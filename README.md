@@ -2,12 +2,14 @@
 
 哔哩哔哩网页端的用户脚本与插件整合。工作区是 `C:\AIWorkspace\biliweb`。
 
-这个目录是 `C:\GrokProject\biliweb` 的全面重构准备仓。前身停在 2026-08 的 MisakaClean `0.5.1-test`。这里从 2026-10-07 重新拉取上游，并写下快照。产品源码还没有迁进来，正式功能任务从下一轮开始。
+这个目录是 `C:\GrokProject\biliweb` 的全面重构。前身那套独立壳不再作为这一版的结构。当前可安装的是体验版 0.1.0，源码改在 `refs/bilibili-cleaner` 的 `experience` 分支上。
 
 ## 现在磁盘上有什么
 
 | 路径 | 内容 |
 |------|------|
+| `products/experience/` | 体验版安装脚本 `bilibili-cleaner-experience.user.js` |
+| `refs/bilibili-cleaner` | 体验版源码，分支 `experience` |
 | `refs/` | 五个上游的本机克隆。嵌套 git 仓库，不进本仓历史。 |
 | `analysis/upstream/` | 各上游的解析，以及 `PINS.md` 快照表。 |
 | `analysis/predecessor/` | 前身 MisakaClean 的模块地图。长文档仍在前身仓库。 |

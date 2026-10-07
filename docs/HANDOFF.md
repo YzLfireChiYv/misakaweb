@@ -6,7 +6,7 @@
 | 更新 | 2026-10-07 |
 | 工作区 | `C:\AIWorkspace\biliweb` |
 | 前身 | `C:\GrokProject\biliweb`，保留为历史树 |
-| 本仓状态 | 已 `git init`。上游已克隆并解析。产品目录尚未建立。 |
+| 本仓状态 | 体验版 0.1.0 已构建。安装文件在 `products/experience/bilibili-cleaner-experience.user.js`。 |
 
 人类负责目标和验收。这一轮只重建仓库并解析上游，方便后面的正式任务开工。没有迁移产品源码，没有改上游文件，没有安装依赖。
 
@@ -24,9 +24,10 @@
 biliweb/
   README.md
   docs/HANDOFF.md
+  products/experience/        体验版 0.1.0 安装脚本
   analysis/upstream/          五份解析 + PINS.md
   analysis/predecessor/       MisakaClean 模块地图
-  refs/                       嵌套克隆，gitignore
+  refs/bilibili-cleaner       experience 分支，gitignore
 ```
 
 `refs/**` 除 `refs/README.md` 外不进本仓提交。`private/`、`node_modules/`、`dist/` 已忽略。不要把前身 `private/` 和个人日用的 253 条标题规则复制过来。
@@ -49,12 +50,16 @@ biliweb/
 
 视频过滤雏形已能藏卡并回滚，默认关闭。业态预设有 `preset-video-civic`、`preset-video-hustle`、`preset-video-review`。厚编辑器雏形在前身 `products/misaka-clean/editor/`。同步、插件、评论、动态、专栏仍是预留槽。
 
-## 这一轮明确还没做的事
+## 体验版 0.1.0
 
-- 没有把 `products/misaka-clean` 复制到本仓。
-- 没有按 v4.5.13 重接样式包、hooks 白名单或 KEEP 目录。
-- 没有把 SPA 补丁打进新的 `refs/bilibili-cleaner`。
-- 没有恢复 MisakaWeb，没有新建原生 App 目录。
-- 没有 `npm install`，没有构建用户脚本。
+安装 `products/experience/bilibili-cleaner-experience.user.js`。脚本名是「bilibili 页面净化大师 体验版」。试用时关掉官方同名脚本，避免两支一起藏卡。
 
-正式任务开在本仓 `C:\AIWorkspace\biliweb`。前身目录继续只读，除非人类点名要改那里。
+源码在 `refs/bilibili-cleaner` 分支 `experience`，基底是 `15d9bce`（v4.5.13）。
+
+视频过滤在原有黑名单、白名单和 BV 高权限之后，对仍然显示、且不是白名单救回的视频按需取播放量、点赞数、收藏数。低于已打开项的下限就用 cleaner 原有方式藏卡。三个开关都关时不请求。取数失败不藏，留给下一次扫描。
+
+规则仓库同步只传名单和阈值。页面开关、净化开关、WebDAV 链接和密码留在本机。`bili-rules.stamp` 是时间戳，`bili-rules.pack` 是简略 gzip 正文。谁的时间戳更晚谁覆盖谁，相同则不传。
+
+`pageType` 每次读当前网址。`attachShadow` 总是挂钩且只挂一次。`history.pushState` 之后会补启动新页面的净化项和过滤器。
+
+前身 MisakaClean 没有迁进本仓。没有恢复 MisakaWeb，没有新建原生 App 目录。

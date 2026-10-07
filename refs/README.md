@@ -2,11 +2,11 @@
 
 这些目录是 GitHub 上的上游仓库，给后续重构对照用。完整树不进本仓 git 历史。快照说明写在 `analysis/upstream/`。
 
-2026-10-07 这一轮拉取的是干净上游，不带 `C:\GrokProject\biliweb\refs\bilibili-cleaner` 里那两处 SPA 补丁。钉扎见 `analysis/upstream/PINS.md`。
+2026-10-07 拉下来的上游钉扎见 `analysis/upstream/PINS.md`。`bilibili-cleaner` 的 `experience` 分支在此之上做了体验版，并让页面判断跟着当前网址走。
 
 | 目录 | 2026-10-07 HEAD |
 |------|-----------------|
-| `bilibili-cleaner` | `15d9bce`（v4.5.13） |
+| `bilibili-cleaner` | 上游 `15d9bce`（v4.5.13）。体验版改动在分支 `experience`。 |
 | `bilibili_blocked_videos_by_tags` | `33a7d07`（v1.5.0） |
 | `Bilibili-Evolved` | `fa06dce`（v2.11.4） |
 | `wider-bilibili` | `6a8d970`（0.4.9） |
