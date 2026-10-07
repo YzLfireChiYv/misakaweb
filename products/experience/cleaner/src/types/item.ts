@@ -1,4 +1,4 @@
-export type Item = ISwitchItem | INumberItem | IListItem | IEditorItem | IStringItem
+export type Item = ISwitchItem | INumberItem | IListItem | IEditorItem | IStringItem | IWebdavItem
 
 interface IBaseItem<T extends string> {
     type: T
@@ -65,6 +65,9 @@ export interface INumberItem extends IBaseItem<'number'> {
     // 步进
     step: number
 
+    // 保存时保留的小数位数。缺省则不改输入值。
+    decimals?: number
+
     // 默认值
     defaultValue: number
 
@@ -121,6 +124,25 @@ export interface IStringItem extends IBaseItem<'string'> {
      * @param value 当前内容
      */
     fn: (value: string) => Promise<void> | void
+}
+
+/** 链接、账号、密码排成一列，并带一次连通性检查。这三项留在本机。 */
+export interface IWebdavItem extends IBaseItem<'webdav'> {
+    type: 'webdav'
+
+    id: string
+
+    name: string
+
+    urlId: string
+
+    userId: string
+
+    passwordId: string
+
+    onEdit: () => void
+
+    verify: (url: string, user: string, password: string) => Promise<string>
 }
 
 // 单选功能

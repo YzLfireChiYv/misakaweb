@@ -35,6 +35,8 @@ export const RULE_FIELDS: RuleField[] = [
     { short: 'lk', gm: 'biliweb-stat-like-min', kind: 'number', absent: 0 },
     { short: 'fv', gm: 'biliweb-stat-fav-min', kind: 'number', absent: 0 },
     { short: 'av', gm: 'biliweb-stat-view-min', kind: 'number', absent: 0 },
+    { short: 'lr', gm: 'biliweb-stat-like-rate-min', kind: 'number', absent: 0 },
+    { short: 'fr', gm: 'biliweb-stat-fav-rate-min', kind: 'number', absent: 0 },
 ]
 
 export type RuleWrite = {

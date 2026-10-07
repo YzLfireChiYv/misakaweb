@@ -35,6 +35,15 @@ watchThrottled(
             if (newValue < item.minValue) {
                 currValue.value = item.minValue
             }
+            if (item.decimals != null) {
+                const numeric = typeof currValue.value === 'number' ? currValue.value : Number(currValue.value)
+                if (Number.isFinite(numeric)) {
+                    const rounded = Number(numeric.toFixed(item.decimals))
+                    if (rounded !== currValue.value) {
+                        currValue.value = rounded
+                    }
+                }
+            }
 
             // 样式生效、失效
             if (oldValue === item.disableValue) {

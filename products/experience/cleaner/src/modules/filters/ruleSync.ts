@@ -8,6 +8,7 @@ import {
 import { Group } from '@/types/collection'
 import { logger } from '@/utils/logger'
 import { RULE_FIELDS, exportRulePack, planRuleImport } from './rulePack'
+import { classifyWebdavStatus, webdavProbeText } from './webdavProbe'
 
 const SYNC_KEYS = {
     enabled: 'biliweb-sync-enabled',
@@ -294,18 +295,68 @@ const touchSync = () => {
     }
 }
 
+/** 只检查目录和鉴权，不上传、不下载规则包。 */
+export const verifyWebdav = async (url: string, user: string, password: string) => {
+    const base = url.trim()
+    const account = user.trim()
+    if (!base || !account) {
+        return '请先填写链接和账号'
+    }
+    const headers = { Authorization: basicAuth(account, password) }
+    const dir = `${base.replace(/\/+$/, '')}/`
+    let response: GmResponse
+    try {
+        response = await gmRequest({
+            method: 'PROPFIND',
+            url: dir,
+            headers: { ...headers, Depth: '0' },
+        })
+    } catch {
+        return '没有连上'
+    }
+    const first = classifyWebdavStatus(response.status, 'PROPFIND')
+    if (first !== 'fallback') {
+        return first === 'fail' ? webdavProbeText(first, response.status) : webdavProbeText(first)
+    }
+    try {
+        response = await gmRequest({
+            method: 'GET',
+            url: joinUrl(base, STAMP_NAME),
+            headers,
+        })
+    } catch {
+        return '没有连上'
+    }
+    const second = classifyWebdavStatus(response.status, 'GET')
+    if (second === 'fallback') {
+        return webdavProbeText('fail', response.status)
+    }
+    return second === 'fail' ? webdavProbeText(second, response.status) : webdavProbeText(second)
+}
+
 export const ruleSyncGroup = (): Group => ({
     name: '规则仓库同步',
     fold: true,
     items: [
         {
+            type: 'webdav',
+            id: 'biliweb-sync-form',
+            name: 'WebDAV',
+            urlId: SYNC_KEYS.url,
+            userId: SYNC_KEYS.user,
+            passwordId: SYNC_KEYS.password,
+            onEdit: () => {
+                touchSync()
+            },
+            verify: verifyWebdav,
+        },
+        {
             type: 'switch',
             id: SYNC_KEYS.enabled,
             name: '启用 WebDAV 同步',
             description: [
-                '只同步规则仓库：黑白名单和各项阈值。',
-                '页面开关、净化开关、这里的链接和密码留在本机。',
-                '本地时间戳和 bili-rules.stamp 谁更晚，谁覆盖另一边。',
+                '只同步黑白名单和各项阈值。链接、账号和密码留在本机。',
+                '时间戳更晚的一边覆盖另一边。',
             ],
             noStyle: true,
             enableFn: () => {
@@ -316,41 +367,6 @@ export const ruleSyncGroup = (): Group => ({
                 void syncRulesNow()
             },
             disableFn: () => {},
-        },
-        {
-            type: 'string',
-            id: SYNC_KEYS.url,
-            name: 'WebDAV 链接',
-            description: ['目录地址。脚本在其中写入 bili-rules.stamp 和 bili-rules.pack。'],
-            defaultValue: '',
-            disableValue: '',
-            noStyle: true,
-            fn: () => {
-                touchSync()
-            },
-        },
-        {
-            type: 'string',
-            id: SYNC_KEYS.user,
-            name: '账号',
-            defaultValue: '',
-            disableValue: '',
-            noStyle: true,
-            fn: () => {
-                touchSync()
-            },
-        },
-        {
-            type: 'string',
-            id: SYNC_KEYS.password,
-            name: '密码',
-            inputType: 'password',
-            defaultValue: '',
-            disableValue: '',
-            noStyle: true,
-            fn: () => {
-                touchSync()
-            },
         },
     ],
 })

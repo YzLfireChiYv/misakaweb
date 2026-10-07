@@ -16,6 +16,7 @@
                     <SwitchComp v-if="item.type === 'switch'" v-bind="item"></SwitchComp>
                     <NumberComp v-else-if="item.type === 'number'" v-bind="item"></NumberComp>
                     <StringComp v-else-if="item.type === 'string'" v-bind="item"></StringComp>
+                    <WebdavComp v-else-if="item.type === 'webdav'" v-bind="item"></WebdavComp>
                     <EditorComp v-else-if="item.type === 'editor'" v-bind="item" @edit="handleEdit"></EditorComp>
                     <ListComp v-else-if="item.type === 'list'" v-bind="item"></ListComp>
                 </div>
@@ -33,6 +34,7 @@ import ListComp from '@/components/items/ListComp.vue'
 import NumberComp from '@/components/items/NumberComp.vue'
 import StringComp from '@/components/items/StringComp.vue'
 import SwitchComp from '@/components/items/SwitchComp.vue'
+import WebdavComp from '@/components/items/WebdavComp.vue'
 import PanelComp from '@/components/PanelComp.vue'
 import { commentFilters } from '@/modules/filters'
 import { useCommentFilterPanelStore } from '@/stores/view'

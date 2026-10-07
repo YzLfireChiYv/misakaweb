@@ -16,7 +16,7 @@ export default defineConfig({
             userscript: {
                 name: 'MisakaWeb',
                 namespace: 'https://github.com/YzLfireChiYv/misakaweb',
-                version: '0.1.3',
+                version: '0.1.4',
                 description: '大量借用社区上游项目。',
                 author: 'festoney8, MisakaWeb',
                 homepage: 'https://github.com/YzLfireChiYv/misakaweb',

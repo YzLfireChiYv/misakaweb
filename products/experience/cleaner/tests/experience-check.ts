@@ -1,6 +1,8 @@
 import assert from 'node:assert/strict'
 import { md5 } from '../src/utils/md5.ts'
 import { exportRulePack, planRuleImport } from '../src/modules/filters/rulePack.ts'
+import { ratePercent, round1 } from '../src/modules/filters/variety/video/statRate.ts'
+import { classifyWebdavStatus, webdavProbeText } from '../src/modules/filters/webdavProbe.ts'
 
 assert.equal(md5(''), 'd41d8cd98f00b204e9800998ecf8427e')
 assert.equal(md5('abc'), '900150983cd24fb0d6963f7d28e17f72')
@@ -27,5 +29,30 @@ assert.deepEqual(writes, [
 ])
 assert.equal(planRuleImport({ nope: 1 }, () => undefined), null)
 assert.equal(planRuleImport({ tb: [1] }, () => undefined), null)
+
+assert.equal(ratePercent(15, 1000), 1.5)
+assert.equal(ratePercent(1, 3), 33.3)
+assert.equal(ratePercent(2, 3), 66.7)
+assert.equal(ratePercent(0, 10), 0)
+assert.equal(ratePercent(5, 0), null)
+assert.equal(ratePercent(1, -1), null)
+assert.equal(round1(1.26), 1.3)
+assert.equal(round1(2), 2)
+
+assert.equal(classifyWebdavStatus(207, 'PROPFIND'), 'ok')
+assert.equal(classifyWebdavStatus(401, 'PROPFIND'), 'auth')
+assert.equal(classifyWebdavStatus(404, 'PROPFIND'), 'missing')
+assert.equal(classifyWebdavStatus(405, 'PROPFIND'), 'fallback')
+assert.equal(classifyWebdavStatus(404, 'GET'), 'ok')
+assert.equal(classifyWebdavStatus(500, 'GET'), 'fail')
+assert.equal(webdavProbeText('ok'), '已连通')
+assert.equal(webdavProbeText('missing'), '目录不存在')
+assert.equal(webdavProbeText('fail', 500), '没有连上（500）')
+
+const ratePack = exportRulePack((key) => (key === 'biliweb-stat-like-rate-min' ? 1.5 : undefined))
+assert.deepEqual(ratePack, { lr: 1.5 })
+const rateWrites = planRuleImport({ fr: 2.5 }, () => undefined)
+assert.ok(rateWrites)
+assert.deepEqual(rateWrites, [{ gm: 'biliweb-stat-fav-rate-min', value: 2.5 }])
 
 console.log('experience checks ok')
