@@ -1,9 +1,9 @@
 // ==UserScript==
-// @name         bilibili 页面净化大师 体验版
+// @name         MisakaWeb
 // @namespace    https://github.com/YzLfireChiYv/misakaweb
-// @version      0.1.2
+// @version      0.1.3
 // @author       festoney8, MisakaWeb
-// @description  MisakaWeb 体验版。视频过滤末级可按接口播放量、点赞数、收藏数藏卡。规则仓库可用 WebDAV 按时间戳双向覆盖。代码与更新来自 YzLfireChiYv/misakaweb。
+// @description  大量借用社区上游项目。
 // @license      MIT
 // @icon         https://www.bilibili.com/favicon.ico
 // @homepage     https://github.com/YzLfireChiYv/misakaweb
