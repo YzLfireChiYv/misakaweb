@@ -114,7 +114,7 @@ const menu = () => {
         sideBtnStore.toggle()
     })
     GM_registerMenuCommand('💬 问题反馈', () => {
-        window.open('https://github.com/YzLfireChiYv/biliweb/issues', '_blank')
+        window.open('https://github.com/YzLfireChiYv/misakaweb/issues', '_blank')
     })
 }
 

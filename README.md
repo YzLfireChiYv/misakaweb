@@ -2,13 +2,13 @@
 
 哔哩哔哩网页端的用户脚本与插件整合。工作区是 `C:\AIWorkspace\biliweb`。
 
-这个目录是 `C:\GrokProject\biliweb` 的全面重构。前身那套独立壳不再作为这一版的结构。当前可安装的是体验版 0.1.1。脚本更新地址是 `YzLfireChiYv/biliweb` 上的这份安装文件，不跟 festoney8 的官方脚本走。
+这个目录是 `C:\GrokProject\biliweb` 的全面重构。前身那套独立壳不再作为这一版的结构。当前可安装的是体验版 0.1.2。公开仓库是 `YzLfireChiYv/misakaweb`。脚本只从这份仓库更新。
 
 ## 现在磁盘上有什么
 
 | 路径 | 内容 |
 |------|------|
-| `products/experience/` | 体验版安装脚本 `bilibili-cleaner-experience.user.js` |
+| `products/experience/` | 体验版安装脚本 `misakaweb.user.js` |
 | `refs/bilibili-cleaner` | 体验版源码，分支 `experience` |
 | `refs/` | 五个上游的本机克隆。嵌套 git 仓库，不进本仓历史。 |
 | `analysis/upstream/` | 各上游的解析，以及 `PINS.md` 快照表。 |

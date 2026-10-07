@@ -1,12 +1,12 @@
-# 体验版 0.1.1
+# 体验版 0.1.2
 
-安装文件是 `bilibili-cleaner-experience.user.js`。把它交给 ScriptCat 或 Tampermonkey。脚本名是「bilibili 页面净化大师 体验版」，命名空间是 `https://github.com/YzLfireChiYv/biliweb`。两支脚本同时开时会各藏一次卡片，试用时把官方脚本关掉。
+安装文件是 `misakaweb.user.js`。把它交给 ScriptCat 或 Tampermonkey。脚本名是「bilibili 页面净化大师 体验版」，命名空间是 `https://github.com/YzLfireChiYv/misakaweb`。两支脚本同时开时会各藏一次卡片，试用时把官方脚本关掉。
 
 更新只从本仓库拉取：
 
-`https://raw.githubusercontent.com/YzLfireChiYv/biliweb/main/products/experience/bilibili-cleaner-experience.user.js`
+`https://raw.githubusercontent.com/YzLfireChiYv/misakaweb/main/products/experience/misakaweb.user.js`
 
-`@downloadURL` 和 `@updateURL` 都是这个地址。没有 Greasy Fork 地址，管理器不会把它换成 festoney8 的官方脚本。
+`@downloadURL` 和 `@updateURL` 都是这个地址。仓库名是 `misakaweb`。没有 Greasy Fork 地址。
 
 页面净化基底是 bilibili-cleaner `15d9bce`（v4.5.13）。公开源码快照在 `cleaner/`。本机继续开发的分支是 `refs/bilibili-cleaner` 的 `experience`。
 
@@ -25,5 +25,5 @@ cd C:\AIWorkspace\biliweb\products\experience\cleaner
 corepack pnpm install --ignore-scripts
 corepack pnpm exec vue-tsc -b
 corepack pnpm exec vite build
-Copy-Item -Force dist\bilibili-cleaner.user.js C:\AIWorkspace\biliweb\products\experience\bilibili-cleaner-experience.user.js
+Copy-Item -Force dist\bilibili-cleaner.user.js C:\AIWorkspace\biliweb\products\experience\misakaweb.user.js
 ```
