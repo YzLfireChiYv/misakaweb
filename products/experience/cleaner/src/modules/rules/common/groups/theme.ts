@@ -1,0 +1,193 @@
+import { useGMValue } from '@/composables/gmValue'
+import { Item } from '@/types/item'
+import { isPageDynamic, isPageHomepage, isPageLive, isPageMessage, isPageSpace } from '@/utils/pageType'
+import { usePreferredDark } from '@vueuse/core'
+import { useCookies } from '@vueuse/integrations/useCookies'
+import { ref, watch } from 'vue'
+
+// 同步夜间模式状态
+const themeState = useGMValue('common-theme-dark', 'off', {
+    deep: false,
+    debounce: 1000,
+})
+
+// 夜间模式状态
+export const isDarkMode = ref(false)
+const isDark = usePreferredDark()
+let isAutoMode = themeState.value === 'auto'
+
+// 是否禁止修改lab-style属性
+let labStyleLock = false
+
+const origSetAttribute = Element.prototype.setAttribute
+
+// 启用夜间模式
+const enableDarkMode = () => {
+    isDarkMode.value = true
+
+    // 直播页设定夜间模式, 拦截其他代码修改lab-style
+    if (isPageLive()) {
+        document.documentElement.setAttribute('common-theme-dark-page', 'live')
+        document.documentElement.setAttribute('lab-style', 'dark')
+        labStyleLock = true
+        Element.prototype.setAttribute = function (attr, value) {
+            if (labStyleLock && this === document.documentElement && attr === 'lab-style') {
+                return origSetAttribute.call(this, attr, 'dark')
+            }
+            return origSetAttribute.call(this, attr, value)
+        }
+    } else if (isPageDynamic()) {
+        document.documentElement.setAttribute('common-theme-dark-page', 'dynamic')
+        document.documentElement.classList.add('bili_dark')
+    } else if (isPageMessage()) {
+        document.documentElement.setAttribute('common-theme-dark-page', 'message')
+        document.documentElement.classList.add('bili_dark')
+    } else if (isPageSpace()) {
+        document.documentElement.setAttribute('common-theme-dark-page', 'space')
+    } else if (isPageHomepage()) {
+        document.documentElement.classList.add('bili_dark')
+    } else {
+        document.documentElement.setAttribute('common-theme-dark-page', 'common')
+    }
+
+    const style = document.querySelector('head link#__css-map__') as HTMLLinkElement
+    if (style?.href?.includes('light.css')) {
+        style.href = style.href.replace('light.css', 'dark.css')
+    }
+
+    const cookies = useCookies()
+    if (cookies.get('theme_style') === 'dark') {
+        return
+    }
+    const expires = new Date()
+    expires.setDate(expires.getDate() + 3650)
+    cookies.set('theme_style', 'dark', {
+        path: '/',
+        domain: '.bilibili.com',
+        expires: expires,
+    })
+}
+
+// 禁用夜间模式
+const disableDarkMode = () => {
+    isDarkMode.value = false
+
+    document.documentElement.removeAttribute('common-theme-dark-page')
+
+    if (isPageLive()) {
+        labStyleLock = false
+        Element.prototype.setAttribute = origSetAttribute
+        document.documentElement.setAttribute('lab-style', '')
+    }
+    if (isPageDynamic() || isPageMessage() || isPageHomepage()) {
+        document.documentElement.classList.remove('bili_dark')
+    }
+    const style = document.querySelector('head link#__css-map__') as HTMLLinkElement
+    if (style?.href?.includes('dark.css')) {
+        style.href = style.href.replace('dark.css', 'light.css')
+    }
+
+    const cookies = useCookies()
+    if (cookies.get('theme_style') === 'light') {
+        return
+    }
+    const expires = new Date()
+    expires.setDate(expires.getDate() + 3650)
+    cookies.set('theme_style', 'light', {
+        path: '/',
+        domain: '.bilibili.com',
+        expires: expires,
+    })
+}
+
+// 监听状态切换
+watch(themeState, (value) => {
+    if (value === 'on') {
+        if (!isDarkMode.value) {
+            isDarkMode.value = true
+            enableDarkMode()
+        }
+        isAutoMode = false
+    }
+    if (value === 'off') {
+        if (isDarkMode.value) {
+            isDarkMode.value = false
+            disableDarkMode()
+        }
+        isAutoMode = false
+    }
+})
+
+// 跟随系统夜间模式
+watch(
+    isDark,
+    (v) => {
+        if (isAutoMode) {
+            if (v) {
+                enableDarkMode()
+            } else {
+                disableDarkMode()
+            }
+        }
+    },
+    { immediate: true },
+)
+
+export const toggleDarkMode = () => {
+    isAutoMode = false
+    if (isDarkMode.value) {
+        disableDarkMode()
+        themeState.value = 'off'
+    } else {
+        enableDarkMode()
+        themeState.value = 'on'
+    }
+}
+
+export const commonThemeItems: Item[] = [
+    {
+        type: 'list',
+        id: 'common-theme-dark',
+        name: '夜间模式',
+        description: [
+            '实验功能，仅对常用页面生效',
+            '插件会接管夜间模式，官方默认时不接管',
+            '官方模式在顶栏头像菜单中设定',
+        ],
+        defaultValue: 'default',
+        disableValue: 'default',
+        options: [
+            {
+                value: 'off',
+                name: '日间',
+                fn: () => {
+                    isAutoMode = false
+                    disableDarkMode()
+                },
+            },
+            {
+                value: 'on',
+                name: '夜间',
+                fn: () => {
+                    isAutoMode = false
+                    enableDarkMode()
+                },
+            },
+            {
+                value: 'auto',
+                name: '跟随系统',
+                fn: () => {
+                    isAutoMode = true
+                    isDark.value ? enableDarkMode() : disableDarkMode()
+                },
+            },
+            {
+                value: 'default',
+                name: '官方默认',
+                fn: () => {
+                    isAutoMode = false
+                },
+            },
+        ],
+    },
+]

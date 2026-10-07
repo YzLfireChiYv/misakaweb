@@ -1,0 +1,44 @@
+// 隐藏 头像饰品
+html[live-page-head-info-avatar-pendant] {
+    #head-info-vm :is(.blive-avatar-pendant, .blive-avatar-icons) {
+        display: none !important;
+    }
+}
+
+// 隐藏 关注主播/加粉丝团
+html[live-page-head-info-vm-upper-row-follow-ctnr] {
+    #head-info-vm .left-anchor-section .follow-ctnr {
+        display: none !important;
+    }
+}
+
+// 隐藏 榜单
+html[live-page-head-info-vm-upper-row-hotrank] {
+    #head-info-vm #LiveRoomHotrankEntries {
+        display: none !important;
+    }
+}
+
+// 隐藏 活动
+html[live-page-head-info-vm-upper-row-activity] {
+    #head-info-vm {
+        .activity-entry,
+        .right-dynamic-modules {
+            display: none !important;
+        }
+    }
+}
+
+// 隐藏 信息栏
+html[live-page-head-info-vm] {
+    #head-info-vm {
+        display: none !important;
+    }
+
+    // 补齐圆角, 不可important
+    #player-ctnr {
+        border-top-left-radius: 12px;
+        border-top-right-radius: 12px;
+        overflow: hidden;
+    }
+}

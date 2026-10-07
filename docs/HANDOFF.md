@@ -6,7 +6,7 @@
 | 更新 | 2026-10-07 |
 | 工作区 | `C:\AIWorkspace\biliweb` |
 | 前身 | `C:\GrokProject\biliweb`，保留为历史树 |
-| 本仓状态 | 体验版 0.1.0 已构建。安装文件在 `products/experience/bilibili-cleaner-experience.user.js`。 |
+| 本仓状态 | 体验版 0.1.1。公开仓库 `https://github.com/YzLfireChiYv/biliweb`。安装文件的 `@downloadURL` 与 `@updateURL` 指向该仓库的 raw 脚本。 |
 
 人类负责目标和验收。这一轮只重建仓库并解析上游，方便后面的正式任务开工。没有迁移产品源码，没有改上游文件，没有安装依赖。
 
@@ -50,9 +50,11 @@ biliweb/
 
 视频过滤雏形已能藏卡并回滚，默认关闭。业态预设有 `preset-video-civic`、`preset-video-hustle`、`preset-video-review`。厚编辑器雏形在前身 `products/misaka-clean/editor/`。同步、插件、评论、动态、专栏仍是预留槽。
 
-## 体验版 0.1.0
+## 体验版 0.1.1
 
-安装 `products/experience/bilibili-cleaner-experience.user.js`。脚本名是「bilibili 页面净化大师 体验版」。试用时关掉官方同名脚本，避免两支一起藏卡。
+安装 `products/experience/bilibili-cleaner-experience.user.js`。脚本名是「bilibili 页面净化大师 体验版」。命名空间是 `https://github.com/YzLfireChiYv/biliweb`。试用时关掉官方脚本，避免两支一起藏卡。
+
+自动更新只请求本仓库的 raw 脚本。问题反馈菜单打开 `YzLfireChiYv/biliweb` 的 issues。
 
 源码在 `refs/bilibili-cleaner` 分支 `experience`，基底是 `15d9bce`（v4.5.13）。
 

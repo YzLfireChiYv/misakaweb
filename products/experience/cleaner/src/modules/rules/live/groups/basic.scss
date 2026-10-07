@@ -1,0 +1,54 @@
+// 隐藏 页面右侧按钮 实验室/关注
+html[live-page-sidebar-vm] {
+    #sidebar-vm {
+        display: none !important;
+    }
+}
+
+// 禁用 播放器皮肤
+html[live-page-default-skin] {
+    #control-panel-ctnr-box .icon-left-part svg {
+        &:hover path {
+            fill: #00aeec;
+        }
+        path {
+            fill: #c9ccd0;
+        }
+    }
+    &[lab-style='dark'] #control-panel-ctnr-box .icon-left-part svg {
+        &:hover path {
+            fill: #00aeec;
+        }
+        path {
+            fill: #46494d;
+        }
+    }
+}
+
+// 禁用 直播背景
+html[live-page-remove-wallpaper] {
+    .room-bg {
+        background-image: unset !important;
+    }
+    #player-ctnr {
+        box-shadow: 0 0 12px rgb(0 0 0 / 0.2);
+        border-radius: 12px;
+    }
+    #aside-area-vm {
+        box-shadow: 0 0 12px rgb(0 0 0 / 0.2);
+    }
+}
+
+// 修改 页面宽度
+html[live-page-width] {
+    body:not(.pure_room_root, .player-full-win) .live-room-app .app-content .app-body {
+        width: var(
+            --live-page-width,
+            clamp(
+                980px,
+                min(calc((100vh - 136px - 78px - 64px) * 16 / 9 + 320px + 12px + 100px), calc(100vw - 100px)),
+                3420px
+            )
+        ) !important;
+    }
+}

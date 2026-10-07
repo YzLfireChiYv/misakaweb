@@ -1,0 +1,83 @@
+<template>
+    <div class="flex items-center justify-between py-1">
+        <div class="text-black">{{ name }}</div>
+        <Listbox v-model="selectedOption">
+            <div class="relative w-2/5">
+                <ListboxButton
+                    class="relative w-full cursor-pointer rounded-lg border border-gray-300 bg-white px-3 py-1.5 text-left outline-hidden focus-visible:border-indigo-500 sm:text-sm"
+                >
+                    <span class="block truncate text-gray-800">{{ selectedOption.name }}</span>
+                    <span class="pointer-events-none absolute inset-y-0 right-0 flex items-center pr-2">
+                        <ChevronUpDownIcon class="h-5 w-5 text-gray-400" aria-hidden="true" />
+                    </span>
+                </ListboxButton>
+
+                <transition
+                    leave-active-class="transition duration-100 ease-in"
+                    leave-from-class="opacity-100"
+                    leave-to-class="opacity-0"
+                >
+                    <ListboxOptions
+                        class="no-scrollbar absolute z-10 mt-1 max-h-60 w-full overflow-auto rounded-md bg-white py-1 shadow-lg ring-1 ring-black/5 focus:outline-hidden sm:text-sm"
+                    >
+                        <ListboxOption
+                            v-slot="{ active, selected }"
+                            v-for="(option, index) in options"
+                            :key="index"
+                            :value="option"
+                            as="template"
+                        >
+                            <li
+                                :class="[
+                                    active ? 'bg-purple-100 text-black' : 'text-gray-900',
+                                    'relative cursor-default py-2 pr-4 pl-10 transition-colors duration-200',
+                                ]"
+                            >
+                                <span :class="[selected ? 'font-medium' : 'font-normal', 'block truncate']">{{
+                                    option.name
+                                }}</span>
+                                <span
+                                    v-if="selected"
+                                    class="absolute inset-y-0 left-0 flex items-center pl-3 text-purple-600"
+                                >
+                                    <CheckIcon class="h-5 w-5" aria-hidden="true" />
+                                </span>
+                            </li>
+                        </ListboxOption>
+                    </ListboxOptions>
+                </transition>
+            </div>
+        </Listbox>
+    </div>
+    <DescriptionComp class="pl-1" v-if="description?.length" :description="description"></DescriptionComp>
+</template>
+
+<script setup lang="ts">
+import { IListItem } from '@/types/item'
+import { GM_getValue, GM_setValue } from '$'
+import { Listbox, ListboxButton, ListboxOption, ListboxOptions } from '@headlessui/vue'
+import { CheckIcon, ChevronUpDownIcon } from '@heroicons/vue/20/solid'
+import { ref, watch } from 'vue'
+import DescriptionComp from './DescriptionComp.vue'
+
+const item = defineProps<IListItem>()
+const options = item.options
+const currValue = GM_getValue(item.id, item.defaultValue)
+const currOption = options.find((v) => v.value === currValue)
+const selectedOption = ref(currOption ?? options[0])
+
+watch(selectedOption, (newSelected) => {
+    const value = newSelected.value
+    if (value !== item.disableValue) {
+        document.documentElement.setAttribute(item.id, value)
+        for (const option of item.options) {
+            if (option.value === value && option.fn) {
+                option.fn()?.catch(() => {})
+            }
+        }
+    } else {
+        document.documentElement.removeAttribute(item.id)
+    }
+    GM_setValue(item.id, value)
+})
+</script>

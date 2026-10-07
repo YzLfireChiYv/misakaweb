@@ -1,8 +1,14 @@
-# 体验版 0.1.0
+# 体验版 0.1.1
 
-安装文件是 `bilibili-cleaner-experience.user.js`。把它交给 ScriptCat 或 Tampermonkey。脚本名是「bilibili 页面净化大师 体验版」，命名空间和官方脚本分开。两支脚本同时开时会各藏一次卡片，试用时把官方脚本关掉。
+安装文件是 `bilibili-cleaner-experience.user.js`。把它交给 ScriptCat 或 Tampermonkey。脚本名是「bilibili 页面净化大师 体验版」，命名空间是 `https://github.com/YzLfireChiYv/biliweb`。两支脚本同时开时会各藏一次卡片，试用时把官方脚本关掉。
 
-这支脚本基于 bilibili-cleaner `15d9bce`（v4.5.13）。源码改动在 `refs/bilibili-cleaner` 的 `experience` 分支。没有接 Greasy Fork 的更新地址，管理器不会把它换回官方版。
+更新只从本仓库拉取：
+
+`https://raw.githubusercontent.com/YzLfireChiYv/biliweb/main/products/experience/bilibili-cleaner-experience.user.js`
+
+`@downloadURL` 和 `@updateURL` 都是这个地址。没有 Greasy Fork 地址，管理器不会把它换成 festoney8 的官方脚本。
+
+页面净化基底是 bilibili-cleaner `15d9bce`（v4.5.13）。公开源码快照在 `cleaner/`。本机继续开发的分支是 `refs/bilibili-cleaner` 的 `experience`。
 
 ## 这一版有什么
 
@@ -15,7 +21,7 @@
 ## 重新构建
 
 ```powershell
-cd C:\AIWorkspace\biliweb\refs\bilibili-cleaner
+cd C:\AIWorkspace\biliweb\products\experience\cleaner
 corepack pnpm install --ignore-scripts
 corepack pnpm exec vue-tsc -b
 corepack pnpm exec vite build

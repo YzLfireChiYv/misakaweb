@@ -1,13 +1,15 @@
 // ==UserScript==
 // @name         bilibili 页面净化大师 体验版
-// @namespace    https://github.com/biliweb/experience
-// @version      0.1.0
+// @namespace    https://github.com/YzLfireChiYv/biliweb
+// @version      0.1.1
 // @author       festoney8, biliweb
-// @description  基于 bilibili-cleaner 4.5.13 的体验版。视频过滤末级可按接口播放量、点赞数、收藏数藏卡。规则仓库可用 WebDAV 按时间戳双向覆盖。
+// @description  biliweb 体验版。视频过滤末级可按接口播放量、点赞数、收藏数藏卡。规则仓库可用 WebDAV 按时间戳双向覆盖。代码与更新来自 YzLfireChiYv/biliweb，页面净化基底来自 festoney8/bilibili-cleaner 4.5.13。
 // @license      MIT
 // @icon         https://www.bilibili.com/favicon.ico
-// @homepage     https://github.com/festoney8/bilibili-cleaner
-// @supportURL   https://github.com/festoney8/bilibili-cleaner
+// @homepage     https://github.com/YzLfireChiYv/biliweb
+// @supportURL   https://github.com/YzLfireChiYv/biliweb/issues
+// @downloadURL  https://raw.githubusercontent.com/YzLfireChiYv/biliweb/main/products/experience/bilibili-cleaner-experience.user.js
+// @updateURL    https://raw.githubusercontent.com/YzLfireChiYv/biliweb/main/products/experience/bilibili-cleaner-experience.user.js
 // @match        *://*.bilibili.com/*
 // @exclude      *://message.bilibili.com/pages/nav/header_sync
 // @exclude      *://message.bilibili.com/pages/nav/index_new_pc_sync
@@ -16168,7 +16170,7 @@
 			sideBtnStore.toggle();
 		});
 		_GM_registerMenuCommand("💬 问题反馈", () => {
-			window.open("https://github.com/festoney8/bilibili-cleaner", "_blank");
+			window.open("https://github.com/YzLfireChiYv/biliweb/issues", "_blank");
 		});
 	};
 	logger.info(`mode: production, url: ${location.href}`);

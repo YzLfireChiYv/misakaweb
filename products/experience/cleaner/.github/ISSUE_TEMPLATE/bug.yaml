@@ -1,0 +1,122 @@
+name: Bug 反馈
+description: 上报功能失效、功能异常等问题
+title: "[BUG] "
+labels: ["bug"]
+body:
+  - type: markdown
+    attributes:
+      value: |
+        ## 问题描述
+
+  - type: input
+    id: problem_page
+    attributes:
+      label: 出问题的页面
+      description: 如首页、播放页、动态页、搜索页、直播页等，特殊情况请给出网址
+      placeholder: 输入页面名或网址
+    validations:
+      required: true
+
+  - type: input
+    id: problem_name
+    attributes:
+      label: 问题功能名
+      placeholder: 输入出问题的功能名
+    validations:
+      required: true
+
+  - type: textarea
+    id: problem_description
+    attributes:
+      label: 问题描述
+    validations:
+      required: true
+
+  - type: textarea
+    id: problem_screenshot
+    attributes:
+      label: 上传截图（可选）
+    validations:
+      required: false
+
+  - type: markdown
+    attributes:
+      value: |
+        ## 当前环境
+
+  - type: input
+    id: env_browser
+    attributes:
+      label: 浏览器版本
+      description: 如：Chrome 最新 / Edge v150.0 / Firefox 最新
+      placeholder: Chrome 最新
+    validations:
+      required: true
+
+  - type: input
+    id: env_plugin
+    attributes:
+      label: 本脚本(bilibili-cleaner) 版本
+      description: 可尝试更新本脚本到最新版，检查是否还会出问题
+      placeholder: 最新
+    validations:
+      required: true
+
+  - type: input
+    id: env_monkey
+    attributes:
+      label: 脚本管理器
+      description: 如：篡改猴 最新 / 暴力猴 v2.48.0 / 脚本猫 最新
+      placeholder: 篡改猴 最新
+    validations:
+      required: false
+
+  - type: input
+    id: env_os
+    attributes:
+      label: 操作系统
+      description: 如：Windows 10 / Windows 11 / MacOS
+      placeholder: Windows 11
+    validations:
+      required: false
+
+  - type: markdown
+    attributes:
+      value: |
+        ## 初步检查
+
+  - type: dropdown
+    id: check_reproduce
+    attributes:
+      label: 刷新网页，可稳定复现问题
+      options:
+        - 是
+        - 否
+        - 未知
+      default: 2
+    validations:
+      required: true
+
+  - type: dropdown
+    id: check_script_conflict
+    attributes:
+      label: 在暴力猴/篡改猴内，只启用本脚本时，仍出现问题
+      options:
+        - 是
+        - 否
+        - 未知
+      default: 2
+    validations:
+      required: true
+
+  - type: dropdown
+    id: check_plugin_conflict
+    attributes:
+      label: 禁用掉对 B 站生效的其他浏览器插件（不含暴力猴/篡改猴），仍出现问题
+      options:
+        - 是
+        - 否
+        - 未知
+      default: 2
+    validations:
+      required: true

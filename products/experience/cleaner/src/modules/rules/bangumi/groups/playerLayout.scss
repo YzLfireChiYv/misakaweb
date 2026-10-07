@@ -1,0 +1,133 @@
+@mixin bangumi-scrollable() {
+    body:has(#bilibili-player-wrap[class^='video_playerFullScreen']) {
+        overflow: auto !important;
+        position: relative !important;
+
+        #bilibili-player-wrap {
+            position: absolute !important;
+            width: 100vw !important;
+            height: 100vh !important;
+        }
+        .main-container {
+            position: static !important;
+            margin: 0 auto !important;
+            padding-top: calc(100vh + 15px) !important;
+            min-width: 900px !important;
+            width: calc(var(--normalscreen-width, calc(177.778vh - 470px)) + 30px + var(--right-bar-width)) !important;
+            .plp-left-wrap {
+                padding-top: 0 !important;
+            }
+        }
+        &::-webkit-scrollbar {
+            display: none !important;
+        }
+        #danmukuBox .bui-collapse-wrap:not(.bui-collapse-wrap-folded) {
+            .bpx-player-wraplist {
+                max-height: calc(50vh + 75px) !important;
+            }
+            .bpx-player-dm-wrap {
+                max-height: 50vh !important;
+            }
+        }
+    }
+
+    // msg bubble
+    .bili-msg {
+        z-index: 100001 !important;
+    }
+
+    // 选集列表防止滚动穿透
+    .bpx-player-ctrl-eplist-menu-wrap {
+        overscroll-behavior: none;
+    }
+}
+
+// 网页全屏时 页面可滚动
+html[webscreen-scrollable] {
+    @include bangumi-scrollable;
+}
+
+// 网页全屏时 页面可滚动 firefox
+@supports (-moz-appearance: none) {
+    html[webscreen-scrollable] {
+        &,
+        body {
+            &:has(#bilibili-player-wrap[class^='video_playerFullScreen']) {
+                scrollbar-width: none !important;
+            }
+        }
+    }
+}
+
+// 全屏时 页面可滚动
+html[fullscreen-scrollable] {
+    @include bangumi-scrollable;
+}
+
+// 全屏时 页面可滚动 firefox
+@supports (-moz-appearance: none) {
+    html[fullscreen-scrollable] {
+        &,
+        body {
+            &:has(#bilibili-player-wrap[class^='video_playerFullScreen']) {
+                scrollbar-width: none !important;
+            }
+        }
+    }
+}
+
+// 网页全屏滚动时 启用小窗播放器
+html[screen-scrollable-enable-mini-player] {
+    // 隐藏小窗右上角叉号，点了会退出全屏
+    #bilibili-player-wrap[class^='video_playerFullScreen'] .bpx-player-mini-close {
+        display: none !important;
+    }
+}
+
+// 全屏滚动时 在视频底部显示顶栏
+// issue #199, 参考 https://greasyfork.org/scripts/445241
+html[screen-scrollable-move-header-bottom] {
+    body:has(#bilibili-player-wrap[class^='video_playerFullScreen']) {
+        #biliMainHeader {
+            display: block !important;
+            top: 100vh !important;
+            width: 100% !important;
+            position: absolute !important;
+        }
+        .fixed-header .bili-header__bar {
+            position: relative !important;
+        }
+
+        // 新版顶栏
+        .bili-header.bili-header--fixed .bili-header__bar {
+            position: relative !important;
+        }
+        .home-container {
+            padding-top: 64px !important;
+        }
+
+        // 适配 bilibli evolved
+        .custom-navbar[role='navigation'] {
+            top: 100vh !important;
+            z-index: 1000 !important;
+            .custom-navbar-item .popup {
+                top: 100% !important;
+            }
+        }
+        &.fixed-navbar .custom-navbar[role='navigation'] {
+            position: absolute !important;
+        }
+    }
+
+    // 动画闪现问题
+    .custom-navbar[role='navigation'] {
+        transition: unset !important;
+    }
+}
+
+// 普通播放 视频宽度调节
+html[normalscreen-width] {
+    .main-container:has(#bilibili-player-wrap[class^='video_playerNormal']) {
+        width: calc(var(--normalscreen-width) + 30px + var(--right-bar-width));
+    }
+}

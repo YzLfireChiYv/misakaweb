@@ -1,0 +1,42 @@
+name: dev-ci
+on:
+    push:
+        paths-ignore:
+            - '**/*.md'
+        branches-ignore:
+            - main
+    pull_request:
+        branches-ignore:
+            - main
+
+jobs:
+    dev-build:
+        runs-on: ubuntu-latest
+        permissions:
+            contents: write
+        steps:
+            # env
+            - name: checkout code
+              uses: actions/checkout@v6
+            - name: setup node and pnpm
+              uses: pnpm/setup@v2
+              with:
+                  runtime: node@24
+                  cache: true
+            - name: install dependencies
+              run: pnpm install --frozen-lockfile
+
+            # build
+            - name: build
+              run: pnpm run build
+            - name: add doc
+              run: cp LICENSE README.md CHANGELOG.md dist/
+            - name: list files
+              run: ls -lah dist/
+
+            # 上传产物
+            - name: upload-artifact
+              uses: actions/upload-artifact@v6
+              with:
+                  name: bilibili-cleaner
+                  path: dist/*

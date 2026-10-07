@@ -1,0 +1,26 @@
+// 隐藏 个人信息框
+html[hide-dynamic-page-bili-dyn-my-info] {
+    aside.left section {
+        display: none !important;
+    }
+}
+
+// 隐藏 直播中Logo
+html[hide-dynamic-page-bili-dyn-live-users__item__living] {
+    .bili-dyn-live-users__item__living {
+        display: none !important;
+    }
+}
+
+// 隐藏 左栏
+html[hide-dynamic-page-aside-left] {
+    aside.left {
+        display: none !important;
+    }
+    .bili-dyn-home--member {
+        justify-content: center !important;
+    }
+    #app:has(.bili-dyn-home--member) {
+        min-width: fit-content;
+    }
+}

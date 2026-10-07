@@ -1,0 +1,31 @@
+// 调节 动态列表 中栏宽度
+html[dynamic-list-width] {
+    #app:has(.bili-dyn-home--member) {
+        min-width: fit-content !important;
+        main {
+            width: max(556px, var(--dynamic-list-width)) !important;
+        }
+    }
+}
+
+// 调节 动态详情 中栏宽度
+html[dynamic-detail-width] {
+    // www.bilibili.com/opus/123456789
+    #app:has(.opus-detail) {
+        min-width: fit-content !important;
+        .opus-detail {
+            width: max(708px, var(--dynamic-detail-width)) !important;
+            .right-sidebar-wrap {
+                margin-left: calc(max(708px, var(--dynamic-detail-width)) + 10px) !important;
+            }
+        }
+    }
+
+    // t.bilibili.com/123456789
+    #app:has(.card .bili-dyn-item) {
+        min-width: fit-content !important;
+        .content {
+            width: max(556px, var(--dynamic-detail-width)) !important;
+        }
+    }
+}
