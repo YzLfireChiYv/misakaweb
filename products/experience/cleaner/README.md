@@ -1,27 +1,19 @@
-# MisakaWeb
+# MisakaWeb 源码
 
-这里的源码大量借用社区上游项目。
+本目录由根独立 Git 仓库管理，refs 仅供只读参考，不参与构建。
 
-本目录是 MisakaWeb 当前测试产品的开发源码，由本项目独立 Git 仓库管理，不创建嵌套 Git 仓库。
+## 当前产品探索
 
-在本目录安装依赖、修改源码和构建。构建命令为 `corepack pnpm exec vue-tsc -b` 和 `corepack pnpm exec vite build`；产物经验证后更新 `../misakaweb.user.js`。
+0.1.4.9 以完整编号版供实际试用，普通完整版共用界面，差别仅编号。页面设置按原功能组拆成“净化”“优化 - 具体包”“公共设置”栏目，保留搜索、折叠和实际设置控件。原取舍工具退出产品入口；历史代码和记录仅留作参考，不再读取取舍记录。
 
-本机 `refs/bilibili-cleaner` 仅供上游阅读对照，不参与产品构建，不在其 `experience` 分支继续开发。具体边界见根目录 `AGENTS.md`。
+分类由构建时的公开目录注入，分栏不改变 Item 引用、配置键、默认值或回调。编号测试可搜索 S 编号；普通版搜索名称和栏目。维护信息导出是两版都有的支持工具，不自动读取私人数据。
 
-## 编号测试构建
+## 构建与发行
 
-运行 `pnpm build:feedback`，产物为 `../misakaweb-feedback-test.user.js`。只有该构建显示反馈编号，不含公开自动更新地址；普通构建不显示编号。测试编号保持稳定，数据仍使用原持久化键。
+`pnpm release:prepare` 更新维护索引、检查类型和既有测试，构建完整编号版与普通完整版（desktop-toolkit）及摘要。不执行 Git 操作。源码推送后 GitHub 运行同样流程，更新这两个安装通道。
 
-运行 `pnpm test` 检查配置映射与交互判定；安装了 Playwright 的本机还可运行 `node tests/panel-playwright.mjs` 验证面板拖动、关闭和窗口缩窄。测试使用隔离模拟页面，不等同于线上页面验收。用户设置候选与当前交付说明从根目录文档入口定位 OneDrive 资料。
+`pnpm build:feedback` 生成 ../misakaweb-feedback-test.user.js。已有分包实验保留原固定地址，当前暂不扩大发行矩阵。需要特定组合时可用 `pnpm build:variants --profile ID`，有意重建全部实验才用 `pnpm build:variants`。旧 ../misakaweb.user.js 0.1.4 保留，不从当前普通构建自动覆盖。
 
-M07 现在打开“快捷开关设置”，每次打开重新居中。页面快捷入口默认位于顶栏搜索右侧，可在面板中关闭或切换为原悬浮按钮；没有可用顶栏时仍可用 M07。`src/modules/shortcut/` 集中管理新入口的设备设置、可用动作及网页位置适配。新设置不加入当前规则同步包，原悬浮坐标保留。
+快捷入口默认在搜索图标右侧的独立 body 节点，可在“快捷开关设置”中关闭或切回悬浮；每次打开快捷设置会居中。编号和普通版使用同一组设置键。
 
-0.1.4.5编号构建在M06/B19中提供净化/优化分类、优化功能组筛选、本页实效设置与全站取舍清单。`src/feedback/review-store.ts`集中保存独立取舍记录，不改实际设置、不加入WebDAV。普通构建使用空取舍目录且不读写该记录。净化全部保留，字体/直角化/夜间模式已确定可选保留、默认不启用，其余未标记优化仍待定。本版尚未物理裁剪功能组，触摸手势尚未集成。
-
-## 分组与发布
-
-`config/optimization-packs.json`记录六组现有优化及预留触摸组，覆盖全部73个优化键；技术依赖与功能类别分开。未来从一套源码构建不同完整脚本，尚未完成的发行组合不会显示为可安装版本。
-
-版本和更新地址集中在`config/release.json`。运行`pnpm release:prepare`完成类型检查、测试和开发构建，自动更新`../misakaweb-feedback-test.user.js`和`../release-manifest.json`；该命令不执行Git操作。仓库根`.github/workflows/userscript.yml`在源码推送后运行同样的检查和构建，仅发布开发脚本与摘要，保留旧0.1.4文件。下一次手动更新到0.1.4.5后，脚本猫可从固定GitHub地址检查后续更新。
-
-0.1.4.6将快捷入口挂到独立body节点，避免进入网站框架管理的搜索子树；位置仍跟随搜索按钮右侧。更新后刷新网页。`pnpm test:search`在隔离匿名Edge中运行完整构建，检查热搜、搜索联想、原生搜索生成的历史及入口模式切换；需可用Playwright包或`PLAYWRIGHT_MODULE_PATH`，结果默认写入忽略的`node_modules/.tmp/live-search/`。它不是日常用户配置或实际脚本猫扩展验收。
+社区接入见 [准备记录](community/README.md)，分包约束见 [PACKS.md](PACKS.md)，维护材料见 [maintenance/README.md](maintenance/README.md)。复杂评分与新 WebDAV 并发协议尚未实现。

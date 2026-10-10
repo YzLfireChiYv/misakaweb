@@ -2,6 +2,7 @@ import vue from '@vitejs/plugin-vue'
 import { fileURLToPath, URL } from 'node:url'
 import { defineConfig } from 'vitest/config'
 import { readFileSync } from 'node:fs'
+import { classificationFor } from './scripts/pack-build.mjs'
 
 const release = JSON.parse(readFileSync(new URL('./config/release.json', import.meta.url), 'utf8'))
 
@@ -15,6 +16,7 @@ export default defineConfig({
         __PACK_LINKS__: true,
         __BUILD_PROFILE__: JSON.stringify('development'),
         __BUILD_LABEL__: JSON.stringify('开发测试版（完整能力）'),
+        __SETTING_SECTIONS__: JSON.stringify(classificationFor(null)),
     },
     resolve: {
         alias: {

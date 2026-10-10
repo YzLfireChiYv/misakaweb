@@ -1,7 +1,7 @@
 // ==UserScript==
 // @name         MisakaWeb
 // @namespace    https://github.com/YzLfireChiYv/misakaweb
-// @version      0.1.4.8
+// @version      0.1.4.9
 // @author       festoney8, MisakaWeb
 // @description  大量借用社区上游项目。反馈测试编号版，开发分组。
 // @license      MIT
@@ -2519,7 +2519,7 @@
 			"clip-rule": "evenodd"
 		})]);
 	}
-	var _hoisted_1$17 = { class: "mx-auto w-full bg-white p-1.5" };
+	var _hoisted_1$16 = { class: "mx-auto w-full bg-white p-1.5" };
 	var DisclosureComp_default = (0, vue.defineComponent)({
 		__name: "DisclosureComp",
 		props: {
@@ -2529,7 +2529,7 @@
 		},
 		setup(__props) {
 			return (_ctx, _cache) => {
-				return (0, vue.openBlock)(), (0, vue.createElementBlock)("div", _hoisted_1$17, [(0, vue.createVNode)((0, vue.unref)(N), { "default-open": !__props.isFold }, {
+				return (0, vue.openBlock)(), (0, vue.createElementBlock)("div", _hoisted_1$16, [(0, vue.createVNode)((0, vue.unref)(N), { "default-open": !__props.isFold }, {
 					default: (0, vue.withCtx)(({ open }) => [(0, vue.createVNode)((0, vue.unref)(Q), { class: (0, vue.normalizeClass)(["flex w-full justify-between rounded-lg px-4 py-1.5 text-left font-bold outline-hidden", {
 						"bg-blue-100/60 text-blue-900 hover:bg-blue-100": !__props.isSpecial,
 						"bg-purple-100/60 text-purple-900 hover:bg-purple-100": __props.isSpecial
@@ -3754,7 +3754,7 @@
 			height
 		};
 	}
-	var _hoisted_1$16 = ["data-feedback-id", "title"];
+	var _hoisted_1$15 = ["data-feedback-id", "title"];
 	var Badge_default = (0, vue.defineComponent)({
 		__name: "Badge",
 		props: {
@@ -3768,7 +3768,7 @@
 					"data-feedback-id": __props.code,
 					title: __props.code,
 					class: (0, vue.normalizeClass)(__props.compact ? "pointer-events-none absolute -top-1 -left-1 z-10 rounded bg-amber-300 px-0.5 font-mono text-[9px] leading-[12px] font-bold text-black" : "mr-1 inline-block rounded bg-amber-300 px-1 py-px align-middle font-mono text-[11px] leading-4 font-bold text-black")
-				}, (0, vue.toDisplayString)(__props.code), 11, _hoisted_1$16)) : (0, vue.createCommentVNode)("", true);
+				}, (0, vue.toDisplayString)(__props.code), 11, _hoisted_1$15)) : (0, vue.createCommentVNode)("", true);
 			};
 		}
 	});
@@ -3819,12 +3819,12 @@
 		if (!closeEl || !(event.target instanceof Node)) return false;
 		return closeEl === event.target || closeEl instanceof Node && closeEl.contains(event.target);
 	};
-	var _hoisted_1$15 = { class: "text-xl font-black text-white" };
-	var _hoisted_2$13 = {
+	var _hoisted_1$14 = { class: "text-xl font-black text-white" };
+	var _hoisted_2$12 = {
 		key: 0,
 		class: "pointer-events-none absolute top-1.5 right-10"
 	};
-	var _hoisted_3$8 = { class: "no-scrollbar flex min-h-[calc(100%-2.5rem)] flex-1 flex-col p-2" };
+	var _hoisted_3$7 = { class: "no-scrollbar flex min-h-[calc(100%-2.5rem)] flex-1 flex-col p-2" };
 	var PanelComp_default = (0, vue.defineComponent)({
 		__name: "PanelComp",
 		props: {
@@ -3908,8 +3908,8 @@
 					ref: bar,
 					class: "sticky top-0 z-10 w-full cursor-move bg-[#00AEEC] py-1.5 text-center"
 				}, [
-					(0, vue.createElementVNode)("div", _hoisted_1$15, (0, vue.toDisplayString)(__props.title), 1),
-					closeCode.value ? ((0, vue.openBlock)(), (0, vue.createElementBlock)("span", _hoisted_2$13, [(0, vue.createVNode)(Badge_default, { code: closeCode.value }, null, 8, ["code"])])) : (0, vue.createCommentVNode)("", true),
+					(0, vue.createElementVNode)("div", _hoisted_1$14, (0, vue.toDisplayString)(__props.title), 1),
+					closeCode.value ? ((0, vue.openBlock)(), (0, vue.createElementBlock)("span", _hoisted_2$12, [(0, vue.createVNode)(Badge_default, { code: closeCode.value }, null, 8, ["code"])])) : (0, vue.createCommentVNode)("", true),
 					(0, vue.createElementVNode)("button", {
 						ref_key: "closeBtn",
 						ref: closeBtn,
@@ -3929,32 +3929,32 @@
 						"stroke-linejoin": "round",
 						d: "M6 18 18 6M6 6l12 12"
 					})], -1)])], 512)
-				], 512), (0, vue.createElementVNode)("div", _hoisted_3$8, [(0, vue.renderSlot)(_ctx.$slots, "default")])], 4);
+				], 512), (0, vue.createElementVNode)("div", _hoisted_3$7, [(0, vue.renderSlot)(_ctx.$slots, "default")])], 4);
 			};
 		}
 	});
-	var _hoisted_1$14 = {
+	var _hoisted_1$13 = {
 		key: 0,
 		class: "mb-1.5"
 	};
-	var _hoisted_2$12 = { class: "text-sm leading-6 text-orange-900" };
+	var _hoisted_2$11 = { class: "text-sm leading-6 text-orange-900" };
 	var DescriptionComp_default = (0, vue.defineComponent)({
 		__name: "DescriptionComp",
 		props: { description: {} },
 		setup(__props) {
 			return (_ctx, _cache) => {
-				return __props.description?.length ? ((0, vue.openBlock)(), (0, vue.createElementBlock)("div", _hoisted_1$14, [(0, vue.createElementVNode)("div", _hoisted_2$12, [((0, vue.openBlock)(true), (0, vue.createElementBlock)(vue.Fragment, null, (0, vue.renderList)(__props.description, (line, index) => {
+				return __props.description?.length ? ((0, vue.openBlock)(), (0, vue.createElementBlock)("div", _hoisted_1$13, [(0, vue.createElementVNode)("div", _hoisted_2$11, [((0, vue.openBlock)(true), (0, vue.createElementBlock)(vue.Fragment, null, (0, vue.renderList)(__props.description, (line, index) => {
 					return (0, vue.openBlock)(), (0, vue.createElementBlock)("div", { key: index }, [(0, vue.createElementVNode)("p", null, [_cache[0] || (_cache[0] = (0, vue.createElementVNode)("span", { class: "mr-1" }, "•", -1)), (0, vue.createTextVNode)((0, vue.toDisplayString)(line), 1)])]);
 				}), 128))])])) : (0, vue.createCommentVNode)("", true);
 			};
 		}
 	});
-	var _hoisted_1$13 = { class: "mx-2 mb-2 flex flex-1 flex-col p-1 text-black" };
-	var _hoisted_2$11 = {
+	var _hoisted_1$12 = { class: "mx-2 mb-2 flex flex-1 flex-col p-1 text-black" };
+	var _hoisted_2$10 = {
 		key: 1,
 		class: "mb-1"
 	};
-	var _hoisted_3$7 = ["data-feedback-id"];
+	var _hoisted_3$6 = ["data-feedback-id"];
 	var EditorDialog_default = (0, vue.defineComponent)({
 		__name: "EditorDialog",
 		setup(__props, { expose: __expose }) {
@@ -4002,13 +4002,13 @@
 					minHeight: 600,
 					closeAction: "panel-close-editor"
 				}, { onClose: closeEditor }), {
-					default: (0, vue.withCtx)(() => [(0, vue.createElementVNode)("div", _hoisted_1$13, [
+					default: (0, vue.withCtx)(() => [(0, vue.createElementVNode)("div", _hoisted_1$12, [
 						currentItem.value?.editorDescription?.length ? ((0, vue.openBlock)(), (0, vue.createBlock)(DescriptionComp_default, {
 							key: 0,
 							class: "mb-3",
 							description: currentItem.value.editorDescription
 						}, null, 8, ["description"])) : (0, vue.createCommentVNode)("", true),
-						editorCode.value ? ((0, vue.openBlock)(), (0, vue.createElementBlock)("div", _hoisted_2$11, [(0, vue.createVNode)(Badge_default, { code: editorCode.value }, null, 8, ["code"])])) : (0, vue.createCommentVNode)("", true),
+						editorCode.value ? ((0, vue.openBlock)(), (0, vue.createElementBlock)("div", _hoisted_2$10, [(0, vue.createVNode)(Badge_default, { code: editorCode.value }, null, 8, ["code"])])) : (0, vue.createCommentVNode)("", true),
 						(0, vue.withDirectives)((0, vue.createElementVNode)("textarea", {
 							"onUpdate:modelValue": _cache[0] || (_cache[0] = ($event) => editorData.value = $event),
 							onKeydown: _cache[1] || (_cache[1] = (0, vue.withModifiers)(() => {}, ["stop"])),
@@ -4020,15 +4020,15 @@
 							spellcheck: "false",
 							placeholder: "请输入内容...",
 							"data-feedback-id": editorCode.value || void 0
-						}, null, 40, _hoisted_3$7), [[vue.vModelText, editorData.value]])
+						}, null, 40, _hoisted_3$6), [[vue.vModelText, editorData.value]])
 					])]),
 					_: 1
 				}, 16)) : (0, vue.createCommentVNode)("", true);
 			};
 		}
 	});
-	var _hoisted_1$12 = { class: "flex w-full py-1 hover:bg-blue-50/50" };
-	var _hoisted_2$10 = { class: "ml-2 self-center text-black" };
+	var _hoisted_1$11 = { class: "flex w-full py-1 hover:bg-blue-50/50" };
+	var _hoisted_2$9 = { class: "ml-2 self-center text-black" };
 	var EditorComp_default = (0, vue.defineComponent)({
 		__name: "EditorComp",
 		props: {
@@ -4046,11 +4046,11 @@
 			const feedbackCode = settingLabel(item.id);
 			const emit = __emit;
 			return (_ctx, _cache) => {
-				return (0, vue.openBlock)(), (0, vue.createElementBlock)(vue.Fragment, null, [(0, vue.createElementVNode)("label", _hoisted_1$12, [(0, vue.createElementVNode)("button", {
+				return (0, vue.openBlock)(), (0, vue.createElementBlock)(vue.Fragment, null, [(0, vue.createElementVNode)("label", _hoisted_1$11, [(0, vue.createElementVNode)("button", {
 					type: "button",
 					class: "inline-flex justify-center rounded-md border border-gray-300 bg-white px-2 py-1 text-sm text-blue-900 outline-hidden",
 					onClick: _cache[0] || (_cache[0] = ($event) => emit("edit", item))
-				}, " 编辑 "), (0, vue.createElementVNode)("span", _hoisted_2$10, [(0, vue.createVNode)(Badge_default, { code: (0, vue.unref)(feedbackCode) }, null, 8, ["code"]), (0, vue.createTextVNode)(" " + (0, vue.toDisplayString)(__props.name), 1)])]), __props.description?.length ? ((0, vue.openBlock)(), (0, vue.createBlock)(DescriptionComp_default, {
+				}, " 编辑 "), (0, vue.createElementVNode)("span", _hoisted_2$9, [(0, vue.createVNode)(Badge_default, { code: (0, vue.unref)(feedbackCode) }, null, 8, ["code"]), (0, vue.createTextVNode)(" " + (0, vue.toDisplayString)(__props.name), 1)])]), __props.description?.length ? ((0, vue.openBlock)(), (0, vue.createBlock)(DescriptionComp_default, {
 					key: 0,
 					class: "pl-9",
 					description: __props.description
@@ -4058,12 +4058,12 @@
 			};
 		}
 	});
-	var _hoisted_1$11 = { class: "flex items-center justify-between py-1" };
-	var _hoisted_2$9 = { class: "text-black" };
-	var _hoisted_3$6 = { class: "relative w-2/5" };
-	var _hoisted_4$4 = { class: "block truncate text-gray-800" };
-	var _hoisted_5$4 = { class: "pointer-events-none absolute inset-y-0 right-0 flex items-center pr-2" };
-	var _hoisted_6$4 = {
+	var _hoisted_1$10 = { class: "flex items-center justify-between py-1" };
+	var _hoisted_2$8 = { class: "text-black" };
+	var _hoisted_3$5 = { class: "relative w-2/5" };
+	var _hoisted_4$3 = { class: "block truncate text-gray-800" };
+	var _hoisted_5$3 = { class: "pointer-events-none absolute inset-y-0 right-0 flex items-center pr-2" };
+	var _hoisted_6$3 = {
 		key: 0,
 		class: "absolute inset-y-0 left-0 flex items-center pl-3 text-purple-600"
 	};
@@ -4094,12 +4094,12 @@
 				_GM_setValue(item.id, value);
 			});
 			return (_ctx, _cache) => {
-				return (0, vue.openBlock)(), (0, vue.createElementBlock)(vue.Fragment, null, [(0, vue.createElementVNode)("div", _hoisted_1$11, [(0, vue.createElementVNode)("div", _hoisted_2$9, [(0, vue.createVNode)(Badge_default, { code: (0, vue.unref)(feedbackCode) }, null, 8, ["code"]), (0, vue.createTextVNode)(" " + (0, vue.toDisplayString)(__props.name), 1)]), (0, vue.createVNode)((0, vue.unref)(Ie), {
+				return (0, vue.openBlock)(), (0, vue.createElementBlock)(vue.Fragment, null, [(0, vue.createElementVNode)("div", _hoisted_1$10, [(0, vue.createElementVNode)("div", _hoisted_2$8, [(0, vue.createVNode)(Badge_default, { code: (0, vue.unref)(feedbackCode) }, null, 8, ["code"]), (0, vue.createTextVNode)(" " + (0, vue.toDisplayString)(__props.name), 1)]), (0, vue.createVNode)((0, vue.unref)(Ie), {
 					modelValue: selectedOption.value,
 					"onUpdate:modelValue": _cache[0] || (_cache[0] = ($event) => selectedOption.value = $event)
 				}, {
-					default: (0, vue.withCtx)(() => [(0, vue.createElementVNode)("div", _hoisted_3$6, [(0, vue.createVNode)((0, vue.unref)(je), { class: "relative w-full cursor-pointer rounded-lg border border-gray-300 bg-white px-3 py-1.5 text-left outline-hidden focus-visible:border-indigo-500 sm:text-sm" }, {
-						default: (0, vue.withCtx)(() => [(0, vue.createElementVNode)("span", _hoisted_4$4, (0, vue.toDisplayString)(selectedOption.value.name), 1), (0, vue.createElementVNode)("span", _hoisted_5$4, [(0, vue.createVNode)((0, vue.unref)(render$1), {
+					default: (0, vue.withCtx)(() => [(0, vue.createElementVNode)("div", _hoisted_3$5, [(0, vue.createVNode)((0, vue.unref)(je), { class: "relative w-full cursor-pointer rounded-lg border border-gray-300 bg-white px-3 py-1.5 text-left outline-hidden focus-visible:border-indigo-500 sm:text-sm" }, {
+						default: (0, vue.withCtx)(() => [(0, vue.createElementVNode)("span", _hoisted_4$3, (0, vue.toDisplayString)(selectedOption.value.name), 1), (0, vue.createElementVNode)("span", _hoisted_5$3, [(0, vue.createVNode)((0, vue.unref)(render$1), {
 							class: "h-5 w-5 text-gray-400",
 							"aria-hidden": "true"
 						})])]),
@@ -4116,7 +4116,7 @@
 									value: option,
 									as: "template"
 								}, {
-									default: (0, vue.withCtx)(({ active, selected }) => [(0, vue.createElementVNode)("li", { class: (0, vue.normalizeClass)([active ? "bg-purple-100 text-black" : "text-gray-900", "relative cursor-default py-2 pr-4 pl-10 transition-colors duration-200"]) }, [(0, vue.createElementVNode)("span", { class: (0, vue.normalizeClass)([selected ? "font-medium" : "font-normal", "block truncate"]) }, (0, vue.toDisplayString)(option.name), 3), selected ? ((0, vue.openBlock)(), (0, vue.createElementBlock)("span", _hoisted_6$4, [(0, vue.createVNode)((0, vue.unref)(render$2), {
+									default: (0, vue.withCtx)(({ active, selected }) => [(0, vue.createElementVNode)("li", { class: (0, vue.normalizeClass)([active ? "bg-purple-100 text-black" : "text-gray-900", "relative cursor-default py-2 pr-4 pl-10 transition-colors duration-200"]) }, [(0, vue.createElementVNode)("span", { class: (0, vue.normalizeClass)([selected ? "font-medium" : "font-normal", "block truncate"]) }, (0, vue.toDisplayString)(option.name), 3), selected ? ((0, vue.openBlock)(), (0, vue.createElementBlock)("span", _hoisted_6$3, [(0, vue.createVNode)((0, vue.unref)(render$2), {
 										class: "h-5 w-5",
 										"aria-hidden": "true"
 									})])) : (0, vue.createCommentVNode)("", true)], 2)]),
@@ -4136,9 +4136,9 @@
 			};
 		}
 	});
-	var _hoisted_1$10 = { class: "my-1 flex items-center py-1 text-black" };
-	var _hoisted_2$8 = ["step"];
-	var _hoisted_3$5 = {
+	var _hoisted_1$9 = { class: "my-1 flex items-center py-1 text-black" };
+	var _hoisted_2$7 = ["step"];
+	var _hoisted_3$4 = {
 		key: 0,
 		class: "ml-2"
 	};
@@ -4192,7 +4192,7 @@
 				trailing: true
 			});
 			return (_ctx, _cache) => {
-				return (0, vue.openBlock)(), (0, vue.createElementBlock)(vue.Fragment, null, [(0, vue.createElementVNode)("div", _hoisted_1$10, [
+				return (0, vue.openBlock)(), (0, vue.createElementBlock)(vue.Fragment, null, [(0, vue.createElementVNode)("div", _hoisted_1$9, [
 					(0, vue.createElementVNode)("div", null, [(0, vue.createVNode)(Badge_default, { code: (0, vue.unref)(feedbackCode) }, null, 8, ["code"]), (0, vue.createTextVNode)(" " + (0, vue.toDisplayString)(__props.name), 1)]),
 					(0, vue.withDirectives)((0, vue.createElementVNode)("input", {
 						type: "number",
@@ -4200,8 +4200,8 @@
 						"onUpdate:modelValue": _cache[0] || (_cache[0] = ($event) => currValue.value = $event),
 						onKeydown: _cache[1] || (_cache[1] = (0, vue.withModifiers)(() => {}, ["stop"])),
 						class: "ml-auto block w-1/5 rounded-lg border border-gray-300 bg-white px-2.5 py-1.5 text-sm outline-hidden invalid:border-2 invalid:border-red-500 focus:border-gray-500 focus:invalid:border-red-500"
-					}, null, 40, _hoisted_2$8), [[vue.vModelText, currValue.value]]),
-					__props.addonText ? ((0, vue.openBlock)(), (0, vue.createElementBlock)("div", _hoisted_3$5, (0, vue.toDisplayString)(__props.addonText), 1)) : (0, vue.createCommentVNode)("", true)
+					}, null, 40, _hoisted_2$7), [[vue.vModelText, currValue.value]]),
+					__props.addonText ? ((0, vue.openBlock)(), (0, vue.createElementBlock)("div", _hoisted_3$4, (0, vue.toDisplayString)(__props.addonText), 1)) : (0, vue.createCommentVNode)("", true)
 				]), __props.description?.length ? ((0, vue.openBlock)(), (0, vue.createBlock)(DescriptionComp_default, {
 					key: 0,
 					class: "pl-1",
@@ -4210,8 +4210,8 @@
 			};
 		}
 	});
-	var _hoisted_1$9 = { class: "mt-1 mb-0.5 flex items-center py-1 text-black" };
-	var _hoisted_2$7 = ["type"];
+	var _hoisted_1$8 = { class: "mt-1 mb-0.5 flex items-center py-1 text-black" };
+	var _hoisted_2$6 = ["type"];
 	var StringComp_default = (0, vue.defineComponent)({
 		__name: "StringComp",
 		props: {
@@ -4249,20 +4249,20 @@
 				trailing: true
 			});
 			return (_ctx, _cache) => {
-				return (0, vue.openBlock)(), (0, vue.createElementBlock)(vue.Fragment, null, [(0, vue.createElementVNode)("div", _hoisted_1$9, [(0, vue.createElementVNode)("div", null, [(0, vue.createVNode)(Badge_default, { code: (0, vue.unref)(feedbackCode) }, null, 8, ["code"]), (0, vue.createTextVNode)(" " + (0, vue.toDisplayString)(__props.name), 1)]), (0, vue.withDirectives)((0, vue.createElementVNode)("input", {
+				return (0, vue.openBlock)(), (0, vue.createElementBlock)(vue.Fragment, null, [(0, vue.createElementVNode)("div", _hoisted_1$8, [(0, vue.createElementVNode)("div", null, [(0, vue.createVNode)(Badge_default, { code: (0, vue.unref)(feedbackCode) }, null, 8, ["code"]), (0, vue.createTextVNode)(" " + (0, vue.toDisplayString)(__props.name), 1)]), (0, vue.withDirectives)((0, vue.createElementVNode)("input", {
 					type: __props.inputType || "text",
 					"onUpdate:modelValue": _cache[0] || (_cache[0] = ($event) => currValue.value = $event),
 					onKeydown: _cache[1] || (_cache[1] = (0, vue.withModifiers)(() => {}, ["stop"])),
 					class: "ml-4 block flex-1 rounded-md border border-gray-300 bg-white p-1.5 text-sm outline-hidden invalid:border-red-500 focus:border-gray-500 focus:invalid:border-red-500"
-				}, null, 40, _hoisted_2$7), [[vue.vModelDynamic, currValue.value]])]), __props.description?.length ? ((0, vue.openBlock)(), (0, vue.createBlock)(DescriptionComp_default, {
+				}, null, 40, _hoisted_2$6), [[vue.vModelDynamic, currValue.value]])]), __props.description?.length ? ((0, vue.openBlock)(), (0, vue.createBlock)(DescriptionComp_default, {
 					key: 0,
 					description: __props.description
 				}, null, 8, ["description"])) : (0, vue.createCommentVNode)("", true)], 64);
 			};
 		}
 	});
-	var _hoisted_1$8 = { class: "flex items-center" };
-	var _hoisted_2$6 = { class: "ml-2 flex-1" };
+	var _hoisted_1$7 = { class: "flex items-center" };
+	var _hoisted_2$5 = { class: "ml-2 flex-1" };
 	var SwitchComp_default = (0, vue.defineComponent)({
 		__name: "SwitchComp",
 		props: {
@@ -4300,7 +4300,7 @@
 			});
 			return (_ctx, _cache) => {
 				return (0, vue.openBlock)(), (0, vue.createElementBlock)(vue.Fragment, null, [(0, vue.createVNode)((0, vue.unref)(oe), { class: "m-0.5 h-fit w-full rounded-lg py-1 hover:bg-blue-50/50" }, {
-					default: (0, vue.withCtx)(() => [(0, vue.createElementVNode)("div", _hoisted_1$8, [(0, vue.createVNode)((0, vue.unref)(de), { class: "flex flex-1 flex-row text-black" }, {
+					default: (0, vue.withCtx)(() => [(0, vue.createElementVNode)("div", _hoisted_1$7, [(0, vue.createVNode)((0, vue.unref)(de), { class: "flex flex-1 flex-row text-black" }, {
 						default: (0, vue.withCtx)(() => [(0, vue.createVNode)((0, vue.unref)(ue), {
 							modelValue: enabled.value,
 							"onUpdate:modelValue": _cache[0] || (_cache[0] = ($event) => enabled.value = $event),
@@ -4308,7 +4308,7 @@
 						}, {
 							default: (0, vue.withCtx)(() => [(0, vue.createElementVNode)("span", { class: (0, vue.normalizeClass)([enabled.value ? "translate-x-6" : "translate-x-1", "inline-block h-4 w-4 transform rounded-full bg-white transition-transform"]) }, null, 2)]),
 							_: 1
-						}, 8, ["modelValue", "class"]), (0, vue.createElementVNode)("p", _hoisted_2$6, [(0, vue.createVNode)(Badge_default, { code: (0, vue.unref)(feedbackCode) }, null, 8, ["code"]), (0, vue.createTextVNode)(" " + (0, vue.toDisplayString)(__props.name), 1)])]),
+						}, 8, ["modelValue", "class"]), (0, vue.createElementVNode)("p", _hoisted_2$5, [(0, vue.createVNode)(Badge_default, { code: (0, vue.unref)(feedbackCode) }, null, 8, ["code"]), (0, vue.createTextVNode)(" " + (0, vue.toDisplayString)(__props.name), 1)])]),
 						_: 1
 					})])]),
 					_: 1
@@ -4320,16 +4320,16 @@
 			};
 		}
 	});
-	var _hoisted_1$7 = { class: "py-1 text-black" };
-	var _hoisted_2$5 = {
+	var _hoisted_1$6 = { class: "py-1 text-black" };
+	var _hoisted_2$4 = {
 		key: 0,
 		class: "mb-1"
 	};
-	var _hoisted_3$4 = { class: "text-right whitespace-nowrap" };
-	var _hoisted_4$3 = { class: "text-right whitespace-nowrap" };
-	var _hoisted_5$3 = { class: "text-right whitespace-nowrap" };
-	var _hoisted_6$3 = { class: "flex min-w-0 items-center gap-2" };
-	var _hoisted_7$3 = ["disabled"];
+	var _hoisted_3$3 = { class: "text-right whitespace-nowrap" };
+	var _hoisted_4$2 = { class: "text-right whitespace-nowrap" };
+	var _hoisted_5$2 = { class: "text-right whitespace-nowrap" };
+	var _hoisted_6$2 = { class: "flex min-w-0 items-center gap-2" };
+	var _hoisted_7$1 = ["disabled"];
 	var WebdavComp_default = (0, vue.defineComponent)({
 		__name: "WebdavComp",
 		props: {
@@ -4397,8 +4397,8 @@
 				}
 			};
 			return (_ctx, _cache) => {
-				return (0, vue.openBlock)(), (0, vue.createElementBlock)("div", _hoisted_1$7, [(0, vue.unref)(formCode) ? ((0, vue.openBlock)(), (0, vue.createElementBlock)("div", _hoisted_2$5, [(0, vue.createVNode)(Badge_default, { code: (0, vue.unref)(formCode) }, null, 8, ["code"])])) : (0, vue.createCommentVNode)("", true), (0, vue.createElementVNode)("div", { class: (0, vue.normalizeClass)(["grid items-center gap-x-3 gap-y-2", (0, vue.unref)(formCode) ? "grid-cols-[auto_minmax(0,1fr)]" : "grid-cols-[4.5rem_minmax(0,1fr)]"]) }, [
-					(0, vue.createElementVNode)("div", _hoisted_3$4, [(0, vue.createVNode)(Badge_default, { code: (0, vue.unref)(urlCode) }, null, 8, ["code"]), _cache[6] || (_cache[6] = (0, vue.createTextVNode)(" 链接 ", -1))]),
+				return (0, vue.openBlock)(), (0, vue.createElementBlock)("div", _hoisted_1$6, [(0, vue.unref)(formCode) ? ((0, vue.openBlock)(), (0, vue.createElementBlock)("div", _hoisted_2$4, [(0, vue.createVNode)(Badge_default, { code: (0, vue.unref)(formCode) }, null, 8, ["code"])])) : (0, vue.createCommentVNode)("", true), (0, vue.createElementVNode)("div", { class: (0, vue.normalizeClass)(["grid items-center gap-x-3 gap-y-2", (0, vue.unref)(formCode) ? "grid-cols-[auto_minmax(0,1fr)]" : "grid-cols-[4.5rem_minmax(0,1fr)]"]) }, [
+					(0, vue.createElementVNode)("div", _hoisted_3$3, [(0, vue.createVNode)(Badge_default, { code: (0, vue.unref)(urlCode) }, null, 8, ["code"]), _cache[6] || (_cache[6] = (0, vue.createTextVNode)(" 链接 ", -1))]),
 					(0, vue.withDirectives)((0, vue.createElementVNode)("input", {
 						"onUpdate:modelValue": _cache[0] || (_cache[0] = ($event) => url.value = $event),
 						type: "url",
@@ -4408,7 +4408,7 @@
 						onKeydown: _cache[1] || (_cache[1] = (0, vue.withModifiers)(() => {}, ["stop"])),
 						class: "block w-full min-w-0 rounded-md border border-gray-300 bg-white p-1.5 text-sm outline-hidden focus:border-gray-500"
 					}, null, 544), [[vue.vModelText, url.value]]),
-					(0, vue.createElementVNode)("div", _hoisted_4$3, [(0, vue.createVNode)(Badge_default, { code: (0, vue.unref)(userCode) }, null, 8, ["code"]), _cache[7] || (_cache[7] = (0, vue.createTextVNode)(" 账号 ", -1))]),
+					(0, vue.createElementVNode)("div", _hoisted_4$2, [(0, vue.createVNode)(Badge_default, { code: (0, vue.unref)(userCode) }, null, 8, ["code"]), _cache[7] || (_cache[7] = (0, vue.createTextVNode)(" 账号 ", -1))]),
 					(0, vue.withDirectives)((0, vue.createElementVNode)("input", {
 						"onUpdate:modelValue": _cache[2] || (_cache[2] = ($event) => user.value = $event),
 						type: "text",
@@ -4416,7 +4416,7 @@
 						onKeydown: _cache[3] || (_cache[3] = (0, vue.withModifiers)(() => {}, ["stop"])),
 						class: "block w-full min-w-0 rounded-md border border-gray-300 bg-white p-1.5 text-sm outline-hidden focus:border-gray-500"
 					}, null, 544), [[vue.vModelText, user.value]]),
-					(0, vue.createElementVNode)("div", _hoisted_5$3, [(0, vue.createVNode)(Badge_default, { code: (0, vue.unref)(passwordCode) }, null, 8, ["code"]), _cache[8] || (_cache[8] = (0, vue.createTextVNode)(" 密码 ", -1))]),
+					(0, vue.createElementVNode)("div", _hoisted_5$2, [(0, vue.createVNode)(Badge_default, { code: (0, vue.unref)(passwordCode) }, null, 8, ["code"]), _cache[8] || (_cache[8] = (0, vue.createTextVNode)(" 密码 ", -1))]),
 					(0, vue.withDirectives)((0, vue.createElementVNode)("input", {
 						"onUpdate:modelValue": _cache[4] || (_cache[4] = ($event) => password.value = $event),
 						type: "password",
@@ -4425,12 +4425,12 @@
 						class: "block w-full min-w-0 rounded-md border border-gray-300 bg-white p-1.5 text-sm outline-hidden focus:border-gray-500"
 					}, null, 544), [[vue.vModelText, password.value]]),
 					_cache[9] || (_cache[9] = (0, vue.createElementVNode)("div", null, null, -1)),
-					(0, vue.createElementVNode)("div", _hoisted_6$3, [(0, vue.createElementVNode)("button", {
+					(0, vue.createElementVNode)("div", _hoisted_6$2, [(0, vue.createElementVNode)("button", {
 						type: "button",
 						class: "inline-flex shrink-0 items-center justify-center rounded-md border border-gray-300 bg-white px-2 py-1 text-sm text-blue-900 outline-hidden disabled:opacity-50",
 						disabled: busy.value,
 						onClick: onVerify
-					}, [(0, vue.createVNode)(Badge_default, { code: (0, vue.unref)(verifyCode) }, null, 8, ["code"]), (0, vue.createTextVNode)(" " + (0, vue.toDisplayString)(busy.value ? "验证中" : "验证"), 1)], 8, _hoisted_7$3), (0, vue.createElementVNode)("span", { class: (0, vue.normalizeClass)(["min-w-0 text-sm", statusClass.value]) }, (0, vue.toDisplayString)(status.value), 3)])
+					}, [(0, vue.createVNode)(Badge_default, { code: (0, vue.unref)(verifyCode) }, null, 8, ["code"]), (0, vue.createTextVNode)(" " + (0, vue.toDisplayString)(busy.value ? "验证中" : "验证"), 1)], 8, _hoisted_7$1), (0, vue.createElementVNode)("span", { class: (0, vue.normalizeClass)(["min-w-0 text-sm", statusClass.value]) }, (0, vue.toDisplayString)(status.value), 3)])
 				], 2)]);
 			};
 		}
@@ -10978,8 +10978,8 @@
 		}
 		return "";
 	};
-	var _hoisted_1$6 = ["onClick"];
-	var _hoisted_2$4 = {
+	var _hoisted_1$5 = ["onClick"];
+	var _hoisted_2$3 = {
 		key: 0,
 		class: "border-gray-300"
 	};
@@ -11036,7 +11036,7 @@
 						_cache[0] || (_cache[0] = (0, vue.createElementVNode)("span", { class: "mr-0.5" }, "◎", -1)),
 						(0, vue.createVNode)(Badge_default, { code: (0, vue.unref)(actionLabel)((0, vue.unref)(contextActionKey)(menu.name)) }, null, 8, ["code"]),
 						(0, vue.createTextVNode)(" " + (0, vue.toDisplayString)(menu.name), 1)
-					], 8, _hoisted_1$6), index < menuList.value.length - 1 ? ((0, vue.openBlock)(), (0, vue.createElementBlock)("hr", _hoisted_2$4)) : (0, vue.createCommentVNode)("", true)]);
+					], 8, _hoisted_1$5), index < menuList.value.length - 1 ? ((0, vue.openBlock)(), (0, vue.createElementBlock)("hr", _hoisted_2$3)) : (0, vue.createCommentVNode)("", true)]);
 				}), 128))], 4)) : (0, vue.createCommentVNode)("", true);
 			};
 		}
@@ -16597,4521 +16597,23 @@
 			logger.error(`loadRuleStyle error, name=${rule.name}`, err);
 		}
 	};
-	var REVIEW_CATALOG_VERSION = "2026-10-11.1";
-	var REVIEW_SOURCE_COMMIT = "15d9bced793487a8c4b0f9e1f7f67c7ccf6f3da9";
-	var reviewCatalog = [
-		{
-			"key": "activity-live-auto-jump",
-			"id": "S001",
-			"names": ["活动直播自动跳转普通直播"],
-			"pages": ["live"],
-			"groups": ["基本功能"],
-			"category": "optimization",
-			"rationale": "原逐项分类：操作增强；按用途归类，待用户校正",
-			"pack": "reading-navigation",
-			"packLabel": "阅读与导航"
-		},
-		{
-			"key": "auto-best-quality",
-			"id": "S002",
-			"names": ["自动切换最高画质 (实验功能)"],
-			"pages": ["live"],
-			"groups": ["基本功能"],
-			"category": "optimization",
-			"rationale": "原逐项分类：操作增强；按用途归类，待用户校正",
-			"pack": "playback",
-			"packLabel": "播放控制"
-		},
-		{
-			"key": "bangumi-page-hide-bpx-player-record-item-wrap",
-			"id": "S003",
-			"names": ["隐藏 视频内封审核号(非内嵌) ★"],
-			"pages": ["bangumi"],
-			"groups": ["播放器（标★是番剧页独有项）"],
-			"category": "cleaning",
-			"rationale": "原逐项分类：页面净化；按用途归类，待用户校正"
-		},
-		{
-			"key": "bangumi-page-hide-bpx-player-top-follow",
-			"id": "S004",
-			"names": ["隐藏 追番/追剧按钮 ★"],
-			"pages": ["bangumi"],
-			"groups": ["播放器（标★是番剧页独有项）"],
-			"category": "cleaning",
-			"rationale": "原逐项分类：页面净化；按用途归类，待用户校正"
-		},
-		{
-			"key": "bangumi-page-hide-eplist-badge",
-			"id": "S005",
-			"names": ["隐藏 视频列表 会员/限免标记 ★"],
-			"pages": ["bangumi"],
-			"groups": ["右栏"],
-			"category": "cleaning",
-			"rationale": "原逐项分类：页面净化；按用途归类，待用户校正"
-		},
-		{
-			"key": "bangumi-page-hide-media-info",
-			"id": "S006",
-			"names": ["隐藏 作品介绍 ★"],
-			"pages": ["bangumi"],
-			"groups": ["工具栏/作品信息"],
-			"category": "cleaning",
-			"rationale": "原逐项分类：页面净化；按用途归类，待用户校正"
-		},
-		{
-			"key": "bangumi-page-hide-recommend",
-			"id": "S007",
-			"names": ["隐藏 相关作品推荐 ★"],
-			"pages": ["bangumi"],
-			"groups": ["右栏"],
-			"category": "cleaning",
-			"rationale": "原逐项分类：页面净化；按用途归类，待用户校正"
-		},
-		{
-			"key": "bangumi-page-hide-right-container-section-height",
-			"id": "S008",
-			"names": ["隐藏 大会员按钮 ★"],
-			"pages": ["bangumi"],
-			"groups": ["右栏"],
-			"category": "cleaning",
-			"rationale": "原逐项分类：页面净化；按用途归类，待用户校正"
-		},
-		{
-			"key": "bangumi-page-hide-sidenav-issue",
-			"id": "S009",
-			"names": ["隐藏 新版反馈 ★"],
-			"pages": ["bangumi"],
-			"groups": ["页面右下角 小按钮"],
-			"category": "cleaning",
-			"rationale": "原逐项分类：页面净化；按用途归类，待用户校正"
-		},
-		{
-			"key": "bangumi-page-hide-sponsor-module",
-			"id": "S010",
-			"names": ["隐藏 承包榜 ★"],
-			"pages": ["bangumi"],
-			"groups": ["工具栏/作品信息"],
-			"category": "cleaning",
-			"rationale": "原逐项分类：页面净化；按用途归类，待用户校正"
-		},
-		{
-			"key": "bangumi-page-hide-toolbar",
-			"id": "S011",
-			"names": ["隐藏 工具栏(赞币转) ★"],
-			"pages": ["bangumi"],
-			"groups": ["工具栏/作品信息"],
-			"category": "cleaning",
-			"rationale": "原逐项分类：页面净化；按用途归类，待用户校正"
-		},
-		{
-			"key": "bangumi-page-hide-watch-together",
-			"id": "S012",
-			"names": ["隐藏 一起看 ★"],
-			"pages": ["bangumi"],
-			"groups": ["工具栏/作品信息"],
-			"category": "cleaning",
-			"rationale": "原逐项分类：页面净化；按用途归类，待用户校正"
-		},
-		{
-			"key": "bangumi-page-simple-media-info",
-			"id": "S013",
-			"names": ["精简 作品介绍 ★"],
-			"pages": ["bangumi"],
-			"groups": ["工具栏/作品信息"],
-			"category": "cleaning",
-			"rationale": "原逐项分类：页面净化；按用途归类，待用户校正"
-		},
-		{
-			"key": "beauty-scrollbar",
-			"id": "S014",
-			"names": ["美化页面滚动条"],
-			"pages": ["*"],
-			"groups": ["全站通用 - 基本功能"],
-			"category": "optimization",
-			"rationale": "原逐项分类：外观调整；按用途归类，待用户校正",
-			"pack": "appearance",
-			"packLabel": "主题与外观"
-		},
-		{
-			"key": "border-radius",
-			"id": "S030",
-			"names": ["页面直角化，去除圆角"],
-			"pages": ["*"],
-			"groups": ["全站通用 - 基本功能"],
-			"category": "optimization",
-			"rationale": "原逐项分类：外观调整；按用途归类，待用户校正",
-			"pack": "appearance",
-			"packLabel": "主题与外观",
-			"retention": "optional-retain",
-			"defaultOff": true
-		},
-		{
-			"key": "channel-hide-carousel",
-			"id": "S033",
-			"names": ["隐藏 大图轮播"],
-			"pages": ["channel"],
-			"groups": ["分区页 基础功能"],
-			"category": "cleaning",
-			"rationale": "原逐项分类：页面净化；按用途归类，待用户校正"
-		},
-		{
-			"key": "channel-hide-danmaku-count",
-			"id": "S034",
-			"names": ["隐藏 弹幕数"],
-			"pages": ["channel"],
-			"groups": ["视频列表"],
-			"category": "cleaning",
-			"rationale": "原逐项分类：页面净化；按用途归类，待用户校正"
-		},
-		{
-			"key": "channel-hide-sticky-header",
-			"id": "S035",
-			"names": ["隐藏 滚动页面时 顶部吸附顶栏"],
-			"pages": ["channel"],
-			"groups": ["分区页 基础功能"],
-			"category": "cleaning",
-			"rationale": "取消干扰性的顶栏吸附，归净化"
-		},
-		{
-			"key": "channel-hide-subarea",
-			"id": "S036",
-			"names": ["隐藏 分区栏"],
-			"pages": ["channel"],
-			"groups": ["分区页 基础功能"],
-			"category": "cleaning",
-			"rationale": "原逐项分类：页面净化；按用途归类，待用户校正"
-		},
-		{
-			"key": "channel-increase-rcmd-list-font-size",
-			"id": "S037",
-			"names": ["增大 视频信息字号"],
-			"pages": ["channel"],
-			"groups": ["视频列表"],
-			"category": "optimization",
-			"rationale": "原逐项分类：外观调整；按用途归类，待用户校正",
-			"pack": "text-style",
-			"packLabel": "文字与字幕"
-		},
-		{
-			"key": "channel-layout",
-			"id": "S038",
-			"names": ["修改 视频列表列数"],
-			"pages": ["channel"],
-			"groups": ["页面布局"],
-			"category": "optimization",
-			"rationale": "原逐项分类：布局调整；按用途归类，待用户校正",
-			"pack": "layout",
-			"packLabel": "页面布局"
-		},
-		{
-			"key": "channel-layout-padding",
-			"id": "S039",
-			"names": ["修改 页面两侧边距 (-1禁用)"],
-			"pages": ["channel"],
-			"groups": ["页面布局"],
-			"category": "optimization",
-			"rationale": "原逐项分类：布局调整；按用途归类，待用户校正",
-			"pack": "layout",
-			"packLabel": "页面布局"
-		},
-		{
-			"key": "common-header-bar-padding-left",
-			"id": "S046",
-			"names": ["左边界距离（-1禁用）"],
-			"pages": ["*"],
-			"groups": ["全站通用 - 顶栏 数值设定"],
-			"category": "optimization",
-			"rationale": "原逐项分类：布局调整；按用途归类，待用户校正",
-			"pack": "layout",
-			"packLabel": "页面布局"
-		},
-		{
-			"key": "common-header-bar-padding-right",
-			"id": "S047",
-			"names": ["右边界距离（-1禁用）"],
-			"pages": ["*"],
-			"groups": ["全站通用 - 顶栏 数值设定"],
-			"category": "optimization",
-			"rationale": "原逐项分类：布局调整；按用途归类，待用户校正",
-			"pack": "layout",
-			"packLabel": "页面布局"
-		},
-		{
-			"key": "common-header-bar-search-margin-left",
-			"id": "S048",
-			"names": ["搜索框与左侧距离（-1禁用）"],
-			"pages": ["*"],
-			"groups": ["全站通用 - 顶栏 数值设定"],
-			"category": "optimization",
-			"rationale": "原逐项分类：布局调整；按用途归类，待用户校正",
-			"pack": "layout",
-			"packLabel": "页面布局"
-		},
-		{
-			"key": "common-header-bar-search-width",
-			"id": "S049",
-			"names": ["搜索框宽度（-1禁用）"],
-			"pages": ["*"],
-			"groups": ["全站通用 - 顶栏 数值设定"],
-			"category": "optimization",
-			"rationale": "原逐项分类：布局调整；按用途归类，待用户校正",
-			"pack": "layout",
-			"packLabel": "页面布局"
-		},
-		{
-			"key": "common-hide-nav-anime",
-			"id": "S050",
-			"names": ["隐藏 番剧"],
-			"pages": ["*"],
-			"groups": ["全站通用 - 顶栏 左侧"],
-			"category": "cleaning",
-			"rationale": "原逐项分类：页面净化；按用途归类，待用户校正"
-		},
-		{
-			"key": "common-hide-nav-anime-popover",
-			"id": "S051",
-			"names": ["隐藏 番剧弹出框"],
-			"pages": ["*"],
-			"groups": ["全站通用 - 顶栏 左侧"],
-			"category": "cleaning",
-			"rationale": "原逐项分类：页面净化；按用途归类，待用户校正"
-		},
-		{
-			"key": "common-hide-nav-avatar",
-			"id": "S052",
-			"names": ["隐藏 头像"],
-			"pages": ["*"],
-			"groups": ["全站通用 - 顶栏 右侧"],
-			"category": "cleaning",
-			"rationale": "原逐项分类：页面净化；按用途归类，待用户校正"
-		},
-		{
-			"key": "common-hide-nav-bdu",
-			"id": "S053",
-			"names": ["隐藏 百大评选"],
-			"pages": ["*"],
-			"groups": ["全站通用 - 顶栏 左侧"],
-			"category": "cleaning",
-			"rationale": "原逐项分类：页面净化；按用途归类，待用户校正"
-		},
-		{
-			"key": "common-hide-nav-blackboard",
-			"id": "S054",
-			"names": ["隐藏 所有官方活动/活动直播"],
-			"pages": ["*"],
-			"groups": ["全站通用 - 顶栏 左侧"],
-			"category": "cleaning",
-			"rationale": "原逐项分类：页面净化；按用途归类，待用户校正"
-		},
-		{
-			"key": "common-hide-nav-bml",
-			"id": "S055",
-			"names": ["隐藏 BML"],
-			"pages": ["*"],
-			"groups": ["全站通用 - 顶栏 左侧"],
-			"category": "cleaning",
-			"rationale": "原逐项分类：页面净化；按用途归类，待用户校正"
-		},
-		{
-			"key": "common-hide-nav-channel-panel-popover",
-			"id": "S056",
-			"names": ["隐藏 首页弹出框"],
-			"pages": ["*"],
-			"groups": ["全站通用 - 顶栏 左侧"],
-			"category": "cleaning",
-			"rationale": "原逐项分类：页面净化；按用途归类，待用户校正"
-		},
-		{
-			"key": "common-hide-nav-download-app",
-			"id": "S057",
-			"names": ["隐藏 下载客户端"],
-			"pages": ["*"],
-			"groups": ["全站通用 - 顶栏 左侧"],
-			"category": "cleaning",
-			"rationale": "原逐项分类：页面净化；按用途归类，待用户校正"
-		},
-		{
-			"key": "common-hide-nav-dynamic",
-			"id": "S058",
-			"names": ["隐藏 动态"],
-			"pages": ["*"],
-			"groups": ["全站通用 - 顶栏 右侧"],
-			"category": "cleaning",
-			"rationale": "原逐项分类：页面净化；按用途归类，待用户校正"
-		},
-		{
-			"key": "common-hide-nav-dynamic-red-num",
-			"id": "S059",
-			"names": ["隐藏 动态小红点"],
-			"pages": ["*"],
-			"groups": ["全站通用 - 顶栏 右侧"],
-			"category": "cleaning",
-			"rationale": "原逐项分类：页面净化；按用途归类，待用户校正"
-		},
-		{
-			"key": "common-hide-nav-favorite",
-			"id": "S060",
-			"names": ["隐藏 收藏"],
-			"pages": ["*"],
-			"groups": ["全站通用 - 顶栏 右侧"],
-			"category": "cleaning",
-			"rationale": "原逐项分类：页面净化；按用途归类，待用户校正"
-		},
-		{
-			"key": "common-hide-nav-game",
-			"id": "S061",
-			"names": ["隐藏 游戏中心"],
-			"pages": ["*"],
-			"groups": ["全站通用 - 顶栏 左侧"],
-			"category": "cleaning",
-			"rationale": "原逐项分类：页面净化；按用途归类，待用户校正"
-		},
-		{
-			"key": "common-hide-nav-game-popover",
-			"id": "S062",
-			"names": ["隐藏 游戏中心弹出框"],
-			"pages": ["*"],
-			"groups": ["全站通用 - 顶栏 左侧"],
-			"category": "cleaning",
-			"rationale": "原逐项分类：页面净化；按用途归类，待用户校正"
-		},
-		{
-			"key": "common-hide-nav-history",
-			"id": "S063",
-			"names": ["隐藏 历史"],
-			"pages": ["*"],
-			"groups": ["全站通用 - 顶栏 右侧"],
-			"category": "cleaning",
-			"rationale": "原逐项分类：页面净化；按用途归类，待用户校正"
-		},
-		{
-			"key": "common-hide-nav-homepage",
-			"id": "S064",
-			"names": ["隐藏 首页"],
-			"pages": ["*"],
-			"groups": ["全站通用 - 顶栏 左侧"],
-			"category": "cleaning",
-			"rationale": "原逐项分类：页面净化；按用途归类，待用户校正"
-		},
-		{
-			"key": "common-hide-nav-homepage-logo",
-			"id": "S065",
-			"names": ["隐藏 主站Logo"],
-			"pages": ["*"],
-			"groups": ["全站通用 - 顶栏 左侧"],
-			"category": "cleaning",
-			"rationale": "原逐项分类：页面净化；按用途归类，待用户校正"
-		},
-		{
-			"key": "common-hide-nav-live",
-			"id": "S066",
-			"names": ["隐藏 直播"],
-			"pages": ["*"],
-			"groups": ["全站通用 - 顶栏 左侧"],
-			"category": "cleaning",
-			"rationale": "原逐项分类：页面净化；按用途归类，待用户校正"
-		},
-		{
-			"key": "common-hide-nav-live-popover",
-			"id": "S067",
-			"names": ["隐藏 直播弹出框"],
-			"pages": ["*"],
-			"groups": ["全站通用 - 顶栏 左侧"],
-			"category": "cleaning",
-			"rationale": "原逐项分类：页面净化；按用途归类，待用户校正"
-		},
-		{
-			"key": "common-hide-nav-manga",
-			"id": "S068",
-			"names": ["隐藏 漫画"],
-			"pages": ["*"],
-			"groups": ["全站通用 - 顶栏 左侧"],
-			"category": "cleaning",
-			"rationale": "原逐项分类：页面净化；按用途归类，待用户校正"
-		},
-		{
-			"key": "common-hide-nav-manga-popover",
-			"id": "S069",
-			"names": ["隐藏 漫画弹出框"],
-			"pages": ["*"],
-			"groups": ["全站通用 - 顶栏 左侧"],
-			"category": "cleaning",
-			"rationale": "原逐项分类：页面净化；按用途归类，待用户校正"
-		},
-		{
-			"key": "common-hide-nav-match",
-			"id": "S070",
-			"names": ["隐藏 赛事"],
-			"pages": ["*"],
-			"groups": ["全站通用 - 顶栏 左侧"],
-			"category": "cleaning",
-			"rationale": "原逐项分类：页面净化；按用途归类，待用户校正"
-		},
-		{
-			"key": "common-hide-nav-member",
-			"id": "S071",
-			"names": ["隐藏 创作中心"],
-			"pages": ["*"],
-			"groups": ["全站通用 - 顶栏 右侧"],
-			"category": "cleaning",
-			"rationale": "原逐项分类：页面净化；按用途归类，待用户校正"
-		},
-		{
-			"key": "common-hide-nav-message",
-			"id": "S072",
-			"names": ["隐藏 消息"],
-			"pages": ["*"],
-			"groups": ["全站通用 - 顶栏 右侧"],
-			"category": "cleaning",
-			"rationale": "原逐项分类：页面净化；按用途归类，待用户校正"
-		},
-		{
-			"key": "common-hide-nav-message-red-num",
-			"id": "S073",
-			"names": ["隐藏 消息小红点"],
-			"pages": ["*"],
-			"groups": ["全站通用 - 顶栏 右侧"],
-			"category": "cleaning",
-			"rationale": "原逐项分类：页面净化；按用途归类，待用户校正"
-		},
-		{
-			"key": "common-hide-nav-search-btn",
-			"id": "S074",
-			"names": ["隐藏 搜索按钮"],
-			"pages": ["*"],
-			"groups": ["全站通用 - 顶栏 搜索框"],
-			"category": "cleaning",
-			"rationale": "原逐项分类：页面净化；按用途归类，待用户校正"
-		},
-		{
-			"key": "common-hide-nav-search-history",
-			"id": "S075",
-			"names": ["隐藏 搜索历史"],
-			"pages": ["*"],
-			"groups": ["全站通用 - 顶栏 搜索框"],
-			"category": "cleaning",
-			"rationale": "原逐项分类：页面净化；按用途归类，待用户校正"
-		},
-		{
-			"key": "common-hide-nav-search-rcmd",
-			"id": "S076",
-			"names": ["隐藏 推荐搜索"],
-			"pages": ["*"],
-			"groups": ["全站通用 - 顶栏 搜索框"],
-			"category": "cleaning",
-			"rationale": "原逐项分类：页面净化；按用途归类，待用户校正"
-		},
-		{
-			"key": "common-hide-nav-search-trending",
-			"id": "S077",
-			"names": ["隐藏 bilibili热搜"],
-			"pages": ["*"],
-			"groups": ["全站通用 - 顶栏 搜索框"],
-			"category": "cleaning",
-			"rationale": "原逐项分类：页面净化；按用途归类，待用户校正"
-		},
-		{
-			"key": "common-hide-nav-upload",
-			"id": "S078",
-			"names": ["隐藏 投稿"],
-			"pages": ["*"],
-			"groups": ["全站通用 - 顶栏 右侧"],
-			"category": "cleaning",
-			"rationale": "原逐项分类：页面净化；按用途归类，待用户校正"
-		},
-		{
-			"key": "common-hide-nav-vip",
-			"id": "S079",
-			"names": ["隐藏 大会员"],
-			"pages": ["*"],
-			"groups": ["全站通用 - 顶栏 右侧"],
-			"category": "cleaning",
-			"rationale": "原逐项分类：页面净化；按用途归类，待用户校正"
-		},
-		{
-			"key": "common-hide-nav-vipshop",
-			"id": "S080",
-			"names": ["隐藏 会员购"],
-			"pages": ["*"],
-			"groups": ["全站通用 - 顶栏 左侧"],
-			"category": "cleaning",
-			"rationale": "原逐项分类：页面净化；按用途归类，待用户校正"
-		},
-		{
-			"key": "common-nav-favorite-select-watchlater",
-			"id": "S081",
-			"names": ["收藏弹出框 自动选中稍后再看"],
-			"pages": ["*"],
-			"groups": ["全站通用 - 顶栏 右侧"],
-			"category": "optimization",
-			"rationale": "原逐项分类：操作增强；按用途归类，待用户校正",
-			"pack": "reading-navigation",
-			"packLabel": "阅读与导航"
-		},
-		{
-			"key": "common-nav-search-middle-justify",
-			"id": "S082",
-			"names": ["修复 搜索框居中"],
-			"pages": ["*"],
-			"groups": ["全站通用 - 顶栏 搜索框"],
-			"category": "optimization",
-			"rationale": "原逐项分类：布局调整；按用途归类，待用户校正",
-			"pack": "layout",
-			"packLabel": "页面布局"
-		},
-		{
-			"key": "common-theme-dark",
-			"id": "S083",
-			"names": ["夜间模式"],
-			"pages": ["*"],
-			"groups": ["全站通用 - 夜间模式"],
-			"category": "optimization",
-			"rationale": "原逐项分类：外观调整；按用途归类，待用户校正",
-			"pack": "appearance",
-			"packLabel": "主题与外观",
-			"retention": "optional-retain",
-			"defaultOff": true
-		},
-		{
-			"key": "common-unify-font",
-			"id": "S084",
-			"names": ["统一全站字体"],
-			"pages": ["*"],
-			"groups": ["全站通用 - 基本功能"],
-			"category": "optimization",
-			"rationale": "原逐项分类：外观调整；按用途归类，待用户校正",
-			"pack": "text-style",
-			"packLabel": "文字与字幕",
-			"retention": "optional-retain",
-			"defaultOff": true
-		},
-		{
-			"key": "debug-mode",
-			"id": "S085",
-			"names": ["Debug 模式"],
-			"pages": ["space"],
-			"groups": ["日志输出"],
-			"category": "support",
-			"rationale": "原逐项分类：公共支撑；按用途归类，待用户校正"
-		},
-		{
-			"key": "default-webscreen",
-			"id": "S086",
-			"names": ["自动网页全屏播放"],
-			"pages": ["video", "playlist"],
-			"groups": ["布局设定"],
-			"category": "optimization",
-			"rationale": "原逐项分类：操作增强；按用途归类，待用户校正",
-			"pack": "playback",
-			"packLabel": "播放控制"
-		},
-		{
-			"key": "default-widescreen",
-			"id": "S087",
-			"names": ["自动宽屏播放"],
-			"pages": [
-				"bangumi",
-				"video",
-				"playlist"
-			],
-			"groups": ["布局设定"],
-			"category": "optimization",
-			"rationale": "原逐项分类：操作增强；按用途归类，待用户校正",
-			"pack": "playback",
-			"packLabel": "播放控制"
-		},
-		{
-			"key": "dynamic-detail-width",
-			"id": "S097",
-			"names": ["动态详情 中栏宽度 (0禁用)"],
-			"pages": ["dynamic"],
-			"groups": ["动态宽度调节"],
-			"category": "optimization",
-			"rationale": "原逐项分类：布局调整；按用途归类，待用户校正",
-			"pack": "layout",
-			"packLabel": "页面布局"
-		},
-		{
-			"key": "dynamic-list-width",
-			"id": "S098",
-			"names": ["动态列表 中栏宽度 (0禁用)"],
-			"pages": ["dynamic"],
-			"groups": ["动态宽度调节"],
-			"category": "optimization",
-			"rationale": "原逐项分类：布局调整；按用途归类，待用户校正",
-			"pack": "layout",
-			"packLabel": "页面布局"
-		},
-		{
-			"key": "dynamic-page-hide-all-comment",
-			"id": "S099",
-			"names": ["隐藏 动态评论区 (动态页/空间页)"],
-			"pages": [
-				"video",
-				"bangumi",
-				"dynamic",
-				"space",
-				"playlist",
-				"festival"
-			],
-			"groups": ["全站通用 - 评论区"],
-			"category": "cleaning",
-			"rationale": "原逐项分类：页面净化；按用途归类，待用户校正"
-		},
-		{
-			"key": "dynamic-page-unfold-dynamic",
-			"id": "S100",
-			"names": ["自动展开 相同UP主被折叠的动态"],
-			"pages": ["dynamic"],
-			"groups": ["中栏 动态列表"],
-			"category": "optimization",
-			"rationale": "原逐项分类：操作增强；按用途归类，待用户校正",
-			"pack": "reading-navigation",
-			"packLabel": "阅读与导航"
-		},
-		{
-			"key": "dynamic-page-unfold-dynamic-content",
-			"id": "S101",
-			"names": ["自动展开 动态文字内容"],
-			"pages": ["dynamic", "space"],
-			"groups": ["中栏 动态列表", "动态列表 (与动态页同步)"],
-			"category": "optimization",
-			"rationale": "原逐项分类：操作增强；按用途归类，待用户校正",
-			"pack": "reading-navigation",
-			"packLabel": "阅读与导航"
-		},
-		{
-			"key": "dynamic-page-up-list-checked-item-hide",
-			"id": "S102",
-			"names": ["隐藏 UP 主列表 已查看项"],
-			"pages": ["dynamic"],
-			"groups": ["中栏 顶部功能"],
-			"category": "cleaning",
-			"rationale": "原逐项分类：页面净化；按用途归类，待用户校正"
-		},
-		{
-			"key": "dynamic-page-up-list-checked-item-opacity",
-			"id": "S103",
-			"names": ["淡化 UP 主列表 已查看项"],
-			"pages": ["dynamic"],
-			"groups": ["中栏 顶部功能"],
-			"category": "cleaning",
-			"rationale": "原逐项分类：页面净化；按用途归类，待用户校正"
-		},
-		{
-			"key": "dynamic-page-up-list-dual-line-mode",
-			"id": "S104",
-			"names": ["双行显示 UP 主列表"],
-			"pages": ["dynamic"],
-			"groups": ["中栏 顶部功能"],
-			"category": "optimization",
-			"rationale": "原逐项分类：布局调整；按用途归类，待用户校正",
-			"pack": "layout",
-			"packLabel": "页面布局"
-		},
-		{
-			"key": "exchange-dynamic-page-left-right-aside",
-			"id": "S105",
-			"names": ["交换 左栏与右栏位置"],
-			"pages": ["dynamic"],
-			"groups": ["基本功能"],
-			"category": "optimization",
-			"rationale": "原逐项分类：布局调整；按用途归类，待用户校正",
-			"pack": "layout",
-			"packLabel": "页面布局"
-		},
-		{
-			"key": "fullscreen-key-f-scrollable",
-			"id": "S106",
-			"names": ["按 F 键全屏可滚动"],
-			"pages": [
-				"bangumi",
-				"video",
-				"playlist"
-			],
-			"groups": ["布局设定"],
-			"category": "optimization",
-			"rationale": "原逐项分类：操作增强；按用途归类，待用户校正",
-			"pack": "playback",
-			"packLabel": "播放控制"
-		},
-		{
-			"key": "fullscreen-scrollable",
-			"id": "S107",
-			"names": ["网页全屏/真全屏时 页面可滚动"],
-			"pages": [
-				"bangumi",
-				"video",
-				"playlist"
-			],
-			"groups": ["布局设定"],
-			"category": "optimization",
-			"rationale": "原逐项分类：操作增强；按用途归类，待用户校正",
-			"pack": "playback",
-			"packLabel": "播放控制"
-		},
-		{
-			"key": "hide-dynamic-page-aside-left",
-			"id": "S129",
-			"names": ["隐藏 左栏"],
-			"pages": ["dynamic"],
-			"groups": ["左栏 个人信息/正在直播"],
-			"category": "cleaning",
-			"rationale": "原逐项分类：页面净化；按用途归类，待用户校正"
-		},
-		{
-			"key": "hide-dynamic-page-aside-right",
-			"id": "S130",
-			"names": ["隐藏 右栏"],
-			"pages": ["dynamic"],
-			"groups": ["右栏 热门话题"],
-			"category": "cleaning",
-			"rationale": "原逐项分类：页面净化；按用途归类，待用户校正"
-		},
-		{
-			"key": "hide-dynamic-page-bili-dyn-ads",
-			"id": "S131",
-			"names": ["隐藏 广告"],
-			"pages": ["dynamic"],
-			"groups": ["右栏 热门话题"],
-			"category": "cleaning",
-			"rationale": "原逐项分类：页面净化；按用途归类，待用户校正"
-		},
-		{
-			"key": "hide-dynamic-page-bili-dyn-avatar-icon",
-			"id": "S132",
-			"names": ["隐藏 头像徽章"],
-			"pages": ["dynamic", "space"],
-			"groups": ["中栏 动态列表", "动态列表 (与动态页同步)"],
-			"category": "cleaning",
-			"rationale": "原逐项分类：页面净化；按用途归类，待用户校正"
-		},
-		{
-			"key": "hide-dynamic-page-bili-dyn-avatar-pendent",
-			"id": "S133",
-			"names": ["隐藏 头像框"],
-			"pages": ["dynamic", "space"],
-			"groups": ["中栏 动态列表", "动态列表 (与动态页同步)"],
-			"category": "cleaning",
-			"rationale": "原逐项分类：页面净化；按用途归类，待用户校正"
-		},
-		{
-			"key": "hide-dynamic-page-bili-dyn-banner",
-			"id": "S134",
-			"names": ["隐藏 社区中心"],
-			"pages": ["dynamic"],
-			"groups": ["右栏 热门话题"],
-			"category": "cleaning",
-			"rationale": "原逐项分类：页面净化；按用途归类，待用户校正"
-		},
-		{
-			"key": "hide-dynamic-page-bili-dyn-blocked",
-			"id": "S135",
-			"names": ["隐藏 充电动态/问答动态"],
-			"pages": ["dynamic", "space"],
-			"groups": ["中栏 动态列表", "动态列表 (与动态页同步)"],
-			"category": "cleaning",
-			"rationale": "原逐项分类：内容过滤；按用途归类，待用户校正"
-		},
-		{
-			"key": "hide-dynamic-page-bili-dyn-card-goods",
-			"id": "S136",
-			"names": ["隐藏 带货动态"],
-			"pages": ["dynamic", "space"],
-			"groups": ["中栏 动态列表", "动态列表 (与动态页同步)"],
-			"category": "cleaning",
-			"rationale": "原逐项分类：内容过滤；按用途归类，待用户校正"
-		},
-		{
-			"key": "hide-dynamic-page-bili-dyn-card-reserve",
-			"id": "S137",
-			"names": ["隐藏 视频预约/直播预约动态"],
-			"pages": ["dynamic", "space"],
-			"groups": ["中栏 动态列表", "动态列表 (与动态页同步)"],
-			"category": "cleaning",
-			"rationale": "原逐项分类：内容过滤；按用途归类，待用户校正"
-		},
-		{
-			"key": "hide-dynamic-page-bili-dyn-charge-video",
-			"id": "S138",
-			"names": ["隐藏 全部充电视频 (含已充电)", "隐藏 全部充电视频(含已充电)"],
-			"pages": ["dynamic", "space"],
-			"groups": ["中栏 动态列表", "动态列表 (与动态页同步)"],
-			"category": "cleaning",
-			"rationale": "原逐项分类：内容过滤；按用途归类，待用户校正"
-		},
-		{
-			"key": "hide-dynamic-page-bili-dyn-dispute",
-			"id": "S139",
-			"names": ["隐藏 警告notice"],
-			"pages": ["dynamic", "space"],
-			"groups": ["中栏 动态列表", "动态列表 (与动态页同步)"],
-			"category": "cleaning",
-			"rationale": "原逐项分类：页面净化；按用途归类，待用户校正"
-		},
-		{
-			"key": "hide-dynamic-page-bili-dyn-forward",
-			"id": "S140",
-			"names": ["隐藏 转发的动态"],
-			"pages": ["dynamic", "space"],
-			"groups": ["中栏 动态列表", "动态列表 (与动态页同步)"],
-			"category": "cleaning",
-			"rationale": "原逐项分类：内容过滤；按用途归类，待用户校正"
-		},
-		{
-			"key": "hide-dynamic-page-bili-dyn-item-interaction",
-			"id": "S141",
-			"names": ["隐藏 动态精选互动 XXX赞了/XXX回复"],
-			"pages": ["dynamic", "space"],
-			"groups": ["中栏 动态列表", "动态列表 (与动态页同步)"],
-			"category": "cleaning",
-			"rationale": "原逐项分类：页面净化；按用途归类，待用户校正"
-		},
-		{
-			"key": "hide-dynamic-page-bili-dyn-list-tabs",
-			"id": "S142",
-			"names": ["隐藏 动态分类Tab bar"],
-			"pages": ["dynamic"],
-			"groups": ["中栏 顶部功能"],
-			"category": "cleaning",
-			"rationale": "原逐项分类：页面净化；按用途归类，待用户校正"
-		},
-		{
-			"key": "hide-dynamic-page-bili-dyn-live",
-			"id": "S143",
-			"names": ["隐藏 直播通知动态"],
-			"pages": ["dynamic", "space"],
-			"groups": ["中栏 动态列表", "动态列表 (与动态页同步)"],
-			"category": "cleaning",
-			"rationale": "原逐项分类：内容过滤；按用途归类，待用户校正"
-		},
-		{
-			"key": "hide-dynamic-page-bili-dyn-live-users__item__living",
-			"id": "S144",
-			"names": ["隐藏 直播中Logo"],
-			"pages": ["dynamic"],
-			"groups": ["左栏 个人信息/正在直播"],
-			"category": "cleaning",
-			"rationale": "原逐项分类：页面净化；按用途归类，待用户校正"
-		},
-		{
-			"key": "hide-dynamic-page-bili-dyn-lottery",
-			"id": "S145",
-			"names": ["隐藏 抽奖动态 (含转发)", "隐藏 抽奖动态(含转发)"],
-			"pages": ["dynamic", "space"],
-			"groups": ["中栏 动态列表", "动态列表 (与动态页同步)"],
-			"category": "cleaning",
-			"rationale": "原逐项分类：内容过滤；按用途归类，待用户校正"
-		},
-		{
-			"key": "hide-dynamic-page-bili-dyn-my-info",
-			"id": "S146",
-			"names": ["隐藏 个人信息框"],
-			"pages": ["dynamic"],
-			"groups": ["左栏 个人信息/正在直播"],
-			"category": "cleaning",
-			"rationale": "原逐项分类：页面净化；按用途归类，待用户校正"
-		},
-		{
-			"key": "hide-dynamic-page-bili-dyn-official-topic",
-			"id": "S147",
-			"names": ["隐藏 官方话题Tag"],
-			"pages": ["dynamic", "space"],
-			"groups": ["中栏 动态列表", "动态列表 (与动态页同步)"],
-			"category": "cleaning",
-			"rationale": "原逐项分类：页面净化；按用途归类，待用户校正"
-		},
-		{
-			"key": "hide-dynamic-page-bili-dyn-ornament",
-			"id": "S148",
-			"names": ["隐藏 动态右侧饰品"],
-			"pages": ["dynamic", "space"],
-			"groups": ["中栏 动态列表", "动态列表 (与动态页同步)"],
-			"category": "cleaning",
-			"rationale": "原逐项分类：页面净化；按用途归类，待用户校正"
-		},
-		{
-			"key": "hide-dynamic-page-bili-dyn-publishing",
-			"id": "S149",
-			"names": ["隐藏 动态发布框"],
-			"pages": ["dynamic"],
-			"groups": ["中栏 顶部功能"],
-			"category": "cleaning",
-			"rationale": "原逐项分类：页面净化；按用途归类，待用户校正"
-		},
-		{
-			"key": "hide-dynamic-page-bili-dyn-text-topic",
-			"id": "S150",
-			"names": ["禁用 普通话题#Tag#高亮"],
-			"pages": ["dynamic", "space"],
-			"groups": ["中栏 动态列表", "动态列表 (与动态页同步)"],
-			"category": "cleaning",
-			"rationale": "原逐项分类：页面净化；按用途归类，待用户校正"
-		},
-		{
-			"key": "hide-dynamic-page-bili-dyn-topic-box",
-			"id": "S151",
-			"names": ["隐藏 热搜"],
-			"pages": ["dynamic"],
-			"groups": ["右栏 热门话题"],
-			"category": "cleaning",
-			"rationale": "原逐项分类：页面净化；按用途归类，待用户校正"
-		},
-		{
-			"key": "hide-dynamic-page-bili-dyn-vote",
-			"id": "S152",
-			"names": ["隐藏 投票动态"],
-			"pages": ["dynamic", "space"],
-			"groups": ["中栏 动态列表", "动态列表 (与动态页同步)"],
-			"category": "cleaning",
-			"rationale": "原逐项分类：内容过滤；按用途归类，待用户校正"
-		},
-		{
-			"key": "hide-dynamic-page-fixed-header",
-			"id": "S153",
-			"names": ["顶栏 不再吸附顶部"],
-			"pages": ["dynamic"],
-			"groups": ["基本功能"],
-			"category": "cleaning",
-			"rationale": "取消干扰性的顶栏吸附，归净化"
-		},
-		{
-			"key": "hide-dynamic-page-sidebar-back-to-top",
-			"id": "S154",
-			"names": ["隐藏 回顶部"],
-			"pages": ["dynamic"],
-			"groups": ["页面右下角 小按钮"],
-			"category": "cleaning",
-			"rationale": "原逐项分类：页面净化；按用途归类，待用户校正"
-		},
-		{
-			"key": "hide-dynamic-page-sidebar-old-version",
-			"id": "S155",
-			"names": ["隐藏 回到旧版"],
-			"pages": ["dynamic"],
-			"groups": ["页面右下角 小按钮"],
-			"category": "cleaning",
-			"rationale": "原逐项分类：页面净化；按用途归类，待用户校正"
-		},
-		{
-			"key": "hide-dynamic-page-up-list",
-			"id": "S156",
-			"names": ["隐藏 UP 主列表"],
-			"pages": ["dynamic"],
-			"groups": ["中栏 顶部功能"],
-			"category": "cleaning",
-			"rationale": "原逐项分类：页面净化；按用途归类，待用户校正"
-		},
-		{
-			"key": "hide-footer",
-			"id": "S157",
-			"names": ["隐藏 页底footer"],
-			"pages": ["*"],
-			"groups": ["全站通用 - 基本功能"],
-			"category": "cleaning",
-			"rationale": "原逐项分类：页面净化；按用途归类，待用户校正"
-		},
-		{
-			"key": "hide-search-page-activity-game-list",
-			"id": "S158",
-			"names": ["隐藏 搜索结果顶部 游戏、热搜"],
-			"pages": ["search"],
-			"groups": ["基本功能"],
-			"category": "cleaning",
-			"rationale": "原逐项分类：页面净化；按用途归类，待用户校正"
-		},
-		{
-			"key": "hide-search-page-ad",
-			"id": "S159",
-			"names": ["隐藏 广告"],
-			"pages": ["search"],
-			"groups": ["基本功能"],
-			"category": "cleaning",
-			"rationale": "原逐项分类：页面净化；按用途归类，待用户校正"
-		},
-		{
-			"key": "hide-search-page-bangumi-pgc-list",
-			"id": "S160",
-			"names": ["隐藏 搜索结果顶部 版权作品"],
-			"pages": ["search"],
-			"groups": ["基本功能"],
-			"category": "cleaning",
-			"rationale": "原逐项分类：页面净化；按用途归类，待用户校正"
-		},
-		{
-			"key": "hide-search-page-btn-to-top",
-			"id": "S161",
-			"names": ["隐藏 回顶部"],
-			"pages": ["search"],
-			"groups": ["页面右下角 小按钮"],
-			"category": "cleaning",
-			"rationale": "原逐项分类：页面净化；按用途归类，待用户校正"
-		},
-		{
-			"key": "hide-search-page-cheese-result",
-			"id": "S162",
-			"names": ["隐藏 课堂"],
-			"pages": ["search"],
-			"groups": ["基本功能"],
-			"category": "cleaning",
-			"rationale": "原逐项分类：页面净化；按用途归类，待用户校正"
-		},
-		{
-			"key": "hide-search-page-customer-service",
-			"id": "S163",
-			"names": ["隐藏 客服"],
-			"pages": ["search"],
-			"groups": ["页面右下角 小按钮"],
-			"category": "cleaning",
-			"rationale": "原逐项分类：页面净化；按用途归类，待用户校正"
-		},
-		{
-			"key": "hide-search-page-danmaku-count",
-			"id": "S164",
-			"names": ["隐藏 弹幕数量"],
-			"pages": ["search"],
-			"groups": ["基本功能"],
-			"category": "cleaning",
-			"rationale": "原逐项分类：页面净化；按用途归类，待用户校正"
-		},
-		{
-			"key": "hide-search-page-date",
-			"id": "S165",
-			"names": ["隐藏 视频日期"],
-			"pages": ["search"],
-			"groups": ["基本功能"],
-			"category": "cleaning",
-			"rationale": "原逐项分类：页面净化；按用途归类，待用户校正"
-		},
-		{
-			"key": "hide-search-page-live-room-result",
-			"id": "S166",
-			"names": ["隐藏 直播"],
-			"pages": ["search"],
-			"groups": ["基本功能"],
-			"category": "cleaning",
-			"rationale": "原逐项分类：页面净化；按用途归类，待用户校正"
-		},
-		{
-			"key": "hide-search-page-search-sticky-header",
-			"id": "S167",
-			"names": ["顶栏 滚动页面后 不再吸附顶部"],
-			"pages": ["search"],
-			"groups": ["基本功能"],
-			"category": "cleaning",
-			"rationale": "取消干扰性的顶栏吸附，归净化"
-		},
-		{
-			"key": "hide-space-page-sidebar-feedback",
-			"id": "S168",
-			"names": ["隐藏 新版反馈"],
-			"pages": ["space"],
-			"groups": ["页面侧栏"],
-			"category": "cleaning",
-			"rationale": "原逐项分类：页面净化；按用途归类，待用户校正"
-		},
-		{
-			"key": "hide-space-page-sidebar-revert",
-			"id": "S169",
-			"names": ["隐藏 返回旧版"],
-			"pages": ["space"],
-			"groups": ["页面侧栏"],
-			"category": "cleaning",
-			"rationale": "原逐项分类：页面净化；按用途归类，待用户校正"
-		},
-		{
-			"key": "hide-space-page-video-card-charge",
-			"id": "S170",
-			"names": ["隐藏 充电视频"],
-			"pages": ["space"],
-			"groups": ["基本功能"],
-			"category": "cleaning",
-			"rationale": "原逐项分类：内容过滤；按用途归类，待用户校正"
-		},
-		{
-			"key": "hide-space-page-video-card-danmaku-count",
-			"id": "S171",
-			"names": ["隐藏 视频信息 弹幕数"],
-			"pages": ["space"],
-			"groups": ["基本功能"],
-			"category": "cleaning",
-			"rationale": "原逐项分类：页面净化；按用途归类，待用户校正"
-		},
-		{
-			"key": "hide-watchlater-button",
-			"id": "S172",
-			"names": ["隐藏 视频卡片 稍后再看按钮"],
-			"pages": ["*"],
-			"groups": ["全站通用 - 基本功能"],
-			"category": "cleaning",
-			"rationale": "原逐项分类：页面净化；按用途归类，待用户校正"
-		},
-		{
-			"key": "homepage-hide-ad-card",
-			"id": "S176",
-			"names": ["隐藏 广告"],
-			"pages": ["homepage"],
-			"groups": ["视频列表"],
-			"category": "cleaning",
-			"rationale": "原逐项分类：页面净化；按用途归类，待用户校正"
-		},
-		{
-			"key": "homepage-hide-adblock-tips",
-			"id": "S177",
-			"names": ["隐藏 顶部adblock提示"],
-			"pages": ["homepage"],
-			"groups": ["基本功能"],
-			"category": "cleaning",
-			"rationale": "原逐项分类：页面净化；按用途归类，待用户校正"
-		},
-		{
-			"key": "homepage-hide-adcard-button",
-			"id": "S178",
-			"names": ["隐藏 广告"],
-			"pages": ["homepage"],
-			"groups": ["页面侧栏 小组件"],
-			"category": "cleaning",
-			"rationale": "原逐项分类：页面净化；按用途归类，待用户校正"
-		},
-		{
-			"key": "homepage-hide-banner",
-			"id": "S179",
-			"names": ["隐藏 横幅banner"],
-			"pages": [
-				"channel",
-				"homepage",
-				"popular"
-			],
-			"groups": ["分区页 基础功能", "基本功能"],
-			"category": "cleaning",
-			"rationale": "原逐项分类：页面净化；按用途归类，待用户校正"
-		},
-		{
-			"key": "homepage-hide-bili-watch-later-tip",
-			"id": "S180",
-			"names": ["隐藏 稍后再看提示语"],
-			"pages": ["homepage"],
-			"groups": ["视频列表"],
-			"category": "cleaning",
-			"rationale": "原逐项分类：页面净化；按用途归类，待用户校正"
-		},
-		{
-			"key": "homepage-hide-danmaku-count",
-			"id": "S181",
-			"names": ["隐藏 弹幕数"],
-			"pages": ["homepage"],
-			"groups": ["视频列表"],
-			"category": "cleaning",
-			"rationale": "原逐项分类：页面净化；按用途归类，待用户校正"
-		},
-		{
-			"key": "homepage-hide-desktop-download-tip",
-			"id": "S182",
-			"names": ["隐藏 下载桌面端弹窗"],
-			"pages": ["homepage"],
-			"groups": ["页面侧栏 小组件"],
-			"category": "cleaning",
-			"rationale": "原逐项分类：页面净化；按用途归类，待用户校正"
-		},
-		{
-			"key": "homepage-hide-feed-roll-btn",
-			"id": "S183",
-			"names": ["隐藏 换一换"],
-			"pages": ["homepage"],
-			"groups": ["页面侧栏 小组件"],
-			"category": "cleaning",
-			"rationale": "原逐项分类：页面净化；按用途归类，待用户校正"
-		},
-		{
-			"key": "homepage-hide-feedback",
-			"id": "S184",
-			"names": ["隐藏 客服和反馈"],
-			"pages": ["homepage"],
-			"groups": ["页面侧栏 小组件"],
-			"category": "cleaning",
-			"rationale": "原逐项分类：页面净化；按用途归类，待用户校正"
-		},
-		{
-			"key": "homepage-hide-flexible-roll-btn",
-			"id": "S185",
-			"names": ["隐藏 刷新按钮"],
-			"pages": ["homepage"],
-			"groups": ["页面侧栏 小组件"],
-			"category": "cleaning",
-			"rationale": "原逐项分类：页面净化；按用途归类，待用户校正"
-		},
-		{
-			"key": "homepage-hide-flexible-roll-btn-text",
-			"id": "S186",
-			"names": ["隐藏 刷新按钮 文字提示"],
-			"pages": ["homepage"],
-			"groups": ["页面侧栏 小组件"],
-			"category": "cleaning",
-			"rationale": "原逐项分类：页面净化；按用途归类，待用户校正"
-		},
-		{
-			"key": "homepage-hide-inline-player-danmaku",
-			"id": "S187",
-			"names": ["隐藏 视频预览中的弹幕"],
-			"pages": ["homepage"],
-			"groups": ["视频列表"],
-			"category": "cleaning",
-			"rationale": "原逐项分类：页面净化；按用途归类，待用户校正"
-		},
-		{
-			"key": "homepage-hide-live-card-recommend",
-			"id": "S188",
-			"names": ["隐藏 直播间推荐"],
-			"pages": ["homepage"],
-			"groups": ["视频列表"],
-			"category": "cleaning",
-			"rationale": "原逐项分类：页面净化；按用途归类，待用户校正"
-		},
-		{
-			"key": "homepage-hide-no-interest",
-			"id": "S189",
-			"names": ["隐藏 负反馈按钮 恢复标题宽度"],
-			"pages": ["homepage"],
-			"groups": ["视频列表"],
-			"category": "cleaning",
-			"rationale": "削减卡片上的按钮，归净化；移动按钮另属优化"
-		},
-		{
-			"key": "homepage-hide-recommend-swipe",
-			"id": "S190",
-			"names": ["隐藏 大图活动轮播"],
-			"pages": ["homepage"],
-			"groups": ["基本功能"],
-			"category": "cleaning",
-			"rationale": "原逐项分类：页面净化；按用途归类，待用户校正"
-		},
-		{
-			"key": "homepage-hide-skeleton",
-			"id": "S191",
-			"names": ["隐藏 全部加载骨架"],
-			"pages": ["homepage"],
-			"groups": ["视频列表"],
-			"category": "cleaning",
-			"rationale": "原逐项分类：页面净化；按用途归类，待用户校正"
-		},
-		{
-			"key": "homepage-hide-skeleton-animation",
-			"id": "S192",
-			"names": ["关闭 视频载入 骨架动效"],
-			"pages": ["homepage"],
-			"groups": ["视频列表"],
-			"category": "cleaning",
-			"rationale": "原逐项分类：页面净化；按用途归类，待用户校正"
-		},
-		{
-			"key": "homepage-hide-skeleton-before-anchor",
-			"id": "S193",
-			"names": ["隐藏 加载锚点之前的骨架"],
-			"pages": ["homepage"],
-			"groups": ["视频列表"],
-			"category": "cleaning",
-			"rationale": "原逐项分类：页面净化；按用途归类，待用户校正"
-		},
-		{
-			"key": "homepage-hide-sticky-header",
-			"id": "S194",
-			"names": ["隐藏 滚动页面时 顶部吸附顶栏"],
-			"pages": ["homepage", "popular"],
-			"groups": ["基本功能"],
-			"category": "cleaning",
-			"rationale": "取消干扰性的顶栏吸附，归净化"
-		},
-		{
-			"key": "homepage-hide-sticky-subarea",
-			"id": "S195",
-			"names": ["隐藏 滚动页面时 顶部吸附分区栏"],
-			"pages": ["homepage"],
-			"groups": ["基本功能"],
-			"category": "cleaning",
-			"rationale": "取消干扰性的分区栏吸附，归净化"
-		},
-		{
-			"key": "homepage-hide-sub-area-card-recommend",
-			"id": "S196",
-			"names": ["隐藏 分区视频推荐"],
-			"pages": ["homepage"],
-			"groups": ["视频列表"],
-			"category": "cleaning",
-			"rationale": "原逐项分类：页面净化；按用途归类，待用户校正"
-		},
-		{
-			"key": "homepage-hide-subarea",
-			"id": "S197",
-			"names": ["隐藏 分区栏"],
-			"pages": ["homepage"],
-			"groups": ["基本功能"],
-			"category": "cleaning",
-			"rationale": "原逐项分类：页面净化；按用途归类，待用户校正"
-		},
-		{
-			"key": "homepage-hide-top-btn",
-			"id": "S198",
-			"names": ["隐藏 回顶部"],
-			"pages": ["homepage"],
-			"groups": ["页面侧栏 小组件"],
-			"category": "cleaning",
-			"rationale": "原逐项分类：页面净化；按用途归类，待用户校正"
-		},
-		{
-			"key": "homepage-hide-trial-feed-wrap",
-			"id": "S199",
-			"names": ["隐藏 下滑浏览推荐提示"],
-			"pages": ["homepage"],
-			"groups": ["页面侧栏 小组件"],
-			"category": "cleaning",
-			"rationale": "原逐项分类：页面净化；按用途归类，待用户校正"
-		},
-		{
-			"key": "homepage-hide-up-info-icon",
-			"id": "S200",
-			"names": ["隐藏 视频tag (已关注/1万点赞)"],
-			"pages": ["homepage"],
-			"groups": ["视频列表"],
-			"category": "cleaning",
-			"rationale": "原逐项分类：页面净化；按用途归类，待用户校正"
-		},
-		{
-			"key": "homepage-hide-video-info-date",
-			"id": "S201",
-			"names": ["隐藏 发布时间"],
-			"pages": ["homepage"],
-			"groups": ["视频列表"],
-			"category": "cleaning",
-			"rationale": "原逐项分类：页面净化；按用途归类，待用户校正"
-		},
-		{
-			"key": "homepage-hide-watchlater-pip-button",
-			"id": "S202",
-			"names": ["隐藏 稍后再看"],
-			"pages": ["homepage"],
-			"groups": ["页面侧栏 小组件"],
-			"category": "cleaning",
-			"rationale": "原逐项分类：页面净化；按用途归类，待用户校正"
-		},
-		{
-			"key": "homepage-increase-rcmd-list-font-size",
-			"id": "S203",
-			"names": ["增大 视频信息字号"],
-			"pages": ["homepage"],
-			"groups": ["视频列表"],
-			"category": "optimization",
-			"rationale": "原逐项分类：外观调整；按用途归类，待用户校正",
-			"pack": "text-style",
-			"packLabel": "文字与字幕"
-		},
-		{
-			"key": "homepage-increase-rcmd-load-size",
-			"id": "S204",
-			"names": ["增大 视频载入 视频数量"],
-			"pages": ["homepage"],
-			"groups": ["视频列表"],
-			"category": "cleaning",
-			"rationale": "用户2026-10-11明确改归净化；作为过滤配套载入能力保留，触发与请求预算独立管理"
-		},
-		{
-			"key": "homepage-layout",
-			"id": "S205",
-			"names": ["修改 视频列表列数"],
-			"pages": ["homepage"],
-			"groups": ["页面布局"],
-			"category": "optimization",
-			"rationale": "原逐项分类：布局调整；按用途归类，待用户校正",
-			"pack": "layout",
-			"packLabel": "页面布局"
-		},
-		{
-			"key": "homepage-layout-padding",
-			"id": "S206",
-			"names": ["修改 页面两侧边距 (-1禁用)"],
-			"pages": ["homepage"],
-			"groups": ["页面布局"],
-			"category": "optimization",
-			"rationale": "原逐项分类：布局调整；按用途归类，待用户校正",
-			"pack": "layout",
-			"packLabel": "页面布局"
-		},
-		{
-			"key": "homepage-move-no-interest",
-			"id": "S207",
-			"names": ["移动 负反馈按钮 恢复标题宽度"],
-			"pages": ["homepage"],
-			"groups": ["视频列表"],
-			"category": "optimization",
-			"rationale": "原逐项分类：布局调整；按用途归类，待用户校正",
-			"pack": "layout",
-			"packLabel": "页面布局"
-		},
-		{
-			"key": "homepage-rcmd-video-preload",
-			"id": "S209",
-			"names": ["启用 视频列表预加载 (不稳定功能)"],
-			"pages": ["homepage"],
-			"groups": ["视频列表"],
-			"category": "cleaning",
-			"rationale": "用户2026-10-11明确改归净化；作为过滤配套载入能力保留，触发与请求预算独立管理"
-		},
-		{
-			"key": "homepage-revert-channel-dynamic-icon",
-			"id": "S210",
-			"names": ["恢复 原始动态按钮"],
-			"pages": ["channel", "homepage"],
-			"groups": ["分区页 基础功能", "基本功能"],
-			"category": "optimization",
-			"rationale": "原逐项分类：操作增强；按用途归类，待用户校正",
-			"pack": "reading-navigation",
-			"packLabel": "阅读与导航"
-		},
-		{
-			"key": "homepage-simple-sub-area-card-recommend",
-			"id": "S211",
-			"names": ["简化 分区视频推荐"],
-			"pages": ["homepage"],
-			"groups": ["视频列表"],
-			"category": "cleaning",
-			"rationale": "原逐项分类：页面净化；按用途归类，待用户校正"
-		},
-		{
-			"key": "increase-space-page-video-card-font-size",
-			"id": "S218",
-			"names": ["增大 视频信息 字号"],
-			"pages": ["space"],
-			"groups": ["基本功能"],
-			"category": "optimization",
-			"rationale": "原逐项分类：外观调整；按用途归类，待用户校正",
-			"pack": "text-style",
-			"packLabel": "文字与字幕"
-		},
-		{
-			"key": "live-page-announcement-cntr",
-			"id": "S219",
-			"names": ["隐藏 主播公告"],
-			"pages": ["live"],
-			"groups": ["下方页面（动态/公告）"],
-			"category": "cleaning",
-			"rationale": "原逐项分类：页面净化；按用途归类，待用户校正"
-		},
-		{
-			"key": "live-page-brush-prompt",
-			"id": "S220",
-			"names": ["隐藏 底部滚动提示"],
-			"pages": ["live"],
-			"groups": ["右栏 弹幕列表"],
-			"category": "cleaning",
-			"rationale": "原逐项分类：页面净化；按用途归类，待用户校正"
-		},
-		{
-			"key": "live-page-bulge-danmaku",
-			"id": "S221",
-			"names": ["隐藏 大表情弹幕"],
-			"pages": ["live"],
-			"groups": ["右栏 弹幕列表"],
-			"category": "cleaning",
-			"rationale": "原逐项分类：内容过滤；按用途归类，待用户校正"
-		},
-		{
-			"key": "live-page-chat-control-panel",
-			"id": "S222",
-			"names": ["隐藏 弹幕栏底部全部功能"],
-			"pages": ["live"],
-			"groups": ["右栏 弹幕列表"],
-			"category": "cleaning",
-			"rationale": "原逐项分类：页面净化；按用途归类，待用户校正"
-		},
-		{
-			"key": "live-page-chat-input-ctnr",
-			"id": "S223",
-			"names": ["隐藏 发送框"],
-			"pages": ["live"],
-			"groups": ["右栏 弹幕列表"],
-			"category": "cleaning",
-			"rationale": "原逐项分类：页面净化；按用途归类，待用户校正"
-		},
-		{
-			"key": "live-page-chat-input-ctnr-medal-section",
-			"id": "S224",
-			"names": ["隐藏 发送框 粉丝勋章"],
-			"pages": ["live"],
-			"groups": ["右栏 弹幕列表"],
-			"category": "cleaning",
-			"rationale": "原逐项分类：页面净化；按用途归类，待用户校正"
-		},
-		{
-			"key": "live-page-chat-input-ctnr-send-btn",
-			"id": "S225",
-			"names": ["隐藏 发送框 发送按钮 (回车发送)"],
-			"pages": ["live"],
-			"groups": ["右栏 弹幕列表"],
-			"category": "cleaning",
-			"rationale": "原逐项分类：页面净化；按用途归类，待用户校正"
-		},
-		{
-			"key": "live-page-chat-item-background-color",
-			"id": "S226",
-			"names": ["隐藏 弹幕高亮底色"],
-			"pages": ["live"],
-			"groups": ["右栏 弹幕列表"],
-			"category": "cleaning",
-			"rationale": "原逐项分类：页面净化；按用途归类，待用户校正"
-		},
-		{
-			"key": "live-page-chat-item-top3-notice",
-			"id": "S227",
-			"names": ["隐藏 高能用户提示"],
-			"pages": ["live"],
-			"groups": ["右栏 弹幕列表"],
-			"category": "cleaning",
-			"rationale": "原逐项分类：页面净化；按用途归类，待用户校正"
-		},
-		{
-			"key": "live-page-clean-all-danmaku-big-emoji",
-			"id": "S228",
-			"names": ["隐藏 弹幕中的大表情"],
-			"pages": ["live"],
-			"groups": ["播放器"],
-			"category": "cleaning",
-			"rationale": "原逐项分类：页面净化；按用途归类，待用户校正"
-		},
-		{
-			"key": "live-page-clean-all-danmaku-small-emoji",
-			"id": "S229",
-			"names": ["隐藏 弹幕中的小表情"],
-			"pages": ["live"],
-			"groups": ["播放器"],
-			"category": "cleaning",
-			"rationale": "原逐项分类：页面净化；按用途归类，待用户校正"
-		},
-		{
-			"key": "live-page-combo-card",
-			"id": "S230",
-			"names": ["隐藏 互动框"],
-			"pages": ["live"],
-			"groups": ["右栏 弹幕列表"],
-			"category": "cleaning",
-			"rationale": "原逐项分类：页面净化；按用途归类，待用户校正"
-		},
-		{
-			"key": "live-page-combo-danmaku",
-			"id": "S231",
-			"names": ["隐藏 播放器顶部变动计数弹幕"],
-			"pages": ["live"],
-			"groups": ["播放器"],
-			"category": "cleaning",
-			"rationale": "原逐项分类：页面净化；按用途归类，待用户校正"
-		},
-		{
-			"key": "live-page-control-panel-icon-row",
-			"id": "S232",
-			"names": ["隐藏 发送框 功能按钮"],
-			"pages": ["live"],
-			"groups": ["右栏 弹幕列表"],
-			"category": "cleaning",
-			"rationale": "原逐项分类：页面净化；按用途归类，待用户校正"
-		},
-		{
-			"key": "live-page-convention-msg",
-			"id": "S233",
-			"names": ["隐藏 系统提示"],
-			"pages": ["live"],
-			"groups": ["右栏 弹幕列表"],
-			"category": "cleaning",
-			"rationale": "原逐项分类：页面净化；按用途归类，待用户校正"
-		},
-		{
-			"key": "live-page-danmaku-font-size",
-			"id": "S234",
-			"names": ["调整 弹幕列表字号"],
-			"pages": ["live"],
-			"groups": ["右栏 弹幕列表"],
-			"category": "optimization",
-			"rationale": "原逐项分类：外观调整；按用途归类，待用户校正",
-			"pack": "text-style",
-			"packLabel": "文字与字幕"
-		},
-		{
-			"key": "live-page-default-skin",
-			"id": "S235",
-			"names": ["禁用 播放器皮肤"],
-			"pages": ["live"],
-			"groups": ["基本功能"],
-			"category": "cleaning",
-			"rationale": "原逐项分类：页面净化；按用途归类，待用户校正"
-		},
-		{
-			"key": "live-page-disable-hotkey-g-follow",
-			"id": "S236",
-			"names": ["禁用 快捷键 G 关注主播"],
-			"pages": ["live"],
-			"groups": ["直播信息栏"],
-			"category": "cleaning",
-			"rationale": "用户已确认：禁止G键误关注主播属于净化"
-		},
-		{
-			"key": "live-page-fans-medal-item-ctnr",
-			"id": "S237",
-			"names": ["隐藏 粉丝牌"],
-			"pages": ["live"],
-			"groups": ["右栏 弹幕列表"],
-			"category": "cleaning",
-			"rationale": "原逐项分类：页面净化；按用途归类，待用户校正"
-		},
-		{
-			"key": "live-page-flip-view",
-			"id": "S238",
-			"names": ["隐藏 活动海报"],
-			"pages": ["live"],
-			"groups": ["下方页面（动态/公告）"],
-			"category": "cleaning",
-			"rationale": "原逐项分类：页面净化；按用途归类，待用户校正"
-		},
-		{
-			"key": "live-page-fullscreen-danmaku-vm",
-			"id": "S239",
-			"names": ["全屏时 隐藏弹幕发送框"],
-			"pages": ["live"],
-			"groups": ["播放器"],
-			"category": "cleaning",
-			"rationale": "原逐项分类：页面净化；按用途归类，待用户校正"
-		},
-		{
-			"key": "live-page-gift-control-vm",
-			"id": "S240",
-			"names": ["隐藏 礼物栏"],
-			"pages": ["live"],
-			"groups": ["播放器"],
-			"category": "cleaning",
-			"rationale": "原逐项分类：页面净化；按用途归类，待用户校正"
-		},
-		{
-			"key": "live-page-gift-control-vm-show-lottery",
-			"id": "S241",
-			"names": ["隐藏 礼物栏 显示天选"],
-			"pages": ["live"],
-			"groups": ["播放器"],
-			"category": "cleaning",
-			"rationale": "原逐项分类：页面净化；按用途归类，待用户校正"
-		},
-		{
-			"key": "live-page-gift-item",
-			"id": "S242",
-			"names": ["隐藏 礼物弹幕"],
-			"pages": ["live"],
-			"groups": ["右栏 弹幕列表"],
-			"category": "cleaning",
-			"rationale": "原逐项分类：内容过滤；按用途归类，待用户校正"
-		},
-		{
-			"key": "live-page-group-medal-ctnr",
-			"id": "S243",
-			"names": ["隐藏 团体勋章"],
-			"pages": ["live"],
-			"groups": ["右栏 弹幕列表"],
-			"category": "cleaning",
-			"rationale": "原逐项分类：页面净化；按用途归类，待用户校正"
-		},
-		{
-			"key": "live-page-head-info-avatar-pendant",
-			"id": "S244",
-			"names": ["隐藏 头像饰品"],
-			"pages": ["live"],
-			"groups": ["直播信息栏"],
-			"category": "cleaning",
-			"rationale": "原逐项分类：页面净化；按用途归类，待用户校正"
-		},
-		{
-			"key": "live-page-head-info-vm",
-			"id": "S245",
-			"names": ["隐藏 信息栏"],
-			"pages": ["live"],
-			"groups": ["直播信息栏"],
-			"category": "cleaning",
-			"rationale": "原逐项分类：页面净化；按用途归类，待用户校正"
-		},
-		{
-			"key": "live-page-head-info-vm-upper-row-activity",
-			"id": "S246",
-			"names": ["隐藏 活动"],
-			"pages": ["live"],
-			"groups": ["直播信息栏"],
-			"category": "cleaning",
-			"rationale": "原逐项分类：页面净化；按用途归类，待用户校正"
-		},
-		{
-			"key": "live-page-head-info-vm-upper-row-follow-ctnr",
-			"id": "S247",
-			"names": ["隐藏 关注主播/加粉丝团"],
-			"pages": ["live"],
-			"groups": ["直播信息栏"],
-			"category": "cleaning",
-			"rationale": "原逐项分类：页面净化；按用途归类，待用户校正"
-		},
-		{
-			"key": "live-page-head-info-vm-upper-row-hotrank",
-			"id": "S248",
-			"names": ["隐藏 榜单"],
-			"pages": ["live"],
-			"groups": ["直播信息栏"],
-			"category": "cleaning",
-			"rationale": "原逐项分类：页面净化；按用途归类，待用户校正"
-		},
-		{
-			"key": "live-page-head-web-player-announcement-wrapper",
-			"id": "S249",
-			"names": ["隐藏 滚动礼物通告"],
-			"pages": ["live"],
-			"groups": ["播放器"],
-			"category": "cleaning",
-			"rationale": "原逐项分类：页面净化；按用途归类，待用户校正"
-		},
-		{
-			"key": "live-page-head-web-player-awesome-pk-vm",
-			"id": "S250",
-			"names": ["隐藏 直播PK特效"],
-			"pages": ["live"],
-			"groups": ["播放器"],
-			"category": "cleaning",
-			"rationale": "原逐项分类：页面净化；按用途归类，待用户校正"
-		},
-		{
-			"key": "live-page-head-web-player-game-id",
-			"id": "S251",
-			"names": ["隐藏 幻星互动游戏"],
-			"pages": ["live"],
-			"groups": ["播放器"],
-			"category": "cleaning",
-			"rationale": "原逐项分类：页面净化；按用途归类，待用户校正"
-		},
-		{
-			"key": "live-page-head-web-player-icon-feedback",
-			"id": "S252",
-			"names": ["隐藏 反馈按钮"],
-			"pages": ["live"],
-			"groups": ["播放器"],
-			"category": "cleaning",
-			"rationale": "原逐项分类：页面净化；按用途归类，待用户校正"
-		},
-		{
-			"key": "live-page-head-web-player-live-lottery",
-			"id": "S253",
-			"names": ["隐藏 天选时刻"],
-			"pages": ["live"],
-			"groups": ["播放器"],
-			"category": "cleaning",
-			"rationale": "原逐项分类：页面净化；按用途归类，待用户校正"
-		},
-		{
-			"key": "live-page-head-web-player-research-container",
-			"id": "S254",
-			"names": ["隐藏 直播卡顿打分"],
-			"pages": ["live"],
-			"groups": ["播放器"],
-			"category": "cleaning",
-			"rationale": "原逐项分类：页面净化；按用途归类，待用户校正"
-		},
-		{
-			"key": "live-page-head-web-player-shop-popover-vm",
-			"id": "S255",
-			"names": ["隐藏 购物小橙车提示"],
-			"pages": ["live"],
-			"groups": ["播放器"],
-			"category": "cleaning",
-			"rationale": "原逐项分类：页面净化；按用途归类，待用户校正"
-		},
-		{
-			"key": "live-page-header-avatar",
-			"id": "S256",
-			"names": ["隐藏 头像"],
-			"pages": ["live"],
-			"groups": ["顶栏 右侧"],
-			"category": "cleaning",
-			"rationale": "原逐项分类：页面净化；按用途归类，待用户校正"
-		},
-		{
-			"key": "live-page-header-bili-download-panel",
-			"id": "S257",
-			"names": ["隐藏 下载客户端"],
-			"pages": ["live"],
-			"groups": ["顶栏 右侧"],
-			"category": "cleaning",
-			"rationale": "原逐项分类：页面净化；按用途归类，待用户校正"
-		},
-		{
-			"key": "live-page-header-entry-logo",
-			"id": "S258",
-			"names": ["隐藏 直播LOGO"],
-			"pages": ["live"],
-			"groups": ["顶栏 左侧"],
-			"category": "cleaning",
-			"rationale": "原逐项分类：页面净化；按用途归类，待用户校正"
-		},
-		{
-			"key": "live-page-header-entry-title",
-			"id": "S259",
-			"names": ["隐藏 首页"],
-			"pages": ["live"],
-			"groups": ["顶栏 左侧"],
-			"category": "cleaning",
-			"rationale": "原逐项分类：页面净化；按用途归类，待用户校正"
-		},
-		{
-			"key": "live-page-header-follow-panel",
-			"id": "S260",
-			"names": ["隐藏 关注"],
-			"pages": ["live"],
-			"groups": ["顶栏 右侧"],
-			"category": "cleaning",
-			"rationale": "原逐项分类：页面净化；按用途归类，待用户校正"
-		},
-		{
-			"key": "live-page-header-go-live",
-			"id": "S261",
-			"names": ["隐藏 我要开播"],
-			"pages": ["live"],
-			"groups": ["顶栏 右侧"],
-			"category": "cleaning",
-			"rationale": "原逐项分类：页面净化；按用途归类，待用户校正"
-		},
-		{
-			"key": "live-page-header-live",
-			"id": "S262",
-			"names": ["隐藏 直播"],
-			"pages": ["live"],
-			"groups": ["顶栏 左侧"],
-			"category": "cleaning",
-			"rationale": "原逐项分类：页面净化；按用途归类，待用户校正"
-		},
-		{
-			"key": "live-page-header-mobile-game",
-			"id": "S263",
-			"names": ["隐藏 手游"],
-			"pages": ["live"],
-			"groups": ["顶栏 左侧"],
-			"category": "cleaning",
-			"rationale": "原逐项分类：页面净化；按用途归类，待用户校正"
-		},
-		{
-			"key": "live-page-header-net-game",
-			"id": "S264",
-			"names": ["隐藏 网游"],
-			"pages": ["live"],
-			"groups": ["顶栏 左侧"],
-			"category": "cleaning",
-			"rationale": "原逐项分类：页面净化；按用途归类，待用户校正"
-		},
-		{
-			"key": "live-page-header-recharge",
-			"id": "S265",
-			"names": ["隐藏 购买电池"],
-			"pages": ["live"],
-			"groups": ["顶栏 右侧"],
-			"category": "cleaning",
-			"rationale": "原逐项分类：页面净化；按用途归类，待用户校正"
-		},
-		{
-			"key": "live-page-header-search-block",
-			"id": "S266",
-			"names": ["隐藏 搜索框"],
-			"pages": ["live"],
-			"groups": ["顶栏 搜索框"],
-			"category": "cleaning",
-			"rationale": "原逐项分类：页面净化；按用途归类，待用户校正"
-		},
-		{
-			"key": "live-page-header-search-btn",
-			"id": "S267",
-			"names": ["隐藏 搜索按钮"],
-			"pages": ["live"],
-			"groups": ["顶栏 搜索框"],
-			"category": "cleaning",
-			"rationale": "原逐项分类：页面净化；按用途归类，待用户校正"
-		},
-		{
-			"key": "live-page-header-showmore-link",
-			"id": "S268",
-			"names": ["隐藏 更多"],
-			"pages": ["live"],
-			"groups": ["顶栏 左侧"],
-			"category": "cleaning",
-			"rationale": "原逐项分类：页面净化；按用途归类，待用户校正"
-		},
-		{
-			"key": "live-page-header-standalone-chatroom",
-			"id": "S269",
-			"names": ["隐藏 聊天室"],
-			"pages": ["live"],
-			"groups": ["顶栏 左侧"],
-			"category": "cleaning",
-			"rationale": "原逐项分类：页面净化；按用途归类，待用户校正"
-		},
-		{
-			"key": "live-page-header-standalone-entertainment",
-			"id": "S270",
-			"names": ["隐藏 娱乐"],
-			"pages": ["live"],
-			"groups": ["顶栏 左侧"],
-			"category": "cleaning",
-			"rationale": "原逐项分类：页面净化；按用途归类，待用户校正"
-		},
-		{
-			"key": "live-page-header-standalone-game",
-			"id": "S271",
-			"names": ["隐藏 单机游戏"],
-			"pages": ["live"],
-			"groups": ["顶栏 左侧"],
-			"category": "cleaning",
-			"rationale": "原逐项分类：页面净化；按用途归类，待用户校正"
-		},
-		{
-			"key": "live-page-header-standalone-helpmeplay",
-			"id": "S272",
-			"names": ["隐藏 帮我玩"],
-			"pages": ["live"],
-			"groups": ["顶栏 左侧"],
-			"category": "cleaning",
-			"rationale": "原逐项分类：页面净化；按用途归类，待用户校正"
-		},
-		{
-			"key": "live-page-header-standalone-interact",
-			"id": "S273",
-			"names": ["隐藏 互动玩法"],
-			"pages": ["live"],
-			"groups": ["顶栏 左侧"],
-			"category": "cleaning",
-			"rationale": "原逐项分类：页面净化；按用途归类，待用户校正"
-		},
-		{
-			"key": "live-page-header-standalone-knowledge",
-			"id": "S274",
-			"names": ["隐藏 知识"],
-			"pages": ["live"],
-			"groups": ["顶栏 左侧"],
-			"category": "cleaning",
-			"rationale": "原逐项分类：页面净化；按用途归类，待用户校正"
-		},
-		{
-			"key": "live-page-header-standalone-living",
-			"id": "S275",
-			"names": ["隐藏 生活"],
-			"pages": ["live"],
-			"groups": ["顶栏 左侧"],
-			"category": "cleaning",
-			"rationale": "原逐项分类：页面净化；按用途归类，待用户校正"
-		},
-		{
-			"key": "live-page-header-standalone-match",
-			"id": "S276",
-			"names": ["隐藏 赛事"],
-			"pages": ["live"],
-			"groups": ["顶栏 左侧"],
-			"category": "cleaning",
-			"rationale": "原逐项分类：页面净化；按用途归类，待用户校正"
-		},
-		{
-			"key": "live-page-header-standalone-radio",
-			"id": "S277",
-			"names": ["隐藏 电台"],
-			"pages": ["live"],
-			"groups": ["顶栏 左侧"],
-			"category": "cleaning",
-			"rationale": "原逐项分类：页面净化；按用途归类，待用户校正"
-		},
-		{
-			"key": "live-page-header-standalone-shopping",
-			"id": "S278",
-			"names": ["隐藏 购物"],
-			"pages": ["live"],
-			"groups": ["顶栏 左侧"],
-			"category": "cleaning",
-			"rationale": "原逐项分类：页面净化；按用途归类，待用户校正"
-		},
-		{
-			"key": "live-page-header-standalone-vtuber",
-			"id": "S279",
-			"names": ["隐藏 虚拟主播"],
-			"pages": ["live"],
-			"groups": ["顶栏 左侧"],
-			"category": "cleaning",
-			"rationale": "原逐项分类：页面净化；按用途归类，待用户校正"
-		},
-		{
-			"key": "live-page-hide-web-player-background",
-			"id": "S280",
-			"names": ["隐藏 播放器背景图"],
-			"pages": ["live"],
-			"groups": ["播放器"],
-			"category": "cleaning",
-			"rationale": "原逐项分类：页面净化；按用途归类，待用户校正"
-		},
-		{
-			"key": "live-page-nav-search-history",
-			"id": "S281",
-			"names": ["隐藏 搜索历史"],
-			"pages": ["live"],
-			"groups": ["顶栏 搜索框"],
-			"category": "cleaning",
-			"rationale": "原逐项分类：页面净化；按用途归类，待用户校正"
-		},
-		{
-			"key": "live-page-nav-search-rcmd",
-			"id": "S282",
-			"names": ["隐藏 推荐搜索"],
-			"pages": ["live"],
-			"groups": ["顶栏 搜索框"],
-			"category": "cleaning",
-			"rationale": "原逐项分类：页面净化；按用途归类，待用户校正"
-		},
-		{
-			"key": "live-page-nav-search-trending",
-			"id": "S283",
-			"names": ["隐藏 bilibili热搜"],
-			"pages": ["live"],
-			"groups": ["顶栏 搜索框"],
-			"category": "cleaning",
-			"rationale": "原逐项分类：页面净化；按用途归类，待用户校正"
-		},
-		{
-			"key": "live-page-rank-icon",
-			"id": "S284",
-			"names": ["隐藏 用户排名"],
-			"pages": ["live"],
-			"groups": ["右栏 弹幕列表"],
-			"category": "cleaning",
-			"rationale": "原逐项分类：页面净化；按用途归类，待用户校正"
-		},
-		{
-			"key": "live-page-rank-list-vm",
-			"id": "S285",
-			"names": ["隐藏 排行榜/大航海"],
-			"pages": ["live"],
-			"groups": ["右栏 弹幕列表"],
-			"category": "cleaning",
-			"rationale": "原逐项分类：页面净化；按用途归类，待用户校正"
-		},
-		{
-			"key": "live-page-rank-list-vm-fold",
-			"id": "S286",
-			"names": ["折叠 排行榜/大航海"],
-			"pages": ["live"],
-			"groups": ["右栏 弹幕列表"],
-			"category": "cleaning",
-			"rationale": "原逐项分类：页面净化；按用途归类，待用户校正"
-		},
-		{
-			"key": "live-page-remove-wallpaper",
-			"id": "S287",
-			"names": ["禁用 直播背景"],
-			"pages": ["live"],
-			"groups": ["基本功能"],
-			"category": "cleaning",
-			"rationale": "原逐项分类：页面净化；按用途归类，待用户校正"
-		},
-		{
-			"key": "live-page-room-feed",
-			"id": "S288",
-			"names": ["隐藏 主播动态"],
-			"pages": ["live"],
-			"groups": ["下方页面（动态/公告）"],
-			"category": "cleaning",
-			"rationale": "原逐项分类：页面净化；按用途归类，待用户校正"
-		},
-		{
-			"key": "live-page-room-info-ctnr",
-			"id": "S289",
-			"names": ["隐藏 直播间推荐/直播间介绍"],
-			"pages": ["live"],
-			"groups": ["下方页面（动态/公告）"],
-			"category": "cleaning",
-			"rationale": "原逐项分类：页面净化；按用途归类，待用户校正"
-		},
-		{
-			"key": "live-page-sections-vm",
-			"id": "S290",
-			"names": ["隐藏 直播下方全部内容"],
-			"pages": ["live"],
-			"groups": ["下方页面（动态/公告）"],
-			"category": "cleaning",
-			"rationale": "原逐项分类：页面净化；按用途归类，待用户校正"
-		},
-		{
-			"key": "live-page-sidebar-vm",
-			"id": "S291",
-			"names": ["隐藏 页面右侧按钮 实验室/关注"],
-			"pages": ["live"],
-			"groups": ["基本功能"],
-			"category": "cleaning",
-			"rationale": "原逐项分类：页面净化；按用途归类，待用户校正"
-		},
-		{
-			"key": "live-page-title-label",
-			"id": "S292",
-			"names": ["隐藏 头衔装扮"],
-			"pages": ["live"],
-			"groups": ["右栏 弹幕列表"],
-			"category": "cleaning",
-			"rationale": "原逐项分类：页面净化；按用途归类，待用户校正"
-		},
-		{
-			"key": "live-page-wealth-medal-ctnr",
-			"id": "S293",
-			"names": ["隐藏 用户等级"],
-			"pages": ["live"],
-			"groups": ["右栏 弹幕列表"],
-			"category": "cleaning",
-			"rationale": "原逐项分类：页面净化；按用途归类，待用户校正"
-		},
-		{
-			"key": "live-page-web-player-interactive-sticker",
-			"id": "S294",
-			"names": ["隐藏 播放器内sticker"],
-			"pages": ["live"],
-			"groups": ["播放器"],
-			"category": "cleaning",
-			"rationale": "原逐项分类：页面净化；按用途归类，待用户校正"
-		},
-		{
-			"key": "live-page-web-player-watermark",
-			"id": "S295",
-			"names": ["隐藏 直播水印"],
-			"pages": ["live"],
-			"groups": ["播放器"],
-			"category": "cleaning",
-			"rationale": "原逐项分类：页面净化；按用途归类，待用户校正"
-		},
-		{
-			"key": "live-page-welcome-msg",
-			"id": "S296",
-			"names": ["隐藏 XXX来了"],
-			"pages": ["live"],
-			"groups": ["右栏 弹幕列表"],
-			"category": "cleaning",
-			"rationale": "原逐项分类：页面净化；按用途归类，待用户校正"
-		},
-		{
-			"key": "live-page-width",
-			"id": "S297",
-			"names": ["修改 页面宽度占比 (0禁用)"],
-			"pages": ["live"],
-			"groups": ["基本功能"],
-			"category": "optimization",
-			"rationale": "原逐项分类：布局调整；按用途归类，待用户校正",
-			"pack": "layout",
-			"packLabel": "页面布局"
-		},
-		{
-			"key": "normalscreen-width",
-			"id": "S298",
-			"names": ["普通播放宽度调节（-1禁用）"],
-			"pages": [
-				"bangumi",
-				"video",
-				"playlist"
-			],
-			"groups": ["布局设定"],
-			"category": "optimization",
-			"rationale": "原逐项分类：布局调整；按用途归类，待用户校正",
-			"pack": "layout",
-			"packLabel": "页面布局"
-		},
-		{
-			"key": "popular-hide-danmaku-count",
-			"id": "S302",
-			"names": ["隐藏 弹幕数"],
-			"pages": ["popular"],
-			"groups": ["基本功能"],
-			"category": "cleaning",
-			"rationale": "原逐项分类：页面净化；按用途归类，待用户校正"
-		},
-		{
-			"key": "popular-hide-tips",
-			"id": "S303",
-			"names": ["隐藏 tips"],
-			"pages": ["popular"],
-			"groups": ["基本功能"],
-			"category": "cleaning",
-			"rationale": "原逐项分类：页面净化；按用途归类，待用户校正"
-		},
-		{
-			"key": "popular-history-hide-hint",
-			"id": "S304",
-			"names": ["隐藏 入站必刷 一句话简介"],
-			"pages": ["popular"],
-			"groups": ["其他功能"],
-			"category": "cleaning",
-			"rationale": "原逐项分类：页面净化；按用途归类，待用户校正"
-		},
-		{
-			"key": "popular-hot-hide-tag",
-			"id": "S305",
-			"names": ["隐藏 综合热门 视频tag"],
-			"pages": ["popular"],
-			"groups": ["其他功能"],
-			"category": "cleaning",
-			"rationale": "原逐项分类：页面净化；按用途归类，待用户校正"
-		},
-		{
-			"key": "popular-layout",
-			"id": "S306",
-			"names": ["强制修改视频列数"],
-			"pages": ["popular"],
-			"groups": ["页面强制布局"],
-			"category": "optimization",
-			"rationale": "原逐项分类：布局调整；按用途归类，待用户校正",
-			"pack": "layout",
-			"packLabel": "页面布局"
-		},
-		{
-			"key": "popular-weekly-hide-hint",
-			"id": "S313",
-			"names": ["隐藏 每周必看 一句话简介"],
-			"pages": ["popular"],
-			"groups": ["其他功能"],
-			"category": "cleaning",
-			"rationale": "原逐项分类：页面净化；按用途归类，待用户校正"
-		},
-		{
-			"key": "screen-scrollable-enable-mini-player",
-			"id": "S314",
-			"names": ["网页全屏滚动时 启用小窗播放器"],
-			"pages": [
-				"bangumi",
-				"video",
-				"playlist"
-			],
-			"groups": ["布局设定"],
-			"category": "optimization",
-			"rationale": "原逐项分类：操作增强；按用途归类，待用户校正",
-			"pack": "playback",
-			"packLabel": "播放控制"
-		},
-		{
-			"key": "screen-scrollable-move-header-bottom",
-			"id": "S315",
-			"names": ["全屏滚动时 在视频底部显示顶栏"],
-			"pages": [
-				"bangumi",
-				"video",
-				"playlist"
-			],
-			"groups": ["布局设定"],
-			"category": "optimization",
-			"rationale": "原逐项分类：操作增强；按用途归类，待用户校正",
-			"pack": "playback",
-			"packLabel": "播放控制"
-		},
-		{
-			"key": "space-page-redirect-to-video",
-			"id": "S338",
-			"names": ["打开用户主页 自动跳转到投稿"],
-			"pages": ["space"],
-			"groups": ["基本功能"],
-			"category": "optimization",
-			"rationale": "原逐项分类：操作增强；按用途归类，待用户校正",
-			"pack": "reading-navigation",
-			"packLabel": "阅读与导航"
-		},
-		{
-			"key": "url-cleaner",
-			"id": "S342",
-			"names": ["URL参数净化"],
-			"pages": ["*"],
-			"groups": ["全站通用 - 基本功能"],
-			"category": "cleaning",
-			"rationale": "清除多余URL参数，归净化；地址栏自动执行仍默认关闭"
-		},
-		{
-			"key": "video-page-bpx-player-bili-dm-normal-white",
-			"id": "S366",
-			"names": ["普通彩色弹幕 变成白色"],
-			"pages": [
-				"bangumi",
-				"festival",
-				"video",
-				"playlist"
-			],
-			"groups": ["播放器（标★是番剧页独有项）", "播放器"],
-			"category": "optimization",
-			"rationale": "原逐项分类：外观调整；按用途归类，待用户校正",
-			"pack": "appearance",
-			"packLabel": "主题与外观"
-		},
-		{
-			"key": "video-page-bpx-player-bili-dm-vip-white",
-			"id": "S367",
-			"names": ["彩色渐变弹幕 变成白色"],
-			"pages": [
-				"bangumi",
-				"festival",
-				"video",
-				"playlist"
-			],
-			"groups": ["播放器（标★是番剧页独有项）", "播放器"],
-			"category": "optimization",
-			"rationale": "原逐项分类：外观调整；按用途归类，待用户校正",
-			"pack": "appearance",
-			"packLabel": "主题与外观"
-		},
-		{
-			"key": "video-page-bpx-player-bili-high-icon",
-			"id": "S368",
-			"names": ["隐藏 高赞弹幕前点赞按钮"],
-			"pages": [
-				"bangumi",
-				"festival",
-				"video",
-				"playlist"
-			],
-			"groups": ["播放器（标★是番剧页独有项）", "播放器"],
-			"category": "cleaning",
-			"rationale": "原逐项分类：页面净化；按用途归类，待用户校正"
-		},
-		{
-			"key": "video-page-bpx-player-mini-mode-position-record",
-			"id": "S369",
-			"names": ["记录小窗位置"],
-			"pages": [
-				"bangumi",
-				"video",
-				"playlist"
-			],
-			"groups": ["小窗播放器"],
-			"category": "optimization",
-			"rationale": "原逐项分类：操作增强；按用途归类，待用户校正",
-			"pack": "playback",
-			"packLabel": "播放控制"
-		},
-		{
-			"key": "video-page-bpx-player-mini-mode-wheel-adjust",
-			"id": "S370",
-			"names": ["滚轮调节大小"],
-			"pages": [
-				"bangumi",
-				"video",
-				"playlist"
-			],
-			"groups": ["小窗播放器"],
-			"category": "optimization",
-			"rationale": "原逐项分类：操作增强；按用途归类，待用户校正",
-			"pack": "playback",
-			"packLabel": "播放控制"
-		},
-		{
-			"key": "video-page-bv2av",
-			"id": "S371",
-			"names": ["BV号转AV号"],
-			"pages": ["video", "playlist"],
-			"groups": ["基本功能"],
-			"category": "optimization",
-			"rationale": "原逐项分类：操作增强；按用途归类，待用户校正",
-			"pack": "link-tools",
-			"packLabel": "链接工具"
-		},
-		{
-			"key": "video-page-coin-disable-auto-like",
-			"id": "S372",
-			"names": ["投币时不自动点赞"],
-			"pages": [
-				"bangumi",
-				"video",
-				"playlist"
-			],
-			"groups": ["工具栏/作品信息", "工具栏"],
-			"category": "cleaning",
-			"rationale": "阻止投币附带的自动点赞，归净化"
-		},
-		{
-			"key": "video-page-danmaku-font-family",
-			"id": "S373",
-			"names": ["弹幕字体"],
-			"pages": [
-				"bangumi",
-				"festival",
-				"live",
-				"video",
-				"playlist"
-			],
-			"groups": ["弹幕样式", "弹幕样式（同步播放页）"],
-			"category": "optimization",
-			"rationale": "原逐项分类：外观调整；按用途归类，待用户校正",
-			"pack": "text-style",
-			"packLabel": "文字与字幕"
-		},
-		{
-			"key": "video-page-danmaku-font-weight",
-			"id": "S374",
-			"names": ["弹幕字重"],
-			"pages": [
-				"bangumi",
-				"festival",
-				"live",
-				"video",
-				"playlist"
-			],
-			"groups": ["弹幕样式", "弹幕样式（同步播放页）"],
-			"category": "optimization",
-			"rationale": "原逐项分类：外观调整；按用途归类，待用户校正",
-			"pack": "text-style",
-			"packLabel": "文字与字幕"
-		},
-		{
-			"key": "video-page-exchange-player-position",
-			"id": "S375",
-			"names": ["播放器和视频信息 交换位置"],
-			"pages": ["video", "playlist"],
-			"groups": ["布局设定"],
-			"category": "optimization",
-			"rationale": "原逐项分类：布局调整；按用途归类，待用户校正",
-			"pack": "layout",
-			"packLabel": "页面布局"
-		},
-		{
-			"key": "video-page-fix-note-thumbnail-scale",
-			"id": "S376",
-			"names": ["优化 笔记评论缩略图比例"],
-			"pages": [
-				"video",
-				"bangumi",
-				"dynamic",
-				"space",
-				"playlist",
-				"festival"
-			],
-			"groups": ["全站通用 - 评论区"],
-			"category": "optimization",
-			"rationale": "原逐项分类：外观调整；按用途归类，待用户校正",
-			"pack": "appearance",
-			"packLabel": "主题与外观"
-		},
-		{
-			"key": "video-page-hide-below-activity-vote",
-			"id": "S377",
-			"names": ["隐藏 活动宣传"],
-			"pages": ["video", "playlist"],
-			"groups": ["工具栏"],
-			"category": "cleaning",
-			"rationale": "原逐项分类：页面净化；按用途归类，待用户校正"
-		},
-		{
-			"key": "video-page-hide-below-bannerAd",
-			"id": "S378",
-			"names": ["隐藏 广告banner"],
-			"pages": ["video", "playlist"],
-			"groups": ["工具栏"],
-			"category": "cleaning",
-			"rationale": "原逐项分类：页面净化；按用途归类，待用户校正"
-		},
-		{
-			"key": "video-page-hide-below-info-desc",
-			"id": "S379",
-			"names": ["隐藏 视频简介"],
-			"pages": ["video", "playlist"],
-			"groups": ["工具栏"],
-			"category": "cleaning",
-			"rationale": "原逐项分类：页面净化；按用途归类，待用户校正"
-		},
-		{
-			"key": "video-page-hide-below-info-tag",
-			"id": "S380",
-			"names": ["隐藏 标签列表"],
-			"pages": ["video", "playlist"],
-			"groups": ["工具栏"],
-			"category": "cleaning",
-			"rationale": "原逐项分类：页面净化；按用途归类，待用户校正"
-		},
-		{
-			"key": "video-page-hide-below-info-video-ai-assistant",
-			"id": "S381",
-			"names": ["隐藏 官方AI总结"],
-			"pages": ["video", "playlist"],
-			"groups": ["工具栏"],
-			"category": "cleaning",
-			"rationale": "原逐项分类：页面净化；按用途归类，待用户校正"
-		},
-		{
-			"key": "video-page-hide-below-info-video-complaint",
-			"id": "S382",
-			"names": ["隐藏 举报按钮"],
-			"pages": ["video", "playlist"],
-			"groups": ["工具栏"],
-			"category": "cleaning",
-			"rationale": "原逐项分类：页面净化；按用途归类，待用户校正"
-		},
-		{
-			"key": "video-page-hide-below-info-video-note",
-			"id": "S383",
-			"names": ["隐藏 记笔记"],
-			"pages": ["video", "playlist"],
-			"groups": ["工具栏"],
-			"category": "cleaning",
-			"rationale": "原逐项分类：页面净化；按用途归类，待用户校正"
-		},
-		{
-			"key": "video-page-hide-below-info-video-report-menu",
-			"id": "S384",
-			"names": ["隐藏 折叠菜单"],
-			"pages": ["video", "playlist"],
-			"groups": ["工具栏"],
-			"category": "cleaning",
-			"rationale": "原逐项分类：页面净化；按用途归类，待用户校正"
-		},
-		{
-			"key": "video-page-hide-bili-avatar-nft-icon",
-			"id": "S385",
-			"names": ["隐藏 用户头像徽章"],
-			"pages": [
-				"video",
-				"bangumi",
-				"dynamic",
-				"space",
-				"playlist",
-				"festival"
-			],
-			"groups": ["全站通用 - 评论区"],
-			"category": "cleaning",
-			"rationale": "原逐项分类：页面净化；按用途归类，待用户校正"
-		},
-		{
-			"key": "video-page-hide-bili-avatar-pendent-dom",
-			"id": "S386",
-			"names": ["隐藏 用户头像饰品"],
-			"pages": [
-				"video",
-				"bangumi",
-				"dynamic",
-				"space",
-				"playlist",
-				"festival"
-			],
-			"groups": ["全站通用 - 评论区"],
-			"category": "cleaning",
-			"rationale": "原逐项分类：页面净化；按用途归类，待用户校正"
-		},
-		{
-			"key": "video-page-hide-bpx-player-bili-clock",
-			"id": "S387",
-			"names": ["隐藏 打卡"],
-			"pages": [
-				"bangumi",
-				"festival",
-				"video",
-				"playlist"
-			],
-			"groups": ["播放器（标★是番剧页独有项）", "播放器"],
-			"category": "cleaning",
-			"rationale": "原逐项分类：页面净化；按用途归类，待用户校正"
-		},
-		{
-			"key": "video-page-hide-bpx-player-bili-cmd-shrink",
-			"id": "S388",
-			"names": ["隐藏 迷你弹窗"],
-			"pages": [
-				"bangumi",
-				"festival",
-				"video",
-				"playlist"
-			],
-			"groups": ["播放器（标★是番剧页独有项）", "播放器"],
-			"category": "cleaning",
-			"rationale": "原逐项分类：页面净化；按用途归类，待用户校正"
-		},
-		{
-			"key": "video-page-hide-bpx-player-bili-cmtime",
-			"id": "S389",
-			"names": ["隐藏 心动"],
-			"pages": [
-				"bangumi",
-				"festival",
-				"video",
-				"playlist"
-			],
-			"groups": ["播放器（标★是番剧页独有项）", "播放器"],
-			"category": "cleaning",
-			"rationale": "原逐项分类：页面净化；按用途归类，待用户校正"
-		},
-		{
-			"key": "video-page-hide-bpx-player-bili-guide-all",
-			"id": "S390",
-			"names": ["隐藏 一键三连"],
-			"pages": [
-				"bangumi",
-				"festival",
-				"video",
-				"playlist"
-			],
-			"groups": ["播放器（标★是番剧页独有项）", "播放器"],
-			"category": "cleaning",
-			"rationale": "原逐项分类：页面净化；按用途归类，待用户校正"
-		},
-		{
-			"key": "video-page-hide-bpx-player-bili-link",
-			"id": "S391",
-			"names": ["隐藏 视频链接"],
-			"pages": [
-				"bangumi",
-				"festival",
-				"video",
-				"playlist"
-			],
-			"groups": ["播放器（标★是番剧页独有项）", "播放器"],
-			"category": "cleaning",
-			"rationale": "原逐项分类：页面净化；按用途归类，待用户校正"
-		},
-		{
-			"key": "video-page-hide-bpx-player-bili-qoe-feedback",
-			"id": "S392",
-			"names": ["隐藏 播放效果调查"],
-			"pages": [
-				"bangumi",
-				"festival",
-				"video",
-				"playlist"
-			],
-			"groups": ["播放器（标★是番剧页独有项）", "播放器"],
-			"category": "cleaning",
-			"rationale": "原逐项分类：页面净化；按用途归类，待用户校正"
-		},
-		{
-			"key": "video-page-hide-bpx-player-bili-reserve",
-			"id": "S393",
-			"names": ["隐藏 视频预告"],
-			"pages": [
-				"bangumi",
-				"festival",
-				"video",
-				"playlist"
-			],
-			"groups": ["播放器（标★是番剧页独有项）", "播放器"],
-			"category": "cleaning",
-			"rationale": "原逐项分类：页面净化；按用途归类，待用户校正"
-		},
-		{
-			"key": "video-page-hide-bpx-player-bili-score",
-			"id": "S394",
-			"names": ["隐藏 评分"],
-			"pages": [
-				"bangumi",
-				"festival",
-				"video",
-				"playlist"
-			],
-			"groups": ["播放器（标★是番剧页独有项）", "播放器"],
-			"category": "cleaning",
-			"rationale": "原逐项分类：页面净化；按用途归类，待用户校正"
-		},
-		{
-			"key": "video-page-hide-bpx-player-bili-score-sum",
-			"id": "S395",
-			"names": ["隐藏 评分总结"],
-			"pages": [
-				"bangumi",
-				"festival",
-				"video",
-				"playlist"
-			],
-			"groups": ["播放器（标★是番剧页独有项）", "播放器"],
-			"category": "cleaning",
-			"rationale": "原逐项分类：页面净化；按用途归类，待用户校正"
-		},
-		{
-			"key": "video-page-hide-bpx-player-bili-vote",
-			"id": "S396",
-			"names": ["隐藏 投票"],
-			"pages": [
-				"bangumi",
-				"festival",
-				"video",
-				"playlist"
-			],
-			"groups": ["播放器（标★是番剧页独有项）", "播放器"],
-			"category": "cleaning",
-			"rationale": "原逐项分类：页面净化；按用途归类，待用户校正"
-		},
-		{
-			"key": "video-page-hide-bpx-player-cmd-dm-wrap",
-			"id": "S397",
-			"names": ["隐藏 播放器内所有弹窗 (强制)"],
-			"pages": [
-				"bangumi",
-				"festival",
-				"video",
-				"playlist"
-			],
-			"groups": ["播放器（标★是番剧页独有项）", "播放器"],
-			"category": "cleaning",
-			"rationale": "原逐项分类：页面净化；按用途归类，待用户校正"
-		},
-		{
-			"key": "video-page-hide-bpx-player-ctrl-eplist",
-			"id": "S398",
-			"names": ["隐藏 选集"],
-			"pages": [
-				"bangumi",
-				"festival",
-				"video",
-				"playlist"
-			],
-			"groups": ["播放控制栏"],
-			"category": "cleaning",
-			"rationale": "原逐项分类：页面净化；按用途归类，待用户校正"
-		},
-		{
-			"key": "video-page-hide-bpx-player-ctrl-flac",
-			"id": "S399",
-			"names": ["隐藏 Hi-Res无损"],
-			"pages": [
-				"bangumi",
-				"festival",
-				"video",
-				"playlist"
-			],
-			"groups": ["播放控制栏"],
-			"category": "cleaning",
-			"rationale": "原逐项分类：页面净化；按用途归类，待用户校正"
-		},
-		{
-			"key": "video-page-hide-bpx-player-ctrl-full",
-			"id": "S400",
-			"names": ["隐藏 全屏"],
-			"pages": [
-				"bangumi",
-				"festival",
-				"video",
-				"playlist"
-			],
-			"groups": ["播放控制栏"],
-			"category": "cleaning",
-			"rationale": "原逐项分类：页面净化；按用途归类，待用户校正"
-		},
-		{
-			"key": "video-page-hide-bpx-player-ctrl-next",
-			"id": "S401",
-			"names": ["隐藏 下一个视频"],
-			"pages": [
-				"bangumi",
-				"festival",
-				"video",
-				"playlist"
-			],
-			"groups": ["播放控制栏"],
-			"category": "cleaning",
-			"rationale": "原逐项分类：页面净化；按用途归类，待用户校正"
-		},
-		{
-			"key": "video-page-hide-bpx-player-ctrl-pip",
-			"id": "S402",
-			"names": ["隐藏 画中画"],
-			"pages": [
-				"bangumi",
-				"festival",
-				"video",
-				"playlist"
-			],
-			"groups": ["播放控制栏"],
-			"category": "cleaning",
-			"rationale": "原逐项分类：页面净化；按用途归类，待用户校正"
-		},
-		{
-			"key": "video-page-hide-bpx-player-ctrl-play",
-			"id": "S403",
-			"names": ["隐藏 播放/暂停"],
-			"pages": [
-				"bangumi",
-				"festival",
-				"video",
-				"playlist"
-			],
-			"groups": ["播放控制栏"],
-			"category": "cleaning",
-			"rationale": "原逐项分类：页面净化；按用途归类，待用户校正"
-		},
-		{
-			"key": "video-page-hide-bpx-player-ctrl-playbackrate",
-			"id": "S404",
-			"names": ["隐藏 倍速"],
-			"pages": [
-				"bangumi",
-				"festival",
-				"video",
-				"playlist"
-			],
-			"groups": ["播放控制栏"],
-			"category": "cleaning",
-			"rationale": "原逐项分类：页面净化；按用途归类，待用户校正"
-		},
-		{
-			"key": "video-page-hide-bpx-player-ctrl-prev",
-			"id": "S405",
-			"names": ["隐藏 上一个视频"],
-			"pages": [
-				"bangumi",
-				"festival",
-				"video",
-				"playlist"
-			],
-			"groups": ["播放控制栏"],
-			"category": "cleaning",
-			"rationale": "原逐项分类：页面净化；按用途归类，待用户校正"
-		},
-		{
-			"key": "video-page-hide-bpx-player-ctrl-quality",
-			"id": "S406",
-			"names": ["隐藏 清晰度"],
-			"pages": [
-				"bangumi",
-				"festival",
-				"video",
-				"playlist"
-			],
-			"groups": ["播放控制栏"],
-			"category": "cleaning",
-			"rationale": "原逐项分类：页面净化；按用途归类，待用户校正"
-		},
-		{
-			"key": "video-page-hide-bpx-player-ctrl-setting",
-			"id": "S407",
-			"names": ["隐藏 视频设置"],
-			"pages": [
-				"bangumi",
-				"festival",
-				"video",
-				"playlist"
-			],
-			"groups": ["播放控制栏"],
-			"category": "cleaning",
-			"rationale": "原逐项分类：页面净化；按用途归类，待用户校正"
-		},
-		{
-			"key": "video-page-hide-bpx-player-ctrl-subtitle",
-			"id": "S408",
-			"names": ["隐藏 字幕"],
-			"pages": [
-				"bangumi",
-				"festival",
-				"video",
-				"playlist"
-			],
-			"groups": ["播放控制栏"],
-			"category": "cleaning",
-			"rationale": "原逐项分类：页面净化；按用途归类，待用户校正"
-		},
-		{
-			"key": "video-page-hide-bpx-player-ctrl-viewpoint",
-			"id": "S409",
-			"names": ["隐藏 章节列表"],
-			"pages": [
-				"festival",
-				"video",
-				"playlist"
-			],
-			"groups": ["播放控制栏"],
-			"category": "cleaning",
-			"rationale": "原逐项分类：页面净化；按用途归类，待用户校正"
-		},
-		{
-			"key": "video-page-hide-bpx-player-ctrl-volume",
-			"id": "S410",
-			"names": ["隐藏 音量"],
-			"pages": [
-				"bangumi",
-				"festival",
-				"video",
-				"playlist"
-			],
-			"groups": ["播放控制栏"],
-			"category": "cleaning",
-			"rationale": "原逐项分类：页面净化；按用途归类，待用户校正"
-		},
-		{
-			"key": "video-page-hide-bpx-player-ctrl-web",
-			"id": "S411",
-			"names": ["隐藏 网页全屏"],
-			"pages": [
-				"bangumi",
-				"festival",
-				"video",
-				"playlist"
-			],
-			"groups": ["播放控制栏"],
-			"category": "cleaning",
-			"rationale": "原逐项分类：页面净化；按用途归类，待用户校正"
-		},
-		{
-			"key": "video-page-hide-bpx-player-ctrl-wide",
-			"id": "S412",
-			"names": ["隐藏 宽屏"],
-			"pages": [
-				"bangumi",
-				"festival",
-				"video",
-				"playlist"
-			],
-			"groups": ["播放控制栏"],
-			"category": "cleaning",
-			"rationale": "原逐项分类：页面净化；按用途归类，待用户校正"
-		},
-		{
-			"key": "video-page-hide-bpx-player-dialog-wrap",
-			"id": "S413",
-			"names": ["隐藏 弹幕悬停 点赞/复制/举报", "隐藏 弹幕悬停点赞/复制/举报"],
-			"pages": [
-				"bangumi",
-				"festival",
-				"video",
-				"playlist"
-			],
-			"groups": ["播放器（标★是番剧页独有项）", "播放器"],
-			"category": "cleaning",
-			"rationale": "原逐项分类：页面净化；按用途归类，待用户校正"
-		},
-		{
-			"key": "video-page-hide-bpx-player-dm-btn-send",
-			"id": "S414",
-			"names": ["隐藏 发送按钮"],
-			"pages": [
-				"bangumi",
-				"festival",
-				"video",
-				"playlist"
-			],
-			"groups": ["弹幕控制栏"],
-			"category": "cleaning",
-			"rationale": "原逐项分类：页面净化；按用途归类，待用户校正"
-		},
-		{
-			"key": "video-page-hide-bpx-player-dm-hint",
-			"id": "S415",
-			"names": ["隐藏 弹幕礼仪"],
-			"pages": [
-				"bangumi",
-				"festival",
-				"video",
-				"playlist"
-			],
-			"groups": ["弹幕控制栏"],
-			"category": "cleaning",
-			"rationale": "原逐项分类：页面净化；按用途归类，待用户校正"
-		},
-		{
-			"key": "video-page-hide-bpx-player-dm-input",
-			"id": "S416",
-			"names": ["隐藏 占位文字"],
-			"pages": [
-				"bangumi",
-				"festival",
-				"video",
-				"playlist"
-			],
-			"groups": ["弹幕控制栏"],
-			"category": "cleaning",
-			"rationale": "原逐项分类：页面净化；按用途归类，待用户校正"
-		},
-		{
-			"key": "video-page-hide-bpx-player-dm-setting",
-			"id": "S417",
-			"names": ["隐藏 弹幕显示设置"],
-			"pages": [
-				"bangumi",
-				"festival",
-				"video",
-				"playlist"
-			],
-			"groups": ["弹幕控制栏"],
-			"category": "cleaning",
-			"rationale": "原逐项分类：页面净化；按用途归类，待用户校正"
-		},
-		{
-			"key": "video-page-hide-bpx-player-dm-switch",
-			"id": "S418",
-			"names": ["隐藏 弹幕开关"],
-			"pages": [
-				"bangumi",
-				"festival",
-				"video",
-				"playlist"
-			],
-			"groups": ["弹幕控制栏"],
-			"category": "cleaning",
-			"rationale": "原逐项分类：页面净化；按用途归类，待用户校正"
-		},
-		{
-			"key": "video-page-hide-bpx-player-ending-related",
-			"id": "S419",
-			"names": ["隐藏 播放结束后视频推荐"],
-			"pages": [
-				"festival",
-				"video",
-				"playlist"
-			],
-			"groups": ["播放器"],
-			"category": "cleaning",
-			"rationale": "原逐项分类：页面净化；按用途归类，待用户校正"
-		},
-		{
-			"key": "video-page-hide-bpx-player-mini-mode-danmaku",
-			"id": "S420",
-			"names": ["隐藏弹幕"],
-			"pages": [
-				"bangumi",
-				"video",
-				"playlist"
-			],
-			"groups": ["小窗播放器"],
-			"category": "cleaning",
-			"rationale": "原逐项分类：页面净化；按用途归类，待用户校正"
-		},
-		{
-			"key": "video-page-hide-bpx-player-mini-mode-process",
-			"id": "S421",
-			"names": ["隐藏底边进度"],
-			"pages": [
-				"bangumi",
-				"video",
-				"playlist"
-			],
-			"groups": ["小窗播放器"],
-			"category": "cleaning",
-			"rationale": "原逐项分类：页面净化；按用途归类，待用户校正"
-		},
-		{
-			"key": "video-page-hide-bpx-player-mini-when-ending",
-			"id": "S422",
-			"names": ["播放结束时隐藏小窗"],
-			"pages": [
-				"bangumi",
-				"video",
-				"playlist"
-			],
-			"groups": ["小窗播放器"],
-			"category": "cleaning",
-			"rationale": "原逐项分类：页面净化；按用途归类，待用户校正"
-		},
-		{
-			"key": "video-page-hide-bpx-player-pbp-pin",
-			"id": "S423",
-			"names": ["隐藏 高能进度条 图钉按钮"],
-			"pages": [
-				"bangumi",
-				"festival",
-				"video",
-				"playlist"
-			],
-			"groups": ["播放控制栏"],
-			"category": "cleaning",
-			"rationale": "原逐项分类：页面净化；按用途归类，待用户校正"
-		},
-		{
-			"key": "video-page-hide-bpx-player-postpanel",
-			"id": "S424",
-			"names": ["隐藏 智能弹幕/广告弹幕"],
-			"pages": [
-				"festival",
-				"video",
-				"playlist"
-			],
-			"groups": ["弹幕控制栏"],
-			"category": "cleaning",
-			"rationale": "原逐项分类：页面净化；按用途归类，待用户校正"
-		},
-		{
-			"key": "video-page-hide-bpx-player-sending-area",
-			"id": "S425",
-			"names": ["非全屏时 关闭弹幕栏"],
-			"pages": [
-				"bangumi",
-				"festival",
-				"video",
-				"playlist"
-			],
-			"groups": ["弹幕控制栏"],
-			"category": "cleaning",
-			"rationale": "原逐项分类：页面净化；按用途归类，待用户校正"
-		},
-		{
-			"key": "video-page-hide-bpx-player-shadow-progress-area",
-			"id": "S426",
-			"names": ["隐藏 底边mini视频进度"],
-			"pages": [
-				"bangumi",
-				"festival",
-				"video",
-				"playlist"
-			],
-			"groups": ["播放控制栏"],
-			"category": "cleaning",
-			"rationale": "原逐项分类：页面净化；按用途归类，待用户校正"
-		},
-		{
-			"key": "video-page-hide-bpx-player-state-wrap",
-			"id": "S427",
-			"names": ["隐藏 视频暂停时大Logo"],
-			"pages": [
-				"bangumi",
-				"festival",
-				"video",
-				"playlist"
-			],
-			"groups": ["播放器（标★是番剧页独有项）", "播放器"],
-			"category": "cleaning",
-			"rationale": "原逐项分类：页面净化；按用途归类，待用户校正"
-		},
-		{
-			"key": "video-page-hide-bpx-player-top-issue",
-			"id": "S428",
-			"names": ["隐藏 反馈按钮", "隐藏 右上角 反馈按钮"],
-			"pages": [
-				"bangumi",
-				"festival",
-				"video",
-				"playlist"
-			],
-			"groups": ["播放器（标★是番剧页独有项）", "播放器"],
-			"category": "cleaning",
-			"rationale": "原逐项分类：页面净化；按用途归类，待用户校正"
-		},
-		{
-			"key": "video-page-hide-bpx-player-top-left-follow",
-			"id": "S429",
-			"names": ["隐藏 左上角 关注UP主"],
-			"pages": [
-				"festival",
-				"video",
-				"playlist"
-			],
-			"groups": ["播放器"],
-			"category": "cleaning",
-			"rationale": "原逐项分类：页面净化；按用途归类，待用户校正"
-		},
-		{
-			"key": "video-page-hide-bpx-player-top-left-music",
-			"id": "S430",
-			"names": ["隐藏 视频音乐链接"],
-			"pages": [
-				"festival",
-				"video",
-				"playlist"
-			],
-			"groups": ["播放器"],
-			"category": "cleaning",
-			"rationale": "原逐项分类：页面净化；按用途归类，待用户校正"
-		},
-		{
-			"key": "video-page-hide-bpx-player-top-left-title",
-			"id": "S431",
-			"names": ["隐藏 全屏时 播放器内标题"],
-			"pages": [
-				"bangumi",
-				"festival",
-				"video",
-				"playlist"
-			],
-			"groups": ["播放器（标★是番剧页独有项）", "播放器"],
-			"category": "cleaning",
-			"rationale": "原逐项分类：页面净化；按用途归类，待用户校正"
-		},
-		{
-			"key": "video-page-hide-bpx-player-video-btn-dm",
-			"id": "S432",
-			"names": ["隐藏 弹幕样式"],
-			"pages": [
-				"bangumi",
-				"festival",
-				"video",
-				"playlist"
-			],
-			"groups": ["弹幕控制栏"],
-			"category": "cleaning",
-			"rationale": "原逐项分类：页面净化；按用途归类，待用户校正"
-		},
-		{
-			"key": "video-page-hide-bpx-player-video-info-online",
-			"id": "S433",
-			"names": ["隐藏 同时在看人数"],
-			"pages": [
-				"bangumi",
-				"festival",
-				"video",
-				"playlist"
-			],
-			"groups": ["弹幕控制栏"],
-			"category": "cleaning",
-			"rationale": "原逐项分类：页面净化；按用途归类，待用户校正"
-		},
-		{
-			"key": "video-page-hide-bpx-player-video-inputbar",
-			"id": "S434",
-			"names": ["全屏时 关闭弹幕输入框"],
-			"pages": [
-				"bangumi",
-				"festival",
-				"video",
-				"playlist"
-			],
-			"groups": ["弹幕控制栏"],
-			"category": "cleaning",
-			"rationale": "原逐项分类：页面净化；按用途归类，待用户校正"
-		},
-		{
-			"key": "video-page-hide-comment",
-			"id": "S435",
-			"names": ["隐藏 视频评论区 (播放页/番剧页)"],
-			"pages": [
-				"video",
-				"bangumi",
-				"dynamic",
-				"space",
-				"playlist",
-				"festival"
-			],
-			"groups": ["全站通用 - 评论区"],
-			"category": "cleaning",
-			"rationale": "原逐项分类：页面净化；按用途归类，待用户校正"
-		},
-		{
-			"key": "video-page-hide-comment-user-card",
-			"id": "S436",
-			"names": ["隐藏 用户卡片"],
-			"pages": [
-				"video",
-				"bangumi",
-				"dynamic",
-				"space",
-				"playlist",
-				"festival"
-			],
-			"groups": ["全站通用 - 评论区"],
-			"category": "cleaning",
-			"rationale": "原逐项分类：页面净化；按用途归类，待用户校正"
-		},
-		{
-			"key": "video-page-hide-contractor-box",
-			"id": "S437",
-			"names": ["隐藏 老粉、原始粉丝Tag"],
-			"pages": [
-				"video",
-				"bangumi",
-				"dynamic",
-				"space",
-				"playlist",
-				"festival"
-			],
-			"groups": ["全站通用 - 评论区"],
-			"category": "cleaning",
-			"rationale": "原逐项分类：页面净化；按用途归类，待用户校正"
-		},
-		{
-			"key": "video-page-hide-emoji-large",
-			"id": "S438",
-			"names": ["隐藏 大表情"],
-			"pages": [
-				"video",
-				"bangumi",
-				"dynamic",
-				"space",
-				"playlist",
-				"festival"
-			],
-			"groups": ["全站通用 - 评论区"],
-			"category": "cleaning",
-			"rationale": "原逐项分类：页面净化；按用途归类，待用户校正"
-		},
-		{
-			"key": "video-page-hide-emoji-large-zoom",
-			"id": "S439",
-			"names": ["大表情变成小表情"],
-			"pages": [
-				"video",
-				"bangumi",
-				"dynamic",
-				"space",
-				"playlist",
-				"festival"
-			],
-			"groups": ["全站通用 - 评论区"],
-			"category": "optimization",
-			"rationale": "原逐项分类：外观调整；按用途归类，待用户校正",
-			"pack": "appearance",
-			"packLabel": "主题与外观"
-		},
-		{
-			"key": "video-page-hide-emoji-popover",
-			"id": "S440",
-			"names": ["隐藏 大表情弹框"],
-			"pages": [
-				"video",
-				"bangumi",
-				"dynamic",
-				"space",
-				"playlist",
-				"festival"
-			],
-			"groups": ["全站通用 - 评论区"],
-			"category": "cleaning",
-			"rationale": "原逐项分类：页面净化；按用途归类，待用户校正"
-		},
-		{
-			"key": "video-page-hide-emoji-small",
-			"id": "S441",
-			"names": ["隐藏 小表情"],
-			"pages": [
-				"video",
-				"bangumi",
-				"dynamic",
-				"space",
-				"playlist",
-				"festival"
-			],
-			"groups": ["全站通用 - 评论区"],
-			"category": "cleaning",
-			"rationale": "原逐项分类：页面净化；按用途归类，待用户校正"
-		},
-		{
-			"key": "video-page-hide-fan-badge",
-			"id": "S442",
-			"names": ["隐藏 粉丝牌"],
-			"pages": [
-				"video",
-				"bangumi",
-				"dynamic",
-				"space",
-				"playlist",
-				"festival"
-			],
-			"groups": ["全站通用 - 评论区"],
-			"category": "cleaning",
-			"rationale": "原逐项分类：页面净化；按用途归类，待用户校正"
-		},
-		{
-			"key": "video-page-hide-fixed-header",
-			"id": "S443",
-			"names": ["顶栏 滚动页面后 不再吸附顶部"],
-			"pages": [
-				"bangumi",
-				"video",
-				"playlist"
-			],
-			"groups": ["基本功能"],
-			"category": "cleaning",
-			"rationale": "取消干扰性的顶栏吸附，归净化"
-		},
-		{
-			"key": "video-page-hide-fixed-reply-box",
-			"id": "S444",
-			"names": ["隐藏 页面底部 吸附评论框"],
-			"pages": [
-				"video",
-				"bangumi",
-				"dynamic",
-				"space",
-				"playlist",
-				"festival"
-			],
-			"groups": ["全站通用 - 评论区"],
-			"category": "cleaning",
-			"rationale": "原逐项分类：页面净化；按用途归类，待用户校正"
-		},
-		{
-			"key": "video-page-hide-jump-link-search-word",
-			"id": "S445",
-			"names": ["禁用 评论内容搜索关键词高亮"],
-			"pages": [
-				"video",
-				"bangumi",
-				"dynamic",
-				"space",
-				"playlist",
-				"festival"
-			],
-			"groups": ["全站通用 - 评论区"],
-			"category": "cleaning",
-			"rationale": "抑制评论内容搜索词高亮干扰，归净化"
-		},
-		{
-			"key": "video-page-hide-main-reply-box",
-			"id": "S446",
-			"names": ["隐藏 评论编辑器"],
-			"pages": [
-				"video",
-				"bangumi",
-				"dynamic",
-				"space",
-				"playlist",
-				"festival"
-			],
-			"groups": ["全站通用 - 评论区"],
-			"category": "cleaning",
-			"rationale": "原逐项分类：页面净化；按用途归类，待用户校正"
-		},
-		{
-			"key": "video-page-hide-note-prefix",
-			"id": "S447",
-			"names": ["隐藏 笔记评论前的小Logo"],
-			"pages": [
-				"video",
-				"bangumi",
-				"dynamic",
-				"space",
-				"playlist",
-				"festival"
-			],
-			"groups": ["全站通用 - 评论区"],
-			"category": "cleaning",
-			"rationale": "原逐项分类：页面净化；按用途归类，待用户校正"
-		},
-		{
-			"key": "video-page-hide-reply-box-textarea-placeholder",
-			"id": "S448",
-			"names": ["隐藏 评论编辑器内占位文字"],
-			"pages": [
-				"video",
-				"bangumi",
-				"dynamic",
-				"space",
-				"playlist",
-				"festival"
-			],
-			"groups": ["全站通用 - 评论区"],
-			"category": "cleaning",
-			"rationale": "原逐项分类：页面净化；按用途归类，待用户校正"
-		},
-		{
-			"key": "video-page-hide-reply-content-user-highlight",
-			"id": "S449",
-			"names": ["禁用 评论中的@高亮"],
-			"pages": [
-				"video",
-				"bangumi",
-				"dynamic",
-				"space",
-				"playlist",
-				"festival"
-			],
-			"groups": ["全站通用 - 评论区"],
-			"category": "cleaning",
-			"rationale": "抑制评论@高亮干扰，归净化"
-		},
-		{
-			"key": "video-page-hide-reply-decorate",
-			"id": "S450",
-			"names": ["隐藏 评论右侧装饰"],
-			"pages": [
-				"video",
-				"bangumi",
-				"dynamic",
-				"space",
-				"playlist",
-				"festival"
-			],
-			"groups": ["全站通用 - 评论区"],
-			"category": "cleaning",
-			"rationale": "原逐项分类：页面净化；按用途归类，待用户校正"
-		},
-		{
-			"key": "video-page-hide-reply-dislike-reply-btn",
-			"id": "S451",
-			"names": ["隐藏 踩/回复 只在hover时显示"],
-			"pages": [
-				"video",
-				"bangumi",
-				"dynamic",
-				"space",
-				"playlist",
-				"festival"
-			],
-			"groups": ["全站通用 - 评论区"],
-			"category": "cleaning",
-			"rationale": "原逐项分类：页面净化；按用途归类，待用户校正"
-		},
-		{
-			"key": "video-page-hide-reply-notice",
-			"id": "S452",
-			"names": ["隐藏 活动通知"],
-			"pages": [
-				"video",
-				"bangumi",
-				"dynamic",
-				"space",
-				"playlist",
-				"festival"
-			],
-			"groups": ["全站通用 - 评论区"],
-			"category": "cleaning",
-			"rationale": "原逐项分类：页面净化；按用途归类，待用户校正"
-		},
-		{
-			"key": "video-page-hide-reply-tag-list",
-			"id": "S453",
-			"names": ["隐藏 评论内容下Tag"],
-			"pages": [
-				"video",
-				"bangumi",
-				"dynamic",
-				"space",
-				"playlist",
-				"festival"
-			],
-			"groups": ["全站通用 - 评论区"],
-			"category": "cleaning",
-			"rationale": "原逐项分类：页面净化；按用途归类，待用户校正"
-		},
-		{
-			"key": "video-page-hide-right-container",
-			"id": "S454",
-			"names": ["隐藏 右栏 (宽屏模式不适用)"],
-			"pages": ["video", "playlist"],
-			"groups": ["右侧 视频栏"],
-			"category": "cleaning",
-			"rationale": "原逐项分类：页面净化；按用途归类，待用户校正"
-		},
-		{
-			"key": "video-page-hide-right-container-ad",
-			"id": "S455",
-			"names": ["隐藏 广告"],
-			"pages": ["video", "playlist"],
-			"groups": ["右侧 视频栏"],
-			"category": "cleaning",
-			"rationale": "原逐项分类：页面净化；按用途归类，待用户校正"
-		},
-		{
-			"key": "video-page-hide-right-container-danmaku",
-			"id": "S456",
-			"names": ["隐藏 弹幕列表"],
-			"pages": [
-				"bangumi",
-				"video",
-				"playlist"
-			],
-			"groups": ["右栏", "右侧 视频栏"],
-			"category": "cleaning",
-			"rationale": "原逐项分类：页面净化；按用途归类，待用户校正"
-		},
-		{
-			"key": "video-page-hide-right-container-duration",
-			"id": "S457",
-			"names": ["隐藏 相关视频 视频时长"],
-			"pages": ["video", "playlist"],
-			"groups": ["右侧 视频栏"],
-			"category": "cleaning",
-			"rationale": "原逐项分类：页面净化；按用途归类，待用户校正"
-		},
-		{
-			"key": "video-page-hide-right-container-live",
-			"id": "S458",
-			"names": ["隐藏 直播间推荐"],
-			"pages": ["video", "playlist"],
-			"groups": ["右侧 视频栏"],
-			"category": "cleaning",
-			"rationale": "原逐项分类：页面净化；按用途归类，待用户校正"
-		},
-		{
-			"key": "video-page-hide-right-container-multi-page-add-counter",
-			"id": "S459",
-			"names": ["恢复 分P视频 编号"],
-			"pages": ["video", "playlist"],
-			"groups": ["右侧 视频栏"],
-			"category": "optimization",
-			"rationale": "原逐项分类：操作增强；按用途归类，待用户校正",
-			"pack": "reading-navigation",
-			"packLabel": "阅读与导航"
-		},
-		{
-			"key": "video-page-hide-right-container-reco-list-next-play",
-			"id": "S460",
-			"names": ["隐藏 接下来播放"],
-			"pages": ["video", "playlist"],
-			"groups": ["右侧 视频栏"],
-			"category": "cleaning",
-			"rationale": "原逐项分类：页面净化；按用途归类，待用户校正"
-		},
-		{
-			"key": "video-page-hide-right-container-reco-list-next-play-next-button",
-			"id": "S461",
-			"names": ["隐藏 自动连播开关"],
-			"pages": ["video", "playlist"],
-			"groups": ["右侧 视频栏"],
-			"category": "cleaning",
-			"rationale": "原逐项分类：页面净化；按用途归类，待用户校正"
-		},
-		{
-			"key": "video-page-hide-right-container-reco-list-rec-footer",
-			"id": "S462",
-			"names": ["隐藏 展开/收起 按钮"],
-			"pages": ["video", "playlist"],
-			"groups": ["右侧 视频栏"],
-			"category": "cleaning",
-			"rationale": "原逐项分类：页面净化；按用途归类，待用户校正"
-		},
-		{
-			"key": "video-page-hide-right-container-reco-list-rec-list",
-			"id": "S463",
-			"names": ["隐藏 全部相关视频"],
-			"pages": ["video", "playlist"],
-			"groups": ["右侧 视频栏"],
-			"category": "cleaning",
-			"rationale": "原逐项分类：页面净化；按用途归类，待用户校正"
-		},
-		{
-			"key": "video-page-hide-right-container-reco-list-rec-list-info-plays",
-			"id": "S464",
-			"names": ["隐藏 相关视频 播放和弹幕"],
-			"pages": ["video", "playlist"],
-			"groups": ["右侧 视频栏"],
-			"category": "cleaning",
-			"rationale": "原逐项分类：页面净化；按用途归类，待用户校正"
-		},
-		{
-			"key": "video-page-hide-right-container-reco-list-rec-list-info-up",
-			"id": "S465",
-			"names": ["隐藏 相关视频 UP主"],
-			"pages": ["video", "playlist"],
-			"groups": ["右侧 视频栏"],
-			"category": "cleaning",
-			"rationale": "原逐项分类：页面净化；按用途归类，待用户校正"
-		},
-		{
-			"key": "video-page-hide-right-container-right-bottom-banner",
-			"id": "S466",
-			"names": ["隐藏 活动banner"],
-			"pages": ["video", "playlist"],
-			"groups": ["右侧 视频栏"],
-			"category": "cleaning",
-			"rationale": "原逐项分类：页面净化；按用途归类，待用户校正"
-		},
-		{
-			"key": "video-page-hide-right-container-section-abstract",
-			"id": "S467",
-			"names": ["隐藏 视频合集 简介"],
-			"pages": ["video", "playlist"],
-			"groups": ["右侧 视频栏"],
-			"category": "cleaning",
-			"rationale": "原逐项分类：页面净化；按用途归类，待用户校正"
-		},
-		{
-			"key": "video-page-hide-right-container-section-height",
-			"id": "S468",
-			"names": ["优化 视频合集 列表高度"],
-			"pages": ["video", "playlist"],
-			"groups": ["右侧 视频栏"],
-			"category": "optimization",
-			"rationale": "原逐项分类：布局调整；按用途归类，待用户校正",
-			"pack": "layout",
-			"packLabel": "页面布局"
-		},
-		{
-			"key": "video-page-hide-right-container-section-play-num",
-			"id": "S469",
-			"names": ["隐藏 视频合集 播放量"],
-			"pages": ["video", "playlist"],
-			"groups": ["右侧 视频栏"],
-			"category": "cleaning",
-			"rationale": "原逐项分类：页面净化；按用途归类，待用户校正"
-		},
-		{
-			"key": "video-page-hide-right-container-section-subscribe",
-			"id": "S470",
-			"names": ["隐藏 视频合集 订阅合集"],
-			"pages": ["video", "playlist"],
-			"groups": ["右侧 视频栏"],
-			"category": "cleaning",
-			"rationale": "原逐项分类：页面净化；按用途归类，待用户校正"
-		},
-		{
-			"key": "video-page-hide-right-container-video-page-game-card-small",
-			"id": "S471",
-			"names": ["隐藏 游戏推荐"],
-			"pages": ["video", "playlist"],
-			"groups": ["右侧 视频栏"],
-			"category": "cleaning",
-			"rationale": "原逐项分类：页面净化；按用途归类，待用户校正"
-		},
-		{
-			"key": "video-page-hide-sidenav-back-to-top",
-			"id": "S472",
-			"names": ["隐藏 回顶部"],
-			"pages": [
-				"bangumi",
-				"video",
-				"playlist"
-			],
-			"groups": ["页面右下角 小按钮"],
-			"category": "cleaning",
-			"rationale": "原逐项分类：页面净化；按用途归类，待用户校正"
-		},
-		{
-			"key": "video-page-hide-sidenav-customer-service",
-			"id": "S473",
-			"names": ["隐藏 客服"],
-			"pages": [
-				"bangumi",
-				"video",
-				"playlist"
-			],
-			"groups": ["页面右下角 小按钮"],
-			"category": "cleaning",
-			"rationale": "原逐项分类：页面净化；按用途归类，待用户校正"
-		},
-		{
-			"key": "video-page-hide-sidenav-mini",
-			"id": "S474",
-			"names": ["隐藏 小窗播放开关"],
-			"pages": ["bangumi"],
-			"groups": ["页面右下角 小按钮"],
-			"category": "cleaning",
-			"rationale": "原逐项分类：页面净化；按用途归类，待用户校正"
-		},
-		{
-			"key": "video-page-hide-sidenav-right-container-live",
-			"id": "S475",
-			"names": ["隐藏 小窗播放开关"],
-			"pages": ["video", "playlist"],
-			"groups": ["页面右下角 小按钮"],
-			"category": "cleaning",
-			"rationale": "原逐项分类：页面净化；按用途归类，待用户校正"
-		},
-		{
-			"key": "video-page-hide-top-vote-card",
-			"id": "S476",
-			"names": ["隐藏 投票栏 (红方/蓝方)"],
-			"pages": [
-				"video",
-				"bangumi",
-				"dynamic",
-				"space",
-				"playlist",
-				"festival"
-			],
-			"groups": ["全站通用 - 评论区"],
-			"category": "cleaning",
-			"rationale": "原逐项分类：页面净化；按用途归类，待用户校正"
-		},
-		{
-			"key": "video-page-hide-triple-oldfan-entry",
-			"id": "S477",
-			"names": ["隐藏 成为老粉按钮"],
-			"pages": ["video", "playlist"],
-			"groups": ["工具栏"],
-			"category": "cleaning",
-			"rationale": "原逐项分类：页面净化；按用途归类，待用户校正"
-		},
-		{
-			"key": "video-page-hide-up-bili-avatar-icon",
-			"id": "S478",
-			"names": ["隐藏 UP主头像icon"],
-			"pages": ["video", "playlist"],
-			"groups": ["右侧 UP主信息"],
-			"category": "cleaning",
-			"rationale": "原逐项分类：页面净化；按用途归类，待用户校正"
-		},
-		{
-			"key": "video-page-hide-up-bili-avatar-pendent-dom",
-			"id": "S479",
-			"names": ["隐藏 UP主头像外饰品"],
-			"pages": ["video", "playlist"],
-			"groups": ["右侧 UP主信息"],
-			"category": "cleaning",
-			"rationale": "原逐项分类：页面净化；按用途归类，待用户校正"
-		},
-		{
-			"key": "video-page-hide-up-charge",
-			"id": "S480",
-			"names": ["隐藏 充电"],
-			"pages": ["video", "playlist"],
-			"groups": ["右侧 UP主信息"],
-			"category": "cleaning",
-			"rationale": "原逐项分类：页面净化；按用途归类，待用户校正"
-		},
-		{
-			"key": "video-page-hide-up-description",
-			"id": "S481",
-			"names": ["隐藏 UP主简介"],
-			"pages": ["video", "playlist"],
-			"groups": ["右侧 UP主信息"],
-			"category": "cleaning",
-			"rationale": "原逐项分类：页面净化；按用途归类，待用户校正"
-		},
-		{
-			"key": "video-page-hide-up-membersinfo-normal-header",
-			"id": "S482",
-			"names": ["隐藏 创作团队header"],
-			"pages": ["video", "playlist"],
-			"groups": ["右侧 UP主信息"],
-			"category": "cleaning",
-			"rationale": "原逐项分类：页面净化；按用途归类，待用户校正"
-		},
-		{
-			"key": "video-page-hide-up-sendmsg",
-			"id": "S483",
-			"names": ["隐藏 发消息"],
-			"pages": ["video", "playlist"],
-			"groups": ["右侧 UP主信息"],
-			"category": "cleaning",
-			"rationale": "原逐项分类：页面净化；按用途归类，待用户校正"
-		},
-		{
-			"key": "video-page-hide-up-usercard",
-			"id": "S484",
-			"names": ["隐藏 UP主用户卡片"],
-			"pages": ["video", "playlist"],
-			"groups": ["右侧 UP主信息"],
-			"category": "cleaning",
-			"rationale": "原逐项分类：页面净化；按用途归类，待用户校正"
-		},
-		{
-			"key": "video-page-hide-user-level",
-			"id": "S485",
-			"names": ["隐藏 用户等级"],
-			"pages": [
-				"video",
-				"bangumi",
-				"dynamic",
-				"space",
-				"playlist",
-				"festival"
-			],
-			"groups": ["全站通用 - 评论区"],
-			"category": "cleaning",
-			"rationale": "原逐项分类：页面净化；按用途归类，待用户校正"
-		},
-		{
-			"key": "video-page-hide-video-info-argue",
-			"id": "S486",
-			"names": ["隐藏 温馨提示 (饮酒/危险/AI生成)"],
-			"pages": ["video", "playlist"],
-			"groups": ["视频信息"],
-			"category": "cleaning",
-			"rationale": "原逐项分类：页面净化；按用途归类，待用户校正"
-		},
-		{
-			"key": "video-page-hide-video-info-copyright",
-			"id": "S487",
-			"names": ["隐藏 版权声明"],
-			"pages": ["video", "playlist"],
-			"groups": ["视频信息"],
-			"category": "cleaning",
-			"rationale": "原逐项分类：页面净化；按用途归类，待用户校正"
-		},
-		{
-			"key": "video-page-hide-video-info-danmaku-count",
-			"id": "S488",
-			"names": ["隐藏 弹幕数"],
-			"pages": ["video", "playlist"],
-			"groups": ["视频信息"],
-			"category": "cleaning",
-			"rationale": "原逐项分类：页面净化；按用途归类，待用户校正"
-		},
-		{
-			"key": "video-page-hide-video-info-honor",
-			"id": "S489",
-			"names": ["隐藏 视频荣誉 (排行榜/每周必看)"],
-			"pages": ["video", "playlist"],
-			"groups": ["视频信息"],
-			"category": "cleaning",
-			"rationale": "原逐项分类：页面净化；按用途归类，待用户校正"
-		},
-		{
-			"key": "video-page-hide-video-info-pubdate",
-			"id": "S490",
-			"names": ["隐藏 发布日期"],
-			"pages": ["video", "playlist"],
-			"groups": ["视频信息"],
-			"category": "cleaning",
-			"rationale": "原逐项分类：页面净化；按用途归类，待用户校正"
-		},
-		{
-			"key": "video-page-hide-video-share-popover",
-			"id": "S491",
-			"names": ["隐藏 分享按钮弹出菜单"],
-			"pages": [
-				"bangumi",
-				"video",
-				"playlist"
-			],
-			"groups": ["工具栏/作品信息", "工具栏"],
-			"category": "cleaning",
-			"rationale": "原逐项分类：页面净化；按用途归类，待用户校正"
-		},
-		{
-			"key": "video-page-hide-vote-info",
-			"id": "S492",
-			"names": ["隐藏 用户投票 (红方/蓝方)"],
-			"pages": [
-				"video",
-				"bangumi",
-				"dynamic",
-				"space",
-				"playlist",
-				"festival"
-			],
-			"groups": ["全站通用 - 评论区"],
-			"category": "cleaning",
-			"rationale": "原逐项分类：页面净化；按用途归类，待用户校正"
-		},
-		{
-			"key": "video-page-reply-user-name-color-default",
-			"id": "S493",
-			"names": ["用户名 全部恢复默认色"],
-			"pages": [
-				"video",
-				"bangumi",
-				"dynamic",
-				"space",
-				"playlist",
-				"festival"
-			],
-			"groups": ["全站通用 - 评论区"],
-			"category": "optimization",
-			"rationale": "原逐项分类：外观调整；按用途归类，待用户校正",
-			"pack": "appearance",
-			"packLabel": "主题与外观"
-		},
-		{
-			"key": "video-page-reply-user-name-color-pink",
-			"id": "S494",
-			"names": ["用户名 全部大会员色"],
-			"pages": [
-				"video",
-				"bangumi",
-				"dynamic",
-				"space",
-				"playlist",
-				"festival"
-			],
-			"groups": ["全站通用 - 评论区"],
-			"category": "optimization",
-			"rationale": "原逐项分类：外观调整；按用途归类，待用户校正",
-			"pack": "appearance",
-			"packLabel": "主题与外观"
-		},
-		{
-			"key": "video-page-right-container-section-unfold-title",
-			"id": "S495",
-			"names": ["展开 视频合集 第二行标题"],
-			"pages": ["video", "playlist"],
-			"groups": ["右侧 视频栏"],
-			"category": "optimization",
-			"rationale": "原逐项分类：操作增强；按用途归类，待用户校正",
-			"pack": "reading-navigation",
-			"packLabel": "阅读与导航"
-		},
-		{
-			"key": "video-page-right-container-set-info-bottom",
-			"id": "S496",
-			"names": ["相关视频 视频信息置底"],
-			"pages": ["video", "playlist"],
-			"groups": ["右侧 视频栏"],
-			"category": "optimization",
-			"rationale": "原逐项分类：布局调整；按用途归类，待用户校正",
-			"pack": "layout",
-			"packLabel": "页面布局"
-		},
-		{
-			"key": "video-page-right-container-sticky-disable",
-			"id": "S497",
-			"names": ["禁用 右栏底部吸附"],
-			"pages": ["video", "playlist"],
-			"groups": ["右侧 视频栏"],
-			"category": "cleaning",
-			"rationale": "取消干扰性的右栏吸附，归净化"
-		},
-		{
-			"key": "video-page-right-container-sticky-optimize",
-			"id": "S498",
-			"names": ["优化 右栏底部吸附"],
-			"pages": ["video", "playlist"],
-			"groups": ["右侧 视频栏"],
-			"category": "optimization",
-			"rationale": "原逐项分类：布局调整；按用途归类，待用户校正",
-			"pack": "layout",
-			"packLabel": "页面布局"
-		},
-		{
-			"key": "video-page-show-bpx-player-pbp",
-			"id": "S499",
-			"names": ["控制栏收起时 显示高能进度条"],
-			"pages": [
-				"bangumi",
-				"festival",
-				"video",
-				"playlist"
-			],
-			"groups": ["播放控制栏"],
-			"category": "optimization",
-			"rationale": "原逐项分类：操作增强；按用途归类，待用户校正",
-			"pack": "playback",
-			"packLabel": "播放控制"
-		},
-		{
-			"key": "video-page-show-bpx-player-shadow-progress-area-fullscreen",
-			"id": "S500",
-			"names": ["全屏时 显示底边mini视频进度"],
-			"pages": [
-				"bangumi",
-				"festival",
-				"video",
-				"playlist"
-			],
-			"groups": ["播放控制栏"],
-			"category": "optimization",
-			"rationale": "原逐项分类：操作增强；按用途归类，待用户校正",
-			"pack": "playback",
-			"packLabel": "播放控制"
-		},
-		{
-			"key": "video-page-show-fullscreen-bpx-player-video-info-online",
-			"id": "S501",
-			"names": ["全屏时 显示同时在看人数"],
-			"pages": [
-				"bangumi",
-				"festival",
-				"video",
-				"playlist"
-			],
-			"groups": ["弹幕控制栏"],
-			"category": "optimization",
-			"rationale": "原逐项分类：操作增强；按用途归类，待用户校正",
-			"pack": "playback",
-			"packLabel": "播放控制"
-		},
-		{
-			"key": "video-page-simple-share",
-			"id": "S502",
-			"names": ["净化分享功能"],
-			"pages": [
-				"bangumi",
-				"video",
-				"playlist"
-			],
-			"groups": ["基本功能"],
-			"category": "cleaning",
-			"rationale": "用户已确认：净化分享功能属于净化"
-		},
-		{
-			"key": "video-page-simple-share-domain",
-			"id": "S503",
-			"names": ["使用短域名分享"],
-			"pages": ["video", "playlist"],
-			"groups": ["基本功能"],
-			"category": "optimization",
-			"rationale": "用户已确认：短域名分享仅工具包版本",
-			"pack": "link-tools",
-			"packLabel": "链接工具"
-		},
-		{
-			"key": "video-page-simple-video-share-popover",
-			"id": "S504",
-			"names": ["精简 分享按钮弹出菜单"],
-			"pages": [
-				"bangumi",
-				"video",
-				"playlist"
-			],
-			"groups": ["工具栏/作品信息", "工具栏"],
-			"category": "cleaning",
-			"rationale": "原逐项分类：页面净化；按用途归类，待用户校正"
-		},
-		{
-			"key": "video-page-subtitle-font-color",
-			"id": "S505",
-			"names": ["字幕颜色"],
-			"pages": [
-				"festival",
-				"video",
-				"playlist"
-			],
-			"groups": ["字幕样式"],
-			"category": "optimization",
-			"rationale": "原逐项分类：外观调整；按用途归类，待用户校正",
-			"pack": "text-style",
-			"packLabel": "文字与字幕"
-		},
-		{
-			"key": "video-page-subtitle-font-family",
-			"id": "S506",
-			"names": ["字幕字体"],
-			"pages": [
-				"festival",
-				"video",
-				"playlist"
-			],
-			"groups": ["字幕样式"],
-			"category": "optimization",
-			"rationale": "原逐项分类：外观调整；按用途归类，待用户校正",
-			"pack": "text-style",
-			"packLabel": "文字与字幕"
-		},
-		{
-			"key": "video-page-subtitle-font-weight",
-			"id": "S507",
-			"names": ["字幕字重"],
-			"pages": [
-				"festival",
-				"video",
-				"playlist"
-			],
-			"groups": ["字幕样式"],
-			"category": "optimization",
-			"rationale": "原逐项分类：外观调整；按用途归类，待用户校正",
-			"pack": "text-style",
-			"packLabel": "文字与字幕"
-		},
-		{
-			"key": "video-page-subtitle-text-stroke-color",
-			"id": "S508",
-			"names": ["描边颜色"],
-			"pages": [
-				"festival",
-				"video",
-				"playlist"
-			],
-			"groups": ["字幕样式"],
-			"category": "optimization",
-			"rationale": "原逐项分类：外观调整；按用途归类，待用户校正",
-			"pack": "text-style",
-			"packLabel": "文字与字幕"
-		},
-		{
-			"key": "video-page-subtitle-text-stroke-width",
-			"id": "S509",
-			"names": ["描边宽度 (0为禁用)"],
-			"pages": [
-				"festival",
-				"video",
-				"playlist"
-			],
-			"groups": ["字幕样式"],
-			"category": "optimization",
-			"rationale": "原逐项分类：外观调整；按用途归类，待用户校正",
-			"pack": "text-style",
-			"packLabel": "文字与字幕"
-		},
-		{
-			"key": "video-page-unfold-below-info-desc",
-			"id": "S510",
-			"names": ["展开 视频简介"],
-			"pages": ["video", "playlist"],
-			"groups": ["工具栏"],
-			"category": "optimization",
-			"rationale": "原逐项分类：操作增强；按用途归类，待用户校正",
-			"pack": "reading-navigation",
-			"packLabel": "阅读与导航"
-		},
-		{
-			"key": "video-page-unfold-right-container-danmaku",
-			"id": "S511",
-			"names": ["自动展开 弹幕列表"],
-			"pages": [
-				"bangumi",
-				"video",
-				"playlist"
-			],
-			"groups": ["右栏", "右侧 视频栏"],
-			"category": "optimization",
-			"rationale": "原逐项分类：操作增强；按用途归类，待用户校正",
-			"pack": "reading-navigation",
-			"packLabel": "阅读与导航"
-		},
-		{
-			"key": "video-page-unfold-right-container-reco-list",
-			"id": "S512",
-			"names": ["自动展开 相关视频"],
-			"pages": ["video", "playlist"],
-			"groups": ["右侧 视频栏"],
-			"category": "optimization",
-			"rationale": "原逐项分类：操作增强；按用途归类，待用户校正",
-			"pack": "reading-navigation",
-			"packLabel": "阅读与导航"
-		},
-		{
-			"key": "video-page-unfold-video-info-title",
-			"id": "S513",
-			"names": ["展开 多行视频标题"],
-			"pages": ["video", "playlist"],
-			"groups": ["视频信息"],
-			"category": "optimization",
-			"rationale": "原逐项分类：操作增强；按用途归类，待用户校正",
-			"pack": "reading-navigation",
-			"packLabel": "阅读与导航"
-		},
-		{
-			"key": "watchlater-hide-feedback",
-			"id": "S520",
-			"names": ["隐藏 新版反馈"],
-			"pages": ["watchlater"],
-			"groups": ["基本功能"],
-			"category": "cleaning",
-			"rationale": "原逐项分类：页面净化；按用途归类，待用户校正"
-		},
-		{
-			"key": "watchlater-increase-font-size",
-			"id": "S521",
-			"names": ["增大 视频信息字号"],
-			"pages": ["watchlater"],
-			"groups": ["基本功能"],
-			"category": "optimization",
-			"rationale": "原逐项分类：外观调整；按用途归类，待用户校正",
-			"pack": "text-style",
-			"packLabel": "文字与字幕"
-		},
-		{
-			"key": "watchlater-layout",
-			"id": "S522",
-			"names": ["修改 视频列表列数"],
-			"pages": ["watchlater"],
-			"groups": ["基本功能"],
-			"category": "optimization",
-			"rationale": "原逐项分类：布局调整；按用途归类，待用户校正",
-			"pack": "layout",
-			"packLabel": "页面布局"
-		},
-		{
-			"key": "webscreen-scrollable",
-			"id": "S523",
-			"names": ["网页全屏时 页面可滚动"],
-			"pages": [
-				"bangumi",
-				"video",
-				"playlist"
-			],
-			"groups": ["布局设定"],
-			"category": "optimization",
-			"rationale": "原逐项分类：操作增强；按用途归类，待用户校正",
-			"pack": "playback",
-			"packLabel": "播放控制"
-		},
-		{
-			"key": "ctx-copy-space-url",
-			"id": "B05",
-			"names": ["右键 复制主页链接"],
-			"pages": [
-				"homepage",
-				"video",
-				"playlist",
-				"channel",
-				"search"
-			],
-			"groups": ["右键菜单（无独立设置开关）"],
-			"category": "optimization",
-			"rationale": "额外复制操作归优化候选；保留屏蔽/白名单等过滤操作",
-			"pack": "link-tools",
-			"packLabel": "链接工具"
-		},
-		{
-			"key": "ctx-copy-video-url",
-			"id": "B06",
-			"names": ["右键 复制视频链接"],
-			"pages": [
-				"homepage",
-				"video",
-				"playlist",
-				"popular",
-				"channel",
-				"search",
-				"space"
-			],
-			"groups": ["右键菜单（无独立设置开关）"],
-			"category": "optimization",
-			"rationale": "额外复制操作归优化候选；保留屏蔽/白名单等过滤操作",
-			"pack": "link-tools",
-			"packLabel": "链接工具"
-		}
-	];
-	var REVIEW_STORAGE_KEY = "misakaweb-review-decisions-v1";
-	var entries = new Map(reviewCatalog.map((entry) => [entry.key, entry]));
-	var record = (value) => value !== null && typeof value === "object" && !Array.isArray(value);
-	var normalizeReview = (raw) => {
-		const state = {
-			decisions: {},
-			readOnly: false
-		};
-		if (!record(raw)) return state;
-		if (raw.schemaVersion !== 1) return {
-			...state,
-			readOnly: true
-		};
-		if (!record(raw.decisions)) return state;
-		for (const [key, value] of Object.entries(raw.decisions)) {
-			const entry = entries.get(key);
-			if (!entry || entry.category === "support" || !record(value)) continue;
-			const decision = {};
-			if (value.category === "cleaning" || value.category === "optimization") decision.category = value.category;
-			if (!(entry.retention === "optional-retain" && raw.catalogVersion !== "2026-10-11.1") && (decision.category ?? entry.category) === "optimization" && value.remove === true) decision.remove = true;
-			if (Object.keys(decision).length) state.decisions[key] = decision;
-		}
-		return state;
-	};
-	var categoryFor = (entry, state) => state.decisions[entry.key]?.category ?? entry.category;
-	var exportReview = (state) => ({
-		format: "misakaweb-optimization-review",
-		schemaVersion: 1,
-		scriptVersion: "0.1.4.8",
-		catalogVersion: REVIEW_CATALOG_VERSION,
-		upstreamCommit: REVIEW_SOURCE_COMMIT,
-		exportedAt: new Date().toISOString(),
-		scope: "product-retention-feedback; does not describe enabled settings",
-		items: reviewCatalog.map((entry) => ({
-			key: entry.key,
-			id: entry.id,
-			names: entry.names,
-			pages: entry.pages,
-			groups: entry.groups,
-			proposedCategory: entry.category,
-			category: categoryFor(entry, state),
-			rationale: entry.rationale,
-			pack: entry.pack,
-			packLabel: entry.packLabel,
-			categoryExplicit: Boolean(state.decisions[entry.key]?.category),
-			disposition: categoryFor(entry, state) !== "optimization" ? "retain" : state.decisions[entry.key]?.remove ? "delete-candidate" : entry.retention ?? "pending",
-			dispositionSource: categoryFor(entry, state) !== "optimization" ? "retain-cleaning-and-support" : state.decisions[entry.key]?.remove ? "user-mark" : entry.retention ? "confirmed-product-choice" : "undecided",
-			proposedDefaultEnabled: entry.defaultOff ? false : void 0
-		}))
-	});
-	var useReviewStore = () => {
-		const error = (0, vue.ref)("");
-		const state = (0, vue.ref)({
-			decisions: {},
-			readOnly: false
-		});
-		const refresh = (raw, supplied = false) => {
-			try {
-				state.value = normalizeReview(supplied ? raw : _GM_getValue(REVIEW_STORAGE_KEY));
-			} catch {
-				error.value = "无法读取取舍标记，请稍后重新打开设置。";
-				state.value.readOnly = true;
-			}
-		};
-		refresh();
-		const listener = _GM_addValueChangeListener(REVIEW_STORAGE_KEY, (_key, _old, value) => refresh(value, true));
-		const dispose = () => _GM_removeValueChangeListener(listener);
-		if ((0, vue.getCurrentScope)()) (0, vue.onScopeDispose)(dispose);
-		const patch = (key, update) => {
-			error.value = "";
-			const entry = entries.get(key);
-			if (!entry || entry.category === "support") return false;
-			try {
-				const raw = _GM_getValue(REVIEW_STORAGE_KEY);
-				const latest = normalizeReview(raw);
-				if (latest.readOnly) {
-					state.value = latest;
-					error.value = "此标记文件使用了不支持的格式，已停止写入。";
-					return false;
-				}
-				const original = record(raw) ? raw : {};
-				const decisions = { ...record(original.decisions) ? original.decisions : {} };
-				if (original.catalogVersion !== "2026-10-11.1") for (const entry of reviewCatalog) {
-					const prior = decisions[entry.key];
-					if (entry.retention !== "optional-retain" || !record(prior)) continue;
-					const migrated = { ...prior };
-					delete migrated.remove;
-					if (Object.keys(migrated).length) decisions[entry.key] = migrated;
-					else delete decisions[entry.key];
-				}
-				const decision = update(latest.decisions[key] ?? {}, entry);
-				if (Object.keys(decision).length) decisions[key] = decision;
-				else delete decisions[key];
-				const next = {
-					...original,
-					schemaVersion: 1,
-					catalogVersion: REVIEW_CATALOG_VERSION,
-					decisions
-				};
-				_GM_setValue(REVIEW_STORAGE_KEY, next);
-				state.value = normalizeReview(next);
-				return true;
-			} catch {
-				error.value = "取舍标记保存失败，本次操作未确认保存，请重试。";
-				return false;
-			}
-		};
-		const toggleRemove = (key) => patch(key, (old, entry) => {
-			if ((old.category ?? entry.category) !== "optimization") return old;
-			return old.remove ? old.category ? { category: old.category } : {} : {
-				...old,
-				remove: true
+	var sectionGroups = (groups, classification) => groups.flatMap((group, groupIndex) => {
+		const sections = new Map();
+		for (const item of group.items) {
+			const entry = classification[item.id] ?? { category: "support" };
+			const suffix = entry.category === "cleaning" ? "净化" : entry.category === "optimization" ? "优化 - " + (entry.packLabel ?? "其他") : "公共设置";
+			const key = entry.category + ":" + (entry.pack ?? "");
+			const section = sections.get(key) ?? {
+				name: group.name + " - " + suffix,
+				fold: group.fold,
+				items: [],
+				sectionKey: groupIndex + ":" + key
 			};
-		});
-		const changeCategory = (key) => patch(key, (old, entry) => {
-			const category = (old.category ?? entry.category) === "cleaning" ? "optimization" : "cleaning";
-			return category === entry.category ? {} : { category };
-		});
-		const download = () => {
-			error.value = "";
-			try {
-				refresh();
-				if (state.value.readOnly) {
-					error.value = "当前标记格式无法安全导出，请使用支持该格式的版本。";
-					return false;
-				}
-				const blob = new Blob([JSON.stringify(exportReview(state.value), null, 2)], { type: "application/json;charset=utf-8" });
-				const url = URL.createObjectURL(blob);
-				const anchor = document.createElement("a");
-				anchor.href = url;
-				anchor.download = `misakaweb-optimization-review-${new Date().toISOString().slice(0, 10)}.json`;
-				document.body.append(anchor);
-				anchor.click();
-				anchor.remove();
-				setTimeout(() => URL.revokeObjectURL(url), 1e4);
-				return true;
-			} catch {
-				error.value = "导出失败，请重试。";
-				return false;
-			}
-		};
-		return {
-			state,
-			error,
-			readOnly: (0, vue.computed)(() => state.value.readOnly),
-			toggleRemove,
-			changeCategory,
-			download,
-			dispose
-		};
-	};
-	var _hoisted_1$5 = ["data-review-key", "data-review-category"];
-	var _hoisted_2$3 = { key: 0 };
-	var _hoisted_3$3 = { key: 1 };
-	var _hoisted_4$2 = { key: 2 };
-	var _hoisted_5$2 = ["disabled", "aria-pressed"];
-	var _hoisted_6$2 = ["disabled"];
-	var _hoisted_7$2 = { class: "w-full" };
-	var _hoisted_8$2 = { class: "pt-1" };
-	var OptimizationReviewRow_default = (0, vue.defineComponent)({
-		__name: "OptimizationReviewRow",
-		props: {
-			entry: {},
-			store: {}
-		},
-		setup(__props) {
-			const props = __props;
-			const category = (0, vue.computed)(() => categoryFor(props.entry, props.store.state.value));
-			const removed = (0, vue.computed)(() => Boolean(props.store.state.value.decisions[props.entry.key]?.remove));
-			return (_ctx, _cache) => {
-				return (0, vue.openBlock)(), (0, vue.createElementBlock)("div", {
-					class: "mt-1 mb-2 flex flex-wrap items-center gap-2 rounded border border-gray-200 bg-gray-50 px-2 py-1 text-xs text-gray-700",
-					"data-review-key": __props.entry.key,
-					"data-review-category": category.value
-				}, [
-					category.value === "optimization" ? ((0, vue.openBlock)(), (0, vue.createElementBlock)("span", _hoisted_2$3, (0, vue.toDisplayString)(removed.value ? "已标记删除" : __props.entry.retention ? "可选保留 · 默认关闭" : "优化 · 待定"), 1)) : category.value === "cleaning" ? ((0, vue.openBlock)(), (0, vue.createElementBlock)("span", _hoisted_3$3, "净化 · 保留")) : ((0, vue.openBlock)(), (0, vue.createElementBlock)("span", _hoisted_4$2, "公共支撑 · 保留")),
-					category.value === "optimization" ? ((0, vue.openBlock)(), (0, vue.createElementBlock)("button", {
-						key: 3,
-						type: "button",
-						disabled: __props.store.readOnly.value,
-						"aria-pressed": removed.value,
-						class: (0, vue.normalizeClass)(["rounded border px-2 py-1 disabled:opacity-50", removed.value ? "border-red-600 text-red-700" : "border-gray-400"]),
-						onClick: _cache[0] || (_cache[0] = (0, vue.withModifiers)(($event) => __props.store.toggleRemove(__props.entry.key), ["stop"]))
-					}, [(0, vue.createVNode)(Badge_default, { code: (0, vue.unref)(actionLabel)("review-toggle-remove") }, null, 8, ["code"]), (0, vue.createTextVNode)((0, vue.toDisplayString)(removed.value ? "撤销删除" : "建议删除"), 1)], 10, _hoisted_5$2)) : (0, vue.createCommentVNode)("", true),
-					category.value !== "support" ? ((0, vue.openBlock)(), (0, vue.createElementBlock)("button", {
-						key: 4,
-						type: "button",
-						disabled: __props.store.readOnly.value,
-						class: "rounded border border-gray-400 px-2 py-1 disabled:opacity-50",
-						onClick: _cache[1] || (_cache[1] = (0, vue.withModifiers)(($event) => __props.store.changeCategory(__props.entry.key), ["stop"]))
-					}, [(0, vue.createVNode)(Badge_default, { code: (0, vue.unref)(actionLabel)("review-change-category") }, null, 8, ["code"]), (0, vue.createTextVNode)((0, vue.toDisplayString)(category.value === "cleaning" ? "归为优化" : "归为净化"), 1)], 8, _hoisted_6$2)) : (0, vue.createCommentVNode)("", true),
-					(0, vue.createElementVNode)("details", _hoisted_7$2, [_cache[2] || (_cache[2] = (0, vue.createElementVNode)("summary", { class: "cursor-pointer" }, "分类依据", -1)), (0, vue.createElementVNode)("p", _hoisted_8$2, (0, vue.toDisplayString)(__props.entry.rationale), 1)])
-				], 8, _hoisted_1$5);
-			};
+			section.items.push(item);
+			sections.set(key, section);
 		}
+		const rank = (section) => section.sectionKey.includes(":cleaning:") ? 0 : section.sectionKey.includes(":optimization:") ? 1 : 2;
+		return [...sections.values()].sort((a, b) => rank(a) - rank(b));
 	});
 	var object = (v) => Boolean(v) && typeof v === "object" && !Array.isArray(v);
 	var exactKeys = (v, keys) => {
@@ -21263,7 +16765,7 @@
 		return validateEvidence({
 			format: "misakaweb-structural-diagnostic",
 			schemaVersion: 1,
-			scriptVersion: "0.1.4.8",
+			scriptVersion: "0.1.4.9",
 			capturedAt: new Date().toISOString(),
 			pageType: pageType(),
 			site: location.hostname,
@@ -21283,284 +16785,768 @@
 		setTimeout(() => URL.revokeObjectURL(url), 1e4);
 	};
 	var _hoisted_1$4 = ["data-build-profile"];
-	var _hoisted_2$2 = {
+	var _hoisted_2$2 = ["data-setting-section"];
+	var _hoisted_3$2 = ["data-setting-key"];
+	var _hoisted_4$1 = {
 		key: 0,
-		class: "mb-3 rounded-lg border border-blue-200 bg-blue-50 p-2 text-sm text-gray-800",
-		"data-review-toolbar": ""
+		class: "p-3 text-sm text-gray-500"
 	};
-	var _hoisted_3$2 = {
-		class: "my-2 flex flex-wrap gap-2",
-		role: "tablist",
-		"aria-label": "功能类别"
-	};
-	var _hoisted_4$1 = ["aria-selected", "onClick"];
-	var _hoisted_5$1 = {
-		class: "my-2 flex flex-wrap gap-2",
-		"aria-label": "查看范围"
-	};
-	var _hoisted_6$1 = ["aria-pressed"];
-	var _hoisted_7$1 = ["aria-pressed"];
-	var _hoisted_8$1 = ["disabled"];
-	var _hoisted_9$1 = {
+	var _hoisted_5$1 = { class: "mt-3 border-t border-gray-200 pt-2" };
+	var _hoisted_6$1 = {
 		key: 0,
 		role: "alert",
-		class: "mb-2 text-red-700"
-	};
-	var _hoisted_10$1 = {
-		key: 1,
-		class: "mt-2 block"
-	};
-	var _hoisted_11 = ["value"];
-	var _hoisted_12 = {
-		key: 2,
-		class: "mt-2 flex items-center gap-2"
-	};
-	var _hoisted_13 = { class: "mt-2" };
-	var _hoisted_14 = { class: "mt-1" };
-	var _hoisted_15 = {
-		key: 3,
-		role: "alert",
-		class: "mt-2 text-red-700"
-	};
-	var _hoisted_16 = {
-		key: 4,
-		role: "alert",
-		class: "mt-2 text-red-700"
-	};
-	var _hoisted_17 = {
-		key: 1,
-		"data-review-catalog": ""
-	};
-	var _hoisted_18 = {
-		key: 0,
-		class: "mt-1 text-xs font-bold text-blue-700"
-	};
-	var _hoisted_19 = { class: "mt-1 text-xs text-gray-500" };
-	var _hoisted_20 = {
-		key: 3,
-		class: "p-4 text-sm text-gray-600"
+		class: "mt-1 text-sm text-red-700"
 	};
 	var RulePanelView_default = (0, vue.defineComponent)({
 		__name: "RulePanelView",
 		setup(__props) {
 			const store = useRulePanelStore();
 			const buildProfile = "development";
-			const buildLabel = "开发测试版（完整能力）";
-			const scriptVersion = "0.1.4.8";
+			const buildLabel = "完整工具包";
+			const scriptVersion = "0.1.4.9";
 			const editorDialogRef = (0, vue.ref)(null);
-			const handleEdit = (item) => {
-				editorDialogRef.value?.openEditor(item);
-			};
-			const review = useReviewStore();
-			const category = (0, vue.ref)("cleaning");
-			const scope = (0, vue.ref)("page");
 			const query = (0, vue.ref)("");
-			const onlyMarked = (0, vue.ref)(false);
 			const diagnosticError = (0, vue.ref)("");
+			const handleEdit = (item) => editorDialogRef.value?.openEditor(item);
 			const exportDiagnostic = () => {
 				diagnosticError.value = "";
 				try {
 					downloadMaintenanceDiagnostic();
 				} catch {
-					diagnosticError.value = "诊断导出失败，请重试。不会导出设置、名单或账号数据。";
+					diagnosticError.value = "导出失败，请重试。";
 				}
 			};
-			const packFilter = (0, vue.ref)("");
-			const tabs = [
-				{
-					key: "cleaning",
-					name: "净化"
-				},
-				{
-					key: "optimization",
-					name: "优化"
-				},
-				{
-					key: "support",
-					name: "公共设置"
-				}
-			];
-			const catalogByKey = new Map(reviewCatalog.map((entry) => [entry.key, entry]));
-			const activeRules = (0, vue.computed)(() => rules.filter((rule) => rule.checkFn()));
-			const activeKeys = (0, vue.computed)(() => new Set(activeRules.value.flatMap((rule) => rule.groups.flatMap((group) => group.items.map((item) => item.id)))));
-			const activePages = (0, vue.computed)(() => new Set(activeRules.value.map((rule) => rule.name)));
-			const inScope = (entry) => scope.value === "all" || activeKeys.value.has(entry.key) || entry.id.startsWith("B") && entry.pages.some((page) => activePages.value.has(page));
-			const matches = (entry) => [
-				entry.id,
-				entry.key,
-				entry.packLabel ?? "",
-				...entry.names,
-				...entry.groups
-			].join(" ").toLowerCase().includes(query.value.trim().toLowerCase());
-			const selected = (entry) => review && categoryFor(entry, review.state.value) === category.value && matches(entry) && (category.value !== "optimization" || !packFilter.value || (entry.pack ?? "classification-overrides") === packFilter.value) && (!onlyMarked.value || Boolean(review.state.value.decisions[entry.key]?.remove));
-			const visibleEntries = (0, vue.computed)(() => reviewCatalog.filter((entry) => inScope(entry) && selected(entry)));
-			const counts = (0, vue.computed)(() => {
-				const result = {
-					cleaning: 0,
-					optimization: 0,
-					support: 0
-				};
-				if (review) {
-					for (const entry of reviewCatalog) if (inScope(entry)) result[categoryFor(entry, review.state.value)]++;
-				}
-				return result;
+			const displayedRules = (0, vue.computed)(() => {
+				const search = query.value.trim().toLowerCase();
+				return rules.filter((rule) => rule.checkFn()).map((rule) => ({
+					...rule,
+					groups: sectionGroups(rule.groups, {
+						"activity-live-auto-jump": {
+							"category": "optimization",
+							"pack": "reading-navigation",
+							"packLabel": "阅读与导航"
+						},
+						"auto-best-quality": {
+							"category": "optimization",
+							"pack": "playback",
+							"packLabel": "播放控制"
+						},
+						"bangumi-page-hide-bpx-player-record-item-wrap": { "category": "cleaning" },
+						"bangumi-page-hide-bpx-player-top-follow": { "category": "cleaning" },
+						"bangumi-page-hide-eplist-badge": { "category": "cleaning" },
+						"bangumi-page-hide-media-info": { "category": "cleaning" },
+						"bangumi-page-hide-recommend": { "category": "cleaning" },
+						"bangumi-page-hide-right-container-section-height": { "category": "cleaning" },
+						"bangumi-page-hide-sidenav-issue": { "category": "cleaning" },
+						"bangumi-page-hide-sponsor-module": { "category": "cleaning" },
+						"bangumi-page-hide-toolbar": { "category": "cleaning" },
+						"bangumi-page-hide-watch-together": { "category": "cleaning" },
+						"bangumi-page-simple-media-info": { "category": "cleaning" },
+						"beauty-scrollbar": {
+							"category": "optimization",
+							"pack": "appearance",
+							"packLabel": "主题与外观"
+						},
+						"border-radius": {
+							"category": "optimization",
+							"pack": "appearance",
+							"packLabel": "主题与外观"
+						},
+						"channel-hide-carousel": { "category": "cleaning" },
+						"channel-hide-danmaku-count": { "category": "cleaning" },
+						"channel-hide-sticky-header": { "category": "cleaning" },
+						"channel-hide-subarea": { "category": "cleaning" },
+						"channel-increase-rcmd-list-font-size": {
+							"category": "optimization",
+							"pack": "text-style",
+							"packLabel": "文字与字幕"
+						},
+						"channel-layout": {
+							"category": "optimization",
+							"pack": "layout",
+							"packLabel": "页面布局"
+						},
+						"channel-layout-padding": {
+							"category": "optimization",
+							"pack": "layout",
+							"packLabel": "页面布局"
+						},
+						"common-header-bar-padding-left": {
+							"category": "optimization",
+							"pack": "layout",
+							"packLabel": "页面布局"
+						},
+						"common-header-bar-padding-right": {
+							"category": "optimization",
+							"pack": "layout",
+							"packLabel": "页面布局"
+						},
+						"common-header-bar-search-margin-left": {
+							"category": "optimization",
+							"pack": "layout",
+							"packLabel": "页面布局"
+						},
+						"common-header-bar-search-width": {
+							"category": "optimization",
+							"pack": "layout",
+							"packLabel": "页面布局"
+						},
+						"common-hide-nav-anime": { "category": "cleaning" },
+						"common-hide-nav-anime-popover": { "category": "cleaning" },
+						"common-hide-nav-avatar": { "category": "cleaning" },
+						"common-hide-nav-bdu": { "category": "cleaning" },
+						"common-hide-nav-blackboard": { "category": "cleaning" },
+						"common-hide-nav-bml": { "category": "cleaning" },
+						"common-hide-nav-channel-panel-popover": { "category": "cleaning" },
+						"common-hide-nav-download-app": { "category": "cleaning" },
+						"common-hide-nav-dynamic": { "category": "cleaning" },
+						"common-hide-nav-dynamic-red-num": { "category": "cleaning" },
+						"common-hide-nav-favorite": { "category": "cleaning" },
+						"common-hide-nav-game": { "category": "cleaning" },
+						"common-hide-nav-game-popover": { "category": "cleaning" },
+						"common-hide-nav-history": { "category": "cleaning" },
+						"common-hide-nav-homepage": { "category": "cleaning" },
+						"common-hide-nav-homepage-logo": { "category": "cleaning" },
+						"common-hide-nav-live": { "category": "cleaning" },
+						"common-hide-nav-live-popover": { "category": "cleaning" },
+						"common-hide-nav-manga": { "category": "cleaning" },
+						"common-hide-nav-manga-popover": { "category": "cleaning" },
+						"common-hide-nav-match": { "category": "cleaning" },
+						"common-hide-nav-member": { "category": "cleaning" },
+						"common-hide-nav-message": { "category": "cleaning" },
+						"common-hide-nav-message-red-num": { "category": "cleaning" },
+						"common-hide-nav-search-btn": { "category": "cleaning" },
+						"common-hide-nav-search-history": { "category": "cleaning" },
+						"common-hide-nav-search-rcmd": { "category": "cleaning" },
+						"common-hide-nav-search-trending": { "category": "cleaning" },
+						"common-hide-nav-upload": { "category": "cleaning" },
+						"common-hide-nav-vip": { "category": "cleaning" },
+						"common-hide-nav-vipshop": { "category": "cleaning" },
+						"common-nav-favorite-select-watchlater": {
+							"category": "optimization",
+							"pack": "reading-navigation",
+							"packLabel": "阅读与导航"
+						},
+						"common-nav-search-middle-justify": {
+							"category": "optimization",
+							"pack": "layout",
+							"packLabel": "页面布局"
+						},
+						"common-theme-dark": {
+							"category": "optimization",
+							"pack": "appearance",
+							"packLabel": "主题与外观"
+						},
+						"common-unify-font": {
+							"category": "optimization",
+							"pack": "text-style",
+							"packLabel": "文字与字幕"
+						},
+						"debug-mode": { "category": "support" },
+						"default-webscreen": {
+							"category": "optimization",
+							"pack": "playback",
+							"packLabel": "播放控制"
+						},
+						"default-widescreen": {
+							"category": "optimization",
+							"pack": "playback",
+							"packLabel": "播放控制"
+						},
+						"dynamic-detail-width": {
+							"category": "optimization",
+							"pack": "layout",
+							"packLabel": "页面布局"
+						},
+						"dynamic-list-width": {
+							"category": "optimization",
+							"pack": "layout",
+							"packLabel": "页面布局"
+						},
+						"dynamic-page-hide-all-comment": { "category": "cleaning" },
+						"dynamic-page-unfold-dynamic": {
+							"category": "optimization",
+							"pack": "reading-navigation",
+							"packLabel": "阅读与导航"
+						},
+						"dynamic-page-unfold-dynamic-content": {
+							"category": "optimization",
+							"pack": "reading-navigation",
+							"packLabel": "阅读与导航"
+						},
+						"dynamic-page-up-list-checked-item-hide": { "category": "cleaning" },
+						"dynamic-page-up-list-checked-item-opacity": { "category": "cleaning" },
+						"dynamic-page-up-list-dual-line-mode": {
+							"category": "optimization",
+							"pack": "layout",
+							"packLabel": "页面布局"
+						},
+						"exchange-dynamic-page-left-right-aside": {
+							"category": "optimization",
+							"pack": "layout",
+							"packLabel": "页面布局"
+						},
+						"fullscreen-key-f-scrollable": {
+							"category": "optimization",
+							"pack": "playback",
+							"packLabel": "播放控制"
+						},
+						"fullscreen-scrollable": {
+							"category": "optimization",
+							"pack": "playback",
+							"packLabel": "播放控制"
+						},
+						"hide-dynamic-page-aside-left": { "category": "cleaning" },
+						"hide-dynamic-page-aside-right": { "category": "cleaning" },
+						"hide-dynamic-page-bili-dyn-ads": { "category": "cleaning" },
+						"hide-dynamic-page-bili-dyn-avatar-icon": { "category": "cleaning" },
+						"hide-dynamic-page-bili-dyn-avatar-pendent": { "category": "cleaning" },
+						"hide-dynamic-page-bili-dyn-banner": { "category": "cleaning" },
+						"hide-dynamic-page-bili-dyn-blocked": { "category": "cleaning" },
+						"hide-dynamic-page-bili-dyn-card-goods": { "category": "cleaning" },
+						"hide-dynamic-page-bili-dyn-card-reserve": { "category": "cleaning" },
+						"hide-dynamic-page-bili-dyn-charge-video": { "category": "cleaning" },
+						"hide-dynamic-page-bili-dyn-dispute": { "category": "cleaning" },
+						"hide-dynamic-page-bili-dyn-forward": { "category": "cleaning" },
+						"hide-dynamic-page-bili-dyn-item-interaction": { "category": "cleaning" },
+						"hide-dynamic-page-bili-dyn-list-tabs": { "category": "cleaning" },
+						"hide-dynamic-page-bili-dyn-live": { "category": "cleaning" },
+						"hide-dynamic-page-bili-dyn-live-users__item__living": { "category": "cleaning" },
+						"hide-dynamic-page-bili-dyn-lottery": { "category": "cleaning" },
+						"hide-dynamic-page-bili-dyn-my-info": { "category": "cleaning" },
+						"hide-dynamic-page-bili-dyn-official-topic": { "category": "cleaning" },
+						"hide-dynamic-page-bili-dyn-ornament": { "category": "cleaning" },
+						"hide-dynamic-page-bili-dyn-publishing": { "category": "cleaning" },
+						"hide-dynamic-page-bili-dyn-text-topic": { "category": "cleaning" },
+						"hide-dynamic-page-bili-dyn-topic-box": { "category": "cleaning" },
+						"hide-dynamic-page-bili-dyn-vote": { "category": "cleaning" },
+						"hide-dynamic-page-fixed-header": { "category": "cleaning" },
+						"hide-dynamic-page-sidebar-back-to-top": { "category": "cleaning" },
+						"hide-dynamic-page-sidebar-old-version": { "category": "cleaning" },
+						"hide-dynamic-page-up-list": { "category": "cleaning" },
+						"hide-footer": { "category": "cleaning" },
+						"hide-search-page-activity-game-list": { "category": "cleaning" },
+						"hide-search-page-ad": { "category": "cleaning" },
+						"hide-search-page-bangumi-pgc-list": { "category": "cleaning" },
+						"hide-search-page-btn-to-top": { "category": "cleaning" },
+						"hide-search-page-cheese-result": { "category": "cleaning" },
+						"hide-search-page-customer-service": { "category": "cleaning" },
+						"hide-search-page-danmaku-count": { "category": "cleaning" },
+						"hide-search-page-date": { "category": "cleaning" },
+						"hide-search-page-live-room-result": { "category": "cleaning" },
+						"hide-search-page-search-sticky-header": { "category": "cleaning" },
+						"hide-space-page-sidebar-feedback": { "category": "cleaning" },
+						"hide-space-page-sidebar-revert": { "category": "cleaning" },
+						"hide-space-page-video-card-charge": { "category": "cleaning" },
+						"hide-space-page-video-card-danmaku-count": { "category": "cleaning" },
+						"hide-watchlater-button": { "category": "cleaning" },
+						"homepage-hide-ad-card": { "category": "cleaning" },
+						"homepage-hide-adblock-tips": { "category": "cleaning" },
+						"homepage-hide-adcard-button": { "category": "cleaning" },
+						"homepage-hide-banner": { "category": "cleaning" },
+						"homepage-hide-bili-watch-later-tip": { "category": "cleaning" },
+						"homepage-hide-danmaku-count": { "category": "cleaning" },
+						"homepage-hide-desktop-download-tip": { "category": "cleaning" },
+						"homepage-hide-feed-roll-btn": { "category": "cleaning" },
+						"homepage-hide-feedback": { "category": "cleaning" },
+						"homepage-hide-flexible-roll-btn": { "category": "cleaning" },
+						"homepage-hide-flexible-roll-btn-text": { "category": "cleaning" },
+						"homepage-hide-inline-player-danmaku": { "category": "cleaning" },
+						"homepage-hide-live-card-recommend": { "category": "cleaning" },
+						"homepage-hide-no-interest": { "category": "cleaning" },
+						"homepage-hide-recommend-swipe": { "category": "cleaning" },
+						"homepage-hide-skeleton": { "category": "cleaning" },
+						"homepage-hide-skeleton-animation": { "category": "cleaning" },
+						"homepage-hide-skeleton-before-anchor": { "category": "cleaning" },
+						"homepage-hide-sticky-header": { "category": "cleaning" },
+						"homepage-hide-sticky-subarea": { "category": "cleaning" },
+						"homepage-hide-sub-area-card-recommend": { "category": "cleaning" },
+						"homepage-hide-subarea": { "category": "cleaning" },
+						"homepage-hide-top-btn": { "category": "cleaning" },
+						"homepage-hide-trial-feed-wrap": { "category": "cleaning" },
+						"homepage-hide-up-info-icon": { "category": "cleaning" },
+						"homepage-hide-video-info-date": { "category": "cleaning" },
+						"homepage-hide-watchlater-pip-button": { "category": "cleaning" },
+						"homepage-increase-rcmd-list-font-size": {
+							"category": "optimization",
+							"pack": "text-style",
+							"packLabel": "文字与字幕"
+						},
+						"homepage-increase-rcmd-load-size": { "category": "cleaning" },
+						"homepage-layout": {
+							"category": "optimization",
+							"pack": "layout",
+							"packLabel": "页面布局"
+						},
+						"homepage-layout-padding": {
+							"category": "optimization",
+							"pack": "layout",
+							"packLabel": "页面布局"
+						},
+						"homepage-move-no-interest": {
+							"category": "optimization",
+							"pack": "layout",
+							"packLabel": "页面布局"
+						},
+						"homepage-rcmd-video-preload": { "category": "cleaning" },
+						"homepage-revert-channel-dynamic-icon": {
+							"category": "optimization",
+							"pack": "reading-navigation",
+							"packLabel": "阅读与导航"
+						},
+						"homepage-simple-sub-area-card-recommend": { "category": "cleaning" },
+						"increase-space-page-video-card-font-size": {
+							"category": "optimization",
+							"pack": "text-style",
+							"packLabel": "文字与字幕"
+						},
+						"live-page-announcement-cntr": { "category": "cleaning" },
+						"live-page-brush-prompt": { "category": "cleaning" },
+						"live-page-bulge-danmaku": { "category": "cleaning" },
+						"live-page-chat-control-panel": { "category": "cleaning" },
+						"live-page-chat-input-ctnr": { "category": "cleaning" },
+						"live-page-chat-input-ctnr-medal-section": { "category": "cleaning" },
+						"live-page-chat-input-ctnr-send-btn": { "category": "cleaning" },
+						"live-page-chat-item-background-color": { "category": "cleaning" },
+						"live-page-chat-item-top3-notice": { "category": "cleaning" },
+						"live-page-clean-all-danmaku-big-emoji": { "category": "cleaning" },
+						"live-page-clean-all-danmaku-small-emoji": { "category": "cleaning" },
+						"live-page-combo-card": { "category": "cleaning" },
+						"live-page-combo-danmaku": { "category": "cleaning" },
+						"live-page-control-panel-icon-row": { "category": "cleaning" },
+						"live-page-convention-msg": { "category": "cleaning" },
+						"live-page-danmaku-font-size": {
+							"category": "optimization",
+							"pack": "text-style",
+							"packLabel": "文字与字幕"
+						},
+						"live-page-default-skin": { "category": "cleaning" },
+						"live-page-disable-hotkey-g-follow": { "category": "cleaning" },
+						"live-page-fans-medal-item-ctnr": { "category": "cleaning" },
+						"live-page-flip-view": { "category": "cleaning" },
+						"live-page-fullscreen-danmaku-vm": { "category": "cleaning" },
+						"live-page-gift-control-vm": { "category": "cleaning" },
+						"live-page-gift-control-vm-show-lottery": { "category": "cleaning" },
+						"live-page-gift-item": { "category": "cleaning" },
+						"live-page-group-medal-ctnr": { "category": "cleaning" },
+						"live-page-head-info-avatar-pendant": { "category": "cleaning" },
+						"live-page-head-info-vm": { "category": "cleaning" },
+						"live-page-head-info-vm-upper-row-activity": { "category": "cleaning" },
+						"live-page-head-info-vm-upper-row-follow-ctnr": { "category": "cleaning" },
+						"live-page-head-info-vm-upper-row-hotrank": { "category": "cleaning" },
+						"live-page-head-web-player-announcement-wrapper": { "category": "cleaning" },
+						"live-page-head-web-player-awesome-pk-vm": { "category": "cleaning" },
+						"live-page-head-web-player-game-id": { "category": "cleaning" },
+						"live-page-head-web-player-icon-feedback": { "category": "cleaning" },
+						"live-page-head-web-player-live-lottery": { "category": "cleaning" },
+						"live-page-head-web-player-research-container": { "category": "cleaning" },
+						"live-page-head-web-player-shop-popover-vm": { "category": "cleaning" },
+						"live-page-header-avatar": { "category": "cleaning" },
+						"live-page-header-bili-download-panel": { "category": "cleaning" },
+						"live-page-header-entry-logo": { "category": "cleaning" },
+						"live-page-header-entry-title": { "category": "cleaning" },
+						"live-page-header-follow-panel": { "category": "cleaning" },
+						"live-page-header-go-live": { "category": "cleaning" },
+						"live-page-header-live": { "category": "cleaning" },
+						"live-page-header-mobile-game": { "category": "cleaning" },
+						"live-page-header-net-game": { "category": "cleaning" },
+						"live-page-header-recharge": { "category": "cleaning" },
+						"live-page-header-search-block": { "category": "cleaning" },
+						"live-page-header-search-btn": { "category": "cleaning" },
+						"live-page-header-showmore-link": { "category": "cleaning" },
+						"live-page-header-standalone-chatroom": { "category": "cleaning" },
+						"live-page-header-standalone-entertainment": { "category": "cleaning" },
+						"live-page-header-standalone-game": { "category": "cleaning" },
+						"live-page-header-standalone-helpmeplay": { "category": "cleaning" },
+						"live-page-header-standalone-interact": { "category": "cleaning" },
+						"live-page-header-standalone-knowledge": { "category": "cleaning" },
+						"live-page-header-standalone-living": { "category": "cleaning" },
+						"live-page-header-standalone-match": { "category": "cleaning" },
+						"live-page-header-standalone-radio": { "category": "cleaning" },
+						"live-page-header-standalone-shopping": { "category": "cleaning" },
+						"live-page-header-standalone-vtuber": { "category": "cleaning" },
+						"live-page-hide-web-player-background": { "category": "cleaning" },
+						"live-page-nav-search-history": { "category": "cleaning" },
+						"live-page-nav-search-rcmd": { "category": "cleaning" },
+						"live-page-nav-search-trending": { "category": "cleaning" },
+						"live-page-rank-icon": { "category": "cleaning" },
+						"live-page-rank-list-vm": { "category": "cleaning" },
+						"live-page-rank-list-vm-fold": { "category": "cleaning" },
+						"live-page-remove-wallpaper": { "category": "cleaning" },
+						"live-page-room-feed": { "category": "cleaning" },
+						"live-page-room-info-ctnr": { "category": "cleaning" },
+						"live-page-sections-vm": { "category": "cleaning" },
+						"live-page-sidebar-vm": { "category": "cleaning" },
+						"live-page-title-label": { "category": "cleaning" },
+						"live-page-wealth-medal-ctnr": { "category": "cleaning" },
+						"live-page-web-player-interactive-sticker": { "category": "cleaning" },
+						"live-page-web-player-watermark": { "category": "cleaning" },
+						"live-page-welcome-msg": { "category": "cleaning" },
+						"live-page-width": {
+							"category": "optimization",
+							"pack": "layout",
+							"packLabel": "页面布局"
+						},
+						"normalscreen-width": {
+							"category": "optimization",
+							"pack": "layout",
+							"packLabel": "页面布局"
+						},
+						"popular-hide-danmaku-count": { "category": "cleaning" },
+						"popular-hide-tips": { "category": "cleaning" },
+						"popular-history-hide-hint": { "category": "cleaning" },
+						"popular-hot-hide-tag": { "category": "cleaning" },
+						"popular-layout": {
+							"category": "optimization",
+							"pack": "layout",
+							"packLabel": "页面布局"
+						},
+						"popular-weekly-hide-hint": { "category": "cleaning" },
+						"screen-scrollable-enable-mini-player": {
+							"category": "optimization",
+							"pack": "playback",
+							"packLabel": "播放控制"
+						},
+						"screen-scrollable-move-header-bottom": {
+							"category": "optimization",
+							"pack": "playback",
+							"packLabel": "播放控制"
+						},
+						"space-page-redirect-to-video": {
+							"category": "optimization",
+							"pack": "reading-navigation",
+							"packLabel": "阅读与导航"
+						},
+						"url-cleaner": { "category": "cleaning" },
+						"video-page-bpx-player-bili-dm-normal-white": {
+							"category": "optimization",
+							"pack": "appearance",
+							"packLabel": "主题与外观"
+						},
+						"video-page-bpx-player-bili-dm-vip-white": {
+							"category": "optimization",
+							"pack": "appearance",
+							"packLabel": "主题与外观"
+						},
+						"video-page-bpx-player-bili-high-icon": { "category": "cleaning" },
+						"video-page-bpx-player-mini-mode-position-record": {
+							"category": "optimization",
+							"pack": "playback",
+							"packLabel": "播放控制"
+						},
+						"video-page-bpx-player-mini-mode-wheel-adjust": {
+							"category": "optimization",
+							"pack": "playback",
+							"packLabel": "播放控制"
+						},
+						"video-page-bv2av": {
+							"category": "optimization",
+							"pack": "link-tools",
+							"packLabel": "链接工具"
+						},
+						"video-page-coin-disable-auto-like": { "category": "cleaning" },
+						"video-page-danmaku-font-family": {
+							"category": "optimization",
+							"pack": "text-style",
+							"packLabel": "文字与字幕"
+						},
+						"video-page-danmaku-font-weight": {
+							"category": "optimization",
+							"pack": "text-style",
+							"packLabel": "文字与字幕"
+						},
+						"video-page-exchange-player-position": {
+							"category": "optimization",
+							"pack": "layout",
+							"packLabel": "页面布局"
+						},
+						"video-page-fix-note-thumbnail-scale": {
+							"category": "optimization",
+							"pack": "appearance",
+							"packLabel": "主题与外观"
+						},
+						"video-page-hide-below-activity-vote": { "category": "cleaning" },
+						"video-page-hide-below-bannerAd": { "category": "cleaning" },
+						"video-page-hide-below-info-desc": { "category": "cleaning" },
+						"video-page-hide-below-info-tag": { "category": "cleaning" },
+						"video-page-hide-below-info-video-ai-assistant": { "category": "cleaning" },
+						"video-page-hide-below-info-video-complaint": { "category": "cleaning" },
+						"video-page-hide-below-info-video-note": { "category": "cleaning" },
+						"video-page-hide-below-info-video-report-menu": { "category": "cleaning" },
+						"video-page-hide-bili-avatar-nft-icon": { "category": "cleaning" },
+						"video-page-hide-bili-avatar-pendent-dom": { "category": "cleaning" },
+						"video-page-hide-bpx-player-bili-clock": { "category": "cleaning" },
+						"video-page-hide-bpx-player-bili-cmd-shrink": { "category": "cleaning" },
+						"video-page-hide-bpx-player-bili-cmtime": { "category": "cleaning" },
+						"video-page-hide-bpx-player-bili-guide-all": { "category": "cleaning" },
+						"video-page-hide-bpx-player-bili-link": { "category": "cleaning" },
+						"video-page-hide-bpx-player-bili-qoe-feedback": { "category": "cleaning" },
+						"video-page-hide-bpx-player-bili-reserve": { "category": "cleaning" },
+						"video-page-hide-bpx-player-bili-score": { "category": "cleaning" },
+						"video-page-hide-bpx-player-bili-score-sum": { "category": "cleaning" },
+						"video-page-hide-bpx-player-bili-vote": { "category": "cleaning" },
+						"video-page-hide-bpx-player-cmd-dm-wrap": { "category": "cleaning" },
+						"video-page-hide-bpx-player-ctrl-eplist": { "category": "cleaning" },
+						"video-page-hide-bpx-player-ctrl-flac": { "category": "cleaning" },
+						"video-page-hide-bpx-player-ctrl-full": { "category": "cleaning" },
+						"video-page-hide-bpx-player-ctrl-next": { "category": "cleaning" },
+						"video-page-hide-bpx-player-ctrl-pip": { "category": "cleaning" },
+						"video-page-hide-bpx-player-ctrl-play": { "category": "cleaning" },
+						"video-page-hide-bpx-player-ctrl-playbackrate": { "category": "cleaning" },
+						"video-page-hide-bpx-player-ctrl-prev": { "category": "cleaning" },
+						"video-page-hide-bpx-player-ctrl-quality": { "category": "cleaning" },
+						"video-page-hide-bpx-player-ctrl-setting": { "category": "cleaning" },
+						"video-page-hide-bpx-player-ctrl-subtitle": { "category": "cleaning" },
+						"video-page-hide-bpx-player-ctrl-viewpoint": { "category": "cleaning" },
+						"video-page-hide-bpx-player-ctrl-volume": { "category": "cleaning" },
+						"video-page-hide-bpx-player-ctrl-web": { "category": "cleaning" },
+						"video-page-hide-bpx-player-ctrl-wide": { "category": "cleaning" },
+						"video-page-hide-bpx-player-dialog-wrap": { "category": "cleaning" },
+						"video-page-hide-bpx-player-dm-btn-send": { "category": "cleaning" },
+						"video-page-hide-bpx-player-dm-hint": { "category": "cleaning" },
+						"video-page-hide-bpx-player-dm-input": { "category": "cleaning" },
+						"video-page-hide-bpx-player-dm-setting": { "category": "cleaning" },
+						"video-page-hide-bpx-player-dm-switch": { "category": "cleaning" },
+						"video-page-hide-bpx-player-ending-related": { "category": "cleaning" },
+						"video-page-hide-bpx-player-mini-mode-danmaku": { "category": "cleaning" },
+						"video-page-hide-bpx-player-mini-mode-process": { "category": "cleaning" },
+						"video-page-hide-bpx-player-mini-when-ending": { "category": "cleaning" },
+						"video-page-hide-bpx-player-pbp-pin": { "category": "cleaning" },
+						"video-page-hide-bpx-player-postpanel": { "category": "cleaning" },
+						"video-page-hide-bpx-player-sending-area": { "category": "cleaning" },
+						"video-page-hide-bpx-player-shadow-progress-area": { "category": "cleaning" },
+						"video-page-hide-bpx-player-state-wrap": { "category": "cleaning" },
+						"video-page-hide-bpx-player-top-issue": { "category": "cleaning" },
+						"video-page-hide-bpx-player-top-left-follow": { "category": "cleaning" },
+						"video-page-hide-bpx-player-top-left-music": { "category": "cleaning" },
+						"video-page-hide-bpx-player-top-left-title": { "category": "cleaning" },
+						"video-page-hide-bpx-player-video-btn-dm": { "category": "cleaning" },
+						"video-page-hide-bpx-player-video-info-online": { "category": "cleaning" },
+						"video-page-hide-bpx-player-video-inputbar": { "category": "cleaning" },
+						"video-page-hide-comment": { "category": "cleaning" },
+						"video-page-hide-comment-user-card": { "category": "cleaning" },
+						"video-page-hide-contractor-box": { "category": "cleaning" },
+						"video-page-hide-emoji-large": { "category": "cleaning" },
+						"video-page-hide-emoji-large-zoom": {
+							"category": "optimization",
+							"pack": "appearance",
+							"packLabel": "主题与外观"
+						},
+						"video-page-hide-emoji-popover": { "category": "cleaning" },
+						"video-page-hide-emoji-small": { "category": "cleaning" },
+						"video-page-hide-fan-badge": { "category": "cleaning" },
+						"video-page-hide-fixed-header": { "category": "cleaning" },
+						"video-page-hide-fixed-reply-box": { "category": "cleaning" },
+						"video-page-hide-jump-link-search-word": { "category": "cleaning" },
+						"video-page-hide-main-reply-box": { "category": "cleaning" },
+						"video-page-hide-note-prefix": { "category": "cleaning" },
+						"video-page-hide-reply-box-textarea-placeholder": { "category": "cleaning" },
+						"video-page-hide-reply-content-user-highlight": { "category": "cleaning" },
+						"video-page-hide-reply-decorate": { "category": "cleaning" },
+						"video-page-hide-reply-dislike-reply-btn": { "category": "cleaning" },
+						"video-page-hide-reply-notice": { "category": "cleaning" },
+						"video-page-hide-reply-tag-list": { "category": "cleaning" },
+						"video-page-hide-right-container": { "category": "cleaning" },
+						"video-page-hide-right-container-ad": { "category": "cleaning" },
+						"video-page-hide-right-container-danmaku": { "category": "cleaning" },
+						"video-page-hide-right-container-duration": { "category": "cleaning" },
+						"video-page-hide-right-container-live": { "category": "cleaning" },
+						"video-page-hide-right-container-multi-page-add-counter": {
+							"category": "optimization",
+							"pack": "reading-navigation",
+							"packLabel": "阅读与导航"
+						},
+						"video-page-hide-right-container-reco-list-next-play": { "category": "cleaning" },
+						"video-page-hide-right-container-reco-list-next-play-next-button": { "category": "cleaning" },
+						"video-page-hide-right-container-reco-list-rec-footer": { "category": "cleaning" },
+						"video-page-hide-right-container-reco-list-rec-list": { "category": "cleaning" },
+						"video-page-hide-right-container-reco-list-rec-list-info-plays": { "category": "cleaning" },
+						"video-page-hide-right-container-reco-list-rec-list-info-up": { "category": "cleaning" },
+						"video-page-hide-right-container-right-bottom-banner": { "category": "cleaning" },
+						"video-page-hide-right-container-section-abstract": { "category": "cleaning" },
+						"video-page-hide-right-container-section-height": {
+							"category": "optimization",
+							"pack": "layout",
+							"packLabel": "页面布局"
+						},
+						"video-page-hide-right-container-section-play-num": { "category": "cleaning" },
+						"video-page-hide-right-container-section-subscribe": { "category": "cleaning" },
+						"video-page-hide-right-container-video-page-game-card-small": { "category": "cleaning" },
+						"video-page-hide-sidenav-back-to-top": { "category": "cleaning" },
+						"video-page-hide-sidenav-customer-service": { "category": "cleaning" },
+						"video-page-hide-sidenav-mini": { "category": "cleaning" },
+						"video-page-hide-sidenav-right-container-live": { "category": "cleaning" },
+						"video-page-hide-top-vote-card": { "category": "cleaning" },
+						"video-page-hide-triple-oldfan-entry": { "category": "cleaning" },
+						"video-page-hide-up-bili-avatar-icon": { "category": "cleaning" },
+						"video-page-hide-up-bili-avatar-pendent-dom": { "category": "cleaning" },
+						"video-page-hide-up-charge": { "category": "cleaning" },
+						"video-page-hide-up-description": { "category": "cleaning" },
+						"video-page-hide-up-membersinfo-normal-header": { "category": "cleaning" },
+						"video-page-hide-up-sendmsg": { "category": "cleaning" },
+						"video-page-hide-up-usercard": { "category": "cleaning" },
+						"video-page-hide-user-level": { "category": "cleaning" },
+						"video-page-hide-video-info-argue": { "category": "cleaning" },
+						"video-page-hide-video-info-copyright": { "category": "cleaning" },
+						"video-page-hide-video-info-danmaku-count": { "category": "cleaning" },
+						"video-page-hide-video-info-honor": { "category": "cleaning" },
+						"video-page-hide-video-info-pubdate": { "category": "cleaning" },
+						"video-page-hide-video-share-popover": { "category": "cleaning" },
+						"video-page-hide-vote-info": { "category": "cleaning" },
+						"video-page-reply-user-name-color-default": {
+							"category": "optimization",
+							"pack": "appearance",
+							"packLabel": "主题与外观"
+						},
+						"video-page-reply-user-name-color-pink": {
+							"category": "optimization",
+							"pack": "appearance",
+							"packLabel": "主题与外观"
+						},
+						"video-page-right-container-section-unfold-title": {
+							"category": "optimization",
+							"pack": "reading-navigation",
+							"packLabel": "阅读与导航"
+						},
+						"video-page-right-container-set-info-bottom": {
+							"category": "optimization",
+							"pack": "layout",
+							"packLabel": "页面布局"
+						},
+						"video-page-right-container-sticky-disable": { "category": "cleaning" },
+						"video-page-right-container-sticky-optimize": {
+							"category": "optimization",
+							"pack": "layout",
+							"packLabel": "页面布局"
+						},
+						"video-page-show-bpx-player-pbp": {
+							"category": "optimization",
+							"pack": "playback",
+							"packLabel": "播放控制"
+						},
+						"video-page-show-bpx-player-shadow-progress-area-fullscreen": {
+							"category": "optimization",
+							"pack": "playback",
+							"packLabel": "播放控制"
+						},
+						"video-page-show-fullscreen-bpx-player-video-info-online": {
+							"category": "optimization",
+							"pack": "playback",
+							"packLabel": "播放控制"
+						},
+						"video-page-simple-share": { "category": "cleaning" },
+						"video-page-simple-share-domain": {
+							"category": "optimization",
+							"pack": "link-tools",
+							"packLabel": "链接工具"
+						},
+						"video-page-simple-video-share-popover": { "category": "cleaning" },
+						"video-page-subtitle-font-color": {
+							"category": "optimization",
+							"pack": "text-style",
+							"packLabel": "文字与字幕"
+						},
+						"video-page-subtitle-font-family": {
+							"category": "optimization",
+							"pack": "text-style",
+							"packLabel": "文字与字幕"
+						},
+						"video-page-subtitle-font-weight": {
+							"category": "optimization",
+							"pack": "text-style",
+							"packLabel": "文字与字幕"
+						},
+						"video-page-subtitle-text-stroke-color": {
+							"category": "optimization",
+							"pack": "text-style",
+							"packLabel": "文字与字幕"
+						},
+						"video-page-subtitle-text-stroke-width": {
+							"category": "optimization",
+							"pack": "text-style",
+							"packLabel": "文字与字幕"
+						},
+						"video-page-unfold-below-info-desc": {
+							"category": "optimization",
+							"pack": "reading-navigation",
+							"packLabel": "阅读与导航"
+						},
+						"video-page-unfold-right-container-danmaku": {
+							"category": "optimization",
+							"pack": "reading-navigation",
+							"packLabel": "阅读与导航"
+						},
+						"video-page-unfold-right-container-reco-list": {
+							"category": "optimization",
+							"pack": "reading-navigation",
+							"packLabel": "阅读与导航"
+						},
+						"video-page-unfold-video-info-title": {
+							"category": "optimization",
+							"pack": "reading-navigation",
+							"packLabel": "阅读与导航"
+						},
+						"watchlater-hide-feedback": { "category": "cleaning" },
+						"watchlater-increase-font-size": {
+							"category": "optimization",
+							"pack": "text-style",
+							"packLabel": "文字与字幕"
+						},
+						"watchlater-layout": {
+							"category": "optimization",
+							"pack": "layout",
+							"packLabel": "页面布局"
+						},
+						"webscreen-scrollable": {
+							"category": "optimization",
+							"pack": "playback",
+							"packLabel": "播放控制"
+						}
+					}).map((group) => ({
+						...group,
+						items: !search || group.name.toLowerCase().includes(search) ? group.items : group.items.filter((item) => [item.name, settingLabel(item.id)].join(" ").toLowerCase().includes(search)),
+						fold: search ? false : group.fold,
+						sectionKey: group.sectionKey + (search ? "-search" : "")
+					})).filter((group) => group.items.length)
+				})).filter((rule) => rule.groups.length);
 			});
-			const markedCount = (0, vue.computed)(() => review ? Object.values(review.state.value.decisions).filter((d) => d.remove).length : 0);
-			const displayedRules = (0, vue.computed)(() => !review ? activeRules.value : activeRules.value.map((rule) => ({
-				...rule,
-				groups: rule.groups.map((group) => ({
-					...group,
-					items: group.items.filter((item) => {
-						const entry = catalogByKey.get(item.id);
-						return entry ? selected(entry) : category.value === "support";
-					})
-				})).filter((group) => group.items.length)
-			})).filter((rule) => rule.groups.length));
-			const currentActionEntries = (0, vue.computed)(() => visibleEntries.value.filter((entry) => entry.id.startsWith("B")));
-			const packOptions = (0, vue.computed)(() => {
-				const options = new Map();
-				if (review) for (const entry of reviewCatalog) {
-					if (!inScope(entry) || categoryFor(entry, review.state.value) !== "optimization") continue;
-					const id = entry.pack ?? "classification-overrides";
-					const item = options.get(id) ?? {
-						id,
-						label: entry.packLabel ?? "用户改归优化",
-						count: 0
-					};
-					item.count++;
-					options.set(id, item);
-				}
-				return [...options.values()];
-			});
-			const selectCategory = (next) => {
-				category.value = next;
-				onlyMarked.value = false;
-				packFilter.value = "";
-			};
-			const pageNames = {
-				homepage: "首页",
-				video: "视频页",
-				playlist: "播放列表",
-				bangumi: "番剧页",
-				live: "直播",
-				dynamic: "动态",
-				space: "用户空间",
-				popular: "热门",
-				channel: "分区",
-				search: "搜索",
-				watchlater: "稍后再看",
-				common: "全站",
-				comment: "评论区",
-				debug: "全站调试",
-				festival: "活动页"
-			};
-			const pageName = (key) => pageNames[key] ?? key;
 			return (_ctx, _cache) => {
 				return (0, vue.withDirectives)(((0, vue.openBlock)(), (0, vue.createBlock)(PanelComp_default, (0, vue.mergeProps)({
-					title: (0, vue.unref)(true) ? "MisakaWeb · 净化与优化取舍" : "bilibili 页面净化大师",
-					widthPercent: (0, vue.unref)(true) ? 36 : 28,
+					title: "MisakaWeb · 页面设置",
+					widthPercent: 32,
 					heightPercent: 85,
-					minWidth: (0, vue.unref)(true) ? 440 : 360,
+					minWidth: 400,
 					minHeight: 600,
 					closeAction: "panel-close-rule"
 				}, { onClose: (0, vue.unref)(store).hide }), {
 					default: (0, vue.withCtx)(() => [
 						(0, vue.createElementVNode)("p", {
-							class: "mb-2 rounded border border-blue-200 bg-blue-50 p-2 text-sm text-gray-800",
+							class: "mb-2 text-sm text-gray-500",
 							"data-build-profile": (0, vue.unref)(buildProfile)
-						}, " MisakaWeb · " + (0, vue.toDisplayString)((0, vue.unref)(buildLabel)) + " · " + (0, vue.toDisplayString)((0, vue.unref)(scriptVersion)) + "。净化与过滤全部保留；包含的优化仍可逐项开关。 ", 9, _hoisted_1$4),
-						(0, vue.unref)(review) ? ((0, vue.openBlock)(), (0, vue.createElementBlock)("div", _hoisted_2$2, [
-							_cache[15] || (_cache[15] = (0, vue.createElementVNode)("p", null, "净化全部保留。标记只记录取舍，不影响当前功能开关；未标记的优化仍待定。", -1)),
-							(0, vue.createElementVNode)("div", _hoisted_3$2, [((0, vue.openBlock)(), (0, vue.createElementBlock)(vue.Fragment, null, (0, vue.renderList)(tabs, (tab) => {
-								return (0, vue.createElementVNode)("button", {
-									key: tab.key,
-									type: "button",
-									role: "tab",
-									"aria-selected": category.value === tab.key,
-									class: (0, vue.normalizeClass)(["rounded border px-2 py-1", category.value === tab.key ? "border-blue-600 bg-blue-600 text-white" : "border-gray-400 bg-white"]),
-									onClick: ($event) => selectCategory(tab.key)
-								}, [(0, vue.createVNode)(Badge_default, { code: (0, vue.unref)(actionLabel)("review-category-" + tab.key) }, null, 8, ["code"]), (0, vue.createTextVNode)((0, vue.toDisplayString)(tab.name) + "（" + (0, vue.toDisplayString)(counts.value[tab.key]) + "）", 1)], 10, _hoisted_4$1);
-							}), 64))]),
-							(0, vue.createElementVNode)("div", _hoisted_5$1, [
-								(0, vue.createElementVNode)("button", {
-									type: "button",
-									"aria-pressed": scope.value === "page",
-									class: "rounded border border-gray-400 px-2 py-1",
-									onClick: _cache[0] || (_cache[0] = ($event) => scope.value = "page")
-								}, [(0, vue.createVNode)(Badge_default, { code: (0, vue.unref)(actionLabel)("review-scope-page") }, null, 8, ["code"]), _cache[8] || (_cache[8] = (0, vue.createTextVNode)("当前页面 ", -1))], 8, _hoisted_6$1),
-								(0, vue.createElementVNode)("button", {
-									type: "button",
-									"aria-pressed": scope.value === "all",
-									class: "rounded border border-gray-400 px-2 py-1",
-									onClick: _cache[1] || (_cache[1] = ($event) => scope.value = "all")
-								}, [(0, vue.createVNode)(Badge_default, { code: (0, vue.unref)(actionLabel)("review-scope-all") }, null, 8, ["code"]), _cache[9] || (_cache[9] = (0, vue.createTextVNode)("全站清单 ", -1))], 8, _hoisted_7$1),
-								(0, vue.createElementVNode)("button", {
-									type: "button",
-									class: "rounded border border-blue-600 bg-white px-2 py-1 text-blue-800",
-									disabled: (0, vue.unref)(review).readOnly.value,
-									onClick: _cache[2] || (_cache[2] = (...args) => (0, vue.unref)(review).download && (0, vue.unref)(review).download(...args))
-								}, [(0, vue.createVNode)(Badge_default, { code: (0, vue.unref)(actionLabel)("review-export") }, null, 8, ["code"]), _cache[10] || (_cache[10] = (0, vue.createTextVNode)("导出取舍反馈 ", -1))], 8, _hoisted_8$1)
-							]),
-							(0, vue.createElementVNode)("button", {
-								type: "button",
-								class: "mb-2 rounded border border-gray-400 bg-white px-2 py-1",
-								onClick: exportDiagnostic
-							}, [(0, vue.createVNode)(Badge_default, { code: (0, vue.unref)(actionLabel)("maintenance-export-diagnostic") }, null, 8, ["code"]), _cache[11] || (_cache[11] = (0, vue.createTextVNode)("导出维护诊断 ", -1))]),
-							diagnosticError.value ? ((0, vue.openBlock)(), (0, vue.createElementBlock)("p", _hoisted_9$1, (0, vue.toDisplayString)(diagnosticError.value), 1)) : (0, vue.createCommentVNode)("", true),
-							(0, vue.withDirectives)((0, vue.createElementVNode)("input", {
-								"onUpdate:modelValue": _cache[3] || (_cache[3] = ($event) => query.value = $event),
-								type: "search",
-								"aria-label": "搜索功能名称或编号",
-								placeholder: "搜索名称、编号（如 S205）",
-								onKeydown: _cache[4] || (_cache[4] = (0, vue.withModifiers)(() => {}, ["stop"])),
-								class: "w-full rounded border border-gray-400 bg-white px-2 py-1"
-							}, null, 544), [[vue.vModelText, query.value]]),
-							category.value === "optimization" ? ((0, vue.openBlock)(), (0, vue.createElementBlock)("label", _hoisted_10$1, [
-								(0, vue.createVNode)(Badge_default, { code: (0, vue.unref)(actionLabel)("review-pack-filter") }, null, 8, ["code"]),
-								_cache[13] || (_cache[13] = (0, vue.createTextVNode)("优化功能组 ", -1)),
-								(0, vue.withDirectives)((0, vue.createElementVNode)("select", {
-									"onUpdate:modelValue": _cache[5] || (_cache[5] = ($event) => packFilter.value = $event),
-									"aria-label": "优化功能组",
-									class: "ml-2 rounded border border-gray-400 bg-white px-2 py-1",
-									onKeydown: _cache[6] || (_cache[6] = (0, vue.withModifiers)(() => {}, ["stop"]))
-								}, [_cache[12] || (_cache[12] = (0, vue.createElementVNode)("option", { value: "" }, "全部功能组", -1)), ((0, vue.openBlock)(true), (0, vue.createElementBlock)(vue.Fragment, null, (0, vue.renderList)(packOptions.value, (pack) => {
-									return (0, vue.openBlock)(), (0, vue.createElementBlock)("option", {
-										key: pack.id,
-										value: pack.id
-									}, (0, vue.toDisplayString)(pack.label) + "（" + (0, vue.toDisplayString)(pack.count) + "）", 9, _hoisted_11);
-								}), 128))], 544), [[vue.vModelSelect, packFilter.value]])
-							])) : (0, vue.createCommentVNode)("", true),
-							category.value === "optimization" ? ((0, vue.openBlock)(), (0, vue.createElementBlock)("label", _hoisted_12, [(0, vue.withDirectives)((0, vue.createElementVNode)("input", {
-								"onUpdate:modelValue": _cache[7] || (_cache[7] = ($event) => onlyMarked.value = $event),
-								type: "checkbox"
-							}, null, 512), [[vue.vModelCheckbox, onlyMarked.value]]), _cache[14] || (_cache[14] = (0, vue.createTextVNode)("只看已标记删除", -1))])) : (0, vue.createCommentVNode)("", true),
-							(0, vue.createElementVNode)("p", _hoisted_13, (0, vue.toDisplayString)(scope.value === "all" ? "全站清单用于集中取舍；切回当前页面可操作原功能设置。" : "这里保留原功能开关，可边测试效果边标记。"), 1),
-							(0, vue.createElementVNode)("p", _hoisted_14, "已标记删除 " + (0, vue.toDisplayString)(markedCount.value) + " 项；同一配置跨页面共用标记。", 1),
-							(0, vue.unref)(review).readOnly.value ? ((0, vue.openBlock)(), (0, vue.createElementBlock)("p", _hoisted_15, "标记格式无法读取，已停止写入，请使用支持该格式的版本。")) : (0, vue.createCommentVNode)("", true),
-							(0, vue.unref)(review).error.value ? ((0, vue.openBlock)(), (0, vue.createElementBlock)("p", _hoisted_16, (0, vue.toDisplayString)((0, vue.unref)(review).error.value), 1)) : (0, vue.createCommentVNode)("", true)
-						])) : (0, vue.createCommentVNode)("", true),
-						(0, vue.unref)(review) && scope.value === "all" ? ((0, vue.openBlock)(), (0, vue.createElementBlock)("div", _hoisted_17, [((0, vue.openBlock)(true), (0, vue.createElementBlock)(vue.Fragment, null, (0, vue.renderList)(visibleEntries.value, (entry) => {
-							return (0, vue.openBlock)(), (0, vue.createElementBlock)("div", {
-								key: entry.key,
-								class: "mb-3 rounded border border-gray-200 p-2 text-sm text-gray-800"
-							}, [
-								(0, vue.createElementVNode)("div", null, [(0, vue.createVNode)(Badge_default, { code: entry.id }, null, 8, ["code"]), (0, vue.createTextVNode)((0, vue.toDisplayString)(entry.names.join(" / ")), 1)]),
-								entry.packLabel ? ((0, vue.openBlock)(), (0, vue.createElementBlock)("p", _hoisted_18, "功能组：" + (0, vue.toDisplayString)(entry.packLabel), 1)) : (0, vue.createCommentVNode)("", true),
-								(0, vue.createElementVNode)("p", _hoisted_19, (0, vue.toDisplayString)(entry.pages.map(pageName).join("、")) + " · " + (0, vue.toDisplayString)(entry.groups.join(" / ")), 1),
-								(0, vue.createVNode)(OptimizationReviewRow_default, {
-									entry,
-									store: (0, vue.unref)(review)
-								}, null, 8, ["entry", "store"])
-							]);
-						}), 128))])) : ((0, vue.openBlock)(), (0, vue.createElementBlock)(vue.Fragment, { key: 2 }, [((0, vue.openBlock)(true), (0, vue.createElementBlock)(vue.Fragment, null, (0, vue.renderList)(displayedRules.value, (rule) => {
+						}, (0, vue.toDisplayString)((0, vue.unref)(buildLabel)) + " · " + (0, vue.toDisplayString)((0, vue.unref)(scriptVersion)), 9, _hoisted_1$4),
+						(0, vue.withDirectives)((0, vue.createElementVNode)("input", {
+							"onUpdate:modelValue": _cache[0] || (_cache[0] = ($event) => query.value = $event),
+							type: "search",
+							"aria-label": "搜索设置",
+							placeholder: "搜索设置",
+							class: "mb-3 w-full rounded border border-gray-300 bg-white px-2 py-1.5 text-sm",
+							onKeydown: _cache[1] || (_cache[1] = (0, vue.withModifiers)(() => {}, ["stop"]))
+						}, null, 544), [[vue.vModelText, query.value]]),
+						((0, vue.openBlock)(true), (0, vue.createElementBlock)(vue.Fragment, null, (0, vue.renderList)(displayedRules.value, (rule) => {
 							return (0, vue.openBlock)(), (0, vue.createElementBlock)("div", { key: rule.name }, [((0, vue.openBlock)(true), (0, vue.createElementBlock)(vue.Fragment, null, (0, vue.renderList)(rule.groups, (group) => {
-								return (0, vue.openBlock)(), (0, vue.createElementBlock)("div", { key: group.name }, [(0, vue.createVNode)(DisclosureComp_default, (0, vue.mergeProps)({ ref_for: true }, {
+								return (0, vue.openBlock)(), (0, vue.createElementBlock)("section", {
+									key: group.sectionKey,
+									"data-setting-section": group.name
+								}, [(0, vue.createVNode)(DisclosureComp_default, (0, vue.mergeProps)({ ref_for: true }, {
 									title: group.name,
 									isFold: group.fold,
 									isSpecial: rule.isSpecial
 								}), {
 									default: (0, vue.withCtx)(() => [((0, vue.openBlock)(true), (0, vue.createElementBlock)(vue.Fragment, null, (0, vue.renderList)(group.items, (item) => {
-										return (0, vue.openBlock)(), (0, vue.createElementBlock)("div", { key: item.id }, [item.type === "switch" ? ((0, vue.openBlock)(), (0, vue.createBlock)(SwitchComp_default, (0, vue.mergeProps)({
+										return (0, vue.openBlock)(), (0, vue.createElementBlock)("div", {
+											key: item.id,
+											"data-setting-key": item.id
+										}, [item.type === "switch" ? ((0, vue.openBlock)(), (0, vue.createBlock)(SwitchComp_default, (0, vue.mergeProps)({
 											key: 0,
 											ref_for: true
 										}, item), null, 16)) : item.type === "number" ? ((0, vue.openBlock)(), (0, vue.createBlock)(NumberComp_default, (0, vue.mergeProps)({
@@ -21578,35 +17564,18 @@
 										}, item, { onEdit: handleEdit }), null, 16)) : item.type === "list" ? ((0, vue.openBlock)(), (0, vue.createBlock)(ListComp_default, (0, vue.mergeProps)({
 											key: 5,
 											ref_for: true
-										}, item), null, 16)) : (0, vue.createCommentVNode)("", true), (0, vue.unref)(review) && (0, vue.unref)(catalogByKey).has(item.id) ? ((0, vue.openBlock)(), (0, vue.createBlock)(OptimizationReviewRow_default, {
-											key: 6,
-											entry: (0, vue.unref)(catalogByKey).get(item.id),
-											store: (0, vue.unref)(review)
-										}, null, 8, ["entry", "store"])) : (0, vue.createCommentVNode)("", true)]);
+										}, item), null, 16)) : (0, vue.createCommentVNode)("", true)], 8, _hoisted_3$2);
 									}), 128))]),
 									_: 2
-								}, 1040)]);
+								}, 1040)], 8, _hoisted_2$2);
 							}), 128))]);
-						}), 128)), (0, vue.unref)(review) && currentActionEntries.value.length ? ((0, vue.openBlock)(), (0, vue.createBlock)(DisclosureComp_default, {
-							key: 0,
-							title: "右键菜单（无独立设置开关）"
-						}, {
-							default: (0, vue.withCtx)(() => [((0, vue.openBlock)(true), (0, vue.createElementBlock)(vue.Fragment, null, (0, vue.renderList)(currentActionEntries.value, (entry) => {
-								return (0, vue.openBlock)(), (0, vue.createElementBlock)("div", {
-									key: entry.key,
-									class: "text-sm text-gray-800"
-								}, [
-									(0, vue.createVNode)(Badge_default, { code: entry.id }, null, 8, ["code"]),
-									(0, vue.createTextVNode)((0, vue.toDisplayString)(entry.names.join(" / ")) + " ", 1),
-									(0, vue.createVNode)(OptimizationReviewRow_default, {
-										entry,
-										store: (0, vue.unref)(review)
-									}, null, 8, ["entry", "store"])
-								]);
-							}), 128))]),
-							_: 1
-						})) : (0, vue.createCommentVNode)("", true)], 64)),
-						(0, vue.unref)(review) && !visibleEntries.value.length ? ((0, vue.openBlock)(), (0, vue.createElementBlock)("p", _hoisted_20, "当前类别或搜索没有匹配项。可切换全站清单或清空搜索。")) : (0, vue.createCommentVNode)("", true),
+						}), 128)),
+						!displayedRules.value.length ? ((0, vue.openBlock)(), (0, vue.createElementBlock)("p", _hoisted_4$1, "没有匹配的设置。")) : (0, vue.createCommentVNode)("", true),
+						(0, vue.createElementVNode)("div", _hoisted_5$1, [(0, vue.createElementVNode)("button", {
+							type: "button",
+							class: "rounded border border-gray-300 px-2 py-1 text-sm text-gray-700",
+							onClick: exportDiagnostic
+						}, [(0, vue.createVNode)(Badge_default, { code: (0, vue.unref)(actionLabel)("maintenance-export-diagnostic") }, null, 8, ["code"]), _cache[2] || (_cache[2] = (0, vue.createTextVNode)("导出维护信息 ", -1))]), diagnosticError.value ? ((0, vue.openBlock)(), (0, vue.createElementBlock)("p", _hoisted_6$1, (0, vue.toDisplayString)(diagnosticError.value), 1)) : (0, vue.createCommentVNode)("", true)]),
 						(0, vue.createVNode)(EditorDialog_default, {
 							ref_key: "editorDialogRef",
 							ref: editorDialogRef
@@ -22786,7 +18755,7 @@
 		watchRoute();
 		logger.info("loadFilters done");
 	};
-	var style_css_default = _style("/*! tailwindcss v4.3.3 | MIT License | https://tailwindcss.com */\n@layer properties{*,:before,:after,::backdrop{--tw-translate-x:0;--tw-translate-y:0;--tw-translate-z:0;--tw-rotate-x:initial;--tw-rotate-y:initial;--tw-rotate-z:initial;--tw-skew-x:initial;--tw-skew-y:initial;--tw-space-y-reverse:0;--tw-border-style:solid;--tw-leading:initial;--tw-font-weight:initial;--tw-shadow:0 0 #0000;--tw-shadow-color:initial;--tw-shadow-alpha:100%;--tw-inset-shadow:0 0 #0000;--tw-inset-shadow-color:initial;--tw-inset-shadow-alpha:100%;--tw-ring-color:initial;--tw-ring-shadow:0 0 #0000;--tw-inset-ring-color:initial;--tw-inset-ring-shadow:0 0 #0000;--tw-ring-inset:initial;--tw-ring-offset-width:0px;--tw-ring-offset-color:#fff;--tw-ring-offset-shadow:0 0 #0000;--tw-outline-style:solid;--tw-blur:initial;--tw-brightness:initial;--tw-contrast:initial;--tw-grayscale:initial;--tw-hue-rotate:initial;--tw-invert:initial;--tw-opacity:initial;--tw-saturate:initial;--tw-sepia:initial;--tw-drop-shadow:initial;--tw-drop-shadow-color:initial;--tw-drop-shadow-alpha:100%;--tw-drop-shadow-size:initial;--tw-duration:initial;--tw-ease:initial}}@layer theme{:host,:host{--font-sans:-apple-system, BlinkMacSystemFont, \"Segoe UI\", Roboto, \"Helvetica Neue\", \"Noto Sans\", Arial, sans-serif, \"Apple Color Emoji\", \"Segoe UI Emoji\", \"Segoe UI Symbol\", \"Noto Color Emoji\";--font-mono:ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, \"Liberation Mono\", \"Courier New\", monospace;--color-red-500:oklch(63.7% .237 25.331);--color-red-600:oklch(57.7% .245 27.325);--color-red-700:oklch(50.5% .213 27.518);--color-orange-900:oklch(40.8% .123 38.172);--color-amber-300:oklch(87.9% .169 91.605);--color-green-700:oklch(52.7% .154 150.069);--color-blue-50:oklch(97% .014 254.604);--color-blue-100:oklch(93.2% .032 255.585);--color-blue-200:oklch(88.2% .059 254.128);--color-blue-500:oklch(62.3% .214 259.815);--color-blue-600:oklch(54.6% .245 262.881);--color-blue-700:oklch(48.8% .243 264.376);--color-blue-800:oklch(42.4% .199 265.638);--color-blue-900:oklch(37.9% .146 265.522);--color-indigo-500:oklch(58.5% .233 277.117);--color-purple-100:oklch(94.6% .033 307.174);--color-purple-500:oklch(62.7% .265 303.9);--color-purple-600:oklch(55.8% .288 302.321);--color-purple-900:oklch(38.1% .176 304.987);--color-gray-50:oklch(98.5% .002 247.839);--color-gray-200:oklch(92.8% .006 264.531);--color-gray-300:oklch(87.2% .01 258.338);--color-gray-400:oklch(70.7% .022 261.325);--color-gray-500:oklch(55.1% .027 264.364);--color-gray-600:oklch(44.6% .03 256.802);--color-gray-700:oklch(37.3% .034 259.733);--color-gray-800:oklch(27.8% .033 256.848);--color-gray-900:oklch(21% .034 264.665);--color-black:#000;--color-white:#fff;--spacing:4px;--text-xs:12px;--text-xs--line-height:calc(1 / .75);--text-sm:14px;--text-sm--line-height:calc(1.25 / .875);--text-base:16px;--text-base--line-height:calc(1.5 / 1);--text-xl:20px;--text-xl--line-height:calc(1.75 / 1.25);--font-weight-normal:400;--font-weight-medium:500;--font-weight-bold:700;--font-weight-black:900;--radius-md:6px;--radius-lg:8px;--radius-xl:12px;--ease-in:cubic-bezier(.4, 0, 1, 1);--default-transition-duration:.15s;--default-transition-timing-function:cubic-bezier(.4, 0, .2, 1);--default-font-family:var(--font-sans);--default-mono-font-family:var(--font-mono)}}@layer base{*,:after,:before,::backdrop{box-sizing:border-box;border:0 solid;margin:0;padding:0}::file-selector-button{box-sizing:border-box;border:0 solid;margin:0;padding:0}html,:host{-webkit-text-size-adjust:100%;tab-size:4;line-height:1.5;font-family:var(--default-font-family,-apple-system, BlinkMacSystemFont, \"Segoe UI\", Roboto, \"Helvetica Neue\", \"Noto Sans\", Arial, sans-serif, \"Apple Color Emoji\", \"Segoe UI Emoji\", \"Segoe UI Symbol\", \"Noto Color Emoji\");font-feature-settings:var(--default-font-feature-settings,normal);font-variation-settings:var(--default-font-variation-settings,normal);-webkit-tap-highlight-color:transparent}hr{height:0;color:inherit;border-top-width:1px}abbr:where([title]){-webkit-text-decoration:underline dotted;text-decoration:underline dotted}h1,h2,h3,h4,h5,h6{font-size:inherit;font-weight:inherit}a{color:inherit;-webkit-text-decoration:inherit;-webkit-text-decoration:inherit;-webkit-text-decoration:inherit;-webkit-text-decoration:inherit;text-decoration:inherit}b,strong{font-weight:bolder}code,kbd,samp,pre{font-family:var(--default-mono-font-family,ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, \"Liberation Mono\", \"Courier New\", monospace);font-feature-settings:var(--default-mono-font-feature-settings,normal);font-variation-settings:var(--default-mono-font-variation-settings,normal);font-size:1em}small{font-size:80%}sub,sup{vertical-align:baseline;font-size:75%;line-height:0;position:relative}sub{bottom:-.25em}sup{top:-.5em}table{text-indent:0;border-color:inherit;border-collapse:collapse}:-moz-focusring:where(:not(iframe)){outline:auto}progress{vertical-align:baseline}summary{display:list-item}ol,ul,menu{list-style:none}img,svg,video,canvas,audio,iframe,embed,object{vertical-align:middle;display:block}img,video{max-width:100%;height:auto}button,input,select,optgroup,textarea{font:inherit;font-feature-settings:inherit;font-variation-settings:inherit;letter-spacing:inherit;color:inherit;opacity:1;background-color:#0000;border-radius:0}::file-selector-button{font:inherit;font-feature-settings:inherit;font-variation-settings:inherit;letter-spacing:inherit;color:inherit;opacity:1;background-color:#0000;border-radius:0}:where(select:is([multiple],[size])) optgroup{font-weight:bolder}:where(select:is([multiple],[size])) optgroup option{padding-inline-start:20px}::file-selector-button{margin-inline-end:4px}::placeholder{opacity:1}@supports (not ((-webkit-appearance:-apple-pay-button))) or (contain-intrinsic-size:1px){::placeholder{color:currentColor}@supports (color:color-mix(in lab, red, red)){::placeholder{color:color-mix(in oklab, currentcolor 50%, transparent)}}}textarea{resize:vertical}::-webkit-search-decoration{-webkit-appearance:none}::-webkit-date-and-time-value{min-height:1lh;text-align:inherit}::-webkit-datetime-edit{display:inline-flex}::-webkit-datetime-edit-fields-wrapper{padding:0}::-webkit-datetime-edit{padding-block:0}::-webkit-datetime-edit-year-field{padding-block:0}::-webkit-datetime-edit-month-field{padding-block:0}::-webkit-datetime-edit-day-field{padding-block:0}::-webkit-datetime-edit-hour-field{padding-block:0}::-webkit-datetime-edit-minute-field{padding-block:0}::-webkit-datetime-edit-second-field{padding-block:0}::-webkit-datetime-edit-millisecond-field{padding-block:0}::-webkit-datetime-edit-meridiem-field{padding-block:0}::-webkit-calendar-picker-indicator{line-height:1}:-moz-ui-invalid{box-shadow:none}button,input:where([type=button],[type=reset],[type=submit]){appearance:button}::file-selector-button{appearance:button}::-webkit-inner-spin-button{height:auto}::-webkit-outer-spin-button{height:auto}[hidden]:where(:not([hidden=until-found])){display:none!important}:host{font-family:PingFang SC,HarmonyOS_Regular,Helvetica Neue,Microsoft YaHei,sans-serif!important}input[type=number]::-webkit-inner-spin-button{appearance:none;margin:0}input[type=number]::-webkit-outer-spin-button{appearance:none;margin:0}input[type=number]{-moz-appearance:textfield}}@layer components;@layer utilities{.pointer-events-none{pointer-events:none}.collapse{visibility:collapse}.visible{visibility:visible}.absolute{position:absolute}.fixed{position:fixed}.relative{position:relative}.static{position:static}.sticky{position:sticky}.inset-y-0{inset-block:0}.-top-1{top:calc(var(--spacing) * -1)}.top-0{top:0}.top-1\\.5{top:calc(var(--spacing) * 1.5)}.right-0{right:0}.right-10{right:calc(var(--spacing) * 10)}.-left-1{left:calc(var(--spacing) * -1)}.left-0{left:0}.z-10{z-index:10}.z-100{z-index:100}.z-2000{z-index:2000}.z-100000{z-index:100000}.z-10000000{z-index:10000000}.container{width:100%}@media (width>=40rem){.container{max-width:640px}}@media (width>=48rem){.container{max-width:768px}}@media (width>=64rem){.container{max-width:1024px}}@media (width>=80rem){.container{max-width:1280px}}@media (width>=96rem){.container{max-width:1536px}}.m-0\\.5{margin:calc(var(--spacing) * .5)}.m-1{margin:var(--spacing)}.mx-2{margin-inline:calc(var(--spacing) * 2)}.mx-auto{margin-inline:auto}.my-1{margin-block:var(--spacing)}.my-2{margin-block:calc(var(--spacing) * 2)}.mt-1{margin-top:var(--spacing)}.mt-2{margin-top:calc(var(--spacing) * 2)}.mr-0\\.5{margin-right:calc(var(--spacing) * .5)}.mr-1{margin-right:var(--spacing)}.mb-0\\.5{margin-bottom:calc(var(--spacing) * .5)}.mb-1{margin-bottom:var(--spacing)}.mb-1\\.5{margin-bottom:calc(var(--spacing) * 1.5)}.mb-2{margin-bottom:calc(var(--spacing) * 2)}.mb-3{margin-bottom:calc(var(--spacing) * 3)}.ml-2{margin-left:calc(var(--spacing) * 2)}.ml-4{margin-left:calc(var(--spacing) * 4)}.ml-auto{margin-left:auto}.block{display:block}.contents{display:contents}.flex{display:flex}.grid{display:grid}.hidden{display:none}.inline{display:inline}.inline-block{display:inline-block}.inline-flex{display:inline-flex}.table{display:table}.size-8{width:calc(var(--spacing) * 8);height:calc(var(--spacing) * 8)}.h-4{height:calc(var(--spacing) * 4)}.h-5{height:calc(var(--spacing) * 5)}.h-6{height:calc(var(--spacing) * 6)}.h-10{height:calc(var(--spacing) * 10)}.h-fit{height:fit-content}.max-h-60{max-height:calc(var(--spacing) * 60)}.min-h-\\[calc\\(100\\%-2\\.5rem\\)\\]{min-height:calc(100% - 40px)}.w-1\\/5{width:20%}.w-2\\/5{width:40%}.w-4{width:calc(var(--spacing) * 4)}.w-5{width:calc(var(--spacing) * 5)}.w-6{width:calc(var(--spacing) * 6)}.w-10{width:calc(var(--spacing) * 10)}.w-11{width:calc(var(--spacing) * 11)}.w-full{width:100%}.min-w-0{min-width:0}.flex-1{flex:1}.shrink-0{flex-shrink:0}.translate-x-1{--tw-translate-x:var(--spacing);translate:var(--tw-translate-x) var(--tw-translate-y)}.translate-x-6{--tw-translate-x:calc(var(--spacing) * 6);translate:var(--tw-translate-x) var(--tw-translate-y)}.rotate-90{rotate:90deg}.rotate-180{rotate:180deg}.transform{transform:var(--tw-rotate-x,) var(--tw-rotate-y,) var(--tw-rotate-z,) var(--tw-skew-x,) var(--tw-skew-y,)}.cursor-default{cursor:default}.cursor-move{cursor:move}.cursor-pointer{cursor:pointer}.resize{resize:both}.resize-none{resize:none}.grid-cols-\\[4\\.5rem_minmax\\(0\\,1fr\\)\\]{grid-template-columns:72px minmax(0,1fr)}.grid-cols-\\[auto_minmax\\(0\\,1fr\\)\\]{grid-template-columns:auto minmax(0,1fr)}.flex-col{flex-direction:column}.flex-row{flex-direction:row}.flex-wrap{flex-wrap:wrap}.items-center{align-items:center}.justify-between{justify-content:space-between}.justify-center{justify-content:center}.justify-end{justify-content:flex-end}.gap-2{gap:calc(var(--spacing) * 2)}.gap-3{gap:calc(var(--spacing) * 3)}:where(.space-y-3>:not(:last-child)){--tw-space-y-reverse:0;margin-block-start:calc(calc(var(--spacing) * 3) * var(--tw-space-y-reverse));margin-block-end:calc(calc(var(--spacing) * 3) * calc(1 - var(--tw-space-y-reverse)))}.gap-x-3{column-gap:calc(var(--spacing) * 3)}.gap-y-2{row-gap:calc(var(--spacing) * 2)}.self-center{align-self:center}.truncate{text-overflow:ellipsis;white-space:nowrap;overflow:hidden}.overflow-auto{overflow:auto}.overflow-hidden{overflow:hidden}.overscroll-none{overscroll-behavior:none}.rounded{border-radius:4px}.rounded-full{border-radius:2147483647px}.rounded-lg{border-radius:var(--radius-lg)}.rounded-md{border-radius:var(--radius-md)}.rounded-xl{border-radius:var(--radius-xl)}.border{border-style:var(--tw-border-style);border-width:1px}.border-0{border-style:var(--tw-border-style);border-width:0}.border-2{border-style:var(--tw-border-style);border-width:2px}.border-\\[\\#2f3134\\]{border-color:#2f3134}.border-blue-200{border-color:var(--color-blue-200)}.border-blue-600{border-color:var(--color-blue-600)}.border-gray-200{border-color:var(--color-gray-200)}.border-gray-300{border-color:var(--color-gray-300)}.border-gray-400{border-color:var(--color-gray-400)}.border-red-600{border-color:var(--color-red-600)}.bg-\\[\\#00AEEC\\]{background-color:#00aeec}.bg-\\[\\#242628\\]{background-color:#242628}.bg-amber-300{background-color:var(--color-amber-300)}.bg-blue-50{background-color:var(--color-blue-50)}.bg-blue-100\\/60{background-color:#dbeafe99}@supports (color:color-mix(in lab, red, red)){.bg-blue-100\\/60{background-color:color-mix(in oklab, var(--color-blue-100) 60%, transparent)}}.bg-blue-600{background-color:var(--color-blue-600)}.bg-gray-50{background-color:var(--color-gray-50)}.bg-gray-200{background-color:var(--color-gray-200)}.bg-purple-100{background-color:var(--color-purple-100)}.bg-purple-100\\/60{background-color:#f3e8ff99}@supports (color:color-mix(in lab, red, red)){.bg-purple-100\\/60{background-color:color-mix(in oklab, var(--color-purple-100) 60%, transparent)}}.bg-transparent{background-color:#0000}.bg-white{background-color:var(--color-white)}.p-0{padding:0}.p-1{padding:var(--spacing)}.p-1\\.5{padding:calc(var(--spacing) * 1.5)}.p-2{padding:calc(var(--spacing) * 2)}.p-4{padding:calc(var(--spacing) * 4)}.px-0\\.5{padding-inline:calc(var(--spacing) * .5)}.px-1{padding-inline:var(--spacing)}.px-2{padding-inline:calc(var(--spacing) * 2)}.px-2\\.5{padding-inline:calc(var(--spacing) * 2.5)}.px-3{padding-inline:calc(var(--spacing) * 3)}.px-4{padding-inline:calc(var(--spacing) * 4)}.py-1{padding-block:var(--spacing)}.py-1\\.5{padding-block:calc(var(--spacing) * 1.5)}.py-2{padding-block:calc(var(--spacing) * 2)}.py-px{padding-block:1px}.pt-1{padding-top:var(--spacing)}.pt-2{padding-top:calc(var(--spacing) * 2)}.pr-2{padding-right:calc(var(--spacing) * 2)}.pr-4{padding-right:calc(var(--spacing) * 4)}.pl-1{padding-left:var(--spacing)}.pl-3{padding-left:calc(var(--spacing) * 3)}.pl-9{padding-left:calc(var(--spacing) * 9)}.pl-10{padding-left:calc(var(--spacing) * 10)}.text-center{text-align:center}.text-left{text-align:left}.text-right{text-align:right}.align-middle{vertical-align:middle}.font-mono{font-family:var(--font-mono)}.text-base{font-size:var(--text-base);line-height:var(--tw-leading,var(--text-base--line-height))}.text-sm{font-size:var(--text-sm);line-height:var(--tw-leading,var(--text-sm--line-height))}.text-xl{font-size:var(--text-xl);line-height:var(--tw-leading,var(--text-xl--line-height))}.text-xs{font-size:var(--text-xs);line-height:var(--tw-leading,var(--text-xs--line-height))}.text-\\[9px\\]{font-size:9px}.text-\\[11px\\]{font-size:11px}.text-\\[12px\\]{font-size:12px}.text-\\[13px\\]{font-size:13px}.text-\\[15px\\]{font-size:15px}.leading-4{--tw-leading:calc(var(--spacing) * 4);line-height:calc(var(--spacing) * 4)}.leading-5{--tw-leading:calc(var(--spacing) * 5);line-height:calc(var(--spacing) * 5)}.leading-6{--tw-leading:calc(var(--spacing) * 6);line-height:calc(var(--spacing) * 6)}.leading-\\[12px\\]{--tw-leading:12px;line-height:12px}.font-black{--tw-font-weight:var(--font-weight-black);font-weight:var(--font-weight-black)}.font-bold{--tw-font-weight:var(--font-weight-bold);font-weight:var(--font-weight-bold)}.font-medium{--tw-font-weight:var(--font-weight-medium);font-weight:var(--font-weight-medium)}.font-normal{--tw-font-weight:var(--font-weight-normal);font-weight:var(--font-weight-normal)}.whitespace-nowrap{white-space:nowrap}.text-black{color:var(--color-black)}.text-black\\/50{color:#00000080}@supports (color:color-mix(in lab, red, red)){.text-black\\/50{color:color-mix(in oklab, var(--color-black) 50%, transparent)}}.text-blue-500{color:var(--color-blue-500)}.text-blue-700{color:var(--color-blue-700)}.text-blue-800{color:var(--color-blue-800)}.text-blue-900{color:var(--color-blue-900)}.text-gray-400{color:var(--color-gray-400)}.text-gray-500{color:var(--color-gray-500)}.text-gray-600{color:var(--color-gray-600)}.text-gray-700{color:var(--color-gray-700)}.text-gray-800{color:var(--color-gray-800)}.text-gray-900{color:var(--color-gray-900)}.text-green-700{color:var(--color-green-700)}.text-orange-900{color:var(--color-orange-900)}.text-purple-500{color:var(--color-purple-500)}.text-purple-600{color:var(--color-purple-600)}.text-purple-900{color:var(--color-purple-900)}.text-red-700{color:var(--color-red-700)}.text-white{color:var(--color-white)}.text-white\\/50{color:#ffffff80}@supports (color:color-mix(in lab, red, red)){.text-white\\/50{color:color-mix(in oklab, var(--color-white) 50%, transparent)}}.accent-\\[\\#00AEEC\\]{accent-color:#00aeec}.opacity-0{opacity:0}.opacity-100{opacity:1}.shadow{--tw-shadow:0 1px 3px 0 var(--tw-shadow-color,#0000001a), 0 1px 2px -1px var(--tw-shadow-color,#0000001a);box-shadow:var(--tw-inset-shadow), var(--tw-inset-ring-shadow), var(--tw-ring-offset-shadow), var(--tw-ring-shadow), var(--tw-shadow)}.shadow-lg{--tw-shadow:0 10px 15px -3px var(--tw-shadow-color,#0000001a), 0 4px 6px -4px var(--tw-shadow-color,#0000001a);box-shadow:var(--tw-inset-shadow), var(--tw-inset-ring-shadow), var(--tw-ring-offset-shadow), var(--tw-ring-shadow), var(--tw-shadow)}.ring-1{--tw-ring-shadow:var(--tw-ring-inset,) 0 0 0 calc(1px + var(--tw-ring-offset-width)) var(--tw-ring-color,currentcolor);box-shadow:var(--tw-inset-shadow), var(--tw-inset-ring-shadow), var(--tw-ring-offset-shadow), var(--tw-ring-shadow), var(--tw-shadow)}.shadow-black\\/20{--tw-shadow-color:#0003}@supports (color:color-mix(in lab, red, red)){.shadow-black\\/20{--tw-shadow-color:color-mix(in oklab, color-mix(in oklab, var(--color-black) 20%, transparent) var(--tw-shadow-alpha), transparent)}}.ring-black\\/5{--tw-ring-color:#0000000d}@supports (color:color-mix(in lab, red, red)){.ring-black\\/5{--tw-ring-color:color-mix(in oklab, var(--color-black) 5%, transparent)}}.outline-hidden{--tw-outline-style:none;outline-style:none}@media (forced-colors:active){.outline-hidden{outline-offset:2px;outline:2px solid #0000}}.outline{outline-style:var(--tw-outline-style);outline-width:1px}.filter{filter:var(--tw-blur,) var(--tw-brightness,) var(--tw-contrast,) var(--tw-grayscale,) var(--tw-hue-rotate,) var(--tw-invert,) var(--tw-saturate,) var(--tw-sepia,) var(--tw-drop-shadow,)}.transition{transition-property:color,background-color,border-color,outline-color,text-decoration-color,fill,stroke,--tw-gradient-from,--tw-gradient-via,--tw-gradient-to,opacity,box-shadow,transform,translate,scale,rotate,filter,-webkit-backdrop-filter,backdrop-filter,display,content-visibility,overlay,pointer-events;transition-timing-function:var(--tw-ease,var(--default-transition-timing-function));transition-duration:var(--tw-duration,var(--default-transition-duration))}.transition-colors{transition-property:color,background-color,border-color,outline-color,text-decoration-color,fill,stroke,--tw-gradient-from,--tw-gradient-via,--tw-gradient-to;transition-timing-function:var(--tw-ease,var(--default-transition-timing-function));transition-duration:var(--tw-duration,var(--default-transition-duration))}.transition-transform{transition-property:transform,translate,scale,rotate;transition-timing-function:var(--tw-ease,var(--default-transition-timing-function));transition-duration:var(--tw-duration,var(--default-transition-duration))}.duration-100{--tw-duration:.1s;transition-duration:.1s}.duration-200{--tw-duration:.2s;transition-duration:.2s}.ease-in{--tw-ease:var(--ease-in);transition-timing-function:var(--ease-in)}.will-change-\\[right\\,bottom\\]{will-change:right,bottom}.will-change-\\[top\\,left\\]{will-change:top,left}.select-none{-webkit-user-select:none;user-select:none}@media (hover:hover){.group-hover\\:flex:is(:where(.group):hover *){display:flex}}.invalid\\:border-2:invalid{border-style:var(--tw-border-style);border-width:2px}.invalid\\:border-red-500:invalid{border-color:var(--color-red-500)}@media (hover:hover){.hover\\:rounded-full:hover{border-radius:2147483647px}.hover\\:border-none:hover{--tw-border-style:none;border-style:none}.hover\\:bg-\\[\\#00AEEC\\]:hover,.hover\\:bg-\\[\\#00aeec\\]:hover{background-color:#00aeec}.hover\\:bg-blue-50\\/50:hover{background-color:#eff6ff80}@supports (color:color-mix(in lab, red, red)){.hover\\:bg-blue-50\\/50:hover{background-color:color-mix(in oklab, var(--color-blue-50) 50%, transparent)}}.hover\\:bg-blue-100:hover{background-color:var(--color-blue-100)}.hover\\:bg-purple-100:hover{background-color:var(--color-purple-100)}.hover\\:bg-white\\/40:hover{background-color:#fff6}@supports (color:color-mix(in lab, red, red)){.hover\\:bg-white\\/40:hover{background-color:color-mix(in oklab, var(--color-white) 40%, transparent)}}.hover\\:text-black:hover{color:var(--color-black)}.hover\\:text-white:hover{color:var(--color-white)}}.focus\\:border-gray-400:focus{border-color:var(--color-gray-400)}.focus\\:border-gray-500:focus{border-color:var(--color-gray-500)}.focus\\:outline-hidden:focus{--tw-outline-style:none;outline-style:none}@media (forced-colors:active){.focus\\:outline-hidden:focus{outline-offset:2px;outline:2px solid #0000}}.focus\\:invalid\\:border-red-500:focus:invalid{border-color:var(--color-red-500)}.focus-visible\\:border-indigo-500:focus-visible{border-color:var(--color-indigo-500)}.disabled\\:opacity-50:disabled{opacity:.5}@media (width>=40rem){.sm\\:text-sm{font-size:var(--text-sm);line-height:var(--tw-leading,var(--text-sm--line-height))}}}.no-scrollbar::-webkit-scrollbar{display:none}.no-scrollbar{-ms-overflow-style:none;scrollbar-width:none}@property --tw-translate-x{syntax:\"*\";inherits:false;initial-value:0}@property --tw-translate-y{syntax:\"*\";inherits:false;initial-value:0}@property --tw-translate-z{syntax:\"*\";inherits:false;initial-value:0}@property --tw-rotate-x{syntax:\"*\";inherits:false}@property --tw-rotate-y{syntax:\"*\";inherits:false}@property --tw-rotate-z{syntax:\"*\";inherits:false}@property --tw-skew-x{syntax:\"*\";inherits:false}@property --tw-skew-y{syntax:\"*\";inherits:false}@property --tw-space-y-reverse{syntax:\"*\";inherits:false;initial-value:0}@property --tw-border-style{syntax:\"*\";inherits:false;initial-value:solid}@property --tw-leading{syntax:\"*\";inherits:false}@property --tw-font-weight{syntax:\"*\";inherits:false}@property --tw-shadow{syntax:\"*\";inherits:false;initial-value:0 0 #0000}@property --tw-shadow-color{syntax:\"*\";inherits:false}@property --tw-shadow-alpha{syntax:\"<percentage>\";inherits:false;initial-value:100%}@property --tw-inset-shadow{syntax:\"*\";inherits:false;initial-value:0 0 #0000}@property --tw-inset-shadow-color{syntax:\"*\";inherits:false}@property --tw-inset-shadow-alpha{syntax:\"<percentage>\";inherits:false;initial-value:100%}@property --tw-ring-color{syntax:\"*\";inherits:false}@property --tw-ring-shadow{syntax:\"*\";inherits:false;initial-value:0 0 #0000}@property --tw-inset-ring-color{syntax:\"*\";inherits:false}@property --tw-inset-ring-shadow{syntax:\"*\";inherits:false;initial-value:0 0 #0000}@property --tw-ring-inset{syntax:\"*\";inherits:false}@property --tw-ring-offset-width{syntax:\"<length>\";inherits:false;initial-value:0}@property --tw-ring-offset-color{syntax:\"*\";inherits:false;initial-value:#fff}@property --tw-ring-offset-shadow{syntax:\"*\";inherits:false;initial-value:0 0 #0000}@property --tw-outline-style{syntax:\"*\";inherits:false;initial-value:solid}@property --tw-blur{syntax:\"*\";inherits:false}@property --tw-brightness{syntax:\"*\";inherits:false}@property --tw-contrast{syntax:\"*\";inherits:false}@property --tw-grayscale{syntax:\"*\";inherits:false}@property --tw-hue-rotate{syntax:\"*\";inherits:false}@property --tw-invert{syntax:\"*\";inherits:false}@property --tw-opacity{syntax:\"*\";inherits:false}@property --tw-saturate{syntax:\"*\";inherits:false}@property --tw-sepia{syntax:\"*\";inherits:false}@property --tw-drop-shadow{syntax:\"*\";inherits:false}@property --tw-drop-shadow-color{syntax:\"*\";inherits:false}@property --tw-drop-shadow-alpha{syntax:\"<percentage>\";inherits:false;initial-value:100%}@property --tw-drop-shadow-size{syntax:\"*\";inherits:false}@property --tw-duration{syntax:\"*\";inherits:false}@property --tw-ease{syntax:\"*\";inherits:false}");
+	var style_css_default = _style("/*! tailwindcss v4.3.3 | MIT License | https://tailwindcss.com */\n@layer properties{*,:before,:after,::backdrop{--tw-translate-x:0;--tw-translate-y:0;--tw-translate-z:0;--tw-rotate-x:initial;--tw-rotate-y:initial;--tw-rotate-z:initial;--tw-skew-x:initial;--tw-skew-y:initial;--tw-space-y-reverse:0;--tw-border-style:solid;--tw-leading:initial;--tw-font-weight:initial;--tw-shadow:0 0 #0000;--tw-shadow-color:initial;--tw-shadow-alpha:100%;--tw-inset-shadow:0 0 #0000;--tw-inset-shadow-color:initial;--tw-inset-shadow-alpha:100%;--tw-ring-color:initial;--tw-ring-shadow:0 0 #0000;--tw-inset-ring-color:initial;--tw-inset-ring-shadow:0 0 #0000;--tw-ring-inset:initial;--tw-ring-offset-width:0px;--tw-ring-offset-color:#fff;--tw-ring-offset-shadow:0 0 #0000;--tw-outline-style:solid;--tw-blur:initial;--tw-brightness:initial;--tw-contrast:initial;--tw-grayscale:initial;--tw-hue-rotate:initial;--tw-invert:initial;--tw-opacity:initial;--tw-saturate:initial;--tw-sepia:initial;--tw-drop-shadow:initial;--tw-drop-shadow-color:initial;--tw-drop-shadow-alpha:100%;--tw-drop-shadow-size:initial;--tw-duration:initial;--tw-ease:initial}}@layer theme{:host,:host{--font-sans:-apple-system, BlinkMacSystemFont, \"Segoe UI\", Roboto, \"Helvetica Neue\", \"Noto Sans\", Arial, sans-serif, \"Apple Color Emoji\", \"Segoe UI Emoji\", \"Segoe UI Symbol\", \"Noto Color Emoji\";--font-mono:ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, \"Liberation Mono\", \"Courier New\", monospace;--color-red-500:oklch(63.7% .237 25.331);--color-red-600:oklch(57.7% .245 27.325);--color-red-700:oklch(50.5% .213 27.518);--color-orange-900:oklch(40.8% .123 38.172);--color-amber-300:oklch(87.9% .169 91.605);--color-green-700:oklch(52.7% .154 150.069);--color-blue-50:oklch(97% .014 254.604);--color-blue-100:oklch(93.2% .032 255.585);--color-blue-500:oklch(62.3% .214 259.815);--color-blue-900:oklch(37.9% .146 265.522);--color-indigo-500:oklch(58.5% .233 277.117);--color-purple-100:oklch(94.6% .033 307.174);--color-purple-500:oklch(62.7% .265 303.9);--color-purple-600:oklch(55.8% .288 302.321);--color-purple-900:oklch(38.1% .176 304.987);--color-gray-50:oklch(98.5% .002 247.839);--color-gray-200:oklch(92.8% .006 264.531);--color-gray-300:oklch(87.2% .01 258.338);--color-gray-400:oklch(70.7% .022 261.325);--color-gray-500:oklch(55.1% .027 264.364);--color-gray-600:oklch(44.6% .03 256.802);--color-gray-700:oklch(37.3% .034 259.733);--color-gray-800:oklch(27.8% .033 256.848);--color-gray-900:oklch(21% .034 264.665);--color-black:#000;--color-white:#fff;--spacing:4px;--text-xs:12px;--text-xs--line-height:calc(1 / .75);--text-sm:14px;--text-sm--line-height:calc(1.25 / .875);--text-base:16px;--text-base--line-height:calc(1.5 / 1);--text-xl:20px;--text-xl--line-height:calc(1.75 / 1.25);--font-weight-normal:400;--font-weight-medium:500;--font-weight-bold:700;--font-weight-black:900;--radius-md:6px;--radius-lg:8px;--radius-xl:12px;--ease-in:cubic-bezier(.4, 0, 1, 1);--default-transition-duration:.15s;--default-transition-timing-function:cubic-bezier(.4, 0, .2, 1);--default-font-family:var(--font-sans);--default-mono-font-family:var(--font-mono)}}@layer base{*,:after,:before,::backdrop{box-sizing:border-box;border:0 solid;margin:0;padding:0}::file-selector-button{box-sizing:border-box;border:0 solid;margin:0;padding:0}html,:host{-webkit-text-size-adjust:100%;tab-size:4;line-height:1.5;font-family:var(--default-font-family,-apple-system, BlinkMacSystemFont, \"Segoe UI\", Roboto, \"Helvetica Neue\", \"Noto Sans\", Arial, sans-serif, \"Apple Color Emoji\", \"Segoe UI Emoji\", \"Segoe UI Symbol\", \"Noto Color Emoji\");font-feature-settings:var(--default-font-feature-settings,normal);font-variation-settings:var(--default-font-variation-settings,normal);-webkit-tap-highlight-color:transparent}hr{height:0;color:inherit;border-top-width:1px}abbr:where([title]){-webkit-text-decoration:underline dotted;text-decoration:underline dotted}h1,h2,h3,h4,h5,h6{font-size:inherit;font-weight:inherit}a{color:inherit;-webkit-text-decoration:inherit;-webkit-text-decoration:inherit;-webkit-text-decoration:inherit;-webkit-text-decoration:inherit;text-decoration:inherit}b,strong{font-weight:bolder}code,kbd,samp,pre{font-family:var(--default-mono-font-family,ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, \"Liberation Mono\", \"Courier New\", monospace);font-feature-settings:var(--default-mono-font-feature-settings,normal);font-variation-settings:var(--default-mono-font-variation-settings,normal);font-size:1em}small{font-size:80%}sub,sup{vertical-align:baseline;font-size:75%;line-height:0;position:relative}sub{bottom:-.25em}sup{top:-.5em}table{text-indent:0;border-color:inherit;border-collapse:collapse}:-moz-focusring:where(:not(iframe)){outline:auto}progress{vertical-align:baseline}summary{display:list-item}ol,ul,menu{list-style:none}img,svg,video,canvas,audio,iframe,embed,object{vertical-align:middle;display:block}img,video{max-width:100%;height:auto}button,input,select,optgroup,textarea{font:inherit;font-feature-settings:inherit;font-variation-settings:inherit;letter-spacing:inherit;color:inherit;opacity:1;background-color:#0000;border-radius:0}::file-selector-button{font:inherit;font-feature-settings:inherit;font-variation-settings:inherit;letter-spacing:inherit;color:inherit;opacity:1;background-color:#0000;border-radius:0}:where(select:is([multiple],[size])) optgroup{font-weight:bolder}:where(select:is([multiple],[size])) optgroup option{padding-inline-start:20px}::file-selector-button{margin-inline-end:4px}::placeholder{opacity:1}@supports (not ((-webkit-appearance:-apple-pay-button))) or (contain-intrinsic-size:1px){::placeholder{color:currentColor}@supports (color:color-mix(in lab, red, red)){::placeholder{color:color-mix(in oklab, currentcolor 50%, transparent)}}}textarea{resize:vertical}::-webkit-search-decoration{-webkit-appearance:none}::-webkit-date-and-time-value{min-height:1lh;text-align:inherit}::-webkit-datetime-edit{display:inline-flex}::-webkit-datetime-edit-fields-wrapper{padding:0}::-webkit-datetime-edit{padding-block:0}::-webkit-datetime-edit-year-field{padding-block:0}::-webkit-datetime-edit-month-field{padding-block:0}::-webkit-datetime-edit-day-field{padding-block:0}::-webkit-datetime-edit-hour-field{padding-block:0}::-webkit-datetime-edit-minute-field{padding-block:0}::-webkit-datetime-edit-second-field{padding-block:0}::-webkit-datetime-edit-millisecond-field{padding-block:0}::-webkit-datetime-edit-meridiem-field{padding-block:0}::-webkit-calendar-picker-indicator{line-height:1}:-moz-ui-invalid{box-shadow:none}button,input:where([type=button],[type=reset],[type=submit]){appearance:button}::file-selector-button{appearance:button}::-webkit-inner-spin-button{height:auto}::-webkit-outer-spin-button{height:auto}[hidden]:where(:not([hidden=until-found])){display:none!important}:host{font-family:PingFang SC,HarmonyOS_Regular,Helvetica Neue,Microsoft YaHei,sans-serif!important}input[type=number]::-webkit-inner-spin-button{appearance:none;margin:0}input[type=number]::-webkit-outer-spin-button{appearance:none;margin:0}input[type=number]{-moz-appearance:textfield}}@layer components;@layer utilities{.pointer-events-none{pointer-events:none}.collapse{visibility:collapse}.visible{visibility:visible}.absolute{position:absolute}.fixed{position:fixed}.relative{position:relative}.static{position:static}.sticky{position:sticky}.inset-y-0{inset-block:0}.-top-1{top:calc(var(--spacing) * -1)}.top-0{top:0}.top-1\\.5{top:calc(var(--spacing) * 1.5)}.right-0{right:0}.right-10{right:calc(var(--spacing) * 10)}.-left-1{left:calc(var(--spacing) * -1)}.left-0{left:0}.z-10{z-index:10}.z-100{z-index:100}.z-2000{z-index:2000}.z-100000{z-index:100000}.z-10000000{z-index:10000000}.container{width:100%}@media (width>=40rem){.container{max-width:640px}}@media (width>=48rem){.container{max-width:768px}}@media (width>=64rem){.container{max-width:1024px}}@media (width>=80rem){.container{max-width:1280px}}@media (width>=96rem){.container{max-width:1536px}}.m-0\\.5{margin:calc(var(--spacing) * .5)}.m-1{margin:var(--spacing)}.mx-2{margin-inline:calc(var(--spacing) * 2)}.mx-auto{margin-inline:auto}.my-1{margin-block:var(--spacing)}.mt-1{margin-top:var(--spacing)}.mt-3{margin-top:calc(var(--spacing) * 3)}.mr-0\\.5{margin-right:calc(var(--spacing) * .5)}.mr-1{margin-right:var(--spacing)}.mb-0\\.5{margin-bottom:calc(var(--spacing) * .5)}.mb-1{margin-bottom:var(--spacing)}.mb-1\\.5{margin-bottom:calc(var(--spacing) * 1.5)}.mb-2{margin-bottom:calc(var(--spacing) * 2)}.mb-3{margin-bottom:calc(var(--spacing) * 3)}.ml-2{margin-left:calc(var(--spacing) * 2)}.ml-4{margin-left:calc(var(--spacing) * 4)}.ml-auto{margin-left:auto}.block{display:block}.contents{display:contents}.flex{display:flex}.grid{display:grid}.hidden{display:none}.inline{display:inline}.inline-block{display:inline-block}.inline-flex{display:inline-flex}.table{display:table}.size-8{width:calc(var(--spacing) * 8);height:calc(var(--spacing) * 8)}.h-4{height:calc(var(--spacing) * 4)}.h-5{height:calc(var(--spacing) * 5)}.h-6{height:calc(var(--spacing) * 6)}.h-10{height:calc(var(--spacing) * 10)}.h-fit{height:fit-content}.max-h-60{max-height:calc(var(--spacing) * 60)}.min-h-\\[calc\\(100\\%-2\\.5rem\\)\\]{min-height:calc(100% - 40px)}.w-1\\/5{width:20%}.w-2\\/5{width:40%}.w-4{width:calc(var(--spacing) * 4)}.w-5{width:calc(var(--spacing) * 5)}.w-6{width:calc(var(--spacing) * 6)}.w-10{width:calc(var(--spacing) * 10)}.w-11{width:calc(var(--spacing) * 11)}.w-full{width:100%}.min-w-0{min-width:0}.flex-1{flex:1}.shrink-0{flex-shrink:0}.translate-x-1{--tw-translate-x:var(--spacing);translate:var(--tw-translate-x) var(--tw-translate-y)}.translate-x-6{--tw-translate-x:calc(var(--spacing) * 6);translate:var(--tw-translate-x) var(--tw-translate-y)}.rotate-90{rotate:90deg}.rotate-180{rotate:180deg}.transform{transform:var(--tw-rotate-x,) var(--tw-rotate-y,) var(--tw-rotate-z,) var(--tw-skew-x,) var(--tw-skew-y,)}.cursor-default{cursor:default}.cursor-move{cursor:move}.cursor-pointer{cursor:pointer}.resize{resize:both}.resize-none{resize:none}.grid-cols-\\[4\\.5rem_minmax\\(0\\,1fr\\)\\]{grid-template-columns:72px minmax(0,1fr)}.grid-cols-\\[auto_minmax\\(0\\,1fr\\)\\]{grid-template-columns:auto minmax(0,1fr)}.flex-col{flex-direction:column}.flex-row{flex-direction:row}.flex-wrap{flex-wrap:wrap}.items-center{align-items:center}.justify-between{justify-content:space-between}.justify-center{justify-content:center}.justify-end{justify-content:flex-end}.gap-2{gap:calc(var(--spacing) * 2)}.gap-3{gap:calc(var(--spacing) * 3)}:where(.space-y-3>:not(:last-child)){--tw-space-y-reverse:0;margin-block-start:calc(calc(var(--spacing) * 3) * var(--tw-space-y-reverse));margin-block-end:calc(calc(var(--spacing) * 3) * calc(1 - var(--tw-space-y-reverse)))}.gap-x-3{column-gap:calc(var(--spacing) * 3)}.gap-y-2{row-gap:calc(var(--spacing) * 2)}.self-center{align-self:center}.truncate{text-overflow:ellipsis;white-space:nowrap;overflow:hidden}.overflow-auto{overflow:auto}.overflow-hidden{overflow:hidden}.overscroll-none{overscroll-behavior:none}.rounded{border-radius:4px}.rounded-full{border-radius:2147483647px}.rounded-lg{border-radius:var(--radius-lg)}.rounded-md{border-radius:var(--radius-md)}.rounded-xl{border-radius:var(--radius-xl)}.border{border-style:var(--tw-border-style);border-width:1px}.border-0{border-style:var(--tw-border-style);border-width:0}.border-2{border-style:var(--tw-border-style);border-width:2px}.border-t{border-top-style:var(--tw-border-style);border-top-width:1px}.border-\\[\\#2f3134\\]{border-color:#2f3134}.border-gray-200{border-color:var(--color-gray-200)}.border-gray-300{border-color:var(--color-gray-300)}.border-gray-400{border-color:var(--color-gray-400)}.border-red-600{border-color:var(--color-red-600)}.bg-\\[\\#00AEEC\\]{background-color:#00aeec}.bg-\\[\\#242628\\]{background-color:#242628}.bg-amber-300{background-color:var(--color-amber-300)}.bg-blue-100\\/60{background-color:#dbeafe99}@supports (color:color-mix(in lab, red, red)){.bg-blue-100\\/60{background-color:color-mix(in oklab, var(--color-blue-100) 60%, transparent)}}.bg-gray-50{background-color:var(--color-gray-50)}.bg-gray-200{background-color:var(--color-gray-200)}.bg-purple-100{background-color:var(--color-purple-100)}.bg-purple-100\\/60{background-color:#f3e8ff99}@supports (color:color-mix(in lab, red, red)){.bg-purple-100\\/60{background-color:color-mix(in oklab, var(--color-purple-100) 60%, transparent)}}.bg-transparent{background-color:#0000}.bg-white{background-color:var(--color-white)}.p-0{padding:0}.p-1{padding:var(--spacing)}.p-1\\.5{padding:calc(var(--spacing) * 1.5)}.p-2{padding:calc(var(--spacing) * 2)}.p-3{padding:calc(var(--spacing) * 3)}.px-0\\.5{padding-inline:calc(var(--spacing) * .5)}.px-1{padding-inline:var(--spacing)}.px-2{padding-inline:calc(var(--spacing) * 2)}.px-2\\.5{padding-inline:calc(var(--spacing) * 2.5)}.px-3{padding-inline:calc(var(--spacing) * 3)}.px-4{padding-inline:calc(var(--spacing) * 4)}.py-1{padding-block:var(--spacing)}.py-1\\.5{padding-block:calc(var(--spacing) * 1.5)}.py-2{padding-block:calc(var(--spacing) * 2)}.py-px{padding-block:1px}.pt-1{padding-top:var(--spacing)}.pt-2{padding-top:calc(var(--spacing) * 2)}.pr-2{padding-right:calc(var(--spacing) * 2)}.pr-4{padding-right:calc(var(--spacing) * 4)}.pl-1{padding-left:var(--spacing)}.pl-3{padding-left:calc(var(--spacing) * 3)}.pl-9{padding-left:calc(var(--spacing) * 9)}.pl-10{padding-left:calc(var(--spacing) * 10)}.text-center{text-align:center}.text-left{text-align:left}.text-right{text-align:right}.align-middle{vertical-align:middle}.font-mono{font-family:var(--font-mono)}.text-base{font-size:var(--text-base);line-height:var(--tw-leading,var(--text-base--line-height))}.text-sm{font-size:var(--text-sm);line-height:var(--tw-leading,var(--text-sm--line-height))}.text-xl{font-size:var(--text-xl);line-height:var(--tw-leading,var(--text-xl--line-height))}.text-xs{font-size:var(--text-xs);line-height:var(--tw-leading,var(--text-xs--line-height))}.text-\\[9px\\]{font-size:9px}.text-\\[11px\\]{font-size:11px}.text-\\[12px\\]{font-size:12px}.text-\\[13px\\]{font-size:13px}.text-\\[15px\\]{font-size:15px}.leading-4{--tw-leading:calc(var(--spacing) * 4);line-height:calc(var(--spacing) * 4)}.leading-5{--tw-leading:calc(var(--spacing) * 5);line-height:calc(var(--spacing) * 5)}.leading-6{--tw-leading:calc(var(--spacing) * 6);line-height:calc(var(--spacing) * 6)}.leading-\\[12px\\]{--tw-leading:12px;line-height:12px}.font-black{--tw-font-weight:var(--font-weight-black);font-weight:var(--font-weight-black)}.font-bold{--tw-font-weight:var(--font-weight-bold);font-weight:var(--font-weight-bold)}.font-medium{--tw-font-weight:var(--font-weight-medium);font-weight:var(--font-weight-medium)}.font-normal{--tw-font-weight:var(--font-weight-normal);font-weight:var(--font-weight-normal)}.whitespace-nowrap{white-space:nowrap}.text-black{color:var(--color-black)}.text-black\\/50{color:#00000080}@supports (color:color-mix(in lab, red, red)){.text-black\\/50{color:color-mix(in oklab, var(--color-black) 50%, transparent)}}.text-blue-500{color:var(--color-blue-500)}.text-blue-900{color:var(--color-blue-900)}.text-gray-400{color:var(--color-gray-400)}.text-gray-500{color:var(--color-gray-500)}.text-gray-600{color:var(--color-gray-600)}.text-gray-700{color:var(--color-gray-700)}.text-gray-800{color:var(--color-gray-800)}.text-gray-900{color:var(--color-gray-900)}.text-green-700{color:var(--color-green-700)}.text-orange-900{color:var(--color-orange-900)}.text-purple-500{color:var(--color-purple-500)}.text-purple-600{color:var(--color-purple-600)}.text-purple-900{color:var(--color-purple-900)}.text-red-700{color:var(--color-red-700)}.text-white{color:var(--color-white)}.text-white\\/50{color:#ffffff80}@supports (color:color-mix(in lab, red, red)){.text-white\\/50{color:color-mix(in oklab, var(--color-white) 50%, transparent)}}.accent-\\[\\#00AEEC\\]{accent-color:#00aeec}.opacity-0{opacity:0}.opacity-100{opacity:1}.shadow{--tw-shadow:0 1px 3px 0 var(--tw-shadow-color,#0000001a), 0 1px 2px -1px var(--tw-shadow-color,#0000001a);box-shadow:var(--tw-inset-shadow), var(--tw-inset-ring-shadow), var(--tw-ring-offset-shadow), var(--tw-ring-shadow), var(--tw-shadow)}.shadow-lg{--tw-shadow:0 10px 15px -3px var(--tw-shadow-color,#0000001a), 0 4px 6px -4px var(--tw-shadow-color,#0000001a);box-shadow:var(--tw-inset-shadow), var(--tw-inset-ring-shadow), var(--tw-ring-offset-shadow), var(--tw-ring-shadow), var(--tw-shadow)}.ring-1{--tw-ring-shadow:var(--tw-ring-inset,) 0 0 0 calc(1px + var(--tw-ring-offset-width)) var(--tw-ring-color,currentcolor);box-shadow:var(--tw-inset-shadow), var(--tw-inset-ring-shadow), var(--tw-ring-offset-shadow), var(--tw-ring-shadow), var(--tw-shadow)}.shadow-black\\/20{--tw-shadow-color:#0003}@supports (color:color-mix(in lab, red, red)){.shadow-black\\/20{--tw-shadow-color:color-mix(in oklab, color-mix(in oklab, var(--color-black) 20%, transparent) var(--tw-shadow-alpha), transparent)}}.ring-black\\/5{--tw-ring-color:#0000000d}@supports (color:color-mix(in lab, red, red)){.ring-black\\/5{--tw-ring-color:color-mix(in oklab, var(--color-black) 5%, transparent)}}.outline-hidden{--tw-outline-style:none;outline-style:none}@media (forced-colors:active){.outline-hidden{outline-offset:2px;outline:2px solid #0000}}.outline{outline-style:var(--tw-outline-style);outline-width:1px}.filter{filter:var(--tw-blur,) var(--tw-brightness,) var(--tw-contrast,) var(--tw-grayscale,) var(--tw-hue-rotate,) var(--tw-invert,) var(--tw-saturate,) var(--tw-sepia,) var(--tw-drop-shadow,)}.transition{transition-property:color,background-color,border-color,outline-color,text-decoration-color,fill,stroke,--tw-gradient-from,--tw-gradient-via,--tw-gradient-to,opacity,box-shadow,transform,translate,scale,rotate,filter,-webkit-backdrop-filter,backdrop-filter,display,content-visibility,overlay,pointer-events;transition-timing-function:var(--tw-ease,var(--default-transition-timing-function));transition-duration:var(--tw-duration,var(--default-transition-duration))}.transition-colors{transition-property:color,background-color,border-color,outline-color,text-decoration-color,fill,stroke,--tw-gradient-from,--tw-gradient-via,--tw-gradient-to;transition-timing-function:var(--tw-ease,var(--default-transition-timing-function));transition-duration:var(--tw-duration,var(--default-transition-duration))}.transition-transform{transition-property:transform,translate,scale,rotate;transition-timing-function:var(--tw-ease,var(--default-transition-timing-function));transition-duration:var(--tw-duration,var(--default-transition-duration))}.duration-100{--tw-duration:.1s;transition-duration:.1s}.duration-200{--tw-duration:.2s;transition-duration:.2s}.ease-in{--tw-ease:var(--ease-in);transition-timing-function:var(--ease-in)}.will-change-\\[right\\,bottom\\]{will-change:right,bottom}.will-change-\\[top\\,left\\]{will-change:top,left}.select-none{-webkit-user-select:none;user-select:none}@media (hover:hover){.group-hover\\:flex:is(:where(.group):hover *){display:flex}}.invalid\\:border-2:invalid{border-style:var(--tw-border-style);border-width:2px}.invalid\\:border-red-500:invalid{border-color:var(--color-red-500)}@media (hover:hover){.hover\\:rounded-full:hover{border-radius:2147483647px}.hover\\:border-none:hover{--tw-border-style:none;border-style:none}.hover\\:bg-\\[\\#00AEEC\\]:hover,.hover\\:bg-\\[\\#00aeec\\]:hover{background-color:#00aeec}.hover\\:bg-blue-50\\/50:hover{background-color:#eff6ff80}@supports (color:color-mix(in lab, red, red)){.hover\\:bg-blue-50\\/50:hover{background-color:color-mix(in oklab, var(--color-blue-50) 50%, transparent)}}.hover\\:bg-blue-100:hover{background-color:var(--color-blue-100)}.hover\\:bg-purple-100:hover{background-color:var(--color-purple-100)}.hover\\:bg-white\\/40:hover{background-color:#fff6}@supports (color:color-mix(in lab, red, red)){.hover\\:bg-white\\/40:hover{background-color:color-mix(in oklab, var(--color-white) 40%, transparent)}}.hover\\:text-black:hover{color:var(--color-black)}.hover\\:text-white:hover{color:var(--color-white)}}.focus\\:border-gray-400:focus{border-color:var(--color-gray-400)}.focus\\:border-gray-500:focus{border-color:var(--color-gray-500)}.focus\\:outline-hidden:focus{--tw-outline-style:none;outline-style:none}@media (forced-colors:active){.focus\\:outline-hidden:focus{outline-offset:2px;outline:2px solid #0000}}.focus\\:invalid\\:border-red-500:focus:invalid{border-color:var(--color-red-500)}.focus-visible\\:border-indigo-500:focus-visible{border-color:var(--color-indigo-500)}.disabled\\:opacity-50:disabled{opacity:.5}@media (width>=40rem){.sm\\:text-sm{font-size:var(--text-sm);line-height:var(--tw-leading,var(--text-sm--line-height))}}}.no-scrollbar::-webkit-scrollbar{display:none}.no-scrollbar{-ms-overflow-style:none;scrollbar-width:none}@property --tw-translate-x{syntax:\"*\";inherits:false;initial-value:0}@property --tw-translate-y{syntax:\"*\";inherits:false;initial-value:0}@property --tw-translate-z{syntax:\"*\";inherits:false;initial-value:0}@property --tw-rotate-x{syntax:\"*\";inherits:false}@property --tw-rotate-y{syntax:\"*\";inherits:false}@property --tw-rotate-z{syntax:\"*\";inherits:false}@property --tw-skew-x{syntax:\"*\";inherits:false}@property --tw-skew-y{syntax:\"*\";inherits:false}@property --tw-space-y-reverse{syntax:\"*\";inherits:false;initial-value:0}@property --tw-border-style{syntax:\"*\";inherits:false;initial-value:solid}@property --tw-leading{syntax:\"*\";inherits:false}@property --tw-font-weight{syntax:\"*\";inherits:false}@property --tw-shadow{syntax:\"*\";inherits:false;initial-value:0 0 #0000}@property --tw-shadow-color{syntax:\"*\";inherits:false}@property --tw-shadow-alpha{syntax:\"<percentage>\";inherits:false;initial-value:100%}@property --tw-inset-shadow{syntax:\"*\";inherits:false;initial-value:0 0 #0000}@property --tw-inset-shadow-color{syntax:\"*\";inherits:false}@property --tw-inset-shadow-alpha{syntax:\"<percentage>\";inherits:false;initial-value:100%}@property --tw-ring-color{syntax:\"*\";inherits:false}@property --tw-ring-shadow{syntax:\"*\";inherits:false;initial-value:0 0 #0000}@property --tw-inset-ring-color{syntax:\"*\";inherits:false}@property --tw-inset-ring-shadow{syntax:\"*\";inherits:false;initial-value:0 0 #0000}@property --tw-ring-inset{syntax:\"*\";inherits:false}@property --tw-ring-offset-width{syntax:\"<length>\";inherits:false;initial-value:0}@property --tw-ring-offset-color{syntax:\"*\";inherits:false;initial-value:#fff}@property --tw-ring-offset-shadow{syntax:\"*\";inherits:false;initial-value:0 0 #0000}@property --tw-outline-style{syntax:\"*\";inherits:false;initial-value:solid}@property --tw-blur{syntax:\"*\";inherits:false}@property --tw-brightness{syntax:\"*\";inherits:false}@property --tw-contrast{syntax:\"*\";inherits:false}@property --tw-grayscale{syntax:\"*\";inherits:false}@property --tw-hue-rotate{syntax:\"*\";inherits:false}@property --tw-invert{syntax:\"*\";inherits:false}@property --tw-opacity{syntax:\"*\";inherits:false}@property --tw-saturate{syntax:\"*\";inherits:false}@property --tw-sepia{syntax:\"*\";inherits:false}@property --tw-drop-shadow{syntax:\"*\";inherits:false}@property --tw-drop-shadow-color{syntax:\"*\";inherits:false}@property --tw-drop-shadow-alpha{syntax:\"<percentage>\";inherits:false;initial-value:100%}@property --tw-drop-shadow-size{syntax:\"*\";inherits:false}@property --tw-duration{syntax:\"*\";inherits:false}@property --tw-ease{syntax:\"*\";inherits:false}");
 	var migrate = async () => {
 		if (_GM_getValue("__MIGRATED__") === "4.4.0") return;
 		const prefix = "BILICLEANER_";

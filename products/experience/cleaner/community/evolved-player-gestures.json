@@ -1,0 +1,109 @@
+{
+  "schemaVersion": 1,
+  "id": "evolved-player-gestures",
+  "status": "integration-prepared-not-enabled",
+  "pack": "touch-controls",
+  "repository": "https://github.com/the1812/Bilibili-Evolved",
+  "commit": "fa06dcec095dbccaba82f50ae2318c8d61c26671",
+  "files": [
+    {
+      "path": "registry/lib/components/touch/player-gestures/index.ts",
+      "sha256": "19c274a78979e1273e3886c10b95dee194a4459970ce1d6b7f7b64aeae90244a",
+      "url": "https://github.com/the1812/Bilibili-Evolved/blob/fa06dcec095dbccaba82f50ae2318c8d61c26671/registry/lib/components/touch/player-gestures/index.ts"
+    },
+    {
+      "path": "registry/lib/components/touch/player-gestures/entry.ts",
+      "sha256": "aadae5eb8f1209a176e949b06b7ce2d0c9903cfbc62f3f255e49c82c4b0326cc",
+      "url": "https://github.com/the1812/Bilibili-Evolved/blob/fa06dcec095dbccaba82f50ae2318c8d61c26671/registry/lib/components/touch/player-gestures/entry.ts"
+    },
+    {
+      "path": "registry/lib/components/touch/player-gestures/swiper.ts",
+      "sha256": "0a70e20626ddc978ffcea2f359511b480f9c32d5c03870363278a1ca5c8fb895",
+      "url": "https://github.com/the1812/Bilibili-Evolved/blob/fa06dcec095dbccaba82f50ae2318c8d61c26671/registry/lib/components/touch/player-gestures/swiper.ts"
+    },
+    {
+      "path": "registry/lib/components/touch/player-gestures/gesture-preview.ts",
+      "sha256": "f35109b3dedb73352c17b116b02ea161c3c23383bde930ec2dd25a625e1a9e39",
+      "url": "https://github.com/the1812/Bilibili-Evolved/blob/fa06dcec095dbccaba82f50ae2318c8d61c26671/registry/lib/components/touch/player-gestures/gesture-preview.ts"
+    },
+    {
+      "path": "registry/lib/components/touch/player-gestures/GesturePreview.vue",
+      "sha256": "7d08db51365f4909c29c7efa28c2d9ac7d7d969feae20e68d8bc6e9a92dfc661",
+      "url": "https://github.com/the1812/Bilibili-Evolved/blob/fa06dcec095dbccaba82f50ae2318c8d61c26671/registry/lib/components/touch/player-gestures/GesturePreview.vue"
+    },
+    {
+      "path": "registry/lib/components/touch/player-gestures/progress.ts",
+      "sha256": "02ef2d7c3ae9f2d7357030315bea1859f85713ef8932603baea3c68dac03e666",
+      "url": "https://github.com/the1812/Bilibili-Evolved/blob/fa06dcec095dbccaba82f50ae2318c8d61c26671/registry/lib/components/touch/player-gestures/progress.ts"
+    },
+    {
+      "path": "registry/lib/components/touch/player-gestures/brightness.ts",
+      "sha256": "83599ea6e2b84c7bac2de5722ab90a7017e844088d4ba24cf14a59a286327a37",
+      "url": "https://github.com/the1812/Bilibili-Evolved/blob/fa06dcec095dbccaba82f50ae2318c8d61c26671/registry/lib/components/touch/player-gestures/brightness.ts"
+    },
+    {
+      "path": "registry/lib/components/touch/player-gestures/volume.ts",
+      "sha256": "6349392efb3f1fcf959e015605539185ff57f5a5b4fce42fa4d25e598a529cbf",
+      "url": "https://github.com/the1812/Bilibili-Evolved/blob/fa06dcec095dbccaba82f50ae2318c8d61c26671/registry/lib/components/touch/player-gestures/volume.ts"
+    },
+    {
+      "path": "registry/lib/components/touch/player-gestures/videoshot.ts",
+      "sha256": "5a980407a809ffb2a4e8fa782cbd50fcbb1a18ac2df9cdc71b2f5273416f718a",
+      "url": "https://github.com/the1812/Bilibili-Evolved/blob/fa06dcec095dbccaba82f50ae2318c8d61c26671/registry/lib/components/touch/player-gestures/videoshot.ts"
+    },
+    {
+      "path": "LICENCE.md",
+      "sha256": "230e1264ea9cfb050f442ab7703314c5aff1f8866a6a2dec3bbf9b476a427a68",
+      "url": "https://github.com/the1812/Bilibili-Evolved/blob/fa06dcec095dbccaba82f50ae2318c8d61c26671/LICENCE.md"
+    }
+  ],
+  "licenseRecord": {
+    "path": "LICENCE.md",
+    "summary": "Upstream states MIT plus redistribution/support conditions. Preserve notices and provide support through our own repository; recheck conditions when actually copying code."
+  },
+  "firstSlice": {
+    "page": "ordinary-video-page",
+    "capability": "horizontal seek gesture with preview; commit on release, cancel without changing playback",
+    "notYetIncluded": [
+      "vertical volume/brightness",
+      "thumbnail API",
+      "bangumi/festival coverage"
+    ]
+  },
+  "reuse": {
+    "swiper.ts": "Reuse trajectory/direction and seek-speed mapping; inject options instead of getComponentSettings; add explicit mount/dispose, touchcancel/multitouch guards and threshold behavior."
+  },
+  "replacements": [
+    {
+      "upstream": "playerAgent.query.video.element/container/subtitle",
+      "ours": "A page adapter resolves current HTMLVideoElement, input surface and owned preview mount point."
+    },
+    {
+      "upstream": "videoChange",
+      "ours": "A lifecycle binding disposes the previous gesture instance and binds once to the new video/container."
+    },
+    {
+      "upstream": "getComponentSettings(touchPlayerGestures)",
+      "ours": "An Item in 播放器 - 优化 - 触摸操作; saved options passed into the gesture recognizer, off by default during initial integration."
+    },
+    {
+      "upstream": "Vue2 GesturePreview + mountVueComponent",
+      "ours": "Vue3 owned overlay; match the current product setting style, no full Evolved runtime dependency."
+    },
+    {
+      "upstream": "unsafeWindow.player.seek(progress, video.paused)",
+      "ours": "Our seek adapter clamps target and preserves paused state; use the available native player method, with HTMLVideoElement fallback."
+    },
+    {
+      "upstream": "videoshot.ts API + preview image",
+      "ours": "Omit from first integration; optional bounded request/cache layer later."
+    }
+  ],
+  "observedGaps": [
+    "The snapshot creates Swiper on videoChange without a public dispose method.",
+    "swiper reads touches[0] and only touchend resets state; add touchcancel/multitouch handling.",
+    "Do not copy the Vue2 overlay or Evolved settings/observer framework wholesale."
+  ],
+  "nextAcceptance": "One complete script on a real video page: drag-preview-release seek, short movement/native scroll, cancel, disable/re-enable and video replacement. Actual tablet checks when integrated; no broad pre-integration experiment matrix.",
+  "integrationFacts": "No Evolved code copied into runtime in this delivery. No touch listeners installed. Existing scripts remain independently installable."
+}

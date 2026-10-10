@@ -30,6 +30,11 @@ export const profileFor = id => {
     return profile
 }
 export const excludedKeys = profile => new Set([...owners].filter(([,pack])=>!profile.packs.includes(pack)).map(([key])=>key))
+export const classificationFor = profile => {
+    const excluded = profile ? excludedKeys(profile) : new Set()
+    return Object.fromEntries(catalog.filter(row=>row.id.startsWith('S')&&!excluded.has(row.key))
+        .map(row=>[row.key,{category:row.category,...(row.pack ? {pack:row.pack,packLabel:row.packLabel} : {})}]))
+}
 const literal = node => node && (ts.isStringLiteral(node)||ts.isNoSubstitutionTemplateLiteral(node)) ? node.text : undefined
 const property = (node, name) => ts.isObjectLiteralExpression(node)
     ? node.properties.find(p=>ts.isPropertyAssignment(p)&&p.name.getText().replace(/['"]/g,'')===name)?.initializer : undefined

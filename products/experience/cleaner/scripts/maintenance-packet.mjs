@@ -49,6 +49,8 @@ const SUPPORTING_FILES = [
     'scripts/pack-build.mjs',
     'scripts/build-variants.mjs',
     'PACKS.md',
+    'community/README.md',
+    'community/evolved-player-gestures.json',
     'maintenance/registry.json',
     'maintenance/README.md',
 ]

@@ -3,9 +3,9 @@
     "actions": 34,
     "controls": 567,
     "diverged": 35,
-    "files": 259,
+    "files": 260,
     "menus": 8,
-    "noBaseline": 30,
+    "noBaseline": 31,
     "settings": 525,
     "unchanged": 194,
     "unresolved": 35
@@ -5857,6 +5857,21 @@
       }
     },
     {
+      "external": [],
+      "imports": [
+        "src/types/collection.ts"
+      ],
+      "modules": [
+        "settings-ui"
+      ],
+      "path": "src/modules/settings/sections.ts",
+      "provenance": "unverified",
+      "sha256": "cda1b393a7899279d6ca774a123593b21500eb617aebdb369879f67116a7dd73",
+      "status": "no-baseline",
+      "unresolved": [],
+      "upstream": null
+    },
+    {
       "external": [
         {
           "name": "vue",
@@ -6566,13 +6581,10 @@
         "src/components/items/SwitchComp.vue",
         "src/components/items/WebdavComp.vue",
         "src/feedback/Badge.vue",
-        "src/feedback/OptimizationReviewRow.vue",
         "src/feedback/index.ts",
-        "src/feedback/review-catalog.generated.ts",
-        "src/feedback/review-store.ts",
-        "src/feedback/review-types.ts",
         "src/modules/maintenance/diagnostics.ts",
         "src/modules/rules/index.ts",
+        "src/modules/settings/sections.ts",
         "src/stores/view.ts",
         "src/types/item.ts"
       ],
@@ -6581,7 +6593,7 @@
       ],
       "path": "src/views/RulePanelView.vue",
       "provenance": "matching-path-in-fixed-baseline",
-      "sha256": "e765078c3c58d84ff0633f1142ccfc4230cdd95d5924e0aa5af7d72e6f0b9542",
+      "sha256": "7ead6ae1887fb4cc940998fe3964684af84ee5c8b7aef1590f3095cea710e688",
       "status": "diverged",
       "unresolved": [],
       "upstream": {
@@ -6714,7 +6726,7 @@
       "modules": [],
       "path": "src/vite-env.d.ts",
       "provenance": "matching-path-in-fixed-baseline",
-      "sha256": "405fe0bc67e85782064aae4bdb650cfe4c20adcf6529885e818f168fbaaea997",
+      "sha256": "858a18e74528ebecaadea20dbf0bf7a9a0c529b95072980987dffabacd117cef",
       "status": "diverged",
       "unresolved": [],
       "upstream": {
@@ -6776,6 +6788,7 @@
       "paths": [
         "src/components/",
         "src/views/",
+        "src/modules/settings/",
         "src/stores/",
         "src/feedback/",
         "src/utils/panelGeometry.ts"
@@ -7446,13 +7459,7 @@
       "names": [
         "取舍面板 导出取舍反馈"
       ],
-      "occurrences": [
-        {
-          "line": 25,
-          "path": "src/views/RulePanelView.vue",
-          "relation": "literal-reference"
-        }
-      ]
+      "occurrences": []
     },
     {
       "id": "B30",
@@ -7461,13 +7468,7 @@
       "names": [
         "取舍面板 全站清单"
       ],
-      "occurrences": [
-        {
-          "line": 22,
-          "path": "src/views/RulePanelView.vue",
-          "relation": "literal-reference"
-        }
-      ]
+      "occurrences": []
     },
     {
       "id": "B31",
@@ -7476,13 +7477,7 @@
       "names": [
         "取舍面板 当前页面"
       ],
-      "occurrences": [
-        {
-          "line": 19,
-          "path": "src/views/RulePanelView.vue",
-          "relation": "literal-reference"
-        }
-      ]
+      "occurrences": []
     },
     {
       "id": "B32",
@@ -7500,13 +7495,7 @@
       "names": [
         "取舍面板 优化功能组筛选"
       ],
-      "occurrences": [
-        {
-          "line": 35,
-          "path": "src/views/RulePanelView.vue",
-          "relation": "literal-reference"
-        }
-      ]
+      "occurrences": []
     },
     {
       "id": "B34",
@@ -7517,7 +7506,7 @@
       ],
       "occurrences": [
         {
-          "line": 29,
+          "line": 31,
           "path": "src/views/RulePanelView.vue",
           "relation": "literal-reference"
         }

@@ -45,6 +45,7 @@
       "paths": [
         "src/components/",
         "src/views/",
+        "src/modules/settings/",
         "src/stores/",
         "src/feedback/",
         "src/utils/panelGeometry.ts"

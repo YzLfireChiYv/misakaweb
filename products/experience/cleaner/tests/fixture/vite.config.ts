@@ -16,6 +16,7 @@ export default defineConfig({
         __BUILD_PROFILE__: JSON.stringify('development'),
         __BUILD_LABEL__: JSON.stringify('测试夹具'),
         __SCRIPT_VERSION__: JSON.stringify('fixture'),
+        __SETTING_SECTIONS__: JSON.stringify({}),
     },
     resolve: {
         alias: {

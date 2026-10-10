@@ -1,7 +1,7 @@
 {
   "schema_version": 1,
   "catalog_version": "2026-10-11.1",
-  "scope": "Public optimization grouping and build input. Nine complete exclusion-built profiles are available; touch is not implemented.",
+  "scope": "Product exploration uses the complete numbered build with classified setting sections. Nine earlier pack experiments remain available, but final profile lineup is undecided; touch integration is prepared, not implemented.",
   "counts": {
     "existing_optimization_keys": 73,
     "existing_groups": 6,
@@ -306,7 +306,8 @@
     {
       "id": "evolved-player-gestures",
       "pack": "touch-controls",
-      "status": "source-reviewed; not integrated",
+      "status": "integration-prepared; not integrated",
+      "preparation_record": "community/evolved-player-gestures.json",
       "repository": "https://github.com/the1812/Bilibili-Evolved",
       "commit": "fa06dcec095dbccaba82f50ae2318c8d61c26671",
       "path": "registry/lib/components/touch/player-gestures",
@@ -336,6 +337,8 @@
     "artifacts": "multiple complete userscripts generated from pack profiles",
     "runtime_download_platform": false,
     "profile_registry": "config/build-profiles.json",
+    "current_testing_channel": "development-full-with-number-labels",
+    "profile_rollout": "paused-for-product-exploration; keep prior experimental links",
     "planned_profiles": [
       {
         "id": "pure",

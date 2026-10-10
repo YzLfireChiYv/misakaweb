@@ -7,7 +7,7 @@ import monkey, { cdn } from 'vite-plugin-monkey'
 import tailwindcss from '@tailwindcss/vite'
 import tailwindShadowDOM from 'vite-plugin-tailwind-shadowdom'
 import remToPx from '@thedutchcoder/postcss-rem-to-px'
-import { profileFor, packSourcePlugin, cssPruningPlugin } from './scripts/pack-build.mjs'
+import { profileFor, packSourcePlugin, cssPruningPlugin, classificationFor } from './scripts/pack-build.mjs'
 
 const release = JSON.parse(fs.readFileSync(new URL('./config/release.json', import.meta.url), 'utf8'))
 
@@ -41,7 +41,8 @@ export default defineConfig(({ mode }) => {
             __PACK_PLAYBACK__: JSON.stringify(!profile || profile.packs.includes('playback')),
             __PACK_LINKS__: JSON.stringify(!profile || profile.packs.includes('link-tools')),
             __BUILD_PROFILE__: JSON.stringify(profile?.id ?? (isFeedback ? 'development' : 'legacy')),
-            __BUILD_LABEL__: JSON.stringify(profile?.label ?? (isFeedback ? '开发测试版（完整能力）' : '完整能力')),
+            __BUILD_LABEL__: JSON.stringify(profile?.label ?? '完整工具包'),
+            __SETTING_SECTIONS__: JSON.stringify(classificationFor(profile)),
         },
         plugins: [
             ...(profile ? [packSourcePlugin(profile)] : []),

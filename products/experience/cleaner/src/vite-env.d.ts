@@ -9,6 +9,11 @@ declare const __PACK_PLAYBACK__: boolean
 declare const __PACK_LINKS__: boolean
 declare const __BUILD_PROFILE__: string
 declare const __BUILD_LABEL__: string
+declare const __SETTING_SECTIONS__: Record<string, {
+    category: 'cleaning' | 'optimization' | 'support'
+    pack?: string
+    packLabel?: string
+}>
 
 declare module '*.vue' {
     import type { DefineComponent } from 'vue'

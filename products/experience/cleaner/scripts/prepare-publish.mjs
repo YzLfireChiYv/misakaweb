@@ -86,5 +86,7 @@ runPnpm(['run', 'maintenance:index'])
 runPnpm(['exec', 'vue-tsc', '-b'])
 runPnpm(['run', 'test'])
 runPnpm(['run', 'build:feedback'])
-runPnpm(['run', 'build:variants'])
+// Product exploration currently uses the complete numbered build. Publish its
+// ordinary counterpart; leave other experiments on their existing versions.
+runPnpm(['run', 'build:variants', '--profile', 'desktop-toolkit'])
 writeManifest()

@@ -1,6 +1,6 @@
 {
   "schemaVersion": 1,
-  "version": "0.1.4.8",
+  "version": "0.1.4.9",
   "identity": {
     "name": "MisakaWeb",
     "namespace": "https://github.com/YzLfireChiYv/misakaweb"
@@ -96,7 +96,8 @@
           "watchlater-layout",
           "webscreen-scrollable"
         ]
-      }
+      },
+      "version": "0.1.4.8"
     },
     {
       "id": "text-style",
@@ -176,7 +177,8 @@
           "watchlater-layout",
           "webscreen-scrollable"
         ]
-      }
+      },
+      "version": "0.1.4.8"
     },
     {
       "id": "appearance",
@@ -260,7 +262,8 @@
           "watchlater-layout",
           "webscreen-scrollable"
         ]
-      }
+      },
+      "version": "0.1.4.8"
     },
     {
       "id": "layout",
@@ -331,7 +334,8 @@
           "watchlater-increase-font-size",
           "webscreen-scrollable"
         ]
-      }
+      },
+      "version": "0.1.4.8"
     },
     {
       "id": "playback",
@@ -411,7 +415,8 @@
           "watchlater-increase-font-size",
           "watchlater-layout"
         ]
-      }
+      },
+      "version": "0.1.4.8"
     },
     {
       "id": "reading-navigation",
@@ -492,7 +497,8 @@
           "watchlater-layout",
           "webscreen-scrollable"
         ]
-      }
+      },
+      "version": "0.1.4.8"
     },
     {
       "id": "link-tools",
@@ -581,7 +587,8 @@
           "watchlater-layout",
           "webscreen-scrollable"
         ]
-      }
+      },
+      "version": "0.1.4.8"
     },
     {
       "id": "desktop-toolkit",
@@ -594,11 +601,12 @@
         "reading-navigation",
         "link-tools"
       ],
+      "version": "0.1.4.9",
       "artifact": "products/experience/variants/misakaweb-desktop-toolkit.user.js",
       "updateURL": "https://raw.githubusercontent.com/YzLfireChiYv/misakaweb/main/products/experience/variants/misakaweb-desktop-toolkit.user.js",
       "downloadURL": "https://raw.githubusercontent.com/YzLfireChiYv/misakaweb/main/products/experience/variants/misakaweb-desktop-toolkit.user.js",
-      "sha256": "fc2c126dd24764bb35e3547b151c1f967b41df057b91d3d5ab0e6fe1a094d375",
-      "bytes": 889417,
+      "sha256": "472f837b2a707737b5e71975f8a9d5b137e4a55163cf1a8bb3ece80a47f80430",
+      "bytes": 909179,
       "audit": {
         "cleaningKeys": 325,
         "supportKeys": 1,
@@ -650,7 +658,8 @@
           "video-page-subtitle-text-stroke-width",
           "watchlater-increase-font-size"
         ]
-      }
+      },
+      "version": "0.1.4.8"
     }
   ]
 }
