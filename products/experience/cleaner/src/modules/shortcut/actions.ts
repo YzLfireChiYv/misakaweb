@@ -64,7 +64,7 @@ export const useQuickActions = (): Readonly<Ref<QuickAction[]>> => {
             run: () => shortcutStore.show(),
         },
         {
-            text: '配置管理',
+            text: '备份恢复',
             defaultHidden: true,
             isValid: true,
             actionKey: 'side-configuration',

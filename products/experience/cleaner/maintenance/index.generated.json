@@ -509,7 +509,7 @@
       ],
       "path": "src/feedback/control-map.json",
       "provenance": "own-confirmed",
-      "sha256": "2ea2a259dd15e34a09e8f78c416a09933eb245a44d88c5cbbf5df5d4200501d9",
+      "sha256": "28fd41bef682f7f807ed7bcbea5e853c9a440db54c422111ed8829d2312be092",
       "status": "no-baseline",
       "unresolved": [],
       "upstream": null
@@ -535,7 +535,7 @@
       ],
       "path": "src/feedback/fixed-controls.json",
       "provenance": "own-confirmed",
-      "sha256": "c7e8c866eda075b8bbee51137c46b144fc169784e816f90a6912a4319ea92c2d",
+      "sha256": "591e302ab9adbb27e5be6d89ccd0c30574d02443baef87a8d3386952bfd665fb",
       "status": "no-baseline",
       "unresolved": [],
       "upstream": null
@@ -698,7 +698,7 @@
       ],
       "path": "src/main.ts",
       "provenance": "matching-path-in-fixed-baseline",
-      "sha256": "56f60b0283ff8dfa0cb4b1c4e6bd595191557225f9b953d56e900b9319886fe9",
+      "sha256": "1fe00334855d4b964466e56b8951a5d250a2ef001b02f8a39b29a56915bb9a85",
       "status": "diverged",
       "unresolved": [
         {
@@ -5837,7 +5837,7 @@
       ],
       "path": "src/modules/shortcut/actions.ts",
       "provenance": "own-confirmed",
-      "sha256": "4e0ec79a43a840caf5506299a4f4553bc2ed9058e69b59a641053f3e4d49cfd3",
+      "sha256": "9ce4c979632a4d734e4754c5c71ad94f6cfa63957c46baff1528e0e84c5dc74b",
       "status": "no-baseline",
       "unresolved": [],
       "upstream": null
@@ -6493,7 +6493,7 @@
       ],
       "path": "src/views/ConfigurationPanelView.vue",
       "provenance": "unverified",
-      "sha256": "49e931c347a708a3d6da91ea277080001a148cafff4bb0803e07a3ebf32fad36",
+      "sha256": "f60a9e9a01926daf55abd34eb5e343a260e6e1a7fea18803716ff7de90caa52a",
       "status": "no-baseline",
       "unresolved": [],
       "upstream": null
@@ -6630,7 +6630,7 @@
       ],
       "path": "src/views/RulePanelView.vue",
       "provenance": "matching-path-in-fixed-baseline",
-      "sha256": "7a921a0201c12af79487fcef3df9813ecf7047f4dd829fac6b7d19c45ccfc696",
+      "sha256": "784974c82199802e2bb5224246e8e1430da6e5cecffd35c75054f33644c82f59",
       "status": "diverged",
       "unresolved": [],
       "upstream": {
@@ -7646,13 +7646,7 @@
       "names": [
         "保存全局设置"
       ],
-      "occurrences": [
-        {
-          "line": 191,
-          "path": "src/views/ConfigurationPanelView.vue",
-          "relation": "literal-reference"
-        }
-      ]
+      "occurrences": []
     },
     {
       "id": "B41",
@@ -7674,7 +7668,7 @@
       "key": "side-configuration",
       "kind": "action",
       "names": [
-        "打开配置管理"
+        "打开配置备份与恢复"
       ],
       "occurrences": [
         {
@@ -7834,7 +7828,7 @@
       "key": "menu-configuration",
       "kind": "menu",
       "names": [
-        "配置管理"
+        "配置备份与恢复"
       ],
       "occurrences": [
         {
@@ -8405,11 +8399,6 @@
           "line": 9,
           "panel": "filter-sync",
           "path": "src/modules/filters/ruleSync.ts"
-        },
-        {
-          "line": 438,
-          "path": "src/views/ConfigurationPanelView.vue",
-          "relation": "literal-reference"
         }
       ],
       "type": "switch"

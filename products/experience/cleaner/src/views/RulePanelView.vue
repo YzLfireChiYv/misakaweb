@@ -28,7 +28,7 @@
         <div class="mt-3 border-t border-gray-200 pt-2">
             <button type="button" class="mr-2 rounded border border-gray-300 px-2 py-1 text-sm text-gray-700"
                 @click="configurationStore.show()">
-                <FeedbackBadge :code="actionLabel('side-configuration')" />配置管理
+                <FeedbackBadge :code="actionLabel('side-configuration')" />配置备份与恢复
             </button>
             <button type="button" class="rounded border border-gray-300 px-2 py-1 text-sm text-gray-700"
                 @click="exportDiagnostic">

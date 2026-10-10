@@ -9877,7 +9877,7 @@
         {
             "id": "M09",
             "key": "menu-configuration",
-            "name": "配置管理",
+            "name": "配置备份与恢复",
             "pages": [
                 "*"
             ],
@@ -10321,7 +10321,7 @@
         {
             "id": "B42",
             "key": "side-configuration",
-            "name": "打开配置管理",
+            "name": "打开配置备份与恢复",
             "pages": [
                 "*"
             ],

@@ -1,6 +1,6 @@
 {
   "schemaVersion": 1,
-  "version": "0.1.5",
+  "version": "0.1.5.1",
   "identity": {
     "name": "MisakaWeb",
     "namespace": "https://github.com/YzLfireChiYv/misakaweb"
@@ -11,12 +11,12 @@
       "id": "pure",
       "label": "净化轻量版",
       "packs": [],
-      "version": "0.1.5",
+      "version": "0.1.5.1",
       "artifact": "products/experience/variants/misakaweb-pure.user.js",
       "updateURL": "https://raw.githubusercontent.com/YzLfireChiYv/misakaweb/main/products/experience/variants/misakaweb-pure.user.js",
       "downloadURL": "https://raw.githubusercontent.com/YzLfireChiYv/misakaweb/main/products/experience/variants/misakaweb-pure.user.js",
-      "sha256": "87e750e49f1fa14da24f9b478e08463d376a1504d5d5c8b36065041c2e76dec7",
-      "bytes": 726235,
+      "sha256": "ab9695a1b0df62ad325e7f68644411c62e68197d18643b539722ab858b7372a5",
+      "bytes": 711944,
       "audit": {
         "cleaningKeys": 325,
         "supportKeys": 1,
@@ -112,12 +112,12 @@
         "reading-navigation",
         "link-tools"
       ],
-      "version": "0.1.5",
+      "version": "0.1.5.1",
       "artifact": "products/experience/variants/misakaweb-desktop-toolkit.user.js",
       "updateURL": "https://raw.githubusercontent.com/YzLfireChiYv/misakaweb/main/products/experience/variants/misakaweb-desktop-toolkit.user.js",
       "downloadURL": "https://raw.githubusercontent.com/YzLfireChiYv/misakaweb/main/products/experience/variants/misakaweb-desktop-toolkit.user.js",
-      "sha256": "01778c72f11dafd00e2f202567a21caeff9b04f1901040911e7599281151afe8",
-      "bytes": 843723,
+      "sha256": "109e23bcfa274694e83ff0189946cce13870731b0d0f386157b20468fe178440",
+      "bytes": 829421,
       "audit": {
         "cleaningKeys": 325,
         "supportKeys": 1,

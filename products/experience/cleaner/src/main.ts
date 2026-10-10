@@ -71,7 +71,7 @@ const menu = () => {
     GM_registerMenuCommand(withMenuId('menu-rule-panel', '✅ 页面净化优化'), () => {
         ruleStore.toggle()
     })
-    GM_registerMenuCommand(withMenuId('menu-configuration', '⚙ 配置管理'), () => configurationStore.show())
+    GM_registerMenuCommand(withMenuId('menu-configuration', '⚙ 配置备份与恢复'), () => configurationStore.show())
     if (videoStore.isPageValid()) {
         GM_registerMenuCommand(withMenuId('menu-video-filter', '✅ 视频过滤设置'), () => {
             videoStore.toggle()
