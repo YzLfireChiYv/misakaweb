@@ -5,8 +5,13 @@ on:
     inputs:
       module:
         description: '维护模块，例如 shortcut、video-filter、comment-filter、rules-common'
-        required: true
+        required: false
         default: shortcut
+        type: string
+      setting:
+        description: '可选设置/按钮编号，例如 S179；填写时优先按编号生成'
+        required: false
+        default: ''
         type: string
 
 permissions:
@@ -18,6 +23,7 @@ jobs:
     env:
       HUSKY: '0'
       MAINTENANCE_MODULE: ${{ inputs.module }}
+      MAINTENANCE_SETTING: ${{ inputs.setting }}
     defaults:
       run:
         working-directory: products/experience/cleaner
@@ -35,7 +41,12 @@ jobs:
       - name: Generate current maintenance index
         run: pnpm maintenance:index
       - name: Assemble focused source and instructions
-        run: pnpm maintenance:packet --module "$MAINTENANCE_MODULE" --out node_modules/.tmp/maintenance-handoff
+        run: |
+          if [ -n "$MAINTENANCE_SETTING" ]; then
+            pnpm maintenance:packet --setting "$MAINTENANCE_SETTING" --out node_modules/.tmp/maintenance-handoff
+          else
+            pnpm maintenance:packet --module "$MAINTENANCE_MODULE" --out node_modules/.tmp/maintenance-handoff
+          fi
       - uses: actions/upload-artifact@v6
         with:
           name: maintenance-handoff

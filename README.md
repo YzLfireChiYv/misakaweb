@@ -25,4 +25,4 @@
 
 [维护入口与命令](products/experience/cleaner/maintenance/README.md)说明如何按模块、设置编号或源码文件生成材料，包含相关源码、固定上游、差异状态、必要依赖与验收步骤。M06中的B34可导出只读页面结构诊断，不导出正文、名单或凭据。
 
-也可以在[GitHub维护包生成页面](https://github.com/YzLfireChiYv/misakaweb/actions/workflows/maintenance-packet.yml)点击Run workflow，填写模块（例如shortcut、video-filter、comment-filter、rules-common），完成后下载maintenance-handoff。将其中CONTEXT.md及问题描述交给网页版AI即可；包是修复输入，不表示已经通过真实网页验证。
+也可以在[GitHub维护包生成页面](https://github.com/YzLfireChiYv/misakaweb/actions/workflows/maintenance-packet.yml)点击Run workflow，填写模块（例如shortcut、video-filter、comment-filter、rules-common），或在setting中填写编号（例如S179），完成后下载maintenance-handoff。将其中CONTEXT.md及问题描述交给网页版AI即可；包是修复输入，不表示已经通过真实网页验证。
