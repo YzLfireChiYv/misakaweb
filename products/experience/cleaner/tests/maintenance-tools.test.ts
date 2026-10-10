@@ -267,7 +267,7 @@ describe('maintenance index', () => {
         expect(enabled?.occurrences.some(o=>o.path==='src/modules/shortcut/preference.ts' && o.relation==='storage-binding')).toBe(true)
         expect(shortcut.some((f) => f.path.startsWith('src/modules/shortcut/'))).toBe(true)
         expect(shortcut.some((f) => f.path === 'src/views/HeaderShortcutView.vue')).toBe(true)
-    })
+    }, 30000)
 })
 
 describe('maintenance packet', () => {

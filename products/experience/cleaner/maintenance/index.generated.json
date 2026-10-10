@@ -7702,6 +7702,11 @@
           "line": 79,
           "panel": "rule",
           "path": "src/modules/rules/live/groups/basic.ts"
+        },
+        {
+          "line": 108,
+          "path": "src/modules/rules/live/groups/basic.ts",
+          "relation": "literal-reference"
         }
       ],
       "type": "switch"
@@ -9588,6 +9593,11 @@
           "line": null,
           "path": "src/modules/rules/common/groups/theme.scss",
           "relation": "companion-style-by-filename"
+        },
+        {
+          "line": 9,
+          "path": "src/modules/rules/common/groups/theme.ts",
+          "relation": "literal-reference"
         },
         {
           "group": "全站通用 - 夜间模式",
@@ -16485,6 +16495,16 @@
           "line": 268,
           "panel": "rule",
           "path": "src/modules/rules/comment/groups/basic.ts"
+        },
+        {
+          "line": 275,
+          "path": "src/modules/rules/comment/groups/basic.ts",
+          "relation": "literal-reference"
+        },
+        {
+          "line": 281,
+          "path": "src/modules/rules/comment/groups/basic.ts",
+          "relation": "literal-reference"
         }
       ],
       "type": "switch"
@@ -16683,6 +16703,16 @@
           "line": 201,
           "panel": "rule",
           "path": "src/modules/rules/comment/groups/basic.ts"
+        },
+        {
+          "line": 207,
+          "path": "src/modules/rules/comment/groups/basic.ts",
+          "relation": "literal-reference"
+        },
+        {
+          "line": 212,
+          "path": "src/modules/rules/comment/groups/basic.ts",
+          "relation": "literal-reference"
         }
       ],
       "type": "switch"
@@ -16705,6 +16735,16 @@
           "line": 180,
           "panel": "rule",
           "path": "src/modules/rules/comment/groups/basic.ts"
+        },
+        {
+          "line": 186,
+          "path": "src/modules/rules/comment/groups/basic.ts",
+          "relation": "literal-reference"
+        },
+        {
+          "line": 196,
+          "path": "src/modules/rules/comment/groups/basic.ts",
+          "relation": "literal-reference"
         }
       ],
       "type": "switch"
@@ -18780,6 +18820,16 @@
           "line": 98,
           "panel": "rule",
           "path": "src/modules/rules/comment/groups/basic.ts"
+        },
+        {
+          "line": 105,
+          "path": "src/modules/rules/comment/groups/basic.ts",
+          "relation": "literal-reference"
+        },
+        {
+          "line": 110,
+          "path": "src/modules/rules/comment/groups/basic.ts",
+          "relation": "literal-reference"
         }
       ],
       "type": "switch"
@@ -18802,6 +18852,16 @@
           "line": 147,
           "panel": "rule",
           "path": "src/modules/rules/comment/groups/basic.ts"
+        },
+        {
+          "line": 153,
+          "path": "src/modules/rules/comment/groups/basic.ts",
+          "relation": "literal-reference"
+        },
+        {
+          "line": 158,
+          "path": "src/modules/rules/comment/groups/basic.ts",
+          "relation": "literal-reference"
         }
       ],
       "type": "switch"
@@ -18824,6 +18884,16 @@
           "line": 400,
           "panel": "rule",
           "path": "src/modules/rules/comment/groups/basic.ts"
+        },
+        {
+          "line": 406,
+          "path": "src/modules/rules/comment/groups/basic.ts",
+          "relation": "literal-reference"
+        },
+        {
+          "line": 413,
+          "path": "src/modules/rules/comment/groups/basic.ts",
+          "relation": "literal-reference"
         }
       ],
       "type": "switch"
@@ -18846,6 +18916,16 @@
           "line": 418,
           "panel": "rule",
           "path": "src/modules/rules/comment/groups/basic.ts"
+        },
+        {
+          "line": 424,
+          "path": "src/modules/rules/comment/groups/basic.ts",
+          "relation": "literal-reference"
+        },
+        {
+          "line": 429,
+          "path": "src/modules/rules/comment/groups/basic.ts",
+          "relation": "literal-reference"
         }
       ],
       "type": "switch"
@@ -18890,6 +18970,16 @@
           "line": 382,
           "panel": "rule",
           "path": "src/modules/rules/comment/groups/basic.ts"
+        },
+        {
+          "line": 388,
+          "path": "src/modules/rules/comment/groups/basic.ts",
+          "relation": "literal-reference"
+        },
+        {
+          "line": 395,
+          "path": "src/modules/rules/comment/groups/basic.ts",
+          "relation": "literal-reference"
         }
       ],
       "type": "switch"
@@ -18912,6 +19002,16 @@
           "line": 131,
           "panel": "rule",
           "path": "src/modules/rules/comment/groups/basic.ts"
+        },
+        {
+          "line": 137,
+          "path": "src/modules/rules/comment/groups/basic.ts",
+          "relation": "literal-reference"
+        },
+        {
+          "line": 142,
+          "path": "src/modules/rules/comment/groups/basic.ts",
+          "relation": "literal-reference"
         }
       ],
       "type": "switch"
@@ -18967,6 +19067,16 @@
           "line": 64,
           "panel": "rule",
           "path": "src/modules/rules/comment/groups/basic.ts"
+        },
+        {
+          "line": 71,
+          "path": "src/modules/rules/comment/groups/basic.ts",
+          "relation": "literal-reference"
+        },
+        {
+          "line": 76,
+          "path": "src/modules/rules/comment/groups/basic.ts",
+          "relation": "literal-reference"
         }
       ],
       "type": "switch"
@@ -18989,6 +19099,16 @@
           "line": 286,
           "panel": "rule",
           "path": "src/modules/rules/comment/groups/basic.ts"
+        },
+        {
+          "line": 293,
+          "path": "src/modules/rules/comment/groups/basic.ts",
+          "relation": "literal-reference"
+        },
+        {
+          "line": 305,
+          "path": "src/modules/rules/comment/groups/basic.ts",
+          "relation": "literal-reference"
         }
       ],
       "type": "switch"
@@ -19011,6 +19131,16 @@
           "line": 24,
           "panel": "rule",
           "path": "src/modules/rules/comment/groups/basic.ts"
+        },
+        {
+          "line": 30,
+          "path": "src/modules/rules/comment/groups/basic.ts",
+          "relation": "literal-reference"
+        },
+        {
+          "line": 36,
+          "path": "src/modules/rules/comment/groups/basic.ts",
+          "relation": "literal-reference"
         }
       ],
       "type": "switch"
@@ -19033,6 +19163,16 @@
           "line": 251,
           "panel": "rule",
           "path": "src/modules/rules/comment/groups/basic.ts"
+        },
+        {
+          "line": 258,
+          "path": "src/modules/rules/comment/groups/basic.ts",
+          "relation": "literal-reference"
+        },
+        {
+          "line": 263,
+          "path": "src/modules/rules/comment/groups/basic.ts",
+          "relation": "literal-reference"
         }
       ],
       "type": "switch"
@@ -19055,6 +19195,26 @@
           "line": 41,
           "panel": "rule",
           "path": "src/modules/rules/comment/groups/basic.ts"
+        },
+        {
+          "line": 48,
+          "path": "src/modules/rules/comment/groups/basic.ts",
+          "relation": "literal-reference"
+        },
+        {
+          "line": 53,
+          "path": "src/modules/rules/comment/groups/basic.ts",
+          "relation": "literal-reference"
+        },
+        {
+          "line": 58,
+          "path": "src/modules/rules/comment/groups/basic.ts",
+          "relation": "literal-reference"
+        },
+        {
+          "line": 59,
+          "path": "src/modules/rules/comment/groups/basic.ts",
+          "relation": "literal-reference"
         }
       ],
       "type": "switch"
@@ -19077,6 +19237,16 @@
           "line": 310,
           "panel": "rule",
           "path": "src/modules/rules/comment/groups/basic.ts"
+        },
+        {
+          "line": 316,
+          "path": "src/modules/rules/comment/groups/basic.ts",
+          "relation": "literal-reference"
+        },
+        {
+          "line": 323,
+          "path": "src/modules/rules/comment/groups/basic.ts",
+          "relation": "literal-reference"
         }
       ],
       "type": "switch"
@@ -19099,6 +19269,16 @@
           "line": 115,
           "panel": "rule",
           "path": "src/modules/rules/comment/groups/basic.ts"
+        },
+        {
+          "line": 121,
+          "path": "src/modules/rules/comment/groups/basic.ts",
+          "relation": "literal-reference"
+        },
+        {
+          "line": 126,
+          "path": "src/modules/rules/comment/groups/basic.ts",
+          "relation": "literal-reference"
         }
       ],
       "type": "switch"
@@ -19143,6 +19323,16 @@
           "line": 7,
           "panel": "rule",
           "path": "src/modules/rules/comment/groups/basic.ts"
+        },
+        {
+          "line": 14,
+          "path": "src/modules/rules/comment/groups/basic.ts",
+          "relation": "literal-reference"
+        },
+        {
+          "line": 19,
+          "path": "src/modules/rules/comment/groups/basic.ts",
+          "relation": "literal-reference"
         }
       ],
       "type": "switch"
@@ -19165,6 +19355,16 @@
           "line": 234,
           "panel": "rule",
           "path": "src/modules/rules/comment/groups/basic.ts"
+        },
+        {
+          "line": 241,
+          "path": "src/modules/rules/comment/groups/basic.ts",
+          "relation": "literal-reference"
+        },
+        {
+          "line": 246,
+          "path": "src/modules/rules/comment/groups/basic.ts",
+          "relation": "literal-reference"
         }
       ],
       "type": "switch"
@@ -19704,6 +19904,16 @@
           "line": 81,
           "panel": "rule",
           "path": "src/modules/rules/comment/groups/basic.ts"
+        },
+        {
+          "line": 88,
+          "path": "src/modules/rules/comment/groups/basic.ts",
+          "relation": "literal-reference"
+        },
+        {
+          "line": 93,
+          "path": "src/modules/rules/comment/groups/basic.ts",
+          "relation": "literal-reference"
         }
       ],
       "type": "switch"
@@ -19902,6 +20112,16 @@
           "line": 163,
           "panel": "rule",
           "path": "src/modules/rules/comment/groups/basic.ts"
+        },
+        {
+          "line": 169,
+          "path": "src/modules/rules/comment/groups/basic.ts",
+          "relation": "literal-reference"
+        },
+        {
+          "line": 175,
+          "path": "src/modules/rules/comment/groups/basic.ts",
+          "relation": "literal-reference"
         }
       ],
       "type": "switch"
@@ -20067,6 +20287,16 @@
           "line": 217,
           "panel": "rule",
           "path": "src/modules/rules/comment/groups/basic.ts"
+        },
+        {
+          "line": 224,
+          "path": "src/modules/rules/comment/groups/basic.ts",
+          "relation": "literal-reference"
+        },
+        {
+          "line": 229,
+          "path": "src/modules/rules/comment/groups/basic.ts",
+          "relation": "literal-reference"
         }
       ],
       "type": "switch"
@@ -20089,6 +20319,16 @@
           "line": 451,
           "panel": "rule",
           "path": "src/modules/rules/comment/groups/basic.ts"
+        },
+        {
+          "line": 457,
+          "path": "src/modules/rules/comment/groups/basic.ts",
+          "relation": "literal-reference"
+        },
+        {
+          "line": 463,
+          "path": "src/modules/rules/comment/groups/basic.ts",
+          "relation": "literal-reference"
         }
       ],
       "type": "switch"
@@ -20111,6 +20351,16 @@
           "line": 434,
           "panel": "rule",
           "path": "src/modules/rules/comment/groups/basic.ts"
+        },
+        {
+          "line": 440,
+          "path": "src/modules/rules/comment/groups/basic.ts",
+          "relation": "literal-reference"
+        },
+        {
+          "line": 446,
+          "path": "src/modules/rules/comment/groups/basic.ts",
+          "relation": "literal-reference"
         }
       ],
       "type": "switch"
@@ -20380,6 +20630,11 @@
           "line": null,
           "path": "src/modules/rules/video/groups/basic.scss",
           "relation": "companion-style-by-filename"
+        },
+        {
+          "line": 96,
+          "path": "src/modules/rules/video/groups/basic.ts",
+          "relation": "literal-reference"
         },
         {
           "group": "基本功能",

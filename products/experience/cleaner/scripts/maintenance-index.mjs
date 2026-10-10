@@ -79,17 +79,23 @@ const buildSettings = (root, controlMap, occurrences, texts) => {
     // Keep these literal references as well as declaration locations; never index generated tables.
     const controls = ['settings','menus','actions'].flatMap(kind => controlMap[kind] ?? [])
     const keys = new Set([...byKey.keys(), ...controls.map(row => row.key)])
+    const bindings = new Map()
+    for(const row of controls) if(row.storage?.key) {
+        const list=bindings.get(row.storage.key) ?? []
+        list.push(row.key);bindings.set(row.storage.key,list)
+    }
+    const patterns=[...new Set([...keys,...bindings.keys()])].sort((a,b)=>b.length-a.length).map(key=>key.replace(/[.*+?^${}()|[\]\\]/g,'\\$&'))
+    const references=new RegExp(`(?:^|[^\\w-])(${patterns.join('|')})(?=$|[^\\w-])`,'g')
     for (const [rel,text] of texts) {
         if (rel.includes('.generated.') || rel.startsWith('src/feedback/')) continue
-        for (const key of keys) {
-            if (!text.includes(key)) continue
-            for (const line of findKeyLines(text,key)) addOcc(key,{path:rel,line,relation:'literal-reference'})
-        }
-        for (const row of controls) {
-            const storageKey = row.storage?.key
-            if (!storageKey || !text.includes(storageKey)) continue
-            for (const line of findKeyLines(text,storageKey)) addOcc(row.key,{path:rel,line,relation:'storage-binding'})
-        }
+        text.replaceAll('\r\n','\n').split('\n').forEach((line,index)=>{
+            references.lastIndex=0
+            for(const match of line.matchAll(references)){
+                const key=match[1]
+                if(keys.has(key))addOcc(key,{path:rel,line:index+1,relation:'literal-reference'})
+                for(const target of bindings.get(key) ?? [])addOcc(target,{path:rel,line:index+1,relation:'storage-binding'})
+            }
+        })
     }
     for (const [key,entry] of byKey) for (const occurrence of [...entry.occurrences]) {
         if (!occurrence.path.endsWith('.ts')) continue

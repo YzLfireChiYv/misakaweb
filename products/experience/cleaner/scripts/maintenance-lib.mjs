@@ -479,27 +479,31 @@ export const occurrenceToPath = (root, file) => {
 
 const ITEM_CALLS = new Set(['switchItem', 'numberItem', 'rateItem'])
 
+const definitionLineCache = new Map()
 export const findKeyLines = (text, key) => {
-    const sf = ts.createSourceFile('occ.ts', text, ts.ScriptTarget.Latest, true, ts.ScriptKind.TS)
-    const lines = []
-    const add = (node) => {
-        lines.push(sf.getLineAndCharacterOfPosition(node.getStart()).line + 1)
-    }
-    const visit = (node) => {
-        if (ts.isPropertyAssignment(node) && ts.isIdentifier(node.name) && node.name.text === 'id') {
-            if ((ts.isStringLiteral(node.initializer) || ts.isNoSubstitutionTemplateLiteral(node.initializer)) && node.initializer.text === key) {
-                add(node.initializer)
-            }
+    let definitions = definitionLineCache.get(text)
+    if (!definitions) {
+        const sf = ts.createSourceFile('occ.ts', text, ts.ScriptTarget.Latest, true, ts.ScriptKind.TS)
+        definitions = new Map()
+        const add = (node) => {
+            const list = definitions.get(node.text) ?? []
+            list.push(sf.getLineAndCharacterOfPosition(node.getStart()).line + 1)
+            definitions.set(node.text,list)
         }
-        if (ts.isCallExpression(node) && ts.isIdentifier(node.expression) && ITEM_CALLS.has(node.expression.text)) {
-            const arg = node.arguments[0]
-            if (arg && (ts.isStringLiteral(arg) || ts.isNoSubstitutionTemplateLiteral(arg)) && arg.text === key) {
-                add(arg)
+        const visit = (node) => {
+            if (ts.isPropertyAssignment(node) && ts.isIdentifier(node.name) && node.name.text === 'id' &&
+                (ts.isStringLiteral(node.initializer) || ts.isNoSubstitutionTemplateLiteral(node.initializer))) add(node.initializer)
+            if (ts.isCallExpression(node) && ts.isIdentifier(node.expression) && ITEM_CALLS.has(node.expression.text)) {
+                const arg = node.arguments[0]
+                if (arg && (ts.isStringLiteral(arg) || ts.isNoSubstitutionTemplateLiteral(arg))) add(arg)
             }
+            ts.forEachChild(node,visit)
         }
-        ts.forEachChild(node, visit)
+        visit(sf)
+        if (definitionLineCache.size >= 128) definitionLineCache.delete(definitionLineCache.keys().next().value)
+        definitionLineCache.set(text,definitions)
     }
-    visit(sf)
+    const lines = definitions.get(key) ?? []
     if (lines.length) {
         return [...new Set(lines)]
     }
