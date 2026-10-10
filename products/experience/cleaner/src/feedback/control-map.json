@@ -9,7 +9,7 @@
     "counts": {
         "settings": 525,
         "menus": 8,
-        "actions": 33
+        "actions": 34
     },
     "settings": [
         {
@@ -10160,6 +10160,15 @@
             "id": "B33",
             "key": "review-pack-filter",
             "name": "取舍面板 优化功能组筛选",
+            "pages": [
+                "*"
+            ],
+            "panel": "optimization-review-test"
+        },
+        {
+            "id": "B34",
+            "key": "maintenance-export-diagnostic",
+            "name": "导出只读维护诊断",
             "pages": [
                 "*"
             ],

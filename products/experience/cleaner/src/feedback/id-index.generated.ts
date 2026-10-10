@@ -569,5 +569,6 @@ export const actionsByKey: Record<string, string> = {
     "review-scope-all": "B30",
     "review-scope-page": "B31",
     "review-toggle-remove": "B32",
-    "review-pack-filter": "B33"
+    "review-pack-filter": "B33",
+    "maintenance-export-diagnostic": "B34"
 }

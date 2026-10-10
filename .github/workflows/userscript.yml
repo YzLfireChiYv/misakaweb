@@ -45,7 +45,7 @@ jobs:
             echo 'Newer source exists; its build will publish instead.'
             exit 0
           fi
-          git add -- products/experience/misakaweb-feedback-test.user.js products/experience/release-manifest.json
+          git add -- products/experience/misakaweb-feedback-test.user.js products/experience/release-manifest.json products/experience/cleaner/maintenance/index.generated.json
           if git diff --cached --quiet; then
             echo 'Published files already match this build.'
             exit 0

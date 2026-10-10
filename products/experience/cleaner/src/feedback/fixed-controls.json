@@ -405,6 +405,14 @@
                 "*"
             ],
             "panel": "optimization-review-test"
+        },
+        {
+            "key": "maintenance-export-diagnostic",
+            "name": "导出只读维护诊断",
+            "pages": [
+                "*"
+            ],
+            "panel": "optimization-review-test"
         }
     ],
     "settings": [

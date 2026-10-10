@@ -1,0 +1,44 @@
+name: Generate webpage AI maintenance packet
+
+on:
+  workflow_dispatch:
+    inputs:
+      module:
+        description: '维护模块，例如 shortcut、video-filter、comment-filter、rules-common'
+        required: true
+        default: shortcut
+        type: string
+
+permissions:
+  contents: read
+
+jobs:
+  packet:
+    runs-on: ubuntu-latest
+    env:
+      HUSKY: '0'
+      MAINTENANCE_MODULE: ${{ inputs.module }}
+    defaults:
+      run:
+        working-directory: products/experience/cleaner
+    steps:
+      - uses: actions/checkout@v6
+      - uses: pnpm/setup@v2
+        with:
+          version: 12.3.4
+          runtime: node@24
+          package-json-file: products/experience/cleaner/package.json
+          cache-dependency-path: products/experience/cleaner/pnpm-lock.yaml
+          cache: true
+          install: false
+      - run: pnpm install --frozen-lockfile
+      - name: Generate current maintenance index
+        run: pnpm maintenance:index
+      - name: Assemble focused source and instructions
+        run: pnpm maintenance:packet --module "$MAINTENANCE_MODULE" --out node_modules/.tmp/maintenance-handoff
+      - uses: actions/upload-artifact@v6
+        with:
+          name: maintenance-handoff
+          path: products/experience/cleaner/node_modules/.tmp/maintenance-handoff
+          if-no-files-found: error
+          retention-days: 7

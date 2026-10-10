@@ -1,7 +1,7 @@
 // ==UserScript==
 // @name         MisakaWeb
 // @namespace    https://github.com/YzLfireChiYv/misakaweb
-// @version      0.1.4.6
+// @version      0.1.4.7
 // @author       festoney8, MisakaWeb
 // @description  大量借用社区上游项目。反馈测试编号版，开发分组。
 // @license      MIT
@@ -647,7 +647,8 @@
 		"review-scope-all": "B30",
 		"review-scope-page": "B31",
 		"review-toggle-remove": "B32",
-		"review-pack-filter": "B33"
+		"review-pack-filter": "B33",
+		"maintenance-export-diagnostic": "B34"
 	};
 	var lookup = (table, key) => {
 		return table[key] ?? "";
@@ -20944,7 +20945,7 @@
 	var exportReview = (state) => ({
 		format: "misakaweb-optimization-review",
 		schemaVersion: 1,
-		scriptVersion: "0.1.4.6",
+		scriptVersion: "0.1.4.7",
 		catalogVersion: REVIEW_CATALOG_VERSION,
 		upstreamCommit: REVIEW_SOURCE_COMMIT,
 		exportedAt: new Date().toISOString(),
@@ -21112,6 +21113,175 @@
 			};
 		}
 	});
+	var object = (v) => Boolean(v) && typeof v === "object" && !Array.isArray(v);
+	var exactKeys = (v, keys) => {
+		if (Object.keys(v).some((k) => !keys.includes(k))) throw new Error("Diagnostic contains unsupported fields; raw storage/HTML/network dumps are not accepted.");
+	};
+	var safeToken = (v, max = 120) => typeof v === "string" && v.length <= max && /^[\w.\- :#>[\]="']*$/.test(v);
+	var strings = (v, max) => Array.isArray(v) && v.length <= max && v.every((x) => typeof x === "string" && /^[a-zA-Z_][\w-]{0,79}$/.test(x));
+	var validateEvidence = (value) => {
+		if (!object(value)) throw new Error("Expected structural diagnostic object.");
+		exactKeys(value, [
+			"format",
+			"schemaVersion",
+			"scriptVersion",
+			"capturedAt",
+			"pageType",
+			"site",
+			"scope",
+			"probes"
+		]);
+		if (value.format !== "misakaweb-structural-diagnostic" || value.schemaVersion !== 1 || value.scope !== "structure-only; no text, URLs, storage, cookies or account data") throw new Error("Unsupported diagnostic format.");
+		if (typeof value.scriptVersion !== "string" || !/^\d+(\.\d+){2,3}$/.test(value.scriptVersion)) throw new Error("Invalid script version.");
+		if (typeof value.capturedAt !== "string" || !/^\d{4}-\d\d-\d\dT[\d:.]+Z$/.test(value.capturedAt) || !Number.isFinite(Date.parse(value.capturedAt))) throw new Error("Invalid capture date.");
+		if (!safeToken(value.pageType, 40) || typeof value.site !== "string" || !/^(?:[a-z0-9-]+\.)*bilibili\.com$/.test(value.site)) throw new Error("Invalid diagnostic page metadata.");
+		if (!Array.isArray(value.probes) || value.probes.length > 40) throw new Error("Invalid diagnostic probes.");
+		const ids = new Set();
+		for (const probe of value.probes) {
+			if (!object(probe)) throw new Error("Invalid probe.");
+			exactKeys(probe, [
+				"id",
+				"selector",
+				"count",
+				"samples"
+			]);
+			if (!safeToken(probe.id, 80) || !safeToken(probe.selector, 180) || !Number.isInteger(probe.count) || Number(probe.count) < 0 || Number(probe.count) > 1e5 || !Array.isArray(probe.samples) || probe.samples.length > 3) throw new Error("Invalid structural probe.");
+			if (ids.has(probe.id) || probe.samples.length > Number(probe.count)) throw new Error("Inconsistent structural probe.");
+			ids.add(probe.id);
+			for (const sample of probe.samples) {
+				if (!object(sample)) throw new Error("Invalid sample.");
+				exactKeys(sample, [
+					"tag",
+					"classes",
+					"visible",
+					"rect",
+					"childTags",
+					"childClasses",
+					"shadowRoot",
+					"parentTag",
+					"parentClasses",
+					"parentIsBody",
+					"attributeNames"
+				]);
+				if (!safeToken(sample.tag, 60) || !strings(sample.classes, 12) || !strings(sample.childTags, 12) || !Array.isArray(sample.childClasses) || sample.childClasses.length > 12 || !sample.childClasses.every((v) => strings(v, 12)) || typeof sample.visible !== "boolean" || typeof sample.shadowRoot !== "boolean" || !object(sample.rect)) throw new Error("Invalid structural sample.");
+				exactKeys(sample.rect, [
+					"x",
+					"y",
+					"width",
+					"height"
+				]);
+				const rect = sample.rect;
+				if (![
+					"x",
+					"y",
+					"width",
+					"height"
+				].every((k) => typeof rect[k] === "number" && Number.isFinite(rect[k]) && Math.abs(Number(rect[k])) < 1e6)) throw new Error("Invalid rectangle.");
+				if (Number(rect.width) < 0 || Number(rect.height) < 0 || sample.childTags.length !== sample.childClasses.length) throw new Error("Inconsistent structural sample.");
+				if (sample.parentTag !== void 0 && !safeToken(sample.parentTag, 60)) throw new Error("Invalid parent tag.");
+				if (sample.parentClasses !== void 0 && !strings(sample.parentClasses, 12)) throw new Error("Invalid parent classes.");
+				if (sample.parentIsBody !== void 0 && typeof sample.parentIsBody !== "boolean") throw new Error("Invalid parent location.");
+				if (sample.attributeNames !== void 0 && !strings(sample.attributeNames, 32)) throw new Error("Invalid attribute names.");
+			}
+		}
+		return value;
+	};
+	var pageType = () => {
+		return [
+			["homepage", isPageHomepage],
+			["video", isPageVideo],
+			["live", isPageLive],
+			["bangumi", isPageBangumi],
+			["dynamic", isPageDynamic],
+			["space", isPageSpace],
+			["search", isPageSearch],
+			["popular", isPagePopular],
+			["channel", isPageChannel],
+			["playlist", isPagePlaylist],
+			["festival", isPageFestival],
+			["watchlater", isPageWatchlater],
+			["message", isPageMessage]
+		].find(([, check]) => check())?.[0] ?? "unknown";
+	};
+	var classes = (el) => el ? [...el.classList].filter((c) => /^[a-zA-Z_][\w-]{0,79}$/.test(c)).slice(0, 12) : [];
+	var sample = (el) => {
+		const rect = el.getBoundingClientRect();
+		const style = getComputedStyle(el);
+		const children = [...el.children].slice(0, 12);
+		const round = (v) => Math.round(v * 10) / 10;
+		return {
+			tag: el.tagName.toLowerCase(),
+			classes: classes(el),
+			visible: rect.width > 0 && rect.height > 0 && style.display !== "none" && style.visibility !== "hidden" && style.opacity !== "0",
+			rect: {
+				x: round(rect.x),
+				y: round(rect.y),
+				width: round(rect.width),
+				height: round(rect.height)
+			},
+			childTags: children.map((c) => c.tagName.toLowerCase()),
+			childClasses: children.map(classes),
+			shadowRoot: Boolean(el.shadowRoot),
+			parentTag: el.parentElement?.tagName.toLowerCase() ?? "",
+			parentClasses: classes(el.parentElement),
+			parentIsBody: el.parentElement === document.body,
+			attributeNames: el.getAttributeNames().filter((n) => /^[\w-]{1,80}$/.test(n)).slice(0, 32)
+		};
+	};
+	var collectMaintenanceDiagnostic = () => {
+		const probes = [
+			["search-form", "#nav-searchform"],
+			["search-button", "#nav-searchform .nav-search-btn"],
+			["search-wrapper", ".center-search__bar"],
+			["search-panel", ".search-panel"],
+			["search-history", ".search-panel .history"],
+			["search-trending", ".search-panel .trending"],
+			["search-suggestions", ".search-panel .suggestions"],
+			["shortcut-portal", "#bili-cleaner-shortcut-host"],
+			["video-card", ".bili-video-card"],
+			["feed-card", ".feed-card"],
+			["filtered-elements", "[bili-cleaner-hide]"],
+			["player", ".bpx-player-container"],
+			["video-element", "video"],
+			["comment-host", "bili-comments"]
+		].map(([id, selector]) => {
+			const found = document.querySelectorAll(selector);
+			return {
+				id,
+				selector,
+				count: Math.min(found.length, 1e5),
+				samples: [...found].slice(0, 3).map(sample)
+			};
+		});
+		const threads = (document.querySelector("bili-comments")?.shadowRoot)?.querySelectorAll("bili-comment-thread-renderer");
+		probes.push({
+			id: "comment-shadow-threads",
+			selector: "bili-comments::shadow bili-comment-thread-renderer",
+			count: Math.min(threads?.length ?? 0, 1e5),
+			samples: [...threads ?? []].slice(0, 3).map(sample)
+		});
+		return validateEvidence({
+			format: "misakaweb-structural-diagnostic",
+			schemaVersion: 1,
+			scriptVersion: "0.1.4.7",
+			capturedAt: new Date().toISOString(),
+			pageType: pageType(),
+			site: location.hostname,
+			scope: "structure-only; no text, URLs, storage, cookies or account data",
+			probes
+		});
+	};
+	var downloadMaintenanceDiagnostic = () => {
+		const evidence = collectMaintenanceDiagnostic();
+		const url = URL.createObjectURL(new Blob([JSON.stringify(evidence, null, 2)], { type: "application/json;charset=utf-8" }));
+		const anchor = document.createElement("a");
+		anchor.href = url;
+		anchor.download = `misakaweb-maintenance-${evidence.pageType}-${evidence.capturedAt.slice(0, 10)}.json`;
+		document.body.append(anchor);
+		anchor.click();
+		anchor.remove();
+		setTimeout(() => URL.revokeObjectURL(url), 1e4);
+	};
 	var _hoisted_1$4 = {
 		key: 0,
 		class: "mb-3 rounded-lg border border-blue-200 bg-blue-50 p-2 text-sm text-gray-800",
@@ -21132,35 +21302,40 @@
 	var _hoisted_7$1 = ["disabled"];
 	var _hoisted_8$1 = {
 		key: 0,
+		role: "alert",
+		class: "mb-2 text-red-700"
+	};
+	var _hoisted_9$1 = {
+		key: 1,
 		class: "mt-2 block"
 	};
-	var _hoisted_9$1 = ["value"];
-	var _hoisted_10$1 = {
-		key: 1,
+	var _hoisted_10$1 = ["value"];
+	var _hoisted_11 = {
+		key: 2,
 		class: "mt-2 flex items-center gap-2"
 	};
-	var _hoisted_11 = { class: "mt-2" };
-	var _hoisted_12 = { class: "mt-1" };
-	var _hoisted_13 = {
-		key: 2,
-		role: "alert",
-		class: "mt-2 text-red-700"
-	};
+	var _hoisted_12 = { class: "mt-2" };
+	var _hoisted_13 = { class: "mt-1" };
 	var _hoisted_14 = {
 		key: 3,
 		role: "alert",
 		class: "mt-2 text-red-700"
 	};
 	var _hoisted_15 = {
+		key: 4,
+		role: "alert",
+		class: "mt-2 text-red-700"
+	};
+	var _hoisted_16 = {
 		key: 1,
 		"data-review-catalog": ""
 	};
-	var _hoisted_16 = {
+	var _hoisted_17 = {
 		key: 0,
 		class: "mt-1 text-xs font-bold text-blue-700"
 	};
-	var _hoisted_17 = { class: "mt-1 text-xs text-gray-500" };
-	var _hoisted_18 = {
+	var _hoisted_18 = { class: "mt-1 text-xs text-gray-500" };
+	var _hoisted_19 = {
 		key: 3,
 		class: "p-4 text-sm text-gray-600"
 	};
@@ -21177,6 +21352,15 @@
 			const scope = (0, vue.ref)("page");
 			const query = (0, vue.ref)("");
 			const onlyMarked = (0, vue.ref)(false);
+			const diagnosticError = (0, vue.ref)("");
+			const exportDiagnostic = () => {
+				diagnosticError.value = "";
+				try {
+					downloadMaintenanceDiagnostic();
+				} catch {
+					diagnosticError.value = "诊断导出失败，请重试。不会导出设置、名单或账号数据。";
+				}
+			};
 			const packFilter = (0, vue.ref)("");
 			const tabs = [
 				{
@@ -21278,7 +21462,7 @@
 				}, { onClose: (0, vue.unref)(store).hide }), {
 					default: (0, vue.withCtx)(() => [
 						(0, vue.unref)(review) ? ((0, vue.openBlock)(), (0, vue.createElementBlock)("div", _hoisted_1$4, [
-							_cache[14] || (_cache[14] = (0, vue.createElementVNode)("p", null, "净化全部保留。标记只记录取舍，不影响当前功能开关；未标记的优化仍待定。", -1)),
+							_cache[15] || (_cache[15] = (0, vue.createElementVNode)("p", null, "净化全部保留。标记只记录取舍，不影响当前功能开关；未标记的优化仍待定。", -1)),
 							(0, vue.createElementVNode)("div", _hoisted_2$2, [((0, vue.openBlock)(), (0, vue.createElementBlock)(vue.Fragment, null, (0, vue.renderList)(tabs, (tab) => {
 								return (0, vue.createElementVNode)("button", {
 									key: tab.key,
@@ -21309,6 +21493,12 @@
 									onClick: _cache[2] || (_cache[2] = (...args) => (0, vue.unref)(review).download && (0, vue.unref)(review).download(...args))
 								}, [(0, vue.createVNode)(Badge_default, { code: (0, vue.unref)(actionLabel)("review-export") }, null, 8, ["code"]), _cache[10] || (_cache[10] = (0, vue.createTextVNode)("导出取舍反馈 ", -1))], 8, _hoisted_7$1)
 							]),
+							(0, vue.createElementVNode)("button", {
+								type: "button",
+								class: "mb-2 rounded border border-gray-400 bg-white px-2 py-1",
+								onClick: exportDiagnostic
+							}, [(0, vue.createVNode)(Badge_default, { code: (0, vue.unref)(actionLabel)("maintenance-export-diagnostic") }, null, 8, ["code"]), _cache[11] || (_cache[11] = (0, vue.createTextVNode)("导出维护诊断 ", -1))]),
+							diagnosticError.value ? ((0, vue.openBlock)(), (0, vue.createElementBlock)("p", _hoisted_8$1, (0, vue.toDisplayString)(diagnosticError.value), 1)) : (0, vue.createCommentVNode)("", true),
 							(0, vue.withDirectives)((0, vue.createElementVNode)("input", {
 								"onUpdate:modelValue": _cache[3] || (_cache[3] = ($event) => query.value = $event),
 								type: "search",
@@ -21317,38 +21507,38 @@
 								onKeydown: _cache[4] || (_cache[4] = (0, vue.withModifiers)(() => {}, ["stop"])),
 								class: "w-full rounded border border-gray-400 bg-white px-2 py-1"
 							}, null, 544), [[vue.vModelText, query.value]]),
-							category.value === "optimization" ? ((0, vue.openBlock)(), (0, vue.createElementBlock)("label", _hoisted_8$1, [
+							category.value === "optimization" ? ((0, vue.openBlock)(), (0, vue.createElementBlock)("label", _hoisted_9$1, [
 								(0, vue.createVNode)(Badge_default, { code: (0, vue.unref)(actionLabel)("review-pack-filter") }, null, 8, ["code"]),
-								_cache[12] || (_cache[12] = (0, vue.createTextVNode)("优化功能组 ", -1)),
+								_cache[13] || (_cache[13] = (0, vue.createTextVNode)("优化功能组 ", -1)),
 								(0, vue.withDirectives)((0, vue.createElementVNode)("select", {
 									"onUpdate:modelValue": _cache[5] || (_cache[5] = ($event) => packFilter.value = $event),
 									"aria-label": "优化功能组",
 									class: "ml-2 rounded border border-gray-400 bg-white px-2 py-1",
 									onKeydown: _cache[6] || (_cache[6] = (0, vue.withModifiers)(() => {}, ["stop"]))
-								}, [_cache[11] || (_cache[11] = (0, vue.createElementVNode)("option", { value: "" }, "全部功能组", -1)), ((0, vue.openBlock)(true), (0, vue.createElementBlock)(vue.Fragment, null, (0, vue.renderList)(packOptions.value, (pack) => {
+								}, [_cache[12] || (_cache[12] = (0, vue.createElementVNode)("option", { value: "" }, "全部功能组", -1)), ((0, vue.openBlock)(true), (0, vue.createElementBlock)(vue.Fragment, null, (0, vue.renderList)(packOptions.value, (pack) => {
 									return (0, vue.openBlock)(), (0, vue.createElementBlock)("option", {
 										key: pack.id,
 										value: pack.id
-									}, (0, vue.toDisplayString)(pack.label) + "（" + (0, vue.toDisplayString)(pack.count) + "）", 9, _hoisted_9$1);
+									}, (0, vue.toDisplayString)(pack.label) + "（" + (0, vue.toDisplayString)(pack.count) + "）", 9, _hoisted_10$1);
 								}), 128))], 544), [[vue.vModelSelect, packFilter.value]])
 							])) : (0, vue.createCommentVNode)("", true),
-							category.value === "optimization" ? ((0, vue.openBlock)(), (0, vue.createElementBlock)("label", _hoisted_10$1, [(0, vue.withDirectives)((0, vue.createElementVNode)("input", {
+							category.value === "optimization" ? ((0, vue.openBlock)(), (0, vue.createElementBlock)("label", _hoisted_11, [(0, vue.withDirectives)((0, vue.createElementVNode)("input", {
 								"onUpdate:modelValue": _cache[7] || (_cache[7] = ($event) => onlyMarked.value = $event),
 								type: "checkbox"
-							}, null, 512), [[vue.vModelCheckbox, onlyMarked.value]]), _cache[13] || (_cache[13] = (0, vue.createTextVNode)("只看已标记删除", -1))])) : (0, vue.createCommentVNode)("", true),
-							(0, vue.createElementVNode)("p", _hoisted_11, (0, vue.toDisplayString)(scope.value === "all" ? "全站清单用于集中取舍；切回当前页面可操作原功能设置。" : "这里保留原功能开关，可边测试效果边标记。"), 1),
-							(0, vue.createElementVNode)("p", _hoisted_12, "已标记删除 " + (0, vue.toDisplayString)(markedCount.value) + " 项；同一配置跨页面共用标记。", 1),
-							(0, vue.unref)(review).readOnly.value ? ((0, vue.openBlock)(), (0, vue.createElementBlock)("p", _hoisted_13, "标记格式无法读取，已停止写入，请使用支持该格式的版本。")) : (0, vue.createCommentVNode)("", true),
-							(0, vue.unref)(review).error.value ? ((0, vue.openBlock)(), (0, vue.createElementBlock)("p", _hoisted_14, (0, vue.toDisplayString)((0, vue.unref)(review).error.value), 1)) : (0, vue.createCommentVNode)("", true)
+							}, null, 512), [[vue.vModelCheckbox, onlyMarked.value]]), _cache[14] || (_cache[14] = (0, vue.createTextVNode)("只看已标记删除", -1))])) : (0, vue.createCommentVNode)("", true),
+							(0, vue.createElementVNode)("p", _hoisted_12, (0, vue.toDisplayString)(scope.value === "all" ? "全站清单用于集中取舍；切回当前页面可操作原功能设置。" : "这里保留原功能开关，可边测试效果边标记。"), 1),
+							(0, vue.createElementVNode)("p", _hoisted_13, "已标记删除 " + (0, vue.toDisplayString)(markedCount.value) + " 项；同一配置跨页面共用标记。", 1),
+							(0, vue.unref)(review).readOnly.value ? ((0, vue.openBlock)(), (0, vue.createElementBlock)("p", _hoisted_14, "标记格式无法读取，已停止写入，请使用支持该格式的版本。")) : (0, vue.createCommentVNode)("", true),
+							(0, vue.unref)(review).error.value ? ((0, vue.openBlock)(), (0, vue.createElementBlock)("p", _hoisted_15, (0, vue.toDisplayString)((0, vue.unref)(review).error.value), 1)) : (0, vue.createCommentVNode)("", true)
 						])) : (0, vue.createCommentVNode)("", true),
-						(0, vue.unref)(review) && scope.value === "all" ? ((0, vue.openBlock)(), (0, vue.createElementBlock)("div", _hoisted_15, [((0, vue.openBlock)(true), (0, vue.createElementBlock)(vue.Fragment, null, (0, vue.renderList)(visibleEntries.value, (entry) => {
+						(0, vue.unref)(review) && scope.value === "all" ? ((0, vue.openBlock)(), (0, vue.createElementBlock)("div", _hoisted_16, [((0, vue.openBlock)(true), (0, vue.createElementBlock)(vue.Fragment, null, (0, vue.renderList)(visibleEntries.value, (entry) => {
 							return (0, vue.openBlock)(), (0, vue.createElementBlock)("div", {
 								key: entry.key,
 								class: "mb-3 rounded border border-gray-200 p-2 text-sm text-gray-800"
 							}, [
 								(0, vue.createElementVNode)("div", null, [(0, vue.createVNode)(Badge_default, { code: entry.id }, null, 8, ["code"]), (0, vue.createTextVNode)((0, vue.toDisplayString)(entry.names.join(" / ")), 1)]),
-								entry.packLabel ? ((0, vue.openBlock)(), (0, vue.createElementBlock)("p", _hoisted_16, "功能组：" + (0, vue.toDisplayString)(entry.packLabel), 1)) : (0, vue.createCommentVNode)("", true),
-								(0, vue.createElementVNode)("p", _hoisted_17, (0, vue.toDisplayString)(entry.pages.map(pageName).join("、")) + " · " + (0, vue.toDisplayString)(entry.groups.join(" / ")), 1),
+								entry.packLabel ? ((0, vue.openBlock)(), (0, vue.createElementBlock)("p", _hoisted_17, "功能组：" + (0, vue.toDisplayString)(entry.packLabel), 1)) : (0, vue.createCommentVNode)("", true),
+								(0, vue.createElementVNode)("p", _hoisted_18, (0, vue.toDisplayString)(entry.pages.map(pageName).join("、")) + " · " + (0, vue.toDisplayString)(entry.groups.join(" / ")), 1),
 								(0, vue.createVNode)(OptimizationReviewRow_default, {
 									entry,
 									store: (0, vue.unref)(review)
@@ -21408,7 +21598,7 @@
 							}), 128))]),
 							_: 1
 						})) : (0, vue.createCommentVNode)("", true)], 64)),
-						(0, vue.unref)(review) && !visibleEntries.value.length ? ((0, vue.openBlock)(), (0, vue.createElementBlock)("p", _hoisted_18, "当前类别或搜索没有匹配项。可切换全站清单或清空搜索。")) : (0, vue.createCommentVNode)("", true),
+						(0, vue.unref)(review) && !visibleEntries.value.length ? ((0, vue.openBlock)(), (0, vue.createElementBlock)("p", _hoisted_19, "当前类别或搜索没有匹配项。可切换全站清单或清空搜索。")) : (0, vue.createCommentVNode)("", true),
 						(0, vue.createVNode)(EditorDialog_default, {
 							ref_key: "editorDialogRef",
 							ref: editorDialogRef

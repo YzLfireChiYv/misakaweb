@@ -1,0 +1,3380 @@
+{
+  "schemaVersion": 1,
+  "modules": [
+    {
+      "id": "runtime",
+      "label": "运行与页面生命周期",
+      "paths": [
+        "src/main.ts",
+        "src/App.vue",
+        "src/modules/index.ts",
+        "src/utils/pageType.ts",
+        "src/utils/init.ts",
+        "src/utils/fetch.ts"
+      ],
+      "recommended_checks": [
+        "pnpm exec vue-tsc -b",
+        "pnpm test",
+        "pnpm build:feedback",
+        "pnpm test:search",
+        "node tests/shortcut-playwright.mjs"
+      ],
+      "live_verification": "Required on affected page with actual complete script; passing unit/build alone is insufficient."
+    },
+    {
+      "id": "shortcut",
+      "label": "顶栏与悬浮快捷入口",
+      "paths": [
+        "src/modules/shortcut/",
+        "src/views/HeaderShortcutView.vue",
+        "src/views/SideBtnView.vue",
+        "src/views/ShortcutSettingsPanelView.vue"
+      ],
+      "recommended_checks": [
+        "pnpm exec vue-tsc -b",
+        "pnpm test",
+        "pnpm build:feedback",
+        "pnpm test:search",
+        "node tests/shortcut-playwright.mjs"
+      ],
+      "live_verification": "Required on affected page with actual complete script; passing unit/build alone is insufficient."
+    },
+    {
+      "id": "settings-ui",
+      "label": "设置面板与窗口",
+      "paths": [
+        "src/components/",
+        "src/views/",
+        "src/stores/",
+        "src/feedback/",
+        "src/utils/panelGeometry.ts"
+      ],
+      "recommended_checks": [
+        "pnpm exec vue-tsc -b",
+        "pnpm test",
+        "pnpm build:feedback"
+      ],
+      "live_verification": "Required on affected page with actual complete script; passing unit/build alone is insufficient."
+    },
+    {
+      "id": "diagnostics",
+      "label": "只读维护诊断",
+      "paths": [
+        "src/modules/maintenance/"
+      ],
+      "recommended_checks": [
+        "pnpm exec vue-tsc -b",
+        "pnpm test",
+        "pnpm build:feedback"
+      ],
+      "live_verification": "Required on affected page with actual complete script; passing unit/build alone is insufficient."
+    },
+    {
+      "id": "filter-core",
+      "label": "过滤引擎",
+      "paths": [
+        "src/modules/filters/core/",
+        "src/modules/filters/index.ts"
+      ],
+      "recommended_checks": [
+        "pnpm exec vue-tsc -b",
+        "pnpm test",
+        "pnpm build:feedback"
+      ],
+      "live_verification": "Required on affected page with actual complete script; passing unit/build alone is insufficient."
+    },
+    {
+      "id": "video-filter",
+      "label": "视频过滤",
+      "paths": [
+        "src/modules/filters/variety/video/"
+      ],
+      "recommended_checks": [
+        "pnpm exec vue-tsc -b",
+        "pnpm test",
+        "pnpm build:feedback"
+      ],
+      "live_verification": "Required on affected page with actual complete script; passing unit/build alone is insufficient."
+    },
+    {
+      "id": "comment-filter",
+      "label": "评论过滤",
+      "paths": [
+        "src/modules/filters/variety/comment/"
+      ],
+      "recommended_checks": [
+        "pnpm exec vue-tsc -b",
+        "pnpm test",
+        "pnpm build:feedback"
+      ],
+      "live_verification": "Required on affected page with actual complete script; passing unit/build alone is insufficient."
+    },
+    {
+      "id": "dynamic-filter",
+      "label": "动态过滤",
+      "paths": [
+        "src/modules/filters/variety/dynamic/"
+      ],
+      "recommended_checks": [
+        "pnpm exec vue-tsc -b",
+        "pnpm test",
+        "pnpm build:feedback"
+      ],
+      "live_verification": "Required on affected page with actual complete script; passing unit/build alone is insufficient."
+    },
+    {
+      "id": "article-filter",
+      "label": "专栏过滤",
+      "paths": [
+        "src/modules/filters/variety/article/"
+      ],
+      "recommended_checks": [
+        "pnpm exec vue-tsc -b",
+        "pnpm test",
+        "pnpm build:feedback"
+      ],
+      "live_verification": "Required on affected page with actual complete script; passing unit/build alone is insufficient."
+    },
+    {
+      "id": "data-sync",
+      "label": "规则导入与现有WebDAV",
+      "paths": [
+        "src/modules/filters/rulePack.ts",
+        "src/modules/filters/ruleSync.ts",
+        "src/modules/filters/webdavProbe.ts",
+        "src/utils/storage.ts"
+      ],
+      "recommended_checks": [
+        "pnpm exec vue-tsc -b",
+        "pnpm test",
+        "pnpm build:feedback"
+      ],
+      "live_verification": "Required on affected page with actual complete script; passing unit/build alone is insufficient."
+    },
+    {
+      "id": "utilities",
+      "label": "共用工具与类型",
+      "paths": [
+        "src/utils/",
+        "src/types/",
+        "src/composables/",
+        "src/config/"
+      ],
+      "recommended_checks": [
+        "pnpm exec vue-tsc -b",
+        "pnpm test",
+        "pnpm build:feedback"
+      ],
+      "live_verification": "Required on affected page with actual complete script; passing unit/build alone is insufficient."
+    },
+    {
+      "id": "rules-bangumi",
+      "label": "bangumi页面净化与现有优化",
+      "paths": [
+        "src/modules/rules/bangumi/"
+      ],
+      "recommended_checks": [
+        "pnpm exec vue-tsc -b",
+        "pnpm test",
+        "pnpm build:feedback"
+      ],
+      "live_verification": "Required on affected page with actual complete script; passing unit/build alone is insufficient."
+    },
+    {
+      "id": "rules-channel",
+      "label": "channel页面净化与现有优化",
+      "paths": [
+        "src/modules/rules/channel/"
+      ],
+      "recommended_checks": [
+        "pnpm exec vue-tsc -b",
+        "pnpm test",
+        "pnpm build:feedback"
+      ],
+      "live_verification": "Required on affected page with actual complete script; passing unit/build alone is insufficient."
+    },
+    {
+      "id": "rules-comment",
+      "label": "comment页面净化与现有优化",
+      "paths": [
+        "src/modules/rules/comment/"
+      ],
+      "recommended_checks": [
+        "pnpm exec vue-tsc -b",
+        "pnpm test",
+        "pnpm build:feedback"
+      ],
+      "live_verification": "Required on affected page with actual complete script; passing unit/build alone is insufficient."
+    },
+    {
+      "id": "rules-common",
+      "label": "common页面净化与现有优化",
+      "paths": [
+        "src/modules/rules/common/"
+      ],
+      "recommended_checks": [
+        "pnpm exec vue-tsc -b",
+        "pnpm test",
+        "pnpm build:feedback",
+        "pnpm test:search",
+        "node tests/shortcut-playwright.mjs"
+      ],
+      "live_verification": "Required on affected page with actual complete script; passing unit/build alone is insufficient."
+    },
+    {
+      "id": "rules-debug",
+      "label": "debug页面净化与现有优化",
+      "paths": [
+        "src/modules/rules/debug/"
+      ],
+      "recommended_checks": [
+        "pnpm exec vue-tsc -b",
+        "pnpm test",
+        "pnpm build:feedback"
+      ],
+      "live_verification": "Required on affected page with actual complete script; passing unit/build alone is insufficient."
+    },
+    {
+      "id": "rules-dynamic",
+      "label": "dynamic页面净化与现有优化",
+      "paths": [
+        "src/modules/rules/dynamic/"
+      ],
+      "recommended_checks": [
+        "pnpm exec vue-tsc -b",
+        "pnpm test",
+        "pnpm build:feedback"
+      ],
+      "live_verification": "Required on affected page with actual complete script; passing unit/build alone is insufficient."
+    },
+    {
+      "id": "rules-festival",
+      "label": "festival页面净化与现有优化",
+      "paths": [
+        "src/modules/rules/festival/"
+      ],
+      "recommended_checks": [
+        "pnpm exec vue-tsc -b",
+        "pnpm test",
+        "pnpm build:feedback"
+      ],
+      "live_verification": "Required on affected page with actual complete script; passing unit/build alone is insufficient."
+    },
+    {
+      "id": "rules-homepage",
+      "label": "homepage页面净化与现有优化",
+      "paths": [
+        "src/modules/rules/homepage/"
+      ],
+      "recommended_checks": [
+        "pnpm exec vue-tsc -b",
+        "pnpm test",
+        "pnpm build:feedback"
+      ],
+      "live_verification": "Required on affected page with actual complete script; passing unit/build alone is insufficient."
+    },
+    {
+      "id": "rules-live",
+      "label": "live页面净化与现有优化",
+      "paths": [
+        "src/modules/rules/live/"
+      ],
+      "recommended_checks": [
+        "pnpm exec vue-tsc -b",
+        "pnpm test",
+        "pnpm build:feedback"
+      ],
+      "live_verification": "Required on affected page with actual complete script; passing unit/build alone is insufficient."
+    },
+    {
+      "id": "rules-popular",
+      "label": "popular页面净化与现有优化",
+      "paths": [
+        "src/modules/rules/popular/"
+      ],
+      "recommended_checks": [
+        "pnpm exec vue-tsc -b",
+        "pnpm test",
+        "pnpm build:feedback"
+      ],
+      "live_verification": "Required on affected page with actual complete script; passing unit/build alone is insufficient."
+    },
+    {
+      "id": "rules-search",
+      "label": "search页面净化与现有优化",
+      "paths": [
+        "src/modules/rules/search/"
+      ],
+      "recommended_checks": [
+        "pnpm exec vue-tsc -b",
+        "pnpm test",
+        "pnpm build:feedback"
+      ],
+      "live_verification": "Required on affected page with actual complete script; passing unit/build alone is insufficient."
+    },
+    {
+      "id": "rules-space",
+      "label": "space页面净化与现有优化",
+      "paths": [
+        "src/modules/rules/space/"
+      ],
+      "recommended_checks": [
+        "pnpm exec vue-tsc -b",
+        "pnpm test",
+        "pnpm build:feedback"
+      ],
+      "live_verification": "Required on affected page with actual complete script; passing unit/build alone is insufficient."
+    },
+    {
+      "id": "rules-video",
+      "label": "video页面净化与现有优化",
+      "paths": [
+        "src/modules/rules/video/"
+      ],
+      "recommended_checks": [
+        "pnpm exec vue-tsc -b",
+        "pnpm test",
+        "pnpm build:feedback"
+      ],
+      "live_verification": "Required on affected page with actual complete script; passing unit/build alone is insufficient."
+    },
+    {
+      "id": "rules-watchlater",
+      "label": "watchlater页面净化与现有优化",
+      "paths": [
+        "src/modules/rules/watchlater/"
+      ],
+      "recommended_checks": [
+        "pnpm exec vue-tsc -b",
+        "pnpm test",
+        "pnpm build:feedback"
+      ],
+      "live_verification": "Required on affected page with actual complete script; passing unit/build alone is insufficient."
+    },
+    {
+      "id": "rules-registration",
+      "label": "页面规则注册与样式",
+      "paths": [
+        "src/modules/rules/index.ts"
+      ],
+      "recommended_checks": [
+        "pnpm exec vue-tsc -b",
+        "pnpm test",
+        "pnpm build:feedback"
+      ],
+      "live_verification": "Required on affected page with actual complete script; passing unit/build alone is insufficient."
+    }
+  ],
+  "sources": [
+    {
+      "id": "cleaner",
+      "repository": "https://github.com/festoney8/bilibili-cleaner",
+      "commit": "15d9bced793487a8c4b0f9e1f7f67c7ccf6f3da9",
+      "relationship": "copied baseline with local changes; compare patches rather than replacing whole files"
+    },
+    {
+      "id": "evolved",
+      "repository": "https://github.com/the1812/Bilibili-Evolved",
+      "commit": "fa06dcec095dbccaba82f50ae2318c8d61c26671",
+      "relationship": "reference/candidate only; touch gestures not integrated",
+      "candidate_paths": [
+        "registry/lib/components/touch/player-gestures",
+        "src/components/utils/comment-apis.ts",
+        "src/components/video/player-agent"
+      ]
+    }
+  ],
+  "files": [
+    {
+      "file": "src/App.vue",
+      "modules": [
+        "runtime"
+      ],
+      "provenance": "matching-path-in-fixed-baseline",
+      "upstream": {
+        "source": "cleaner",
+        "path": "src/App.vue",
+        "normalized_sha256": "5673ae0a1e3bb0990b342fbae63e47cb2303498dd238319c812f604cb33366c2"
+      }
+    },
+    {
+      "file": "src/components/DisclosureComp.vue",
+      "modules": [
+        "settings-ui"
+      ],
+      "provenance": "matching-path-in-fixed-baseline",
+      "upstream": {
+        "source": "cleaner",
+        "path": "src/components/DisclosureComp.vue",
+        "normalized_sha256": "60f417c2e25db9d73ad54b0c799e281cd737c66ab40fe1fc9d24791006572114"
+      }
+    },
+    {
+      "file": "src/components/EditorDialog.vue",
+      "modules": [
+        "settings-ui"
+      ],
+      "provenance": "matching-path-in-fixed-baseline",
+      "upstream": {
+        "source": "cleaner",
+        "path": "src/components/EditorDialog.vue",
+        "normalized_sha256": "6ba9fd5885f127d46891f9bd1afe1ad811661e23dc2276a966638dfab7510cff"
+      }
+    },
+    {
+      "file": "src/components/PanelComp.vue",
+      "modules": [
+        "settings-ui"
+      ],
+      "provenance": "matching-path-in-fixed-baseline",
+      "upstream": {
+        "source": "cleaner",
+        "path": "src/components/PanelComp.vue",
+        "normalized_sha256": "bf5f49ac35591071be2f33dfb2d5de6e7be609876067455f9fa8d7b7cb0cbe5c"
+      }
+    },
+    {
+      "file": "src/components/items/DescriptionComp.vue",
+      "modules": [
+        "settings-ui"
+      ],
+      "provenance": "matching-path-in-fixed-baseline",
+      "upstream": {
+        "source": "cleaner",
+        "path": "src/components/items/DescriptionComp.vue",
+        "normalized_sha256": "793c5ff8fe6ccbf30f3cd498bcf0a4db949d423a33a680f247a5049bc7ee9d76"
+      }
+    },
+    {
+      "file": "src/components/items/EditorComp.vue",
+      "modules": [
+        "settings-ui"
+      ],
+      "provenance": "matching-path-in-fixed-baseline",
+      "upstream": {
+        "source": "cleaner",
+        "path": "src/components/items/EditorComp.vue",
+        "normalized_sha256": "5eeed8f48391ef8f591e30a5887e2e1947da0a9cd24500c2522b479e3233bed7"
+      }
+    },
+    {
+      "file": "src/components/items/ListComp.vue",
+      "modules": [
+        "settings-ui"
+      ],
+      "provenance": "matching-path-in-fixed-baseline",
+      "upstream": {
+        "source": "cleaner",
+        "path": "src/components/items/ListComp.vue",
+        "normalized_sha256": "4f4fd088ccd854150bba03ad21d68523da0e07f9febc0562f57adec7fc937a19"
+      }
+    },
+    {
+      "file": "src/components/items/NumberComp.vue",
+      "modules": [
+        "settings-ui"
+      ],
+      "provenance": "matching-path-in-fixed-baseline",
+      "upstream": {
+        "source": "cleaner",
+        "path": "src/components/items/NumberComp.vue",
+        "normalized_sha256": "ff053925f84247fa59dd2193f1c5a378951bdb329185a8b01f4fa4f2d0e70735"
+      }
+    },
+    {
+      "file": "src/components/items/StringComp.vue",
+      "modules": [
+        "settings-ui"
+      ],
+      "provenance": "matching-path-in-fixed-baseline",
+      "upstream": {
+        "source": "cleaner",
+        "path": "src/components/items/StringComp.vue",
+        "normalized_sha256": "02b857d37af8caf06329a96a63b02ec2b53fc383c40cc48b32cf4a2877f54ed8"
+      }
+    },
+    {
+      "file": "src/components/items/SwitchComp.vue",
+      "modules": [
+        "settings-ui"
+      ],
+      "provenance": "matching-path-in-fixed-baseline",
+      "upstream": {
+        "source": "cleaner",
+        "path": "src/components/items/SwitchComp.vue",
+        "normalized_sha256": "07d1265fc1d7bb3df89fe68f3188a7786543363cb835d48ceba6aa38e7af2c2d"
+      }
+    },
+    {
+      "file": "src/components/items/WebdavComp.vue",
+      "modules": [
+        "settings-ui"
+      ],
+      "provenance": "no-matching-path-in-fixed-baseline; authorship-unverified",
+      "upstream": null
+    },
+    {
+      "file": "src/composables/gmValue.ts",
+      "modules": [
+        "utilities"
+      ],
+      "provenance": "matching-path-in-fixed-baseline",
+      "upstream": {
+        "source": "cleaner",
+        "path": "src/composables/gmValue.ts",
+        "normalized_sha256": "8752d0f1a5eaf50d964c30443811ac2f1a2ed4c4e4f2c443ebfc32a82f8479b6"
+      }
+    },
+    {
+      "file": "src/config.ts",
+      "modules": [],
+      "provenance": "matching-path-in-fixed-baseline",
+      "upstream": {
+        "source": "cleaner",
+        "path": "src/config.ts",
+        "normalized_sha256": "cf2355c64ccdd1b972a8b47f87c1e08f677225909dca50ee8603d2782adc949d"
+      }
+    },
+    {
+      "file": "src/feedback/Badge.vue",
+      "modules": [
+        "settings-ui"
+      ],
+      "provenance": "own-confirmed",
+      "upstream": null
+    },
+    {
+      "file": "src/feedback/OptimizationReviewRow.vue",
+      "modules": [
+        "settings-ui"
+      ],
+      "provenance": "own-confirmed",
+      "upstream": null
+    },
+    {
+      "file": "src/feedback/context-actions.ts",
+      "modules": [
+        "settings-ui"
+      ],
+      "provenance": "own-confirmed",
+      "upstream": null
+    },
+    {
+      "file": "src/feedback/control-map.json",
+      "modules": [
+        "settings-ui"
+      ],
+      "provenance": "own-confirmed",
+      "upstream": null
+    },
+    {
+      "file": "src/feedback/enabled.ts",
+      "modules": [
+        "settings-ui"
+      ],
+      "provenance": "own-confirmed",
+      "upstream": null
+    },
+    {
+      "file": "src/feedback/fixed-controls.json",
+      "modules": [
+        "settings-ui"
+      ],
+      "provenance": "own-confirmed",
+      "upstream": null
+    },
+    {
+      "file": "src/feedback/id-index.empty.ts",
+      "modules": [
+        "settings-ui"
+      ],
+      "provenance": "own-confirmed",
+      "upstream": null
+    },
+    {
+      "file": "src/feedback/id-index.generated.ts",
+      "modules": [
+        "settings-ui"
+      ],
+      "provenance": "own-confirmed",
+      "upstream": null
+    },
+    {
+      "file": "src/feedback/index.ts",
+      "modules": [
+        "settings-ui"
+      ],
+      "provenance": "own-confirmed",
+      "upstream": null
+    },
+    {
+      "file": "src/feedback/review-catalog.empty.ts",
+      "modules": [
+        "settings-ui"
+      ],
+      "provenance": "own-confirmed",
+      "upstream": null
+    },
+    {
+      "file": "src/feedback/review-catalog.generated.ts",
+      "modules": [
+        "settings-ui"
+      ],
+      "provenance": "own-confirmed",
+      "upstream": null
+    },
+    {
+      "file": "src/feedback/review-store.ts",
+      "modules": [
+        "settings-ui"
+      ],
+      "provenance": "own-confirmed",
+      "upstream": null
+    },
+    {
+      "file": "src/feedback/review-types.ts",
+      "modules": [
+        "settings-ui"
+      ],
+      "provenance": "own-confirmed",
+      "upstream": null
+    },
+    {
+      "file": "src/main.ts",
+      "modules": [
+        "runtime"
+      ],
+      "provenance": "matching-path-in-fixed-baseline",
+      "upstream": {
+        "source": "cleaner",
+        "path": "src/main.ts",
+        "normalized_sha256": "5516e156c9eb44ee0e8bc824b5f5d88f42c1f878098b9b747e85c58e6ca983d9"
+      }
+    },
+    {
+      "file": "src/modules/filters/core/core.ts",
+      "modules": [
+        "filter-core"
+      ],
+      "provenance": "matching-path-in-fixed-baseline",
+      "upstream": {
+        "source": "cleaner",
+        "path": "src/modules/filters/core/core.ts",
+        "normalized_sha256": "2eb9f54abaee253658d37f168d0378d6143a618f006043d1201b2452545192e5"
+      }
+    },
+    {
+      "file": "src/modules/filters/core/subFilters/booleanFilter.ts",
+      "modules": [
+        "filter-core"
+      ],
+      "provenance": "matching-path-in-fixed-baseline",
+      "upstream": {
+        "source": "cleaner",
+        "path": "src/modules/filters/core/subFilters/booleanFilter.ts",
+        "normalized_sha256": "4e1df512ea3c8510d3d3e2b65855bda9a25b28adaae827c0b3855e0524693134"
+      }
+    },
+    {
+      "file": "src/modules/filters/core/subFilters/keywordFilter.ts",
+      "modules": [
+        "filter-core"
+      ],
+      "provenance": "matching-path-in-fixed-baseline",
+      "upstream": {
+        "source": "cleaner",
+        "path": "src/modules/filters/core/subFilters/keywordFilter.ts",
+        "normalized_sha256": "b303b75748007d44a8aae2710b2bd32a021a170f7ca0062f4afbe2282183b767"
+      }
+    },
+    {
+      "file": "src/modules/filters/core/subFilters/numberMaxFilter.ts",
+      "modules": [
+        "filter-core"
+      ],
+      "provenance": "matching-path-in-fixed-baseline",
+      "upstream": {
+        "source": "cleaner",
+        "path": "src/modules/filters/core/subFilters/numberMaxFilter.ts",
+        "normalized_sha256": "6bfef27413593e0ee3e82dcd20405f4c0a18b8a3bc6e0f783586e8aca31819fd"
+      }
+    },
+    {
+      "file": "src/modules/filters/core/subFilters/numberMinFilter.ts",
+      "modules": [
+        "filter-core"
+      ],
+      "provenance": "matching-path-in-fixed-baseline",
+      "upstream": {
+        "source": "cleaner",
+        "path": "src/modules/filters/core/subFilters/numberMinFilter.ts",
+        "normalized_sha256": "eed6ff47d8b52bc23da95444493df817fb55a49a04e5634562e9c9f8d4a886ae"
+      }
+    },
+    {
+      "file": "src/modules/filters/core/subFilters/stringFilter.ts",
+      "modules": [
+        "filter-core"
+      ],
+      "provenance": "matching-path-in-fixed-baseline",
+      "upstream": {
+        "source": "cleaner",
+        "path": "src/modules/filters/core/subFilters/stringFilter.ts",
+        "normalized_sha256": "d75fba3b76b4dedf8167405e1df1dba417dceb358d36960d3d48c50332bb70f4"
+      }
+    },
+    {
+      "file": "src/modules/filters/index.ts",
+      "modules": [
+        "filter-core"
+      ],
+      "provenance": "matching-path-in-fixed-baseline",
+      "upstream": {
+        "source": "cleaner",
+        "path": "src/modules/filters/index.ts",
+        "normalized_sha256": "334da94cb08425bed2dbd5a1511dd971b1eb2e02b73c0a422e325132c6fe2a0e"
+      }
+    },
+    {
+      "file": "src/modules/filters/rulePack.ts",
+      "modules": [
+        "data-sync"
+      ],
+      "provenance": "no-matching-path-in-fixed-baseline; authorship-unverified",
+      "upstream": null
+    },
+    {
+      "file": "src/modules/filters/ruleSync.ts",
+      "modules": [
+        "data-sync"
+      ],
+      "provenance": "no-matching-path-in-fixed-baseline; authorship-unverified",
+      "upstream": null
+    },
+    {
+      "file": "src/modules/filters/variety/article/index.ts",
+      "modules": [
+        "article-filter"
+      ],
+      "provenance": "matching-path-in-fixed-baseline",
+      "upstream": {
+        "source": "cleaner",
+        "path": "src/modules/filters/variety/article/index.ts",
+        "normalized_sha256": "8491f92315aa23b736b229c9b87f69dbeafb605ef41b8984bf481f99cad0e870"
+      }
+    },
+    {
+      "file": "src/modules/filters/variety/article/pages/searchArticle.ts",
+      "modules": [
+        "article-filter"
+      ],
+      "provenance": "matching-path-in-fixed-baseline",
+      "upstream": {
+        "source": "cleaner",
+        "path": "src/modules/filters/variety/article/pages/searchArticle.ts",
+        "normalized_sha256": "fd3ec514a832f6ddaf3ce245a2c8b13f247f291a1c73eaa6d0df1540d82b0a88"
+      }
+    },
+    {
+      "file": "src/modules/filters/variety/article/subFilters/black.ts",
+      "modules": [
+        "article-filter"
+      ],
+      "provenance": "matching-path-in-fixed-baseline",
+      "upstream": {
+        "source": "cleaner",
+        "path": "src/modules/filters/variety/article/subFilters/black.ts",
+        "normalized_sha256": "6d72e810854028f2d1cc4f964368aa9ce635bc082bf3443eb6cb8a80153bd968"
+      }
+    },
+    {
+      "file": "src/modules/filters/variety/article/subFilters/white.ts",
+      "modules": [
+        "article-filter"
+      ],
+      "provenance": "matching-path-in-fixed-baseline",
+      "upstream": {
+        "source": "cleaner",
+        "path": "src/modules/filters/variety/article/subFilters/white.ts",
+        "normalized_sha256": "784ca6692da92feb7807cde4a8c9b656f85f312cce6d2a73c039e6288a4162ef"
+      }
+    },
+    {
+      "file": "src/modules/filters/variety/comment/extra/bots.ts",
+      "modules": [
+        "comment-filter"
+      ],
+      "provenance": "matching-path-in-fixed-baseline",
+      "upstream": {
+        "source": "cleaner",
+        "path": "src/modules/filters/variety/comment/extra/bots.ts",
+        "normalized_sha256": "38f7221b6601c0cd749437080635812023fba7fa2e24dd8b11538d0e746967b4"
+      }
+    },
+    {
+      "file": "src/modules/filters/variety/comment/pages/common.ts",
+      "modules": [
+        "comment-filter"
+      ],
+      "provenance": "matching-path-in-fixed-baseline",
+      "upstream": {
+        "source": "cleaner",
+        "path": "src/modules/filters/variety/comment/pages/common.ts",
+        "normalized_sha256": "b5e97cddc1a810a1ca2d0f54157a04d0dad29bd39679e26a813aca6c887eee3c"
+      }
+    },
+    {
+      "file": "src/modules/filters/variety/comment/subFilters/black.ts",
+      "modules": [
+        "comment-filter"
+      ],
+      "provenance": "matching-path-in-fixed-baseline",
+      "upstream": {
+        "source": "cleaner",
+        "path": "src/modules/filters/variety/comment/subFilters/black.ts",
+        "normalized_sha256": "617f3ecb05a5b9f30776cdafe0730e853c4732b283ef3b96f5a886e75ca6cc51"
+      }
+    },
+    {
+      "file": "src/modules/filters/variety/comment/subFilters/white.ts",
+      "modules": [
+        "comment-filter"
+      ],
+      "provenance": "matching-path-in-fixed-baseline",
+      "upstream": {
+        "source": "cleaner",
+        "path": "src/modules/filters/variety/comment/subFilters/white.ts",
+        "normalized_sha256": "9ea4cab57be646678e80314d8dbf42993d717b446ab11fe339050b7b3ce48aa2"
+      }
+    },
+    {
+      "file": "src/modules/filters/variety/dynamic/pages/dynamic.ts",
+      "modules": [
+        "dynamic-filter"
+      ],
+      "provenance": "matching-path-in-fixed-baseline",
+      "upstream": {
+        "source": "cleaner",
+        "path": "src/modules/filters/variety/dynamic/pages/dynamic.ts",
+        "normalized_sha256": "c584da5d79cd39ebf3b9e8f7d524645f998594e709b13b6f637fc2f4df2d8788"
+      }
+    },
+    {
+      "file": "src/modules/filters/variety/dynamic/pages/header.ts",
+      "modules": [
+        "dynamic-filter"
+      ],
+      "provenance": "matching-path-in-fixed-baseline",
+      "upstream": {
+        "source": "cleaner",
+        "path": "src/modules/filters/variety/dynamic/pages/header.ts",
+        "normalized_sha256": "f2734a27cdc5375eba2e2f863a8ccbb7e72debcdbf1c5b8de8c1a9358d8a50da"
+      }
+    },
+    {
+      "file": "src/modules/filters/variety/dynamic/pages/space.ts",
+      "modules": [
+        "dynamic-filter"
+      ],
+      "provenance": "matching-path-in-fixed-baseline",
+      "upstream": {
+        "source": "cleaner",
+        "path": "src/modules/filters/variety/dynamic/pages/space.ts",
+        "normalized_sha256": "b353512638328c17d1614af252d0df8786eb6453cba72def9f297a1cfbb18c2e"
+      }
+    },
+    {
+      "file": "src/modules/filters/variety/dynamic/subFilters/black.ts",
+      "modules": [
+        "dynamic-filter"
+      ],
+      "provenance": "matching-path-in-fixed-baseline",
+      "upstream": {
+        "source": "cleaner",
+        "path": "src/modules/filters/variety/dynamic/subFilters/black.ts",
+        "normalized_sha256": "f0e03c75a4e7b6add3c3fe6973f8a49a4e904e0d3e213e05e3e6f2c59e8ee90e"
+      }
+    },
+    {
+      "file": "src/modules/filters/variety/dynamic/subFilters/white.ts",
+      "modules": [
+        "dynamic-filter"
+      ],
+      "provenance": "matching-path-in-fixed-baseline",
+      "upstream": {
+        "source": "cleaner",
+        "path": "src/modules/filters/variety/dynamic/subFilters/white.ts",
+        "normalized_sha256": "864855712386630bba8e60123912db822776edbb9fc11140b2d08794fb52ccd4"
+      }
+    },
+    {
+      "file": "src/modules/filters/variety/video/pages/channel.ts",
+      "modules": [
+        "video-filter"
+      ],
+      "provenance": "matching-path-in-fixed-baseline",
+      "upstream": {
+        "source": "cleaner",
+        "path": "src/modules/filters/variety/video/pages/channel.ts",
+        "normalized_sha256": "7eeacbefdee92c08d6a475d420bb0ca0f649499b2ee8b94c1aef31bc6b52d90a"
+      }
+    },
+    {
+      "file": "src/modules/filters/variety/video/pages/homepage.ts",
+      "modules": [
+        "video-filter"
+      ],
+      "provenance": "matching-path-in-fixed-baseline",
+      "upstream": {
+        "source": "cleaner",
+        "path": "src/modules/filters/variety/video/pages/homepage.ts",
+        "normalized_sha256": "9b69a556fec8a78c06e18411ba5b41a7c12397da5ae308af37c1cc1a883b1a56"
+      }
+    },
+    {
+      "file": "src/modules/filters/variety/video/pages/popular.ts",
+      "modules": [
+        "video-filter"
+      ],
+      "provenance": "matching-path-in-fixed-baseline",
+      "upstream": {
+        "source": "cleaner",
+        "path": "src/modules/filters/variety/video/pages/popular.ts",
+        "normalized_sha256": "2c146b5b02003b7a0c2009b28b7a874cf5dab8c78dfc2d3747dee3005447d71f"
+      }
+    },
+    {
+      "file": "src/modules/filters/variety/video/pages/search.ts",
+      "modules": [
+        "video-filter"
+      ],
+      "provenance": "matching-path-in-fixed-baseline",
+      "upstream": {
+        "source": "cleaner",
+        "path": "src/modules/filters/variety/video/pages/search.ts",
+        "normalized_sha256": "d1d5dd49e4f8e91668782b8c3301b2d044dab92d8a131c539012a1b7ad38e4c1"
+      }
+    },
+    {
+      "file": "src/modules/filters/variety/video/pages/space.ts",
+      "modules": [
+        "video-filter"
+      ],
+      "provenance": "matching-path-in-fixed-baseline",
+      "upstream": {
+        "source": "cleaner",
+        "path": "src/modules/filters/variety/video/pages/space.ts",
+        "normalized_sha256": "6a65b07e16fe415b9055d720f5883f7e0e58f279e9f30d2e9296829754b6a24c"
+      }
+    },
+    {
+      "file": "src/modules/filters/variety/video/pages/video.ts",
+      "modules": [
+        "video-filter"
+      ],
+      "provenance": "matching-path-in-fixed-baseline",
+      "upstream": {
+        "source": "cleaner",
+        "path": "src/modules/filters/variety/video/pages/video.ts",
+        "normalized_sha256": "f07f8034f211ea7e85158ecf32fbae638a33189721520d20b801f672776620d4"
+      }
+    },
+    {
+      "file": "src/modules/filters/variety/video/statGate.ts",
+      "modules": [
+        "video-filter"
+      ],
+      "provenance": "no-matching-path-in-fixed-baseline; authorship-unverified",
+      "upstream": null
+    },
+    {
+      "file": "src/modules/filters/variety/video/statRate.ts",
+      "modules": [
+        "video-filter"
+      ],
+      "provenance": "no-matching-path-in-fixed-baseline; authorship-unverified",
+      "upstream": null
+    },
+    {
+      "file": "src/modules/filters/variety/video/subFilters/black.ts",
+      "modules": [
+        "video-filter"
+      ],
+      "provenance": "matching-path-in-fixed-baseline",
+      "upstream": {
+        "source": "cleaner",
+        "path": "src/modules/filters/variety/video/subFilters/black.ts",
+        "normalized_sha256": "74a789cab0b0bd21b6a515c535753f0524d8b868714896c82766dc3e746c1618"
+      }
+    },
+    {
+      "file": "src/modules/filters/variety/video/subFilters/white.ts",
+      "modules": [
+        "video-filter"
+      ],
+      "provenance": "matching-path-in-fixed-baseline",
+      "upstream": {
+        "source": "cleaner",
+        "path": "src/modules/filters/variety/video/subFilters/white.ts",
+        "normalized_sha256": "44f5ab606f826c4cf7d45377412a59dcab1efc50f74f68642b4e9dea4c932a3e"
+      }
+    },
+    {
+      "file": "src/modules/filters/variety/video/viewStat.ts",
+      "modules": [
+        "video-filter"
+      ],
+      "provenance": "no-matching-path-in-fixed-baseline; authorship-unverified",
+      "upstream": null
+    },
+    {
+      "file": "src/modules/filters/webdavProbe.ts",
+      "modules": [
+        "data-sync"
+      ],
+      "provenance": "no-matching-path-in-fixed-baseline; authorship-unverified",
+      "upstream": null
+    },
+    {
+      "file": "src/modules/index.ts",
+      "modules": [
+        "runtime"
+      ],
+      "provenance": "matching-path-in-fixed-baseline",
+      "upstream": {
+        "source": "cleaner",
+        "path": "src/modules/index.ts",
+        "normalized_sha256": "3b03f70be607c46d3a55c7b5308bfa718174d16c7d8f7a6001c4969c8d9b4ee7"
+      }
+    },
+    {
+      "file": "src/modules/maintenance/diagnostics.ts",
+      "modules": [
+        "diagnostics"
+      ],
+      "provenance": "own-confirmed",
+      "upstream": null
+    },
+    {
+      "file": "src/modules/maintenance/evidence.ts",
+      "modules": [
+        "diagnostics"
+      ],
+      "provenance": "own-confirmed",
+      "upstream": null
+    },
+    {
+      "file": "src/modules/rules/bangumi/groups/basic.scss",
+      "modules": [
+        "rules-bangumi"
+      ],
+      "provenance": "matching-path-in-fixed-baseline",
+      "upstream": {
+        "source": "cleaner",
+        "path": "src/modules/rules/bangumi/groups/basic.scss",
+        "normalized_sha256": "d8f4dccf6687111dd3c6d29a2928ae9cecdcd670b8569ae2c84a6d009634d6ce"
+      }
+    },
+    {
+      "file": "src/modules/rules/bangumi/groups/basic.ts",
+      "modules": [
+        "rules-bangumi"
+      ],
+      "provenance": "matching-path-in-fixed-baseline",
+      "upstream": {
+        "source": "cleaner",
+        "path": "src/modules/rules/bangumi/groups/basic.ts",
+        "normalized_sha256": "ece618f3f70aa9991e2938faf923e7a095533e92bdfe560a120405d233cdab61"
+      }
+    },
+    {
+      "file": "src/modules/rules/bangumi/groups/danmaku.scss",
+      "modules": [
+        "rules-bangumi"
+      ],
+      "provenance": "matching-path-in-fixed-baseline",
+      "upstream": {
+        "source": "cleaner",
+        "path": "src/modules/rules/bangumi/groups/danmaku.scss",
+        "normalized_sha256": "a1a03c7f891894d2d132e4e07dafa0b79589f9fadd993508ee6075b73138b0c1"
+      }
+    },
+    {
+      "file": "src/modules/rules/bangumi/groups/danmaku.ts",
+      "modules": [
+        "rules-bangumi"
+      ],
+      "provenance": "matching-path-in-fixed-baseline",
+      "upstream": {
+        "source": "cleaner",
+        "path": "src/modules/rules/bangumi/groups/danmaku.ts",
+        "normalized_sha256": "19c5dc91b4b5b46e9dce2e4227c137463a30ac5fccd48dcdb28035dd3b200f42"
+      }
+    },
+    {
+      "file": "src/modules/rules/bangumi/groups/danmakuControl.scss",
+      "modules": [
+        "rules-bangumi"
+      ],
+      "provenance": "matching-path-in-fixed-baseline",
+      "upstream": {
+        "source": "cleaner",
+        "path": "src/modules/rules/bangumi/groups/danmakuControl.scss",
+        "normalized_sha256": "ac939a1cc8af3a0338e488ce01b737b3740392c24d7c79bf1d1d9573339ac5df"
+      }
+    },
+    {
+      "file": "src/modules/rules/bangumi/groups/danmakuControl.ts",
+      "modules": [
+        "rules-bangumi"
+      ],
+      "provenance": "matching-path-in-fixed-baseline",
+      "upstream": {
+        "source": "cleaner",
+        "path": "src/modules/rules/bangumi/groups/danmakuControl.ts",
+        "normalized_sha256": "4137d5f3d5b863cf0d72c2f4ca18f8626d36f6bae4a97c1b209815eb84212357"
+      }
+    },
+    {
+      "file": "src/modules/rules/bangumi/groups/miniPlayer.scss",
+      "modules": [
+        "rules-bangumi"
+      ],
+      "provenance": "matching-path-in-fixed-baseline",
+      "upstream": {
+        "source": "cleaner",
+        "path": "src/modules/rules/bangumi/groups/miniPlayer.scss",
+        "normalized_sha256": "bdd421bbb1d19f1f2d2729fcab59d8bda9fed40ae1507694ce277bfdbf5084c7"
+      }
+    },
+    {
+      "file": "src/modules/rules/bangumi/groups/miniPlayer.ts",
+      "modules": [
+        "rules-bangumi"
+      ],
+      "provenance": "matching-path-in-fixed-baseline",
+      "upstream": {
+        "source": "cleaner",
+        "path": "src/modules/rules/bangumi/groups/miniPlayer.ts",
+        "normalized_sha256": "e5d441f5dd84ba64461e90f15d516d7e19e65febe6308554e6465b3f538aa79b"
+      }
+    },
+    {
+      "file": "src/modules/rules/bangumi/groups/player.scss",
+      "modules": [
+        "rules-bangumi"
+      ],
+      "provenance": "matching-path-in-fixed-baseline",
+      "upstream": {
+        "source": "cleaner",
+        "path": "src/modules/rules/bangumi/groups/player.scss",
+        "normalized_sha256": "6cd47ba95c09f18f1622efabeba815c75766cd60464e4f79d20470d60d3fcced"
+      }
+    },
+    {
+      "file": "src/modules/rules/bangumi/groups/player.ts",
+      "modules": [
+        "rules-bangumi"
+      ],
+      "provenance": "matching-path-in-fixed-baseline",
+      "upstream": {
+        "source": "cleaner",
+        "path": "src/modules/rules/bangumi/groups/player.ts",
+        "normalized_sha256": "478756b2379fab2be7318bed1c3ed29178dc04ff014c68ae5f77bc8c05318538"
+      }
+    },
+    {
+      "file": "src/modules/rules/bangumi/groups/playerControl.scss",
+      "modules": [
+        "rules-bangumi"
+      ],
+      "provenance": "matching-path-in-fixed-baseline",
+      "upstream": {
+        "source": "cleaner",
+        "path": "src/modules/rules/bangumi/groups/playerControl.scss",
+        "normalized_sha256": "007966af89db1103e9e6c8c530f123880e406c79113b9cf38f9100dcf25f97ff"
+      }
+    },
+    {
+      "file": "src/modules/rules/bangumi/groups/playerControl.ts",
+      "modules": [
+        "rules-bangumi"
+      ],
+      "provenance": "matching-path-in-fixed-baseline",
+      "upstream": {
+        "source": "cleaner",
+        "path": "src/modules/rules/bangumi/groups/playerControl.ts",
+        "normalized_sha256": "f1b80c4759478ca48423134122146aa0fc4684eac94fcb98ed6e5a454f3d842e"
+      }
+    },
+    {
+      "file": "src/modules/rules/bangumi/groups/playerLayout.scss",
+      "modules": [
+        "rules-bangumi"
+      ],
+      "provenance": "matching-path-in-fixed-baseline",
+      "upstream": {
+        "source": "cleaner",
+        "path": "src/modules/rules/bangumi/groups/playerLayout.scss",
+        "normalized_sha256": "94b90133cd3f8ff3dd8598f817cb8e83d6426c65685c687635240068439863b3"
+      }
+    },
+    {
+      "file": "src/modules/rules/bangumi/groups/playerLayout.ts",
+      "modules": [
+        "rules-bangumi"
+      ],
+      "provenance": "matching-path-in-fixed-baseline",
+      "upstream": {
+        "source": "cleaner",
+        "path": "src/modules/rules/bangumi/groups/playerLayout.ts",
+        "normalized_sha256": "1b3a415d7081feb2c58fec505a408e868edb2d757d2b463e1efbf3cebe1cf336"
+      }
+    },
+    {
+      "file": "src/modules/rules/bangumi/groups/right.scss",
+      "modules": [
+        "rules-bangumi"
+      ],
+      "provenance": "matching-path-in-fixed-baseline",
+      "upstream": {
+        "source": "cleaner",
+        "path": "src/modules/rules/bangumi/groups/right.scss",
+        "normalized_sha256": "c2a91203a9f60ce3450105e4e8ae5115cf9cf0827f0515bd272e132e88c1771b"
+      }
+    },
+    {
+      "file": "src/modules/rules/bangumi/groups/right.ts",
+      "modules": [
+        "rules-bangumi"
+      ],
+      "provenance": "matching-path-in-fixed-baseline",
+      "upstream": {
+        "source": "cleaner",
+        "path": "src/modules/rules/bangumi/groups/right.ts",
+        "normalized_sha256": "3bcfa3885da214055d9de5a3f0d40a59dede7b92c02f129207df1c545e2a6388"
+      }
+    },
+    {
+      "file": "src/modules/rules/bangumi/groups/sidebar.scss",
+      "modules": [
+        "rules-bangumi"
+      ],
+      "provenance": "matching-path-in-fixed-baseline",
+      "upstream": {
+        "source": "cleaner",
+        "path": "src/modules/rules/bangumi/groups/sidebar.scss",
+        "normalized_sha256": "b8e81921566f1d2a398b166239368ee2ef25465f71aac1ceb685f11e55eb9e6d"
+      }
+    },
+    {
+      "file": "src/modules/rules/bangumi/groups/sidebar.ts",
+      "modules": [
+        "rules-bangumi"
+      ],
+      "provenance": "matching-path-in-fixed-baseline",
+      "upstream": {
+        "source": "cleaner",
+        "path": "src/modules/rules/bangumi/groups/sidebar.ts",
+        "normalized_sha256": "2a931e5a82d4c052c22606d07c45d298f9a906dc3e4a6f246317db18936a1172"
+      }
+    },
+    {
+      "file": "src/modules/rules/bangumi/groups/toolbar.scss",
+      "modules": [
+        "rules-bangumi"
+      ],
+      "provenance": "matching-path-in-fixed-baseline",
+      "upstream": {
+        "source": "cleaner",
+        "path": "src/modules/rules/bangumi/groups/toolbar.scss",
+        "normalized_sha256": "4a38d2ed7f2626a103049a8917a17b094802ca1db87a990dff53caf71b62d5f5"
+      }
+    },
+    {
+      "file": "src/modules/rules/bangumi/groups/toolbar.ts",
+      "modules": [
+        "rules-bangumi"
+      ],
+      "provenance": "matching-path-in-fixed-baseline",
+      "upstream": {
+        "source": "cleaner",
+        "path": "src/modules/rules/bangumi/groups/toolbar.ts",
+        "normalized_sha256": "77f6bc861d3a15caaccccdaaadc20700ece1e464194151582953ce7c2985f847"
+      }
+    },
+    {
+      "file": "src/modules/rules/bangumi/index.scss",
+      "modules": [
+        "rules-bangumi"
+      ],
+      "provenance": "matching-path-in-fixed-baseline",
+      "upstream": {
+        "source": "cleaner",
+        "path": "src/modules/rules/bangumi/index.scss",
+        "normalized_sha256": "d96fd7ebeab4128f0c2f98a6586563e33d9bf11f8c7e43e5bf8f9d8104bc7c2b"
+      }
+    },
+    {
+      "file": "src/modules/rules/bangumi/index.ts",
+      "modules": [
+        "rules-bangumi"
+      ],
+      "provenance": "matching-path-in-fixed-baseline",
+      "upstream": {
+        "source": "cleaner",
+        "path": "src/modules/rules/bangumi/index.ts",
+        "normalized_sha256": "adf7d7e132170d530b1ce321f079fa4618039ac2165a672b39cc0e8ad2bc027d"
+      }
+    },
+    {
+      "file": "src/modules/rules/channel/groups/basic.scss",
+      "modules": [
+        "rules-channel"
+      ],
+      "provenance": "matching-path-in-fixed-baseline",
+      "upstream": {
+        "source": "cleaner",
+        "path": "src/modules/rules/channel/groups/basic.scss",
+        "normalized_sha256": "a5e85f171f5f4e0db552a1d3320d39c7dff46108a037604821b0413e9a392780"
+      }
+    },
+    {
+      "file": "src/modules/rules/channel/groups/basic.ts",
+      "modules": [
+        "rules-channel"
+      ],
+      "provenance": "matching-path-in-fixed-baseline",
+      "upstream": {
+        "source": "cleaner",
+        "path": "src/modules/rules/channel/groups/basic.ts",
+        "normalized_sha256": "517b6e595d24c0510ae58081e81668b211623588c12e210f6e6d5008cd650a33"
+      }
+    },
+    {
+      "file": "src/modules/rules/channel/groups/layout.scss",
+      "modules": [
+        "rules-channel"
+      ],
+      "provenance": "matching-path-in-fixed-baseline",
+      "upstream": {
+        "source": "cleaner",
+        "path": "src/modules/rules/channel/groups/layout.scss",
+        "normalized_sha256": "41ce91809c437d8d7891477dc510587c15ed1572983b249aef73a6a0bc1638d5"
+      }
+    },
+    {
+      "file": "src/modules/rules/channel/groups/layout.ts",
+      "modules": [
+        "rules-channel"
+      ],
+      "provenance": "matching-path-in-fixed-baseline",
+      "upstream": {
+        "source": "cleaner",
+        "path": "src/modules/rules/channel/groups/layout.ts",
+        "normalized_sha256": "632116afcf86ddadcb85e2e91b2b192ecbef1a67ecb370d59e2c083001ee6ba1"
+      }
+    },
+    {
+      "file": "src/modules/rules/channel/groups/rcmd.scss",
+      "modules": [
+        "rules-channel"
+      ],
+      "provenance": "matching-path-in-fixed-baseline",
+      "upstream": {
+        "source": "cleaner",
+        "path": "src/modules/rules/channel/groups/rcmd.scss",
+        "normalized_sha256": "18fe09191d6bb8dde9e383e2b1ecc20063ea1ce91f98ed630c76888825cce4ef"
+      }
+    },
+    {
+      "file": "src/modules/rules/channel/groups/rcmd.ts",
+      "modules": [
+        "rules-channel"
+      ],
+      "provenance": "matching-path-in-fixed-baseline",
+      "upstream": {
+        "source": "cleaner",
+        "path": "src/modules/rules/channel/groups/rcmd.ts",
+        "normalized_sha256": "ab2cb8d74dd24e9c349b741ba308fe0190f10b0439157ea0e2201b8856a1501d"
+      }
+    },
+    {
+      "file": "src/modules/rules/channel/index.scss",
+      "modules": [
+        "rules-channel"
+      ],
+      "provenance": "matching-path-in-fixed-baseline",
+      "upstream": {
+        "source": "cleaner",
+        "path": "src/modules/rules/channel/index.scss",
+        "normalized_sha256": "21ceab0344caf6c4d8b4b1b98e197b47e84aaa3844d24227694f5b7b6ab79b33"
+      }
+    },
+    {
+      "file": "src/modules/rules/channel/index.ts",
+      "modules": [
+        "rules-channel"
+      ],
+      "provenance": "matching-path-in-fixed-baseline",
+      "upstream": {
+        "source": "cleaner",
+        "path": "src/modules/rules/channel/index.ts",
+        "normalized_sha256": "98454a6aa961dd0a36322fccca7b96aa9db2eaf54fefad1a50c84ddda04b8adf"
+      }
+    },
+    {
+      "file": "src/modules/rules/comment/groups/basic.scss",
+      "modules": [
+        "rules-comment"
+      ],
+      "provenance": "matching-path-in-fixed-baseline",
+      "upstream": {
+        "source": "cleaner",
+        "path": "src/modules/rules/comment/groups/basic.scss",
+        "normalized_sha256": "abc2b46a2540f9886bc150ce5d1017b72219bc2b675228bea01c9408ec709020"
+      }
+    },
+    {
+      "file": "src/modules/rules/comment/groups/basic.ts",
+      "modules": [
+        "rules-comment"
+      ],
+      "provenance": "matching-path-in-fixed-baseline",
+      "upstream": {
+        "source": "cleaner",
+        "path": "src/modules/rules/comment/groups/basic.ts",
+        "normalized_sha256": "34526da2fb88bda7d5bf1256e5715f41fa9af01f465966c406cea5fc482b1c97"
+      }
+    },
+    {
+      "file": "src/modules/rules/comment/index.scss",
+      "modules": [
+        "rules-comment"
+      ],
+      "provenance": "matching-path-in-fixed-baseline",
+      "upstream": {
+        "source": "cleaner",
+        "path": "src/modules/rules/comment/index.scss",
+        "normalized_sha256": "3c05809f2fef1afeaeaac2221c06aabfc63b492fcca5e586a296c54767d5bc84"
+      }
+    },
+    {
+      "file": "src/modules/rules/comment/index.ts",
+      "modules": [
+        "rules-comment"
+      ],
+      "provenance": "matching-path-in-fixed-baseline",
+      "upstream": {
+        "source": "cleaner",
+        "path": "src/modules/rules/comment/index.ts",
+        "normalized_sha256": "5408d7d4cd74cb233396729721cd99ac171ddaadd61498df031d464c10a2920c"
+      }
+    },
+    {
+      "file": "src/modules/rules/common/groups/basic.scss",
+      "modules": [
+        "rules-common"
+      ],
+      "provenance": "matching-path-in-fixed-baseline",
+      "upstream": {
+        "source": "cleaner",
+        "path": "src/modules/rules/common/groups/basic.scss",
+        "normalized_sha256": "9e280ac4728379a62413959155cbf0f370124ca8254368cbf6206bff2f71f214"
+      }
+    },
+    {
+      "file": "src/modules/rules/common/groups/basic.ts",
+      "modules": [
+        "rules-common"
+      ],
+      "provenance": "matching-path-in-fixed-baseline",
+      "upstream": {
+        "source": "cleaner",
+        "path": "src/modules/rules/common/groups/basic.ts",
+        "normalized_sha256": "cd016ac2d595bf22e758ccf260fafeb35086eff2b27ace6da6cd88f098dc4e79"
+      }
+    },
+    {
+      "file": "src/modules/rules/common/groups/font.scss",
+      "modules": [
+        "rules-common"
+      ],
+      "provenance": "matching-path-in-fixed-baseline",
+      "upstream": {
+        "source": "cleaner",
+        "path": "src/modules/rules/common/groups/font.scss",
+        "normalized_sha256": "36a438a623f29743d3bf555ead283e0a11f7b2314b655815d6ae2b757dbdb020"
+      }
+    },
+    {
+      "file": "src/modules/rules/common/groups/headerCenter.scss",
+      "modules": [
+        "rules-common"
+      ],
+      "provenance": "matching-path-in-fixed-baseline",
+      "upstream": {
+        "source": "cleaner",
+        "path": "src/modules/rules/common/groups/headerCenter.scss",
+        "normalized_sha256": "ee5d1cf1d2480fc99cab108b28005b8455977ffc9bd0f03157e489663bfadf6a"
+      }
+    },
+    {
+      "file": "src/modules/rules/common/groups/headerCenter.ts",
+      "modules": [
+        "rules-common"
+      ],
+      "provenance": "matching-path-in-fixed-baseline",
+      "upstream": {
+        "source": "cleaner",
+        "path": "src/modules/rules/common/groups/headerCenter.ts",
+        "normalized_sha256": "5da7778f8768e074d36f93fd9fbaa01fd879e3123e292f80a5659f448021c818"
+      }
+    },
+    {
+      "file": "src/modules/rules/common/groups/headerLeft.scss",
+      "modules": [
+        "rules-common"
+      ],
+      "provenance": "matching-path-in-fixed-baseline",
+      "upstream": {
+        "source": "cleaner",
+        "path": "src/modules/rules/common/groups/headerLeft.scss",
+        "normalized_sha256": "9c7b51ac1331ea90c0a8419f735e83393592c02b1e13fe708776bb0e723570e1"
+      }
+    },
+    {
+      "file": "src/modules/rules/common/groups/headerLeft.ts",
+      "modules": [
+        "rules-common"
+      ],
+      "provenance": "matching-path-in-fixed-baseline",
+      "upstream": {
+        "source": "cleaner",
+        "path": "src/modules/rules/common/groups/headerLeft.ts",
+        "normalized_sha256": "cfaa782a728f7e2bc19915e885e18f7942d8ed9634e1976121a4a328da61411d"
+      }
+    },
+    {
+      "file": "src/modules/rules/common/groups/headerRight.scss",
+      "modules": [
+        "rules-common"
+      ],
+      "provenance": "matching-path-in-fixed-baseline",
+      "upstream": {
+        "source": "cleaner",
+        "path": "src/modules/rules/common/groups/headerRight.scss",
+        "normalized_sha256": "74fa71cad4c78c7c461487f9c6ba33d56c52a08f1506a0cbe40b152e81318a0c"
+      }
+    },
+    {
+      "file": "src/modules/rules/common/groups/headerRight.ts",
+      "modules": [
+        "rules-common"
+      ],
+      "provenance": "matching-path-in-fixed-baseline",
+      "upstream": {
+        "source": "cleaner",
+        "path": "src/modules/rules/common/groups/headerRight.ts",
+        "normalized_sha256": "3792794dc0c0205d4a755428e33def101ecaea664fd59197eb4c44a5461c04c2"
+      }
+    },
+    {
+      "file": "src/modules/rules/common/groups/headerWidth.scss",
+      "modules": [
+        "rules-common"
+      ],
+      "provenance": "matching-path-in-fixed-baseline",
+      "upstream": {
+        "source": "cleaner",
+        "path": "src/modules/rules/common/groups/headerWidth.scss",
+        "normalized_sha256": "bdcab4775e69ede98f0024906de83e6a5d402b6e3510096578f9fa1b929b60cd"
+      }
+    },
+    {
+      "file": "src/modules/rules/common/groups/headerWidth.ts",
+      "modules": [
+        "rules-common"
+      ],
+      "provenance": "matching-path-in-fixed-baseline",
+      "upstream": {
+        "source": "cleaner",
+        "path": "src/modules/rules/common/groups/headerWidth.ts",
+        "normalized_sha256": "d569bcb9af8c675aea66df9910c9b412e37cd046bd90d2474e6dbe0e26a33470"
+      }
+    },
+    {
+      "file": "src/modules/rules/common/groups/theme.scss",
+      "modules": [
+        "rules-common"
+      ],
+      "provenance": "matching-path-in-fixed-baseline",
+      "upstream": {
+        "source": "cleaner",
+        "path": "src/modules/rules/common/groups/theme.scss",
+        "normalized_sha256": "4c0b57e6679a5183a201e8a4dd1d23839e303daebaecce595c74a26a3d9dfcda"
+      }
+    },
+    {
+      "file": "src/modules/rules/common/groups/theme.ts",
+      "modules": [
+        "rules-common"
+      ],
+      "provenance": "matching-path-in-fixed-baseline",
+      "upstream": {
+        "source": "cleaner",
+        "path": "src/modules/rules/common/groups/theme.ts",
+        "normalized_sha256": "2e56877e7142e535365bd67b0b91cb2a4c2ca7ed104727a9329da06b48d8a230"
+      }
+    },
+    {
+      "file": "src/modules/rules/common/index.scss",
+      "modules": [
+        "rules-common"
+      ],
+      "provenance": "matching-path-in-fixed-baseline",
+      "upstream": {
+        "source": "cleaner",
+        "path": "src/modules/rules/common/index.scss",
+        "normalized_sha256": "34635b958f5809848a9b8c7aa250c066d5faaff831eaf6b592c62914b8856def"
+      }
+    },
+    {
+      "file": "src/modules/rules/common/index.ts",
+      "modules": [
+        "rules-common"
+      ],
+      "provenance": "matching-path-in-fixed-baseline",
+      "upstream": {
+        "source": "cleaner",
+        "path": "src/modules/rules/common/index.ts",
+        "normalized_sha256": "b82521b60324f0a6806dc06e5f9f1d6266eefeb68f8f14beeba42f93859c0755"
+      }
+    },
+    {
+      "file": "src/modules/rules/debug/groups/basic.ts",
+      "modules": [
+        "rules-debug"
+      ],
+      "provenance": "matching-path-in-fixed-baseline",
+      "upstream": {
+        "source": "cleaner",
+        "path": "src/modules/rules/debug/groups/basic.ts",
+        "normalized_sha256": "5c22825dd2676b8c3b75cc22c8506bbe4e238de73651aac83f29f0f8008a5bbd"
+      }
+    },
+    {
+      "file": "src/modules/rules/debug/index.ts",
+      "modules": [
+        "rules-debug"
+      ],
+      "provenance": "matching-path-in-fixed-baseline",
+      "upstream": {
+        "source": "cleaner",
+        "path": "src/modules/rules/debug/index.ts",
+        "normalized_sha256": "e8ce8882e1cd9a2719bc400a04b26dddf836bf0848ecc980a7fcd019aed79324"
+      }
+    },
+    {
+      "file": "src/modules/rules/dynamic/groups/basic.scss",
+      "modules": [
+        "rules-dynamic"
+      ],
+      "provenance": "matching-path-in-fixed-baseline",
+      "upstream": {
+        "source": "cleaner",
+        "path": "src/modules/rules/dynamic/groups/basic.scss",
+        "normalized_sha256": "7c52cf1e53c728d0fd89cd2db8bd4d0278780e8b4320bbe422aaee88610add33"
+      }
+    },
+    {
+      "file": "src/modules/rules/dynamic/groups/basic.ts",
+      "modules": [
+        "rules-dynamic"
+      ],
+      "provenance": "matching-path-in-fixed-baseline",
+      "upstream": {
+        "source": "cleaner",
+        "path": "src/modules/rules/dynamic/groups/basic.ts",
+        "normalized_sha256": "d3c1e0c32be86d04444076fe4442fe61be44a30a9b0bda8823742dd65cb5eb11"
+      }
+    },
+    {
+      "file": "src/modules/rules/dynamic/groups/centerDyn.scss",
+      "modules": [
+        "rules-dynamic"
+      ],
+      "provenance": "matching-path-in-fixed-baseline",
+      "upstream": {
+        "source": "cleaner",
+        "path": "src/modules/rules/dynamic/groups/centerDyn.scss",
+        "normalized_sha256": "e7bacf3dfa2b90dc53c06496e6fccc5c2fbfed18f00a6ec50e0b9a983b84f8ac"
+      }
+    },
+    {
+      "file": "src/modules/rules/dynamic/groups/centerDyn.ts",
+      "modules": [
+        "rules-dynamic"
+      ],
+      "provenance": "matching-path-in-fixed-baseline",
+      "upstream": {
+        "source": "cleaner",
+        "path": "src/modules/rules/dynamic/groups/centerDyn.ts",
+        "normalized_sha256": "9993d5ada7f2a86d4ccc70937369ef514720c31e72d86800505436e32145c05c"
+      }
+    },
+    {
+      "file": "src/modules/rules/dynamic/groups/centerTop.scss",
+      "modules": [
+        "rules-dynamic"
+      ],
+      "provenance": "matching-path-in-fixed-baseline",
+      "upstream": {
+        "source": "cleaner",
+        "path": "src/modules/rules/dynamic/groups/centerTop.scss",
+        "normalized_sha256": "bd4151596e058d56d07eb98195c80dbf4fd7d2b1806e63bf475541158b2b37bf"
+      }
+    },
+    {
+      "file": "src/modules/rules/dynamic/groups/centerTop.ts",
+      "modules": [
+        "rules-dynamic"
+      ],
+      "provenance": "matching-path-in-fixed-baseline",
+      "upstream": {
+        "source": "cleaner",
+        "path": "src/modules/rules/dynamic/groups/centerTop.ts",
+        "normalized_sha256": "050e2e42bfbc01932a9a646c18351df14200f3db24d5c8aced7db11b6e3725a9"
+      }
+    },
+    {
+      "file": "src/modules/rules/dynamic/groups/layout.scss",
+      "modules": [
+        "rules-dynamic"
+      ],
+      "provenance": "matching-path-in-fixed-baseline",
+      "upstream": {
+        "source": "cleaner",
+        "path": "src/modules/rules/dynamic/groups/layout.scss",
+        "normalized_sha256": "06979abb38ec7cf009c3cc524a1de474f2c758fb44bdccb00bbc0734c1a7870d"
+      }
+    },
+    {
+      "file": "src/modules/rules/dynamic/groups/layout.ts",
+      "modules": [
+        "rules-dynamic"
+      ],
+      "provenance": "matching-path-in-fixed-baseline",
+      "upstream": {
+        "source": "cleaner",
+        "path": "src/modules/rules/dynamic/groups/layout.ts",
+        "normalized_sha256": "783c75a19bdf19836267a3ff11763e88a84ea528971c7526386593622d6b438f"
+      }
+    },
+    {
+      "file": "src/modules/rules/dynamic/groups/left.scss",
+      "modules": [
+        "rules-dynamic"
+      ],
+      "provenance": "matching-path-in-fixed-baseline",
+      "upstream": {
+        "source": "cleaner",
+        "path": "src/modules/rules/dynamic/groups/left.scss",
+        "normalized_sha256": "4b2b3809bd08361ab1b09236cb6959a0429bdcf511a161b34f88722c4e0511ac"
+      }
+    },
+    {
+      "file": "src/modules/rules/dynamic/groups/left.ts",
+      "modules": [
+        "rules-dynamic"
+      ],
+      "provenance": "matching-path-in-fixed-baseline",
+      "upstream": {
+        "source": "cleaner",
+        "path": "src/modules/rules/dynamic/groups/left.ts",
+        "normalized_sha256": "992e12e5ba7e3198cb8d4c6bc553ecc803cad2c05e3a199bb6bebe0a96fccf70"
+      }
+    },
+    {
+      "file": "src/modules/rules/dynamic/groups/right.scss",
+      "modules": [
+        "rules-dynamic"
+      ],
+      "provenance": "matching-path-in-fixed-baseline",
+      "upstream": {
+        "source": "cleaner",
+        "path": "src/modules/rules/dynamic/groups/right.scss",
+        "normalized_sha256": "0b43ac1cac2d54a84d829018720aa022fd7765072e754b936f2e1a012e2ac0e8"
+      }
+    },
+    {
+      "file": "src/modules/rules/dynamic/groups/right.ts",
+      "modules": [
+        "rules-dynamic"
+      ],
+      "provenance": "matching-path-in-fixed-baseline",
+      "upstream": {
+        "source": "cleaner",
+        "path": "src/modules/rules/dynamic/groups/right.ts",
+        "normalized_sha256": "576430828c74f8cd6cc9c94caedd43911a3f67b9b33ff78d58efaebf0ebcf1bf"
+      }
+    },
+    {
+      "file": "src/modules/rules/dynamic/groups/sidebar.scss",
+      "modules": [
+        "rules-dynamic"
+      ],
+      "provenance": "matching-path-in-fixed-baseline",
+      "upstream": {
+        "source": "cleaner",
+        "path": "src/modules/rules/dynamic/groups/sidebar.scss",
+        "normalized_sha256": "dd21192afae82607f4eda7c325442782891721e96c96cb0883d54910728aa47a"
+      }
+    },
+    {
+      "file": "src/modules/rules/dynamic/groups/sidebar.ts",
+      "modules": [
+        "rules-dynamic"
+      ],
+      "provenance": "matching-path-in-fixed-baseline",
+      "upstream": {
+        "source": "cleaner",
+        "path": "src/modules/rules/dynamic/groups/sidebar.ts",
+        "normalized_sha256": "afb8bdfc2fc234ca0f687f1e1bcb9d290e2af091c2442be32a7a07dd6cb27e2e"
+      }
+    },
+    {
+      "file": "src/modules/rules/dynamic/index.scss",
+      "modules": [
+        "rules-dynamic"
+      ],
+      "provenance": "matching-path-in-fixed-baseline",
+      "upstream": {
+        "source": "cleaner",
+        "path": "src/modules/rules/dynamic/index.scss",
+        "normalized_sha256": "5a3dc75bc10f3e2db6a1709d0ef7911941afe251e74b57592510887e60be82f5"
+      }
+    },
+    {
+      "file": "src/modules/rules/dynamic/index.ts",
+      "modules": [
+        "rules-dynamic"
+      ],
+      "provenance": "matching-path-in-fixed-baseline",
+      "upstream": {
+        "source": "cleaner",
+        "path": "src/modules/rules/dynamic/index.ts",
+        "normalized_sha256": "e62dc530f3bb55f9028a8c3aa21698955ee259b839b3afc5ee666326e1355cc8"
+      }
+    },
+    {
+      "file": "src/modules/rules/festival/groups/danmaku.scss",
+      "modules": [
+        "rules-festival"
+      ],
+      "provenance": "matching-path-in-fixed-baseline",
+      "upstream": {
+        "source": "cleaner",
+        "path": "src/modules/rules/festival/groups/danmaku.scss",
+        "normalized_sha256": "4821e59351a4eaa4f80cbd430c0ef4ff0d92329965ec1ceffa64c613c4ba50ad"
+      }
+    },
+    {
+      "file": "src/modules/rules/festival/groups/danmaku.ts",
+      "modules": [
+        "rules-festival"
+      ],
+      "provenance": "matching-path-in-fixed-baseline",
+      "upstream": {
+        "source": "cleaner",
+        "path": "src/modules/rules/festival/groups/danmaku.ts",
+        "normalized_sha256": "aeb4f6c7ec272e7c5c1c62d0d0264bfa6319039a1d680ca139cec902627467ae"
+      }
+    },
+    {
+      "file": "src/modules/rules/festival/groups/danmakuControl.scss",
+      "modules": [
+        "rules-festival"
+      ],
+      "provenance": "matching-path-in-fixed-baseline",
+      "upstream": {
+        "source": "cleaner",
+        "path": "src/modules/rules/festival/groups/danmakuControl.scss",
+        "normalized_sha256": "0d9b85ff1deadafd565282e03ef382ea7ef8eed65779387f3c25eb020bed71d2"
+      }
+    },
+    {
+      "file": "src/modules/rules/festival/groups/danmakuControl.ts",
+      "modules": [
+        "rules-festival"
+      ],
+      "provenance": "matching-path-in-fixed-baseline",
+      "upstream": {
+        "source": "cleaner",
+        "path": "src/modules/rules/festival/groups/danmakuControl.ts",
+        "normalized_sha256": "e096532bce77b437672e102e046011536a0f5a36848b5d63dda7122c50f89aae"
+      }
+    },
+    {
+      "file": "src/modules/rules/festival/groups/player.scss",
+      "modules": [
+        "rules-festival"
+      ],
+      "provenance": "matching-path-in-fixed-baseline",
+      "upstream": {
+        "source": "cleaner",
+        "path": "src/modules/rules/festival/groups/player.scss",
+        "normalized_sha256": "568cbd82e1a980b0df019278866cab1937cf4222686315260136e46698a2e3c6"
+      }
+    },
+    {
+      "file": "src/modules/rules/festival/groups/player.ts",
+      "modules": [
+        "rules-festival"
+      ],
+      "provenance": "matching-path-in-fixed-baseline",
+      "upstream": {
+        "source": "cleaner",
+        "path": "src/modules/rules/festival/groups/player.ts",
+        "normalized_sha256": "aaecb9cd398dd03d928b570d47f1133fcdee83d42f23cbd3e4cd38577d671959"
+      }
+    },
+    {
+      "file": "src/modules/rules/festival/groups/playerControl.scss",
+      "modules": [
+        "rules-festival"
+      ],
+      "provenance": "matching-path-in-fixed-baseline",
+      "upstream": {
+        "source": "cleaner",
+        "path": "src/modules/rules/festival/groups/playerControl.scss",
+        "normalized_sha256": "15f7b7d20f743cc88de8c38f12cb334f081932afac3ad14fae11e52f2b80c756"
+      }
+    },
+    {
+      "file": "src/modules/rules/festival/groups/playerControl.ts",
+      "modules": [
+        "rules-festival"
+      ],
+      "provenance": "matching-path-in-fixed-baseline",
+      "upstream": {
+        "source": "cleaner",
+        "path": "src/modules/rules/festival/groups/playerControl.ts",
+        "normalized_sha256": "de3933e9b0625e04dae33835dc5d4b217c8d61e58fa47a04851c13ba179280df"
+      }
+    },
+    {
+      "file": "src/modules/rules/festival/groups/subtitle.scss",
+      "modules": [
+        "rules-festival"
+      ],
+      "provenance": "matching-path-in-fixed-baseline",
+      "upstream": {
+        "source": "cleaner",
+        "path": "src/modules/rules/festival/groups/subtitle.scss",
+        "normalized_sha256": "4d899288c64c213f3c8375a4247065dfb03e36d02720a8eb3883c7e69d61c383"
+      }
+    },
+    {
+      "file": "src/modules/rules/festival/groups/subtitle.ts",
+      "modules": [
+        "rules-festival"
+      ],
+      "provenance": "matching-path-in-fixed-baseline",
+      "upstream": {
+        "source": "cleaner",
+        "path": "src/modules/rules/festival/groups/subtitle.ts",
+        "normalized_sha256": "ade6e082dc71599d07a684a6330526cf370d0f5647ba760818d503ba940bb52e"
+      }
+    },
+    {
+      "file": "src/modules/rules/festival/index.scss",
+      "modules": [
+        "rules-festival"
+      ],
+      "provenance": "matching-path-in-fixed-baseline",
+      "upstream": {
+        "source": "cleaner",
+        "path": "src/modules/rules/festival/index.scss",
+        "normalized_sha256": "bbc2f456d50540206b12ef8dd65817fdcc7804b94e0e9463d350d4f6964d3bb3"
+      }
+    },
+    {
+      "file": "src/modules/rules/festival/index.ts",
+      "modules": [
+        "rules-festival"
+      ],
+      "provenance": "matching-path-in-fixed-baseline",
+      "upstream": {
+        "source": "cleaner",
+        "path": "src/modules/rules/festival/index.ts",
+        "normalized_sha256": "79a1521db5795f76c56181c63901bdff8945c1c48072d35e3a9f5aefcec2b078"
+      }
+    },
+    {
+      "file": "src/modules/rules/homepage/groups/basic.scss",
+      "modules": [
+        "rules-homepage"
+      ],
+      "provenance": "matching-path-in-fixed-baseline",
+      "upstream": {
+        "source": "cleaner",
+        "path": "src/modules/rules/homepage/groups/basic.scss",
+        "normalized_sha256": "abc414ad7e11d0d15e4a9edf419951e55943016a3359eed37733693e70ccf3bc"
+      }
+    },
+    {
+      "file": "src/modules/rules/homepage/groups/basic.ts",
+      "modules": [
+        "rules-homepage"
+      ],
+      "provenance": "matching-path-in-fixed-baseline",
+      "upstream": {
+        "source": "cleaner",
+        "path": "src/modules/rules/homepage/groups/basic.ts",
+        "normalized_sha256": "3bdbb5e1e4b78933eec31998335a6bf30d3876edebdb89eb826a45fa03d0fd84"
+      }
+    },
+    {
+      "file": "src/modules/rules/homepage/groups/layout.scss",
+      "modules": [
+        "rules-homepage"
+      ],
+      "provenance": "matching-path-in-fixed-baseline",
+      "upstream": {
+        "source": "cleaner",
+        "path": "src/modules/rules/homepage/groups/layout.scss",
+        "normalized_sha256": "0aef4f1cc7f77a9694c46f56034fc5724d5939f83f9284e9903b77de5754d571"
+      }
+    },
+    {
+      "file": "src/modules/rules/homepage/groups/layout.ts",
+      "modules": [
+        "rules-homepage"
+      ],
+      "provenance": "matching-path-in-fixed-baseline",
+      "upstream": {
+        "source": "cleaner",
+        "path": "src/modules/rules/homepage/groups/layout.ts",
+        "normalized_sha256": "0084cd58375f4be993b4acb06e273cecbf2b14c5e0ac883fcda9f3ca9bfaba89"
+      }
+    },
+    {
+      "file": "src/modules/rules/homepage/groups/rcmd.scss",
+      "modules": [
+        "rules-homepage"
+      ],
+      "provenance": "matching-path-in-fixed-baseline",
+      "upstream": {
+        "source": "cleaner",
+        "path": "src/modules/rules/homepage/groups/rcmd.scss",
+        "normalized_sha256": "31efb1f991be43722988cdad5c2f974c68689c535dc9241161940bdda37d64eb"
+      }
+    },
+    {
+      "file": "src/modules/rules/homepage/groups/rcmd.ts",
+      "modules": [
+        "rules-homepage"
+      ],
+      "provenance": "matching-path-in-fixed-baseline",
+      "upstream": {
+        "source": "cleaner",
+        "path": "src/modules/rules/homepage/groups/rcmd.ts",
+        "normalized_sha256": "d8d53842c2c31178dfc696aa0112439e11fe9a246a80e84326c421d5db9168a6"
+      }
+    },
+    {
+      "file": "src/modules/rules/homepage/groups/sidebar.scss",
+      "modules": [
+        "rules-homepage"
+      ],
+      "provenance": "matching-path-in-fixed-baseline",
+      "upstream": {
+        "source": "cleaner",
+        "path": "src/modules/rules/homepage/groups/sidebar.scss",
+        "normalized_sha256": "a9eb3c2300f04db489be53f01c52e27f03f622be91aa10a80923db92a1e26bde"
+      }
+    },
+    {
+      "file": "src/modules/rules/homepage/groups/sidebar.ts",
+      "modules": [
+        "rules-homepage"
+      ],
+      "provenance": "matching-path-in-fixed-baseline",
+      "upstream": {
+        "source": "cleaner",
+        "path": "src/modules/rules/homepage/groups/sidebar.ts",
+        "normalized_sha256": "2f6bd2781a1c32dfd7395b08931e928bdabcbcffe637b5fde941009c39d3d180"
+      }
+    },
+    {
+      "file": "src/modules/rules/homepage/index.scss",
+      "modules": [
+        "rules-homepage"
+      ],
+      "provenance": "matching-path-in-fixed-baseline",
+      "upstream": {
+        "source": "cleaner",
+        "path": "src/modules/rules/homepage/index.scss",
+        "normalized_sha256": "d34d7f8d7702099ade17c78548cbdeffc2c0dd3a4df52c5ef82e051d95bc6a65"
+      }
+    },
+    {
+      "file": "src/modules/rules/homepage/index.ts",
+      "modules": [
+        "rules-homepage"
+      ],
+      "provenance": "matching-path-in-fixed-baseline",
+      "upstream": {
+        "source": "cleaner",
+        "path": "src/modules/rules/homepage/index.ts",
+        "normalized_sha256": "60cc6cfa64e0334eb15aec7dafc80e4912d51f25e5e14f39294c3e2669668941"
+      }
+    },
+    {
+      "file": "src/modules/rules/index.ts",
+      "modules": [
+        "rules-registration"
+      ],
+      "provenance": "matching-path-in-fixed-baseline",
+      "upstream": {
+        "source": "cleaner",
+        "path": "src/modules/rules/index.ts",
+        "normalized_sha256": "11cec0c68d28d2c7a9310ef7906fa7bdf5d0dd7516e6f7f655f54fff21c72f20"
+      }
+    },
+    {
+      "file": "src/modules/rules/live/groups/basic.scss",
+      "modules": [
+        "rules-live"
+      ],
+      "provenance": "matching-path-in-fixed-baseline",
+      "upstream": {
+        "source": "cleaner",
+        "path": "src/modules/rules/live/groups/basic.scss",
+        "normalized_sha256": "32d0733cb80f6b127d98090cb58b71b96b8865d566c2693df20007a8a315c5a5"
+      }
+    },
+    {
+      "file": "src/modules/rules/live/groups/basic.ts",
+      "modules": [
+        "rules-live"
+      ],
+      "provenance": "matching-path-in-fixed-baseline",
+      "upstream": {
+        "source": "cleaner",
+        "path": "src/modules/rules/live/groups/basic.ts",
+        "normalized_sha256": "90d72230694aeda38b3b65725ab2654898f7a2c26cdbc8bc781a4ffef4de8765"
+      }
+    },
+    {
+      "file": "src/modules/rules/live/groups/below.scss",
+      "modules": [
+        "rules-live"
+      ],
+      "provenance": "matching-path-in-fixed-baseline",
+      "upstream": {
+        "source": "cleaner",
+        "path": "src/modules/rules/live/groups/below.scss",
+        "normalized_sha256": "dd986541470f9f86aab76d09360f5e6a3456145dfeb4a4cdf1c7b8ce54296c43"
+      }
+    },
+    {
+      "file": "src/modules/rules/live/groups/below.ts",
+      "modules": [
+        "rules-live"
+      ],
+      "provenance": "matching-path-in-fixed-baseline",
+      "upstream": {
+        "source": "cleaner",
+        "path": "src/modules/rules/live/groups/below.ts",
+        "normalized_sha256": "7eca578a0a7386aff56e997994170f05a40e6557e4856f2acdbe015096a06561"
+      }
+    },
+    {
+      "file": "src/modules/rules/live/groups/danmaku.scss",
+      "modules": [
+        "rules-live"
+      ],
+      "provenance": "matching-path-in-fixed-baseline",
+      "upstream": {
+        "source": "cleaner",
+        "path": "src/modules/rules/live/groups/danmaku.scss",
+        "normalized_sha256": "a1a03c7f891894d2d132e4e07dafa0b79589f9fadd993508ee6075b73138b0c1"
+      }
+    },
+    {
+      "file": "src/modules/rules/live/groups/danmaku.ts",
+      "modules": [
+        "rules-live"
+      ],
+      "provenance": "matching-path-in-fixed-baseline",
+      "upstream": {
+        "source": "cleaner",
+        "path": "src/modules/rules/live/groups/danmaku.ts",
+        "normalized_sha256": "6140230a054c9c4f5a557f77e63e549708feb1cc90afb364ecbcc054402b7a0b"
+      }
+    },
+    {
+      "file": "src/modules/rules/live/groups/headerCenter.scss",
+      "modules": [
+        "rules-live"
+      ],
+      "provenance": "matching-path-in-fixed-baseline",
+      "upstream": {
+        "source": "cleaner",
+        "path": "src/modules/rules/live/groups/headerCenter.scss",
+        "normalized_sha256": "6547089b62150b1f3b7bca4c3010f8c4d4b819061473cea5fe9d2f13d1631a4a"
+      }
+    },
+    {
+      "file": "src/modules/rules/live/groups/headerCenter.ts",
+      "modules": [
+        "rules-live"
+      ],
+      "provenance": "matching-path-in-fixed-baseline",
+      "upstream": {
+        "source": "cleaner",
+        "path": "src/modules/rules/live/groups/headerCenter.ts",
+        "normalized_sha256": "f9ab0eab0cb4a60747f7e291c0baec21292c20613537fdc7bb69c147610a987c"
+      }
+    },
+    {
+      "file": "src/modules/rules/live/groups/headerLeft.scss",
+      "modules": [
+        "rules-live"
+      ],
+      "provenance": "matching-path-in-fixed-baseline",
+      "upstream": {
+        "source": "cleaner",
+        "path": "src/modules/rules/live/groups/headerLeft.scss",
+        "normalized_sha256": "2d9dc414f5bb2cbb8937d77ddd55ce255b4281dc65fe045725558029e63b1fe6"
+      }
+    },
+    {
+      "file": "src/modules/rules/live/groups/headerLeft.ts",
+      "modules": [
+        "rules-live"
+      ],
+      "provenance": "matching-path-in-fixed-baseline",
+      "upstream": {
+        "source": "cleaner",
+        "path": "src/modules/rules/live/groups/headerLeft.ts",
+        "normalized_sha256": "c33906cafd0ec68381ead419e96b734492a0d450baee12fe62ae41c16bb6064b"
+      }
+    },
+    {
+      "file": "src/modules/rules/live/groups/headerRight.scss",
+      "modules": [
+        "rules-live"
+      ],
+      "provenance": "matching-path-in-fixed-baseline",
+      "upstream": {
+        "source": "cleaner",
+        "path": "src/modules/rules/live/groups/headerRight.scss",
+        "normalized_sha256": "2c1973ba6b0d19c0dd1135402acac68621034edbf5be0ab56b2dfced4727f69a"
+      }
+    },
+    {
+      "file": "src/modules/rules/live/groups/headerRight.ts",
+      "modules": [
+        "rules-live"
+      ],
+      "provenance": "matching-path-in-fixed-baseline",
+      "upstream": {
+        "source": "cleaner",
+        "path": "src/modules/rules/live/groups/headerRight.ts",
+        "normalized_sha256": "81431df4e0f9a33daf901c8d32a476056a18080e9f74f0c63f50eec71e206832"
+      }
+    },
+    {
+      "file": "src/modules/rules/live/groups/info.scss",
+      "modules": [
+        "rules-live"
+      ],
+      "provenance": "matching-path-in-fixed-baseline",
+      "upstream": {
+        "source": "cleaner",
+        "path": "src/modules/rules/live/groups/info.scss",
+        "normalized_sha256": "7ad78985617c99092d2534c42d9d25111f1112335645f6ab9cd66449171e6dc1"
+      }
+    },
+    {
+      "file": "src/modules/rules/live/groups/info.ts",
+      "modules": [
+        "rules-live"
+      ],
+      "provenance": "matching-path-in-fixed-baseline",
+      "upstream": {
+        "source": "cleaner",
+        "path": "src/modules/rules/live/groups/info.ts",
+        "normalized_sha256": "e5650335353aa6a3ea1239ec9c3f15513eca6ea71abee1d5f0410e318d994aad"
+      }
+    },
+    {
+      "file": "src/modules/rules/live/groups/player.scss",
+      "modules": [
+        "rules-live"
+      ],
+      "provenance": "matching-path-in-fixed-baseline",
+      "upstream": {
+        "source": "cleaner",
+        "path": "src/modules/rules/live/groups/player.scss",
+        "normalized_sha256": "5dbed6377a46faf8ba452905e53295be07134199aeed8133289e829f4b03a4b9"
+      }
+    },
+    {
+      "file": "src/modules/rules/live/groups/player.ts",
+      "modules": [
+        "rules-live"
+      ],
+      "provenance": "matching-path-in-fixed-baseline",
+      "upstream": {
+        "source": "cleaner",
+        "path": "src/modules/rules/live/groups/player.ts",
+        "normalized_sha256": "fdcc207b56ec1316236a494eb4cc0285301dc6e8ef7c47081a35d3de4170056d"
+      }
+    },
+    {
+      "file": "src/modules/rules/live/groups/right.scss",
+      "modules": [
+        "rules-live"
+      ],
+      "provenance": "matching-path-in-fixed-baseline",
+      "upstream": {
+        "source": "cleaner",
+        "path": "src/modules/rules/live/groups/right.scss",
+        "normalized_sha256": "43ae4b779ac955dbd0df015660713e23a821afb11df02cd51292508c21d6fec3"
+      }
+    },
+    {
+      "file": "src/modules/rules/live/groups/right.ts",
+      "modules": [
+        "rules-live"
+      ],
+      "provenance": "matching-path-in-fixed-baseline",
+      "upstream": {
+        "source": "cleaner",
+        "path": "src/modules/rules/live/groups/right.ts",
+        "normalized_sha256": "e62fead51f0b1cf878a00b13a5e2fbc24a49acb7163df6be04c0168ea4ab1bad"
+      }
+    },
+    {
+      "file": "src/modules/rules/live/index.scss",
+      "modules": [
+        "rules-live"
+      ],
+      "provenance": "matching-path-in-fixed-baseline",
+      "upstream": {
+        "source": "cleaner",
+        "path": "src/modules/rules/live/index.scss",
+        "normalized_sha256": "7a993a412b298de0b4bc9450e449a2ed2fb5eaea5c56ae1206349fb78b891a03"
+      }
+    },
+    {
+      "file": "src/modules/rules/live/index.ts",
+      "modules": [
+        "rules-live"
+      ],
+      "provenance": "matching-path-in-fixed-baseline",
+      "upstream": {
+        "source": "cleaner",
+        "path": "src/modules/rules/live/index.ts",
+        "normalized_sha256": "d4e15737368543c07c82a5acdb06a2cb431e2aecaea44dc260fa842859b2cfe0"
+      }
+    },
+    {
+      "file": "src/modules/rules/popular/groups/basic.scss",
+      "modules": [
+        "rules-popular"
+      ],
+      "provenance": "matching-path-in-fixed-baseline",
+      "upstream": {
+        "source": "cleaner",
+        "path": "src/modules/rules/popular/groups/basic.scss",
+        "normalized_sha256": "651acd436c5d98c230724cb625a59a84cdd7ec9b6194ef93000e372ad7bc757d"
+      }
+    },
+    {
+      "file": "src/modules/rules/popular/groups/basic.ts",
+      "modules": [
+        "rules-popular"
+      ],
+      "provenance": "matching-path-in-fixed-baseline",
+      "upstream": {
+        "source": "cleaner",
+        "path": "src/modules/rules/popular/groups/basic.ts",
+        "normalized_sha256": "3d289cd9ce6ca81196efdd71b36d611810aa5f476a71ef8aff2d56bec82a92c1"
+      }
+    },
+    {
+      "file": "src/modules/rules/popular/groups/layout.scss",
+      "modules": [
+        "rules-popular"
+      ],
+      "provenance": "matching-path-in-fixed-baseline",
+      "upstream": {
+        "source": "cleaner",
+        "path": "src/modules/rules/popular/groups/layout.scss",
+        "normalized_sha256": "553f4616ee23e8187502288c73a911e4aaab991902e84c02946bc057d68dfcd6"
+      }
+    },
+    {
+      "file": "src/modules/rules/popular/groups/layout.ts",
+      "modules": [
+        "rules-popular"
+      ],
+      "provenance": "matching-path-in-fixed-baseline",
+      "upstream": {
+        "source": "cleaner",
+        "path": "src/modules/rules/popular/groups/layout.ts",
+        "normalized_sha256": "ec256e70c657f2780f534a1d66cb526d79d619fa83aa9f34ab31de40561007d4"
+      }
+    },
+    {
+      "file": "src/modules/rules/popular/groups/other.scss",
+      "modules": [
+        "rules-popular"
+      ],
+      "provenance": "matching-path-in-fixed-baseline",
+      "upstream": {
+        "source": "cleaner",
+        "path": "src/modules/rules/popular/groups/other.scss",
+        "normalized_sha256": "01e37b953eef96c8d38894eff3a7d5aa128e9bb0ca1bc9509c0d8c571385c20d"
+      }
+    },
+    {
+      "file": "src/modules/rules/popular/groups/other.ts",
+      "modules": [
+        "rules-popular"
+      ],
+      "provenance": "matching-path-in-fixed-baseline",
+      "upstream": {
+        "source": "cleaner",
+        "path": "src/modules/rules/popular/groups/other.ts",
+        "normalized_sha256": "fd047102358445f65cf26f946c778aa601cef6bb5fd127a34d3560ee70196f92"
+      }
+    },
+    {
+      "file": "src/modules/rules/popular/index.scss",
+      "modules": [
+        "rules-popular"
+      ],
+      "provenance": "matching-path-in-fixed-baseline",
+      "upstream": {
+        "source": "cleaner",
+        "path": "src/modules/rules/popular/index.scss",
+        "normalized_sha256": "c65918c0c4f2de6393dd6da004af53c3e0ea7d6f3889d44b5fc715d512ac26a0"
+      }
+    },
+    {
+      "file": "src/modules/rules/popular/index.ts",
+      "modules": [
+        "rules-popular"
+      ],
+      "provenance": "matching-path-in-fixed-baseline",
+      "upstream": {
+        "source": "cleaner",
+        "path": "src/modules/rules/popular/index.ts",
+        "normalized_sha256": "ab6b90f2ebbf35c1a56c74cbd59dfb5aaeb8aaa4272cecd3ce30bbe74a868e7a"
+      }
+    },
+    {
+      "file": "src/modules/rules/search/groups/basic.scss",
+      "modules": [
+        "rules-search"
+      ],
+      "provenance": "matching-path-in-fixed-baseline",
+      "upstream": {
+        "source": "cleaner",
+        "path": "src/modules/rules/search/groups/basic.scss",
+        "normalized_sha256": "b194e0e6c26543f8eeed2cf2af7152fa087a22ef98a784e0dfa94e98a19be482"
+      }
+    },
+    {
+      "file": "src/modules/rules/search/groups/basic.ts",
+      "modules": [
+        "rules-search"
+      ],
+      "provenance": "matching-path-in-fixed-baseline",
+      "upstream": {
+        "source": "cleaner",
+        "path": "src/modules/rules/search/groups/basic.ts",
+        "normalized_sha256": "b9942510259fd1b68e2806f6fb3bf144bc7b79ca467839ed4af8c432740a898e"
+      }
+    },
+    {
+      "file": "src/modules/rules/search/groups/sidebar.scss",
+      "modules": [
+        "rules-search"
+      ],
+      "provenance": "matching-path-in-fixed-baseline",
+      "upstream": {
+        "source": "cleaner",
+        "path": "src/modules/rules/search/groups/sidebar.scss",
+        "normalized_sha256": "5e117f446f2212687f5cfc3f1bb8871360f9ae9fca36e39123062495c7a2f03a"
+      }
+    },
+    {
+      "file": "src/modules/rules/search/groups/sidebar.ts",
+      "modules": [
+        "rules-search"
+      ],
+      "provenance": "matching-path-in-fixed-baseline",
+      "upstream": {
+        "source": "cleaner",
+        "path": "src/modules/rules/search/groups/sidebar.ts",
+        "normalized_sha256": "10ccbb5ba5230da21b8f545b65996053a63a808b36ec6dc132472dad16d0aa3c"
+      }
+    },
+    {
+      "file": "src/modules/rules/search/index.scss",
+      "modules": [
+        "rules-search"
+      ],
+      "provenance": "matching-path-in-fixed-baseline",
+      "upstream": {
+        "source": "cleaner",
+        "path": "src/modules/rules/search/index.scss",
+        "normalized_sha256": "1e35a696f7e5f3b9d7c60467ccb3c238be765c111a17bb79e68dcd86e8ebd274"
+      }
+    },
+    {
+      "file": "src/modules/rules/search/index.ts",
+      "modules": [
+        "rules-search"
+      ],
+      "provenance": "matching-path-in-fixed-baseline",
+      "upstream": {
+        "source": "cleaner",
+        "path": "src/modules/rules/search/index.ts",
+        "normalized_sha256": "33fa7f9b68e00a442d3cde315fbcdd15d89baa47b964ecbb6f20b36e0ec099c5"
+      }
+    },
+    {
+      "file": "src/modules/rules/space/groups/basic.scss",
+      "modules": [
+        "rules-space"
+      ],
+      "provenance": "matching-path-in-fixed-baseline",
+      "upstream": {
+        "source": "cleaner",
+        "path": "src/modules/rules/space/groups/basic.scss",
+        "normalized_sha256": "d8e8e30f879e984617fd78a600926d5e1ee01171bd886babf785933558d4ef0e"
+      }
+    },
+    {
+      "file": "src/modules/rules/space/groups/basic.ts",
+      "modules": [
+        "rules-space"
+      ],
+      "provenance": "matching-path-in-fixed-baseline",
+      "upstream": {
+        "source": "cleaner",
+        "path": "src/modules/rules/space/groups/basic.ts",
+        "normalized_sha256": "71fc5c0976f754002022b6f6d49b3d36a8ff353f295b445bc7fec3f73b2c81a3"
+      }
+    },
+    {
+      "file": "src/modules/rules/space/groups/dynamic.scss",
+      "modules": [
+        "rules-space"
+      ],
+      "provenance": "matching-path-in-fixed-baseline",
+      "upstream": {
+        "source": "cleaner",
+        "path": "src/modules/rules/space/groups/dynamic.scss",
+        "normalized_sha256": "e7bacf3dfa2b90dc53c06496e6fccc5c2fbfed18f00a6ec50e0b9a983b84f8ac"
+      }
+    },
+    {
+      "file": "src/modules/rules/space/groups/dynamic.ts",
+      "modules": [
+        "rules-space"
+      ],
+      "provenance": "matching-path-in-fixed-baseline",
+      "upstream": {
+        "source": "cleaner",
+        "path": "src/modules/rules/space/groups/dynamic.ts",
+        "normalized_sha256": "dd4d9b9626cb0cd96d60de2eee7cf6431e8cd13d6c29a950d97584af71fe4160"
+      }
+    },
+    {
+      "file": "src/modules/rules/space/groups/sidebar.scss",
+      "modules": [
+        "rules-space"
+      ],
+      "provenance": "matching-path-in-fixed-baseline",
+      "upstream": {
+        "source": "cleaner",
+        "path": "src/modules/rules/space/groups/sidebar.scss",
+        "normalized_sha256": "49a260ac35b68ed6811f104b4e4b04ba395ed4bd0245320f42087dd2c244690c"
+      }
+    },
+    {
+      "file": "src/modules/rules/space/groups/sidebar.ts",
+      "modules": [
+        "rules-space"
+      ],
+      "provenance": "matching-path-in-fixed-baseline",
+      "upstream": {
+        "source": "cleaner",
+        "path": "src/modules/rules/space/groups/sidebar.ts",
+        "normalized_sha256": "4ad79c75202e599cd9b29c1aa829a79c61ff83e600e6e21c5cabedc2739a6ca4"
+      }
+    },
+    {
+      "file": "src/modules/rules/space/index.scss",
+      "modules": [
+        "rules-space"
+      ],
+      "provenance": "matching-path-in-fixed-baseline",
+      "upstream": {
+        "source": "cleaner",
+        "path": "src/modules/rules/space/index.scss",
+        "normalized_sha256": "fe0b6801110e87c26072dae6f5149c6dfac126e901ab53f0bc406b7cd0a2dd1c"
+      }
+    },
+    {
+      "file": "src/modules/rules/space/index.ts",
+      "modules": [
+        "rules-space"
+      ],
+      "provenance": "matching-path-in-fixed-baseline",
+      "upstream": {
+        "source": "cleaner",
+        "path": "src/modules/rules/space/index.ts",
+        "normalized_sha256": "61837981819ca11991fe94a942acd12e330110c3b95983a029f998e70f3ba00a"
+      }
+    },
+    {
+      "file": "src/modules/rules/video/groups/basic.scss",
+      "modules": [
+        "rules-video"
+      ],
+      "provenance": "matching-path-in-fixed-baseline",
+      "upstream": {
+        "source": "cleaner",
+        "path": "src/modules/rules/video/groups/basic.scss",
+        "normalized_sha256": "3c7edad252243724bb21c3284f238e339eb779c714530e5bfc4f5f72c9278435"
+      }
+    },
+    {
+      "file": "src/modules/rules/video/groups/basic.ts",
+      "modules": [
+        "rules-video"
+      ],
+      "provenance": "matching-path-in-fixed-baseline",
+      "upstream": {
+        "source": "cleaner",
+        "path": "src/modules/rules/video/groups/basic.ts",
+        "normalized_sha256": "2b6a47922d30d6128200637a0afd523e8b2188d04031b757fe1583e02db7a1ec"
+      }
+    },
+    {
+      "file": "src/modules/rules/video/groups/danmaku.scss",
+      "modules": [
+        "rules-video"
+      ],
+      "provenance": "matching-path-in-fixed-baseline",
+      "upstream": {
+        "source": "cleaner",
+        "path": "src/modules/rules/video/groups/danmaku.scss",
+        "normalized_sha256": "f1a9e06783784d298eddd780984d30e0f636c3f049c2b8fcebb3543a26acabe3"
+      }
+    },
+    {
+      "file": "src/modules/rules/video/groups/danmaku.ts",
+      "modules": [
+        "rules-video"
+      ],
+      "provenance": "matching-path-in-fixed-baseline",
+      "upstream": {
+        "source": "cleaner",
+        "path": "src/modules/rules/video/groups/danmaku.ts",
+        "normalized_sha256": "c214672832be5532e1500d95bad1d5862984de51d22d23285de2d4b98d579ff4"
+      }
+    },
+    {
+      "file": "src/modules/rules/video/groups/danmakuControl.scss",
+      "modules": [
+        "rules-video"
+      ],
+      "provenance": "matching-path-in-fixed-baseline",
+      "upstream": {
+        "source": "cleaner",
+        "path": "src/modules/rules/video/groups/danmakuControl.scss",
+        "normalized_sha256": "d58bfa9db151fb14364d32c498745c67273c23b384ce05f0f28a9b17c1649bd4"
+      }
+    },
+    {
+      "file": "src/modules/rules/video/groups/danmakuControl.ts",
+      "modules": [
+        "rules-video"
+      ],
+      "provenance": "matching-path-in-fixed-baseline",
+      "upstream": {
+        "source": "cleaner",
+        "path": "src/modules/rules/video/groups/danmakuControl.ts",
+        "normalized_sha256": "d118335a376a790003de40508902808e8eb9518d6e0766c60216118140d94664"
+      }
+    },
+    {
+      "file": "src/modules/rules/video/groups/info.scss",
+      "modules": [
+        "rules-video"
+      ],
+      "provenance": "matching-path-in-fixed-baseline",
+      "upstream": {
+        "source": "cleaner",
+        "path": "src/modules/rules/video/groups/info.scss",
+        "normalized_sha256": "9fd1a75887d8c29a8f9ca5af4ff340ff47627564a3b32adf9bc3041c63a42abb"
+      }
+    },
+    {
+      "file": "src/modules/rules/video/groups/info.ts",
+      "modules": [
+        "rules-video"
+      ],
+      "provenance": "matching-path-in-fixed-baseline",
+      "upstream": {
+        "source": "cleaner",
+        "path": "src/modules/rules/video/groups/info.ts",
+        "normalized_sha256": "bec09d51001113770a58aa2b2029e873f2754e3e6977527e7c8f6e876e63c636"
+      }
+    },
+    {
+      "file": "src/modules/rules/video/groups/miniPlayer.scss",
+      "modules": [
+        "rules-video"
+      ],
+      "provenance": "matching-path-in-fixed-baseline",
+      "upstream": {
+        "source": "cleaner",
+        "path": "src/modules/rules/video/groups/miniPlayer.scss",
+        "normalized_sha256": "8189f1232fda1a99480b1beb3dcef268541d7e0db1d7a465f08071f49dfa5fad"
+      }
+    },
+    {
+      "file": "src/modules/rules/video/groups/miniPlayer.ts",
+      "modules": [
+        "rules-video"
+      ],
+      "provenance": "matching-path-in-fixed-baseline",
+      "upstream": {
+        "source": "cleaner",
+        "path": "src/modules/rules/video/groups/miniPlayer.ts",
+        "normalized_sha256": "5338442031864b6c76894caa5d5d968b72679f717f57f0d32a5201bfa7890fa5"
+      }
+    },
+    {
+      "file": "src/modules/rules/video/groups/player.scss",
+      "modules": [
+        "rules-video"
+      ],
+      "provenance": "matching-path-in-fixed-baseline",
+      "upstream": {
+        "source": "cleaner",
+        "path": "src/modules/rules/video/groups/player.scss",
+        "normalized_sha256": "073519786e5b71799dd2510fee97e4107379bef9c7e321d404ca7a9865df02ce"
+      }
+    },
+    {
+      "file": "src/modules/rules/video/groups/player.ts",
+      "modules": [
+        "rules-video"
+      ],
+      "provenance": "matching-path-in-fixed-baseline",
+      "upstream": {
+        "source": "cleaner",
+        "path": "src/modules/rules/video/groups/player.ts",
+        "normalized_sha256": "dcf80439b52b664689121fe7abd6c1af422706d773bdfda78f96c9ccad45cfee"
+      }
+    },
+    {
+      "file": "src/modules/rules/video/groups/playerControl.scss",
+      "modules": [
+        "rules-video"
+      ],
+      "provenance": "matching-path-in-fixed-baseline",
+      "upstream": {
+        "source": "cleaner",
+        "path": "src/modules/rules/video/groups/playerControl.scss",
+        "normalized_sha256": "15f7b7d20f743cc88de8c38f12cb334f081932afac3ad14fae11e52f2b80c756"
+      }
+    },
+    {
+      "file": "src/modules/rules/video/groups/playerControl.ts",
+      "modules": [
+        "rules-video"
+      ],
+      "provenance": "matching-path-in-fixed-baseline",
+      "upstream": {
+        "source": "cleaner",
+        "path": "src/modules/rules/video/groups/playerControl.ts",
+        "normalized_sha256": "0728b728583fbd0cfd2d6cc29d998b8e0ddb28193d32a7b5efdf6d4c88be2833"
+      }
+    },
+    {
+      "file": "src/modules/rules/video/groups/playerLayout.scss",
+      "modules": [
+        "rules-video"
+      ],
+      "provenance": "matching-path-in-fixed-baseline",
+      "upstream": {
+        "source": "cleaner",
+        "path": "src/modules/rules/video/groups/playerLayout.scss",
+        "normalized_sha256": "1f1b3de0329d44b04183caa12ee9b698a34cef5467dabe8b9c42f7334c82aa9a"
+      }
+    },
+    {
+      "file": "src/modules/rules/video/groups/playerLayout.ts",
+      "modules": [
+        "rules-video"
+      ],
+      "provenance": "matching-path-in-fixed-baseline",
+      "upstream": {
+        "source": "cleaner",
+        "path": "src/modules/rules/video/groups/playerLayout.ts",
+        "normalized_sha256": "0ce286de85e8af92425003353da2c5b8e2cce0af717461351942ab852a070f3b"
+      }
+    },
+    {
+      "file": "src/modules/rules/video/groups/right.scss",
+      "modules": [
+        "rules-video"
+      ],
+      "provenance": "matching-path-in-fixed-baseline",
+      "upstream": {
+        "source": "cleaner",
+        "path": "src/modules/rules/video/groups/right.scss",
+        "normalized_sha256": "75e03418ee056732b2e1503118c13d6844188241c1588f180ad40aa0cb7c04e7"
+      }
+    },
+    {
+      "file": "src/modules/rules/video/groups/right.ts",
+      "modules": [
+        "rules-video"
+      ],
+      "provenance": "matching-path-in-fixed-baseline",
+      "upstream": {
+        "source": "cleaner",
+        "path": "src/modules/rules/video/groups/right.ts",
+        "normalized_sha256": "fe73b7d11822e7a5108323a55894d36d471d642841f7bb6bf99dc8ab1b8603d9"
+      }
+    },
+    {
+      "file": "src/modules/rules/video/groups/sidebar.scss",
+      "modules": [
+        "rules-video"
+      ],
+      "provenance": "matching-path-in-fixed-baseline",
+      "upstream": {
+        "source": "cleaner",
+        "path": "src/modules/rules/video/groups/sidebar.scss",
+        "normalized_sha256": "9445229afadefd47d08f902d64c544c1691f3cffca8ccb5d44781e9c2949832c"
+      }
+    },
+    {
+      "file": "src/modules/rules/video/groups/sidebar.ts",
+      "modules": [
+        "rules-video"
+      ],
+      "provenance": "matching-path-in-fixed-baseline",
+      "upstream": {
+        "source": "cleaner",
+        "path": "src/modules/rules/video/groups/sidebar.ts",
+        "normalized_sha256": "ce39d37d62f348cff1f35e0e86e66ae16bfa03b3fec71faed6b944b5b7443ce0"
+      }
+    },
+    {
+      "file": "src/modules/rules/video/groups/subtitle.scss",
+      "modules": [
+        "rules-video"
+      ],
+      "provenance": "matching-path-in-fixed-baseline",
+      "upstream": {
+        "source": "cleaner",
+        "path": "src/modules/rules/video/groups/subtitle.scss",
+        "normalized_sha256": "2dc5cc1912ef29e56adeae00e183599151af1d2a1884f43393de895d4d2d1668"
+      }
+    },
+    {
+      "file": "src/modules/rules/video/groups/subtitle.ts",
+      "modules": [
+        "rules-video"
+      ],
+      "provenance": "matching-path-in-fixed-baseline",
+      "upstream": {
+        "source": "cleaner",
+        "path": "src/modules/rules/video/groups/subtitle.ts",
+        "normalized_sha256": "50d72e4fc8fe3457bd9385e9a6aff01813f509a3dde1e3d2bbdba0288c1c0aeb"
+      }
+    },
+    {
+      "file": "src/modules/rules/video/groups/toolbar.scss",
+      "modules": [
+        "rules-video"
+      ],
+      "provenance": "matching-path-in-fixed-baseline",
+      "upstream": {
+        "source": "cleaner",
+        "path": "src/modules/rules/video/groups/toolbar.scss",
+        "normalized_sha256": "074eaece984ce68094c3903e263db66cc677ffa2b058fd45888a44d1ac0d8f27"
+      }
+    },
+    {
+      "file": "src/modules/rules/video/groups/toolbar.ts",
+      "modules": [
+        "rules-video"
+      ],
+      "provenance": "matching-path-in-fixed-baseline",
+      "upstream": {
+        "source": "cleaner",
+        "path": "src/modules/rules/video/groups/toolbar.ts",
+        "normalized_sha256": "d7bb943128b59931e7097516c67824864a9cbf1100d108fb6a6897e8fb180ad7"
+      }
+    },
+    {
+      "file": "src/modules/rules/video/groups/upInfo.scss",
+      "modules": [
+        "rules-video"
+      ],
+      "provenance": "matching-path-in-fixed-baseline",
+      "upstream": {
+        "source": "cleaner",
+        "path": "src/modules/rules/video/groups/upInfo.scss",
+        "normalized_sha256": "a565323318f64e4c33cb0e12d90dbaf9be4477c60027ea803c403d2d6b34e236"
+      }
+    },
+    {
+      "file": "src/modules/rules/video/groups/upInfo.ts",
+      "modules": [
+        "rules-video"
+      ],
+      "provenance": "matching-path-in-fixed-baseline",
+      "upstream": {
+        "source": "cleaner",
+        "path": "src/modules/rules/video/groups/upInfo.ts",
+        "normalized_sha256": "9656884eedf92f8e2d812437eb557c3a6f7f766a93eb6dfaf21fd895ab67c3cb"
+      }
+    },
+    {
+      "file": "src/modules/rules/video/index.scss",
+      "modules": [
+        "rules-video"
+      ],
+      "provenance": "matching-path-in-fixed-baseline",
+      "upstream": {
+        "source": "cleaner",
+        "path": "src/modules/rules/video/index.scss",
+        "normalized_sha256": "0e8a54d646fde62400791dc245ebeb2e0fa86103f8d5f4cdb4efec3db81d4667"
+      }
+    },
+    {
+      "file": "src/modules/rules/video/index.ts",
+      "modules": [
+        "rules-video"
+      ],
+      "provenance": "matching-path-in-fixed-baseline",
+      "upstream": {
+        "source": "cleaner",
+        "path": "src/modules/rules/video/index.ts",
+        "normalized_sha256": "f46cdba67eef94cf3152a535d2d443f001eca26bf797765e5b6bc7d1f5ed8f47"
+      }
+    },
+    {
+      "file": "src/modules/rules/watchlater/groups/basic.scss",
+      "modules": [
+        "rules-watchlater"
+      ],
+      "provenance": "matching-path-in-fixed-baseline",
+      "upstream": {
+        "source": "cleaner",
+        "path": "src/modules/rules/watchlater/groups/basic.scss",
+        "normalized_sha256": "2f9cd4c24b89be37403ef50007c14306a6c9d34bc8ef10279601edea6399878e"
+      }
+    },
+    {
+      "file": "src/modules/rules/watchlater/groups/basic.ts",
+      "modules": [
+        "rules-watchlater"
+      ],
+      "provenance": "matching-path-in-fixed-baseline",
+      "upstream": {
+        "source": "cleaner",
+        "path": "src/modules/rules/watchlater/groups/basic.ts",
+        "normalized_sha256": "1c6310b51fbaff70ba0688742e495ef42fb5b04b6e9c7b151c296b82f3b1260c"
+      }
+    },
+    {
+      "file": "src/modules/rules/watchlater/index.scss",
+      "modules": [
+        "rules-watchlater"
+      ],
+      "provenance": "matching-path-in-fixed-baseline",
+      "upstream": {
+        "source": "cleaner",
+        "path": "src/modules/rules/watchlater/index.scss",
+        "normalized_sha256": "3c05809f2fef1afeaeaac2221c06aabfc63b492fcca5e586a296c54767d5bc84"
+      }
+    },
+    {
+      "file": "src/modules/rules/watchlater/index.ts",
+      "modules": [
+        "rules-watchlater"
+      ],
+      "provenance": "matching-path-in-fixed-baseline",
+      "upstream": {
+        "source": "cleaner",
+        "path": "src/modules/rules/watchlater/index.ts",
+        "normalized_sha256": "bef82912d2af6719d9875562ea2f4ff76efe373dd2bb30f6b64a8eab5f9c67e3"
+      }
+    },
+    {
+      "file": "src/modules/shortcut/actions.ts",
+      "modules": [
+        "shortcut"
+      ],
+      "provenance": "own-confirmed",
+      "upstream": null
+    },
+    {
+      "file": "src/modules/shortcut/anchor.ts",
+      "modules": [
+        "shortcut"
+      ],
+      "provenance": "own-confirmed",
+      "upstream": null
+    },
+    {
+      "file": "src/modules/shortcut/host.ts",
+      "modules": [
+        "shortcut"
+      ],
+      "provenance": "own-confirmed",
+      "upstream": null
+    },
+    {
+      "file": "src/modules/shortcut/preference.ts",
+      "modules": [
+        "shortcut"
+      ],
+      "provenance": "own-confirmed",
+      "upstream": null
+    },
+    {
+      "file": "src/stores/view.ts",
+      "modules": [
+        "settings-ui"
+      ],
+      "provenance": "matching-path-in-fixed-baseline",
+      "upstream": {
+        "source": "cleaner",
+        "path": "src/stores/view.ts",
+        "normalized_sha256": "0c27cd7abdd6fce26de94cea1f5d9defa76ec7bc966fa2787ca466135baae6e8"
+      }
+    },
+    {
+      "file": "src/style.css",
+      "modules": [],
+      "provenance": "matching-path-in-fixed-baseline",
+      "upstream": {
+        "source": "cleaner",
+        "path": "src/style.css",
+        "normalized_sha256": "b31360aeaad468ea17b4459830ba1c74f7df2e4892cbb3282feb4de22d1bf3c3"
+      }
+    },
+    {
+      "file": "src/types/collection.ts",
+      "modules": [
+        "utilities"
+      ],
+      "provenance": "matching-path-in-fixed-baseline",
+      "upstream": {
+        "source": "cleaner",
+        "path": "src/types/collection.ts",
+        "normalized_sha256": "6986797b39c41f057a5ef8efb167486bc1e35a7e277c41c50f2cfbef206632db"
+      }
+    },
+    {
+      "file": "src/types/filter.ts",
+      "modules": [
+        "utilities"
+      ],
+      "provenance": "matching-path-in-fixed-baseline",
+      "upstream": {
+        "source": "cleaner",
+        "path": "src/types/filter.ts",
+        "normalized_sha256": "4a67428ca67d1a994f45a0a7af4ff5e2c80dcbec066176fe532e62166457e493"
+      }
+    },
+    {
+      "file": "src/types/global.d.ts",
+      "modules": [
+        "utilities"
+      ],
+      "provenance": "matching-path-in-fixed-baseline",
+      "upstream": {
+        "source": "cleaner",
+        "path": "src/types/global.d.ts",
+        "normalized_sha256": "db2bd7dff2c29ca01df99fde003f46173f7b5c0695a9d3e6b76f21b1fc91375e"
+      }
+    },
+    {
+      "file": "src/types/item.ts",
+      "modules": [
+        "utilities"
+      ],
+      "provenance": "matching-path-in-fixed-baseline",
+      "upstream": {
+        "source": "cleaner",
+        "path": "src/types/item.ts",
+        "normalized_sha256": "21ee28753b9d33f77ae67ed0fc1859f998da2ca436520c6a61f25a24a580edb7"
+      }
+    },
+    {
+      "file": "src/utils/fetch.ts",
+      "modules": [
+        "runtime",
+        "utilities"
+      ],
+      "provenance": "matching-path-in-fixed-baseline",
+      "upstream": {
+        "source": "cleaner",
+        "path": "src/utils/fetch.ts",
+        "normalized_sha256": "c1185131be6aee030423303e29d4648d94ffa5cafb02f2147dcd8efa1c11e5f3"
+      }
+    },
+    {
+      "file": "src/utils/init.ts",
+      "modules": [
+        "runtime",
+        "utilities"
+      ],
+      "provenance": "matching-path-in-fixed-baseline",
+      "upstream": {
+        "source": "cleaner",
+        "path": "src/utils/init.ts",
+        "normalized_sha256": "fb2d385c5fdfef4c8697ed5ce16016883717548fa6d035af1d30ac73f5544d18"
+      }
+    },
+    {
+      "file": "src/utils/logger.ts",
+      "modules": [
+        "utilities"
+      ],
+      "provenance": "matching-path-in-fixed-baseline",
+      "upstream": {
+        "source": "cleaner",
+        "path": "src/utils/logger.ts",
+        "normalized_sha256": "95f4e4316375e26a98601abb6570a10e204415c6454c1b251eb05738575e15b1"
+      }
+    },
+    {
+      "file": "src/utils/md5.ts",
+      "modules": [
+        "utilities"
+      ],
+      "provenance": "no-matching-path-in-fixed-baseline; authorship-unverified",
+      "upstream": null
+    },
+    {
+      "file": "src/utils/pageType.ts",
+      "modules": [
+        "runtime",
+        "utilities"
+      ],
+      "provenance": "matching-path-in-fixed-baseline",
+      "upstream": {
+        "source": "cleaner",
+        "path": "src/utils/pageType.ts",
+        "normalized_sha256": "5c3a68346a6c35796d93f9c755d534fb97968811aa1ac42c0d51021635988969"
+      }
+    },
+    {
+      "file": "src/utils/panelGeometry.ts",
+      "modules": [
+        "settings-ui",
+        "utilities"
+      ],
+      "provenance": "own-confirmed",
+      "upstream": null
+    },
+    {
+      "file": "src/utils/shadow.ts",
+      "modules": [
+        "utilities"
+      ],
+      "provenance": "matching-path-in-fixed-baseline",
+      "upstream": {
+        "source": "cleaner",
+        "path": "src/utils/shadow.ts",
+        "normalized_sha256": "7f0db174f08fe494a8da7b13c156f41d444a1206494674a42e312745abc5cbcd"
+      }
+    },
+    {
+      "file": "src/utils/storage.ts",
+      "modules": [
+        "data-sync",
+        "utilities"
+      ],
+      "provenance": "matching-path-in-fixed-baseline",
+      "upstream": {
+        "source": "cleaner",
+        "path": "src/utils/storage.ts",
+        "normalized_sha256": "c56efc8ea65c809ef2794d9c1a483ef2bfc0775609d75cf04af8e194ff3259ea"
+      }
+    },
+    {
+      "file": "src/utils/tool.ts",
+      "modules": [
+        "utilities"
+      ],
+      "provenance": "matching-path-in-fixed-baseline",
+      "upstream": {
+        "source": "cleaner",
+        "path": "src/utils/tool.ts",
+        "normalized_sha256": "881419a07f65405b51da26134d80bbf9b135a9ae06981996d7457e05d7d730c5"
+      }
+    },
+    {
+      "file": "src/utils/urlHandler.ts",
+      "modules": [
+        "utilities"
+      ],
+      "provenance": "matching-path-in-fixed-baseline",
+      "upstream": {
+        "source": "cleaner",
+        "path": "src/utils/urlHandler.ts",
+        "normalized_sha256": "254e8f86dcb225e95f23961590593bcc1ed53b54e1f34dbde7cb9aad45f5378e"
+      }
+    },
+    {
+      "file": "src/utils/widePlayer.ts",
+      "modules": [
+        "utilities"
+      ],
+      "provenance": "matching-path-in-fixed-baseline",
+      "upstream": {
+        "source": "cleaner",
+        "path": "src/utils/widePlayer.ts",
+        "normalized_sha256": "023acccc84e59fe7774ea8875a1ca592b682f3d1a24f31176ba9a9e8b81d8723"
+      }
+    },
+    {
+      "file": "src/views/ArticleFilterPanelView.vue",
+      "modules": [
+        "settings-ui"
+      ],
+      "provenance": "matching-path-in-fixed-baseline",
+      "upstream": {
+        "source": "cleaner",
+        "path": "src/views/ArticleFilterPanelView.vue",
+        "normalized_sha256": "c9009b13300c960f118780212985bd87955643198bc9688f5d07c900abe4e746"
+      }
+    },
+    {
+      "file": "src/views/CommentFilterPanelView.vue",
+      "modules": [
+        "settings-ui"
+      ],
+      "provenance": "matching-path-in-fixed-baseline",
+      "upstream": {
+        "source": "cleaner",
+        "path": "src/views/CommentFilterPanelView.vue",
+        "normalized_sha256": "a0de448dc207ecf6bcbbe3745681f4f30522acbe8448e206068d2ae94c40ca53"
+      }
+    },
+    {
+      "file": "src/views/ContextMenuView.vue",
+      "modules": [
+        "settings-ui"
+      ],
+      "provenance": "matching-path-in-fixed-baseline",
+      "upstream": {
+        "source": "cleaner",
+        "path": "src/views/ContextMenuView.vue",
+        "normalized_sha256": "b053751789076e257075f1bbb4ea3b92ca015af1cc73c2f8e05a2aaa5f53f36d"
+      }
+    },
+    {
+      "file": "src/views/DynamicFilterPanelView.vue",
+      "modules": [
+        "settings-ui"
+      ],
+      "provenance": "matching-path-in-fixed-baseline",
+      "upstream": {
+        "source": "cleaner",
+        "path": "src/views/DynamicFilterPanelView.vue",
+        "normalized_sha256": "77a01e2674d336c9f8ef07d7f3cc969084d6d669b522a69d0d9e39b18d200db9"
+      }
+    },
+    {
+      "file": "src/views/HeaderShortcutView.vue",
+      "modules": [
+        "shortcut",
+        "settings-ui"
+      ],
+      "provenance": "own-confirmed",
+      "upstream": null
+    },
+    {
+      "file": "src/views/RulePanelView.vue",
+      "modules": [
+        "settings-ui"
+      ],
+      "provenance": "matching-path-in-fixed-baseline",
+      "upstream": {
+        "source": "cleaner",
+        "path": "src/views/RulePanelView.vue",
+        "normalized_sha256": "f528c9b3588868fec94bf3f94c7f4886ae9784b038ce62ac25fae88f5bf421aa"
+      }
+    },
+    {
+      "file": "src/views/ShortcutSettingsPanelView.vue",
+      "modules": [
+        "shortcut",
+        "settings-ui"
+      ],
+      "provenance": "own-confirmed",
+      "upstream": null
+    },
+    {
+      "file": "src/views/SideBtnView.vue",
+      "modules": [
+        "shortcut",
+        "settings-ui"
+      ],
+      "provenance": "matching-path-in-fixed-baseline",
+      "upstream": {
+        "source": "cleaner",
+        "path": "src/views/SideBtnView.vue",
+        "normalized_sha256": "73aff10e739df987b61d0d8ac08f03311628f226e776911e513fb0068c528695"
+      }
+    },
+    {
+      "file": "src/views/VideoFilterPanelView.vue",
+      "modules": [
+        "settings-ui"
+      ],
+      "provenance": "matching-path-in-fixed-baseline",
+      "upstream": {
+        "source": "cleaner",
+        "path": "src/views/VideoFilterPanelView.vue",
+        "normalized_sha256": "4a364605b02affd360d777886a3dd3b02c6ea53e8ebde4ac0dea8433acd42de1"
+      }
+    },
+    {
+      "file": "src/vite-env.d.ts",
+      "modules": [],
+      "provenance": "matching-path-in-fixed-baseline",
+      "upstream": {
+        "source": "cleaner",
+        "path": "src/vite-env.d.ts",
+        "normalized_sha256": "6908c9dcc11a6dd6ae9315a3945e5fa1c43717d7c16b3b8bf2d40b808a4df9ef"
+      }
+    }
+  ],
+  "matching_path_note": "Path match is a correspondence clue, not proof of authorship or semantic equivalence. Normalized hashes detect textual divergence; changed does not automatically mean a deliberate local patch."
+}

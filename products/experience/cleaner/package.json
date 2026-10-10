@@ -12,6 +12,8 @@
         "test": "vitest run",
         "test:fixture": "node tests/feedback-playwright.mjs",
         "test:search": "node tests/live-search-playwright.mjs",
+        "maintenance:index": "node scripts/maintenance-index.mjs",
+        "maintenance:packet": "node scripts/maintenance-packet.mjs",
         "prepare": "husky"
     },
     "dependencies": {

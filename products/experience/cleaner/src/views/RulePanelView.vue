@@ -22,6 +22,10 @@
                     <FeedbackBadge :code="actionLabel('review-export')" />导出取舍反馈
                 </button>
             </div>
+            <button type="button" class="mb-2 rounded border border-gray-400 bg-white px-2 py-1" @click="exportDiagnostic">
+                <FeedbackBadge :code="actionLabel('maintenance-export-diagnostic')" />导出维护诊断
+            </button>
+            <p v-if="diagnosticError" role="alert" class="mb-2 text-red-700">{{ diagnosticError }}</p>
             <input v-model="query" type="search" aria-label="搜索功能名称或编号" placeholder="搜索名称、编号（如 S205）" @keydown.stop
                 class="w-full rounded border border-gray-400 bg-white px-2 py-1" />
             <label v-if="category === 'optimization'" class="mt-2 block">
@@ -93,6 +97,7 @@ import OptimizationReviewRow from '@/feedback/OptimizationReviewRow.vue'
 import { useReviewStore, categoryFor } from '@/feedback/review-store'
 import { reviewCatalog } from '@review-catalog'
 import type { ReviewCategory, ReviewEntry } from '@/feedback/review-types'
+import { downloadMaintenanceDiagnostic } from '@/modules/maintenance/diagnostics'
 
 const store = useRulePanelStore()
 const editorDialogRef = ref<InstanceType<typeof EditorDialog> | null>(null)
@@ -107,6 +112,12 @@ const category = ref<ReviewCategory>('cleaning')
 const scope = ref<'page' | 'all'>('page')
 const query = ref('')
 const onlyMarked = ref(false)
+const diagnosticError = ref('')
+const exportDiagnostic = () => {
+    diagnosticError.value = ''
+    try { downloadMaintenanceDiagnostic() }
+    catch { diagnosticError.value = '诊断导出失败，请重试。不会导出设置、名单或账号数据。' }
+}
 const packFilter = ref('')
 const tabs: { key: ReviewCategory; name: string }[] = [
     { key: 'cleaning', name: '净化' }, { key: 'optimization', name: '优化' }, { key: 'support', name: '公共设置' },

@@ -82,6 +82,7 @@ const writeManifest = () => {
     console.log('wrote', 'products/experience/release-manifest.json')
 }
 
+runPnpm(['run', 'maintenance:index'])
 runPnpm(['exec', 'vue-tsc', '-b'])
 runPnpm(['run', 'test'])
 runPnpm(['run', 'build:feedback'])
