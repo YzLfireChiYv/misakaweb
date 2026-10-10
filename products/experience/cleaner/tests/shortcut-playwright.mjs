@@ -89,6 +89,14 @@ const main = async () => {
         const host = page.locator('#bili-cleaner-shortcut-host')
         await host.waitFor()
         assert((await host.count()) === 1, 'default header mode should create one host')
+        assert(
+            await page.evaluate(() => document.getElementById('bili-cleaner-shortcut-host')?.parentElement === document.body),
+            'host must be a document.body portal',
+        )
+        assert(
+            await page.evaluate(() => document.getElementById('nav-searchform')?.nextElementSibling?.id !== 'bili-cleaner-shortcut-host'),
+            'host must not sit after the search form',
+        )
         assert((await page.locator('.group.fixed').count()) === 0, 'floating button must not show in header mode')
         assert((await page.textContent('#pref-location'))?.trim() === 'header', 'default location is header')
         assert((await page.textContent('#pref-enabled'))?.trim() === 'on', 'default enabled')
@@ -229,6 +237,10 @@ const main = async () => {
         })
         await wait(200)
         assert((await page.locator('#bili-cleaner-shortcut-host').count()) === 1, 'header replacement must not duplicate hosts')
+        assert(
+            await page.evaluate(() => document.getElementById('bili-cleaner-shortcut-host')?.parentElement === document.body),
+            'replaced header must keep the host as a body portal',
+        )
 
         await page.evaluate(() => {
             const header = document.getElementById('page-header')

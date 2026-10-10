@@ -11,6 +11,7 @@
         "release:prepare": "node scripts/prepare-publish.mjs",
         "test": "vitest run",
         "test:fixture": "node tests/feedback-playwright.mjs",
+        "test:search": "node tests/live-search-playwright.mjs",
         "prepare": "husky"
     },
     "dependencies": {

@@ -14,6 +14,9 @@ import {
 } from './anchor'
 import type { QuickAction } from './actions'
 
+const HOST_PORTAL_Z = '10000'
+const SEARCH_DROPDOWN_NEIGHBOR = '.search-panel, .nav-search-panel, .history, .suggestions, .trending'
+
 const HOST_CSS = `
 :host { display: inline-flex; width: ${HOST_SLOT_PX}px; height: ${HOST_SLOT_PX}px; }
 .trigger {
@@ -155,13 +158,9 @@ const applyHostBox = (host: HTMLElement) => {
     host.style.width = `${HOST_SLOT_PX}px`
     host.style.minWidth = `${HOST_SLOT_PX}px`
     host.style.height = `${HOST_SLOT_PX}px`
-    host.style.marginLeft = `${HOST_GAP_PX}px`
+    host.style.marginLeft = '0px'
     host.style.marginRight = '0px'
     host.style.verticalAlign = 'middle'
-    host.style.position = 'relative'
-    host.style.left = ''
-    host.style.top = ''
-    host.style.zIndex = '30'
     host.style.pointerEvents = 'auto'
     host.style.flexShrink = '0'
 }
@@ -179,7 +178,13 @@ const findRightNeighbor = (anchor: HTMLElement, host: HTMLElement): HTMLElement 
     const visit = (from: Element | null): HTMLElement | null => {
         let sib = from?.nextElementSibling ?? null
         while (sib) {
-            if (sib !== host && sib instanceof HTMLElement && !host.contains(sib) && !sib.contains(host)) {
+            if (
+                sib !== host &&
+                sib instanceof HTMLElement &&
+                !host.contains(sib) &&
+                !sib.contains(host) &&
+                !sib.matches(SEARCH_DROPDOWN_NEIGHBOR)
+            ) {
                 const width = sib.getBoundingClientRect().width
                 if (width > 8 && width < window.innerWidth * 0.7) {
                     return sib
@@ -198,7 +203,7 @@ const applyReservation = (host: HTMLElement, anchor: HTMLElement) => {
     if (!neighbor) {
         return
     }
-    const shift = reservationShift(rectFromDom(host), rectFromDom(neighbor), HOST_GAP_PX)
+    const shift = reservationShift(intendedHostRect(anchor), rectFromDom(neighbor), HOST_GAP_PX)
     if (shift <= 0) {
         return
     }
@@ -223,18 +228,43 @@ const applyReservation = (host: HTMLElement, anchor: HTMLElement) => {
     neighbor.setAttribute(SHORTCUT_RESERVE_ATTR, 'margin')
 }
 
+const intendedHostRect = (anchor: HTMLElement) => {
+    const a = rectFromDom(anchor)
+    const left = a.right + HOST_GAP_PX
+    const top = a.top + (a.height - HOST_SLOT_PX) / 2
+    return {
+        left,
+        top,
+        right: left + HOST_SLOT_PX,
+        bottom: top + HOST_SLOT_PX,
+        width: HOST_SLOT_PX,
+        height: HOST_SLOT_PX,
+    }
+}
+
 const pinBesideAnchor = (host: HTMLElement, anchor: HTMLElement) => {
-    host.style.position = 'absolute'
+    const box = intendedHostRect(anchor)
+    host.style.position = 'fixed'
     host.style.marginLeft = '0px'
-    const a = anchor.getBoundingClientRect()
-    const parent = host.offsetParent
-    const initialBlock = !(parent instanceof HTMLElement) ||
-        (parent === document.body && getComputedStyle(parent).position === 'static' && getComputedStyle(parent).transform === 'none')
-    const r = parent instanceof HTMLElement ? parent.getBoundingClientRect() : null
-    const originX = initialBlock ? -window.scrollX : r!.left + (parent as HTMLElement).clientLeft - (parent as HTMLElement).scrollLeft
-    const originY = initialBlock ? -window.scrollY : r!.top + (parent as HTMLElement).clientTop - (parent as HTMLElement).scrollTop
-    host.style.left = `${a.right + HOST_GAP_PX - originX}px`
-    host.style.top = `${a.top + (a.height - HOST_SLOT_PX) / 2 - originY}px`
+    host.style.left = `${box.left}px`
+    host.style.top = `${box.top}px`
+    host.style.zIndex = HOST_PORTAL_Z
+}
+
+const adoptBodyPortal = (host: HTMLElement | null): HTMLElement => {
+    if (host?.childNodes.length) {
+        host.removeAttribute('id')
+        host.removeAttribute('data-shortcut-host')
+        host = null
+    }
+    if (!host) {
+        host = document.createElement('div')
+        host.id = SHORTCUT_HOST_ID
+    }
+    if (host.parentElement !== document.body) {
+        document.body.append(host)
+    }
+    return host
 }
 
 export const ensureHost = (anchor: HTMLElement): HTMLElement => {
@@ -244,29 +274,12 @@ export const ensureHost = (anchor: HTMLElement): HTMLElement => {
             node.remove()
         }
     })
-    let host = document.getElementById(SHORTCUT_HOST_ID)
-    if (!host) {
-        host = document.createElement('div')
-        host.id = SHORTCUT_HOST_ID
-    }
-    const form = anchor.closest('#nav-searchform')
-    const after = form instanceof HTMLElement ? form : anchor
-    if (host.parentElement !== after.parentElement || host.previousElementSibling !== after) {
-        after.after(host)
-    }
+    const host = adoptBodyPortal(document.getElementById(SHORTCUT_HOST_ID))
     applyHostBox(host)
-    if (prepareSearchSlot(anchor)) {
-        pinBesideAnchor(host, anchor)
-        return host
+    pinBesideAnchor(host, anchor)
+    if (!prepareSearchSlot(anchor)) {
+        applyReservation(host, anchor)
     }
-    const a = anchor.getBoundingClientRect()
-    const h = host.getBoundingClientRect()
-    const nearRight = h.left >= a.right - 2 && h.left <= a.right + HOST_GAP_PX + 28
-    const vertical = Math.min(a.bottom, h.bottom) - Math.max(a.top, h.top) > 4
-    if (!nearRight || !vertical) {
-        pinBesideAnchor(host, anchor)
-    }
-    applyReservation(host, anchor)
     return host
 }
 

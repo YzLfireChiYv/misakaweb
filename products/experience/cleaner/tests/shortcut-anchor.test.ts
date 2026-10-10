@@ -108,8 +108,21 @@ describe('search anchor helpers', () => {
     })
 })
 
+const childSnapshot = (el: HTMLElement) =>
+    Array.from(el.childNodes)
+        .filter((node) => node.nodeType !== Node.TEXT_NODE || Boolean((node.nodeValue ?? '').trim()))
+        .map((node) => {
+            if (node.nodeType === Node.COMMENT_NODE) {
+                return `#comment:${node.nodeValue ?? ''}`
+            }
+            if (node instanceof HTMLElement) {
+                return `${node.tagName.toLowerCase()}#${node.id}.${node.className}`
+            }
+            return node.nodeValue ?? ''
+        })
+
 describe('shortcut host controller', () => {
-    it('places one host after the form, ignores search clicks, and cleans up after replacement', () => {
+    it('places one host on document.body, ignores search clicks, and cleans up after replacement', () => {
         document.body.innerHTML = headerHtml()
         const search = document.getElementById('search-btn') as HTMLElement
         stubRect(search, { x: 800, y: 12, w: 32, h: 32 })
@@ -117,6 +130,8 @@ describe('shortcut host controller', () => {
         search.addEventListener('click', () => {
             clicks += 1
         })
+        const header = document.querySelector('header') as HTMLElement
+        const nativeOrder = childSnapshot(header)
         const controller = createShortcutHostController({
             isActive: () => true,
             getActions: () => [
@@ -126,11 +141,14 @@ describe('shortcut host controller', () => {
         controller.start()
         expect(document.querySelectorAll('#bili-cleaner-shortcut-host')).toHaveLength(1)
         const host = document.getElementById('bili-cleaner-shortcut-host')
-        expect(host?.previousElementSibling?.id).toBe('nav-searchform')
+        expect(host?.parentElement).toBe(document.body)
+        expect(host?.style.position).toBe('fixed')
+        expect(host?.style.left).toBe('840px')
+        expect(host?.style.top).toBe('8px')
+        expect(childSnapshot(header)).toEqual(nativeOrder)
         search.click()
         expect(clicks).toBe(1)
 
-        const header = document.querySelector('header') as HTMLElement
         header.innerHTML = `
           <form id="nav-searchform"><div class="nav-search-btn" id="search-btn-2">go</div></form>
           <a id="nav-link" href="#n">番剧</a>`
@@ -138,7 +156,11 @@ describe('shortcut host controller', () => {
         stubRect(next, { x: 800, y: 12, w: 32, h: 32 })
         controller.refresh()
         expect(document.querySelectorAll('#bili-cleaner-shortcut-host')).toHaveLength(1)
-        expect(document.getElementById('bili-cleaner-shortcut-host')?.previousElementSibling?.id).toBe('nav-searchform')
+        const moved = document.getElementById('bili-cleaner-shortcut-host')
+        expect(moved?.parentElement).toBe(document.body)
+        expect(moved?.style.position).toBe('fixed')
+        expect(moved?.style.left).toBe('840px')
+        expect(header.contains(moved)).toBe(false)
 
         controller.stop()
         expect(document.getElementById('bili-cleaner-shortcut-host')).toBeNull()
@@ -156,5 +178,123 @@ describe('shortcut host controller', () => {
         expect(document.getElementById('bili-cleaner-shortcut-host')).toBeNull()
         expect(document.querySelector('.group.fixed')).toBeNull()
         controller.stop()
+    })
+
+    it('leaves SSR search-panel/comment children unchanged and keeps the host empty of light DOM', () => {
+        document.body.innerHTML = `
+<header class="bili-header">
+  <div class="center-search__bar" id="search-wrap">
+    <form id="nav-searchform">
+      <div class="nav-search-content">
+        <input class="nav-search-input" />
+        <div class="nav-search-btn" id="search-btn">go</div>
+      </div>
+    </form><!--ssr-anchor-->
+    <div class="search-panel nav-search-panel" id="native-panel">
+      <div class="trending">hot</div>
+    </div>
+  </div>
+  <a id="nav-link" href="#n">番剧</a>
+</header>`
+        const wrap = document.getElementById('search-wrap') as HTMLElement
+        const search = document.getElementById('search-btn') as HTMLElement
+        stubRect(search, { x: 400, y: 12, w: 32, h: 32 })
+        const before = childSnapshot(wrap)
+        const controller = createShortcutHostController({
+            isActive: () => true,
+            getActions: () => [
+                { text: '页面净化', defaultHidden: false, isValid: true, actionKey: 'side-rule-panel', run: () => {} },
+            ],
+        })
+        controller.start()
+        const host = document.getElementById('bili-cleaner-shortcut-host')
+        expect(host?.parentElement).toBe(document.body)
+        expect(host?.childNodes.length).toBe(0)
+        expect(wrap.contains(host)).toBe(false)
+        expect(childSnapshot(wrap)).toEqual(before)
+        expect(wrap.style.paddingRight).toBe('48px')
+        expect(document.getElementById('native-panel')?.parentElement).toBe(wrap)
+
+        const replacement = document.createElement('div')
+        replacement.className = 'search-panel nav-search-panel'
+        replacement.id = 'native-panel-2'
+        replacement.innerHTML = '<div class="suggestions">sugg</div>'
+        document.getElementById('native-panel')?.replaceWith(replacement)
+        controller.refresh()
+
+        const after = document.getElementById('bili-cleaner-shortcut-host')
+        expect(after?.parentElement).toBe(document.body)
+        expect(after?.childNodes.length).toBe(0)
+        expect(wrap.contains(after)).toBe(false)
+        expect(childSnapshot(wrap)).toEqual(['form#nav-searchform.', '#comment:ssr-anchor', 'div#native-panel-2.search-panel nav-search-panel'])
+        expect(document.getElementById('native-panel-2')?.parentElement).toBe(wrap)
+        expect(document.getElementById('native-panel-2')?.querySelector('.suggestions')?.textContent).toBe('sugg')
+
+        controller.stop()
+        expect(document.getElementById('bili-cleaner-shortcut-host')).toBeNull()
+        expect(document.getElementById('native-panel-2')?.parentElement).toBe(wrap)
+        expect(wrap.style.paddingRight).toBe('')
+        expect(childSnapshot(wrap)).toEqual(['form#nav-searchform.', '#comment:ssr-anchor', 'div#native-panel-2.search-panel nav-search-panel'])
+    })
+
+    it('does not reserve against native search-panel/history/suggestions', () => {
+        document.body.innerHTML = `
+<header class="bili-header">
+  <form id="nav-searchform"><div class="nav-search-btn" id="search-btn">go</div></form>
+  <div class="search-panel nav-search-panel" id="native-panel">panel</div>
+  <div class="history" id="native-history">hist</div>
+  <div class="suggestions" id="native-sugg">sugg</div>
+  <a id="nav-link" href="#n">番剧</a>
+</header>`
+        const search = document.getElementById('search-btn') as HTMLElement
+        const panel = document.getElementById('native-panel') as HTMLElement
+        const history = document.getElementById('native-history') as HTMLElement
+        const sugg = document.getElementById('native-sugg') as HTMLElement
+        const link = document.getElementById('nav-link') as HTMLElement
+        stubRect(search, { x: 800, y: 12, w: 32, h: 32 })
+        stubRect(panel, { x: 400, y: 52, w: 200, h: 120 })
+        stubRect(history, { x: 400, y: 52, w: 200, h: 80 })
+        stubRect(sugg, { x: 400, y: 52, w: 200, h: 80 })
+        stubRect(link, { x: 840, y: 12, w: 60, h: 32 })
+        const controller = createShortcutHostController({
+            isActive: () => true,
+            getActions: () => [],
+        })
+        controller.start()
+        expect(panel.getAttribute('data-bili-cleaner-shortcut-reserve')).toBeNull()
+        expect(history.getAttribute('data-bili-cleaner-shortcut-reserve')).toBeNull()
+        expect(sugg.getAttribute('data-bili-cleaner-shortcut-reserve')).toBeNull()
+        expect(panel.style.marginLeft).toBe('')
+        expect(link.getAttribute('data-bili-cleaner-shortcut-reserve')).toBe('margin')
+        controller.stop()
+        expect(link.getAttribute('data-bili-cleaner-shortcut-reserve')).toBeNull()
+        expect(link.style.marginLeft).toBe('')
+    })
+
+    it('abandons a Vue-adopted host after the form without moving its light DOM', () => {
+        document.body.innerHTML = `
+<header class="bili-header">
+  <div class="center-search__bar" id="search-wrap">
+    <form id="nav-searchform"><div class="nav-search-btn" id="search-btn">go</div></form>
+    <div id="bili-cleaner-shortcut-host"><div class="trending" id="native-trend">hot</div></div>
+  </div>
+</header>`
+        const wrap = document.getElementById('search-wrap') as HTMLElement
+        const adopted = wrap.querySelector('#bili-cleaner-shortcut-host') as HTMLElement
+        const search = document.getElementById('search-btn') as HTMLElement
+        stubRect(search, { x: 400, y: 12, w: 32, h: 32 })
+        const controller = createShortcutHostController({
+            isActive: () => true,
+            getActions: () => [],
+        })
+        controller.start()
+        expect(adopted.parentElement).toBe(wrap)
+        expect(adopted.id).toBe('')
+        expect(document.getElementById('native-trend')?.parentElement).toBe(adopted)
+        expect(document.getElementById('bili-cleaner-shortcut-host')?.parentElement).toBe(document.body)
+        expect(document.getElementById('bili-cleaner-shortcut-host')?.childNodes.length).toBe(0)
+        controller.stop()
+        expect(document.getElementById('native-trend')?.textContent).toBe('hot')
+        expect(adopted.parentElement).toBe(wrap)
     })
 })

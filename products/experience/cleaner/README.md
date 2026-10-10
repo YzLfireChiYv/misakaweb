@@ -23,3 +23,5 @@ M07 现在打开“快捷开关设置”，每次打开重新居中。页面快�
 `config/optimization-packs.json`记录六组现有优化及预留触摸组，覆盖全部73个优化键；技术依赖与功能类别分开。未来从一套源码构建不同完整脚本，尚未完成的发行组合不会显示为可安装版本。
 
 版本和更新地址集中在`config/release.json`。运行`pnpm release:prepare`完成类型检查、测试和开发构建，自动更新`../misakaweb-feedback-test.user.js`和`../release-manifest.json`；该命令不执行Git操作。仓库根`.github/workflows/userscript.yml`在源码推送后运行同样的检查和构建，仅发布开发脚本与摘要，保留旧0.1.4文件。下一次手动更新到0.1.4.5后，脚本猫可从固定GitHub地址检查后续更新。
+
+0.1.4.6将快捷入口挂到独立body节点，避免进入网站框架管理的搜索子树；位置仍跟随搜索按钮右侧。更新后刷新网页。`pnpm test:search`在隔离匿名Edge中运行完整构建，检查热搜、搜索联想、原生搜索生成的历史及入口模式切换；需可用Playwright包或`PLAYWRIGHT_MODULE_PATH`，结果默认写入忽略的`node_modules/.tmp/live-search/`。它不是日常用户配置或实际脚本猫扩展验收。

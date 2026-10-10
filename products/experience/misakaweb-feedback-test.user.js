@@ -1,7 +1,7 @@
 // ==UserScript==
 // @name         MisakaWeb
 // @namespace    https://github.com/YzLfireChiYv/misakaweb
-// @version      0.1.4.5
+// @version      0.1.4.6
 // @author       festoney8, MisakaWeb
 // @description  大量借用社区上游项目。反馈测试编号版，开发分组。
 // @license      MIT
@@ -20944,7 +20944,7 @@
 	var exportReview = (state) => ({
 		format: "misakaweb-optimization-review",
 		schemaVersion: 1,
-		scriptVersion: "0.1.4.5",
+		scriptVersion: "0.1.4.6",
 		catalogVersion: REVIEW_CATALOG_VERSION,
 		upstreamCommit: REVIEW_SOURCE_COMMIT,
 		exportedAt: new Date().toISOString(),
@@ -21608,6 +21608,8 @@
 			height: box.height
 		};
 	};
+	var HOST_PORTAL_Z = "10000";
+	var SEARCH_DROPDOWN_NEIGHBOR = ".search-panel, .nav-search-panel, .history, .suggestions, .trending";
 	var HOST_CSS = `
 :host { display: inline-flex; width: 40px; height: 40px; }
 .trigger {
@@ -21735,13 +21737,9 @@
 		host.style.width = `40px`;
 		host.style.minWidth = `40px`;
 		host.style.height = `40px`;
-		host.style.marginLeft = `8px`;
+		host.style.marginLeft = "0px";
 		host.style.marginRight = "0px";
 		host.style.verticalAlign = "middle";
-		host.style.position = "relative";
-		host.style.left = "";
-		host.style.top = "";
-		host.style.zIndex = "30";
 		host.style.pointerEvents = "auto";
 		host.style.flexShrink = "0";
 	};
@@ -21755,7 +21753,7 @@
 		const visit = (from) => {
 			let sib = from?.nextElementSibling ?? null;
 			while (sib) {
-				if (sib !== host && sib instanceof HTMLElement && !host.contains(sib) && !sib.contains(host)) {
+				if (sib !== host && sib instanceof HTMLElement && !host.contains(sib) && !sib.contains(host) && !sib.matches(SEARCH_DROPDOWN_NEIGHBOR)) {
 					const width = sib.getBoundingClientRect().width;
 					if (width > 8 && width < window.innerWidth * .7) return sib;
 				}
@@ -21769,7 +21767,7 @@
 		restoreReserve();
 		const neighbor = findRightNeighbor(anchor, host);
 		if (!neighbor) return;
-		const shift = reservationShift(rectFromDom(host), rectFromDom(neighbor), 8);
+		const shift = reservationShift(intendedHostRect(anchor), rectFromDom(neighbor), 8);
 		if (shift <= 0) return;
 		const style = getComputedStyle(neighbor);
 		if (style.position === "absolute" || style.position === "fixed") {
@@ -21803,42 +21801,49 @@
 		neighbor.style.marginLeft = `${base + shift}px`;
 		neighbor.setAttribute(SHORTCUT_RESERVE_ATTR, "margin");
 	};
+	var intendedHostRect = (anchor) => {
+		const a = rectFromDom(anchor);
+		const left = a.right + 8;
+		const top = a.top + (a.height - 40) / 2;
+		return {
+			left,
+			top,
+			right: left + 40,
+			bottom: top + 40,
+			width: 40,
+			height: 40
+		};
+	};
 	var pinBesideAnchor = (host, anchor) => {
-		host.style.position = "absolute";
+		const box = intendedHostRect(anchor);
+		host.style.position = "fixed";
 		host.style.marginLeft = "0px";
-		const a = anchor.getBoundingClientRect();
-		const parent = host.offsetParent;
-		const initialBlock = !(parent instanceof HTMLElement) || parent === document.body && getComputedStyle(parent).position === "static" && getComputedStyle(parent).transform === "none";
-		const r = parent instanceof HTMLElement ? parent.getBoundingClientRect() : null;
-		const originX = initialBlock ? -window.scrollX : r.left + parent.clientLeft - parent.scrollLeft;
-		const originY = initialBlock ? -window.scrollY : r.top + parent.clientTop - parent.scrollTop;
-		host.style.left = `${a.right + 8 - originX}px`;
-		host.style.top = `${a.top + (a.height - 40) / 2 - originY}px`;
+		host.style.left = `${box.left}px`;
+		host.style.top = `${box.top}px`;
+		host.style.zIndex = HOST_PORTAL_Z;
+	};
+	var adoptBodyPortal = (host) => {
+		if (host?.childNodes.length) {
+			host.removeAttribute("id");
+			host.removeAttribute("data-shortcut-host");
+			host = null;
+		}
+		if (!host) {
+			host = document.createElement("div");
+			host.id = SHORTCUT_HOST_ID;
+		}
+		if (host.parentElement !== document.body) document.body.append(host);
+		return host;
 	};
 	var ensureHost = (anchor) => {
 		restoreReserve();
 		document.querySelectorAll(`#${SHORTCUT_HOST_ID}`).forEach((node, index) => {
 			if (index > 0) node.remove();
 		});
-		let host = document.getElementById(SHORTCUT_HOST_ID);
-		if (!host) {
-			host = document.createElement("div");
-			host.id = SHORTCUT_HOST_ID;
-		}
-		const form = anchor.closest("#nav-searchform");
-		const after = form instanceof HTMLElement ? form : anchor;
-		if (host.parentElement !== after.parentElement || host.previousElementSibling !== after) after.after(host);
+		const host = adoptBodyPortal(document.getElementById(SHORTCUT_HOST_ID));
 		applyHostBox(host);
-		if (prepareSearchSlot(anchor)) {
-			pinBesideAnchor(host, anchor);
-			return host;
-		}
-		const a = anchor.getBoundingClientRect();
-		const h = host.getBoundingClientRect();
-		const nearRight = h.left >= a.right - 2 && h.left <= a.right + 8 + 28;
-		const vertical = Math.min(a.bottom, h.bottom) - Math.max(a.top, h.top) > 4;
-		if (!nearRight || !vertical) pinBesideAnchor(host, anchor);
-		applyReservation(host, anchor);
+		pinBesideAnchor(host, anchor);
+		if (!prepareSearchSlot(anchor)) applyReservation(host, anchor);
 		return host;
 	};
 	var releaseHost = () => {
