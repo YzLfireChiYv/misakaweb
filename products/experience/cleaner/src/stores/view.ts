@@ -32,6 +32,14 @@ export const useRulePanelStore = defineStore('RulePanel', () => {
     return { isShow, show, hide, toggle, isPageValid }
 })
 
+export const useConfigurationPanelStore = defineStore('ConfigurationPanel', () => {
+    const isShow = ref(false)
+    const openToken = ref(0)
+    const show = () => { openToken.value++; isShow.value = true }
+    const hide = () => { isShow.value = false }
+    return { isShow, openToken, show, hide }
+})
+
 export const useVideoFilterPanelStore = defineStore('VideoFilterPanel', () => {
     const isShow = ref(false)
     const show = () => {

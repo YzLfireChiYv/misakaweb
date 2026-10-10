@@ -1,5 +1,5 @@
 import { Item } from '@/types/item'
-import { GM_getValue } from '$'
+import { GM_getValue } from '@/storage/configStorage'
 import { matchAvidBvid, matchBvid } from '@/utils/tool'
 import URLHandlerInstance from '@/utils/urlHandler'
 

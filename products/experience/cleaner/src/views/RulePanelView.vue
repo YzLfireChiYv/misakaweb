@@ -26,6 +26,10 @@
         </div>
         <p v-if="!displayedRules.length" class="p-3 text-sm text-gray-500">没有匹配的设置。</p>
         <div class="mt-3 border-t border-gray-200 pt-2">
+            <button type="button" class="mr-2 rounded border border-gray-300 px-2 py-1 text-sm text-gray-700"
+                @click="configurationStore.show()">
+                <FeedbackBadge :code="actionLabel('side-configuration')" />配置管理
+            </button>
             <button type="button" class="rounded border border-gray-300 px-2 py-1 text-sm text-gray-700"
                 @click="exportDiagnostic">
                 <FeedbackBadge :code="actionLabel('maintenance-export-diagnostic')" />导出维护信息
@@ -48,7 +52,7 @@ import WebdavComp from '@/components/items/WebdavComp.vue'
 import PanelComp from '@/components/PanelComp.vue'
 import { rules } from '@/modules/rules'
 import { sectionGroups } from '@/modules/settings/sections'
-import { useRulePanelStore } from '@/stores/view'
+import { useRulePanelStore, useConfigurationPanelStore } from '@/stores/view'
 import type { IEditorItem } from '@/types/item'
 import { computed, ref } from 'vue'
 import { actionLabel, settingLabel } from '@/feedback'
@@ -56,6 +60,7 @@ import FeedbackBadge from '@/feedback/Badge.vue'
 import { downloadMaintenanceDiagnostic } from '@/modules/maintenance/diagnostics'
 
 const store = useRulePanelStore()
+const configurationStore = useConfigurationPanelStore()
 const buildProfile = __BUILD_PROFILE__
 const buildLabel = __BUILD_LABEL__
 const scriptVersion = __SCRIPT_VERSION__

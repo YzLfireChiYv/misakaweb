@@ -10,6 +10,7 @@ import {
     useCommentFilterPanelStore,
     useDynamicFilterPanelStore,
     useRulePanelStore,
+    useConfigurationPanelStore,
     useShortcutSettingsStore,
     useVideoFilterPanelStore,
 } from './stores/view'
@@ -60,6 +61,7 @@ const menu = () => {
         return
     }
     const ruleStore = useRulePanelStore()
+    const configurationStore = useConfigurationPanelStore()
     const videoStore = useVideoFilterPanelStore()
     const commentStore = useCommentFilterPanelStore()
     const dynamicStore = useDynamicFilterPanelStore()
@@ -69,6 +71,7 @@ const menu = () => {
     GM_registerMenuCommand(withMenuId('menu-rule-panel', '✅ 页面净化优化'), () => {
         ruleStore.toggle()
     })
+    GM_registerMenuCommand(withMenuId('menu-configuration', '⚙ 配置管理'), () => configurationStore.show())
     if (videoStore.isPageValid()) {
         GM_registerMenuCommand(withMenuId('menu-video-filter', '✅ 视频过滤设置'), () => {
             videoStore.toggle()

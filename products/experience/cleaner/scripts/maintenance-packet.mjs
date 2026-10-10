@@ -51,6 +51,10 @@ const SUPPORTING_FILES = [
     'PACKS.md',
     'community/README.md',
     'community/evolved-player-gestures.json',
+    'src/feedback/review-catalog.generated.ts',
+    'src/modules/configuration/README.md',
+    'src/modules/touch/README.md',
+    'src/modules/touch/LICENCE.md',
     'maintenance/registry.json',
     'maintenance/README.md',
 ]

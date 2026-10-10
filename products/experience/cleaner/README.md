@@ -4,16 +4,16 @@
 
 ## 当前产品探索
 
-0.1.4.9 以完整编号版供实际试用，普通完整版共用界面，差别仅编号。页面设置按原功能组拆成“净化”“优化 - 具体包”“公共设置”栏目，保留搜索、折叠和实际设置控件。原取舍工具退出产品入口；历史代码和记录仅留作参考，不再读取取舍记录。
+0.1.5以全量体验版试用，净化轻量版和桌面实用版按需构建。页面设置按净化/具体优化组分栏；M09配置中心汇总当前成品530个配置字段，默认下载省略3个连接字段。原键和默认继承状态保持，读写集中到storage/configStorage.ts。
 
 分类由构建时的公开目录注入，分栏不改变 Item 引用、配置键、默认值或回调。编号测试可搜索 S 编号；普通版搜索名称和栏目。维护信息导出是两版都有的支持工具，不自动读取私人数据。
 
 ## 构建与发行
 
-`pnpm release:prepare` 更新维护索引、检查类型和既有测试，构建完整编号版与普通完整版（desktop-toolkit）及摘要。不执行 Git 操作。源码推送后 GitHub 运行同样流程，更新这两个安装通道。
+`pnpm release:prepare` 更新维护索引、检查类型和既有测试，默认只构建全量体验版及摘要。不执行Git操作。另两版按需要运行`pnpm build:variants --profile ID`，不要求每次三版全构建。
 
-`pnpm build:feedback` 生成 ../misakaweb-feedback-test.user.js。已有分包实验保留原固定地址，当前暂不扩大发行矩阵。需要特定组合时可用 `pnpm build:variants --profile ID`，有意重建全部实验才用 `pnpm build:variants`。旧 ../misakaweb.user.js 0.1.4 保留，不从当前普通构建自动覆盖。
+`pnpm build:feedback`生成../misakaweb-feedback-test.user.js。当前普通profiles只有pure和desktop-toolkit，`pnpm build:variants`会构建两者。本轮已生成三份0.1.5起始版本；旧0.1.4与旧单包实验文件只留兼容地址，不进入当前安装目录。
 
 快捷入口默认在搜索图标右侧的独立 body 节点，可在“快捷开关设置”中关闭或切回悬浮；每次打开快捷设置会居中。编号和普通版使用同一组设置键。
 
-社区接入见 [准备记录](community/README.md)，分包约束见 [PACKS.md](PACKS.md)，维护材料见 [maintenance/README.md](maintenance/README.md)。复杂评分与新 WebDAV 并发协议尚未实现。
+触摸原型默认关闭，视频页搜索S529；复用Evolved轨迹/分区灵敏度，提示用原生DOM，不带Vue2。本机只用人工派发触摸事件确认接线，实际平板、原生媒体全屏和音量限制留待用户试用。配置导入/回滚/恢复与同步作用域见[配置说明](src/modules/configuration/README.md)，社区来源见[接入记录](community/README.md)。新的WebDAV并发协议和复杂评分仍未实现。

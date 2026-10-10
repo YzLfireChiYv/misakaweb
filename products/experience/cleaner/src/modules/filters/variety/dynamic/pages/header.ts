@@ -2,7 +2,7 @@ import { coreCheck } from '@/modules/filters/core/core'
 import config from '@/config'
 import { IMainFilter, SelectorResult, SubFilterPair } from '@/types/filter'
 import { logger } from '@/utils/logger'
-import { GM_getValue } from '$'
+import { GM_getValue } from '@/storage/configStorage'
 import { DynContentFilter, DynUploaderFilter, DynVideoTitleFilter } from '../subFilters/black'
 import { DynContentWhiteFilter, DynVideoTitleWhiteFilter } from '../subFilters/white'
 

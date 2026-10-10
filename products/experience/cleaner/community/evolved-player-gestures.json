@@ -1,7 +1,7 @@
 {
   "schemaVersion": 1,
   "id": "evolved-player-gestures",
-  "status": "integration-prepared-not-enabled",
+  "status": "prototype-integrated-default-off",
   "pack": "touch-controls",
   "repository": "https://github.com/the1812/Bilibili-Evolved",
   "commit": "fa06dcec095dbccaba82f50ae2318c8d61c26671",
@@ -63,36 +63,36 @@
   },
   "firstSlice": {
     "page": "ordinary-video-page",
-    "capability": "horizontal seek gesture with preview; commit on release, cancel without changing playback",
+    "capability": "horizontal seek preview/release commit; optional default-off vertical brightness and volume; cancel without application",
     "notYetIncluded": [
-      "vertical volume/brightness",
       "thumbnail API",
-      "bangumi/festival coverage"
+      "bangumi/festival coverage",
+      "native iOS media fullscreen"
     ]
   },
   "reuse": {
-    "swiper.ts": "Reuse trajectory/direction and seek-speed mapping; inject options instead of getComponentSettings; add explicit mount/dispose, touchcancel/multitouch guards and threshold behavior."
+    "swiper.ts": "gesture-math.ts derives direction locking and three-band seek sensitivity; sign-symmetric distance threshold, pure math separated from owned mount/dispose controller."
   },
   "replacements": [
     {
       "upstream": "playerAgent.query.video.element/container/subtitle",
-      "ours": "A page adapter resolves current HTMLVideoElement, input surface and owned preview mount point."
+      "ours": "Current HTMLVideoElement and video-wrap surface selected from native desktop player DOM; preview mounted to body or current fullscreen root."
     },
     {
       "upstream": "videoChange",
-      "ours": "A lifecycle binding disposes the previous gesture instance and binds once to the new video/container."
+      "ours": "TouchGestureController observes relevant player/video insertion or removal; disposes previous binding, cancels on emptied/fullscreen/resize, binds idempotently."
     },
     {
       "upstream": "getComponentSettings(touchPlayerGestures)",
-      "ours": "An Item in 播放器 - 优化 - 触摸操作; saved options passed into the gesture recognizer, off by default during initial integration."
+      "ours": "Four Items in 播放器 - 优化 - 触摸操作: master switch, minimum distance, seek multiplier, separate vertical switch; both switches default off."
     },
     {
       "upstream": "Vue2 GesturePreview + mountVueComponent",
-      "ours": "Vue3 owned overlay; match the current product setting style, no full Evolved runtime dependency."
+      "ours": "Owned lightweight DOM overlay, with no Vue 2 runtime or additional framework dependency."
     },
     {
       "upstream": "unsafeWindow.player.seek(progress, video.paused)",
-      "ours": "Our seek adapter clamps target and preserves paused state; use the available native player method, with HTMLVideoElement fallback."
+      "ours": "Clamped HTMLVideoElement.currentTime assignment on release preserves paused state; no dependency on unsafeWindow.player."
     },
     {
       "upstream": "videoshot.ts API + preview image",
@@ -105,5 +105,5 @@
     "Do not copy the Vue2 overlay or Evolved settings/observer framework wholesale."
   ],
   "nextAcceptance": "One complete script on a real video page: drag-preview-release seek, short movement/native scroll, cancel, disable/re-enable and video replacement. Actual tablet checks when integrated; no broad pre-integration experiment matrix.",
-  "integrationFacts": "No Evolved code copied into runtime in this delivery. No touch listeners installed. Existing scripts remain independently installable."
+  "integrationFacts": "gesture-math.ts contains derivative Evolved trajectory/sensitivity logic. Controller, settings and overlay are MisakaWeb adapters. Upstream LICENCE.md preserved in src/modules/touch; support points to MisakaWeb. No thumbnail requests. Real tablet verification remains outstanding."
 }

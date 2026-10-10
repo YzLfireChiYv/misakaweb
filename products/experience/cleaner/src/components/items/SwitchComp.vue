@@ -25,7 +25,7 @@
 <script setup lang="ts">
 import { ISwitchItem } from '@/types/item'
 import { logger } from '@/utils/logger'
-import { GM_getValue, GM_setValue } from '$'
+import { GM_getValue, GM_setValue } from '@/storage/configStorage'
 import { Switch, SwitchGroup, SwitchLabel } from '@headlessui/vue'
 import { ref, watch } from 'vue'
 import FeedbackBadge from '@/feedback/Badge.vue'

@@ -1,5 +1,5 @@
 import { computed, getCurrentScope, onScopeDispose, ref } from 'vue'
-import { GM_addValueChangeListener, GM_getValue, GM_removeValueChangeListener, GM_setValue } from '$'
+import { GM_addValueChangeListener, GM_getValue, GM_removeValueChangeListener, GM_setValue } from '@/storage/configStorage'
 import { reviewCatalog, REVIEW_CATALOG_VERSION, REVIEW_SOURCE_COMMIT } from '@review-catalog'
 import type { ReviewCategory, ReviewEntry } from './review-types'
 

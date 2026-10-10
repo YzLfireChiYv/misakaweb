@@ -1,3 +1,4 @@
+import { deviceStorage } from '@/storage/configStorage'
 import { Item } from '@/types/item'
 import { logger } from '@/utils/logger'
 import { waitForEle } from '@/utils/tool'
@@ -26,7 +27,7 @@ export const bangumiMiniPlayerItems: Item[] = [
         name: '滚轮调节大小',
         enableFn: async () => {
             try {
-                const zoom = useStorage('bili-cleaner-mini-player-zoom', 1, localStorage)
+                const zoom = useStorage('bili-cleaner-mini-player-zoom', 1, deviceStorage)
                 document.documentElement.style.setProperty('--mini-player-zoom', zoom.value + '')
                 waitForEle(document.body, `#bilibili-player [class^="bpx-player-video"]`, (node: HTMLElement) => {
                     return node.className.startsWith('bpx-player-video')
@@ -85,7 +86,7 @@ export const bangumiMiniPlayerItems: Item[] = [
         id: 'video-page-bpx-player-mini-mode-position-record',
         name: '记录小窗位置',
         enableFn: async () => {
-            const pos = useStorage('bili-cleaner-mini-player-pos', { tx: 0, ty: 0 }, localStorage)
+            const pos = useStorage('bili-cleaner-mini-player-pos', { tx: 0, ty: 0 }, deviceStorage)
             document.documentElement.style.setProperty('--mini-player-translate-x', pos.value.tx + 'px')
             document.documentElement.style.setProperty('--mini-player-translate-y', pos.value.ty + 'px')
 

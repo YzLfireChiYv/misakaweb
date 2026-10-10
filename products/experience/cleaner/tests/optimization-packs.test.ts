@@ -6,7 +6,7 @@ describe('optimization group build inputs', () => {
     it('assigns each existing optimization to exactly one complete capability group', () => {
         const assigned = catalog.packs.flatMap(pack => pack.setting_keys)
         expect(new Set(assigned).size).toBe(assigned.length)
-        expect(assigned).toHaveLength(73)
+        expect(assigned).toHaveLength(catalog.counts.existing_optimization_keys)
         expect([...assigned].sort()).toEqual(reviewCatalog.filter(row => row.category === 'optimization').map(row => row.key).sort())
         for (const pack of catalog.packs) {
             const members = reviewCatalog.filter(row => row.pack === pack.id)
@@ -27,10 +27,9 @@ describe('optimization group build inputs', () => {
     it('keeps confirmed optional defaults and labels future gestures/profiles honestly', () => {
         expect(catalog.packs.flatMap(pack => pack.confirmed_default_off_keys).sort()).toEqual(['border-radius', 'common-theme-dark', 'common-unify-font'])
         const touch = catalog.packs.find(pack => pack.id === 'touch-controls')!
-        expect(touch.status).toBe('planned-not-implemented')
-        expect(touch.setting_keys).toHaveLength(0)
-        expect(catalog.distribution.planned_profiles.filter(profile => profile.available).map(profile=>profile.id)).toEqual(['pure','desktop-toolkit','without-text-appearance'])
-        expect(catalog.distribution.planned_profiles.find(profile=>profile.id==='tablet')?.available).toBe(false)
+        expect(touch.status).toBe('prototype-integrated')
+        expect(touch.setting_keys).toHaveLength(4)
+        expect(catalog.distribution.planned_profiles.filter(profile => profile.available).map(profile=>profile.id)).toEqual(['development','pure','desktop-toolkit'])
         expect(catalog.external_sources[0].commit).toHaveLength(40)
     })
 })

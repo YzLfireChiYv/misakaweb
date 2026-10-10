@@ -1,4 +1,4 @@
-import { GM_getValue } from 'vite-plugin-monkey/dist/client'
+import { GM_getValue } from '@/storage/configStorage'
 
 export default {
     isDebugMode: GM_getValue('debug-mode') === true || import.meta.env.DEV,

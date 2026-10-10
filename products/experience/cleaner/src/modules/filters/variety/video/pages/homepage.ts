@@ -5,7 +5,7 @@ import { Group } from '@/types/collection'
 import { ContextMenuTargetHandler, FilterContextMenu, IMainFilter, SelectorResult, SubFilterPair } from '@/types/filter'
 import { logger } from '@/utils/logger'
 import { isPageHomepage } from '@/utils/pageType'
-import { GM_getValue, GM_setValue } from '$'
+import { GM_getValue, GM_setValue } from '@/storage/configStorage'
 import { convertDateToDays, convertTimeToSec, matchBvid, orderedUniq, showEle, waitForEle } from '@/utils/tool'
 import {
     VideoBvidFilter,

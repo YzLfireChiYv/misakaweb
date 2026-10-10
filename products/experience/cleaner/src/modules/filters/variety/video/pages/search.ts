@@ -6,7 +6,8 @@ import { ContextMenuTargetHandler, FilterContextMenu, IMainFilter, SelectorResul
 import fetchHook from '@/utils/fetch'
 import { logger } from '@/utils/logger'
 import { isPageSearch } from '@/utils/pageType'
-import { GM_getValue, GM_setValue, unsafeWindow } from '$'
+import { unsafeWindow } from '$'
+import { GM_getValue, GM_setValue } from '@/storage/configStorage'
 import { calcVideoRelativity, convertTimeToSec, matchBvid, orderedUniq, showEle, waitForEle } from '@/utils/tool'
 import {
     VideoBvidFilter,

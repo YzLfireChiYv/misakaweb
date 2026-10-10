@@ -244,6 +244,9 @@ const nearestGroupName = (node) => {
 
 const locateFile = (file) => {
     const rel = path.relative(MODULES, file).replaceAll('\\', '/')
+    if (rel === 'touch/index.ts') {
+        return { rel, kind: 'rule', panel: 'rule', pages: ['video', 'playlist'] }
+    }
     if (rel.startsWith('rules/')) {
         const pageKey = rel.split('/')[1]
         return {

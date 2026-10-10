@@ -114,7 +114,7 @@ describe('feedback retention decisions are separate from runtime settings', () =
         const exported = exportReview(normalizeReview(raw))
         const text = JSON.stringify(exported)
         expect(text).not.toContain('DO_NOT_EXPORT')
-        expect(exported.items).toHaveLength(399)
+        expect(exported.items).toHaveLength(403)
         expect(exported.items.find(e => e.key === key)?.disposition).toBe('delete-candidate')
         expect(exported.items.find(e => e.key === 'homepage-layout-padding')?.disposition).toBe('pending')
         expect(exported.items.find(e => e.key === 'homepage-hide-banner')?.disposition).toBe('retain')

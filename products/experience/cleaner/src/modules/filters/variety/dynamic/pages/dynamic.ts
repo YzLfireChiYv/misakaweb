@@ -4,7 +4,7 @@ import { Group } from '@/types/collection'
 import { ContextMenuTargetHandler, FilterContextMenu, IMainFilter, SelectorResult, SubFilterPair } from '@/types/filter'
 import { logger } from '@/utils/logger'
 import { isPageDynamic } from '@/utils/pageType'
-import { GM_getValue, GM_setValue } from '$'
+import { GM_getValue, GM_setValue } from '@/storage/configStorage'
 import { convertTimeToSec, orderedUniq, showEle, waitForEle } from '@/utils/tool'
 import {
     DynContentFilter,

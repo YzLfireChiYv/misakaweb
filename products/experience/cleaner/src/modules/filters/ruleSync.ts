@@ -1,10 +1,5 @@
-import {
-    GM_addValueChangeListener,
-    GM_deleteValue,
-    GM_getValue,
-    GM_setValue,
-    GM_xmlhttpRequest,
-} from '$'
+import { GM_xmlhttpRequest } from '$'
+import { GM_addValueChangeListener, GM_deleteValue, GM_getValue, GM_setValue } from '@/storage/configStorage'
 import { Group } from '@/types/collection'
 import { logger } from '@/utils/logger'
 import { RULE_FIELDS, exportRulePack, planRuleImport } from './rulePack'
@@ -26,6 +21,19 @@ let syncing: Promise<void> | null = null
 let suppressDepth = 0
 let suppressUntil = 0
 let editTimer = 0
+let configImportPaused = false
+
+/** Batch import cannot race an ongoing sync or trigger an upload mid-write.
+ * Deliberately stays paused for this page until the user reloads after import.
+ */
+export const withConfigImportSuppressed = <T>(apply: () => T): T => {
+    if (syncing) throw new Error('正在同步规则，请等待完成后再导入配置。')
+    window.clearTimeout(editTimer)
+    configImportPaused = true
+    suppressDepth++
+    try { return apply() }
+    finally { suppressDepth-- }
+}
 
 type GmResponse = {
     status: number
@@ -40,7 +48,7 @@ const readText = (key: string) => {
 
 const syncEnabled = () => Boolean(GM_getValue(SYNC_KEYS.enabled, false))
 
-const canSync = () => syncEnabled() && readText(SYNC_KEYS.url) !== '' && readText(SYNC_KEYS.user) !== ''
+const canSync = () => !configImportPaused && syncEnabled() && readText(SYNC_KEYS.url) !== '' && readText(SYNC_KEYS.user) !== ''
 
 const basicAuth = (user: string, password: string) => {
     const bytes = new TextEncoder().encode(`${user}:${password}`)
@@ -267,7 +275,7 @@ export const syncRulesNow = () => {
 }
 
 const scheduleFromEdit = () => {
-    if (suppressDepth > 0 || Date.now() < suppressUntil) {
+    if (configImportPaused || suppressDepth > 0 || Date.now() < suppressUntil) {
         return
     }
     GM_setValue(SYNC_KEYS.stamp, Date.now())

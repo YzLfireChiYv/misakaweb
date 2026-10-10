@@ -7,9 +7,9 @@
     "note": "IDs are assigned from keys. The same persisted key reuses the same S ID across pages. Include the page URL in feedback when page-specific implementations differ.",
     "generatedAt": "2026-10-10",
     "counts": {
-        "settings": 525,
-        "menus": 8,
-        "actions": 34
+        "settings": 529,
+        "menus": 9,
+        "actions": 42
     },
     "settings": [
         {
@@ -9715,6 +9715,78 @@
             "groups": [
                 "快捷入口"
             ]
+        },
+        {
+            "id": "S526",
+            "key": "misakaweb-gesture-min-distance",
+            "type": "number",
+            "names": [
+                "触摸手势最小滑动距离"
+            ],
+            "pages": [
+                "video",
+                "playlist"
+            ],
+            "panels": [
+                "rule"
+            ],
+            "groups": [
+                "播放器触摸操作"
+            ]
+        },
+        {
+            "id": "S527",
+            "key": "misakaweb-gesture-seek-scale",
+            "type": "number",
+            "names": [
+                "触摸进度调节倍率"
+            ],
+            "pages": [
+                "video",
+                "playlist"
+            ],
+            "panels": [
+                "rule"
+            ],
+            "groups": [
+                "播放器触摸操作"
+            ]
+        },
+        {
+            "id": "S528",
+            "key": "misakaweb-gesture-vertical",
+            "type": "switch",
+            "names": [
+                "触摸上下滑动调节亮度和音量"
+            ],
+            "pages": [
+                "video",
+                "playlist"
+            ],
+            "panels": [
+                "rule"
+            ],
+            "groups": [
+                "播放器触摸操作"
+            ]
+        },
+        {
+            "id": "S529",
+            "key": "misakaweb-player-gestures",
+            "type": "switch",
+            "names": [
+                "播放器触摸手势"
+            ],
+            "pages": [
+                "video",
+                "playlist"
+            ],
+            "panels": [
+                "rule"
+            ],
+            "groups": [
+                "播放器触摸操作"
+            ]
         }
     ],
     "menus": [
@@ -9799,6 +9871,15 @@
                 "channel",
                 "search",
                 "space"
+            ],
+            "panel": "script-manager"
+        },
+        {
+            "id": "M09",
+            "key": "menu-configuration",
+            "name": "配置管理",
+            "pages": [
+                "*"
             ],
             "panel": "script-manager"
         }
@@ -10173,6 +10254,78 @@
                 "*"
             ],
             "panel": "optimization-review-test"
+        },
+        {
+            "id": "B35",
+            "key": "config-apply-import",
+            "name": "应用导入",
+            "pages": [
+                "*"
+            ],
+            "panel": "configuration"
+        },
+        {
+            "id": "B36",
+            "key": "config-choose-import",
+            "name": "选择配置文件",
+            "pages": [
+                "*"
+            ],
+            "panel": "configuration"
+        },
+        {
+            "id": "B37",
+            "key": "config-export",
+            "name": "下载配置备份",
+            "pages": [
+                "*"
+            ],
+            "panel": "configuration"
+        },
+        {
+            "id": "B38",
+            "key": "config-refresh-page",
+            "name": "刷新应用配置",
+            "pages": [
+                "*"
+            ],
+            "panel": "configuration"
+        },
+        {
+            "id": "B39",
+            "key": "config-restore-backup",
+            "name": "恢复导入前备份",
+            "pages": [
+                "*"
+            ],
+            "panel": "configuration"
+        },
+        {
+            "id": "B40",
+            "key": "config-save-setting",
+            "name": "保存全局设置",
+            "pages": [
+                "*"
+            ],
+            "panel": "configuration"
+        },
+        {
+            "id": "B41",
+            "key": "panel-close-configuration",
+            "name": "关闭配置管理",
+            "pages": [
+                "*"
+            ],
+            "panel": "configuration"
+        },
+        {
+            "id": "B42",
+            "key": "side-configuration",
+            "name": "打开配置管理",
+            "pages": [
+                "*"
+            ],
+            "panel": "configuration"
         }
     ]
 }

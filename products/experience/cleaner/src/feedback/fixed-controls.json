@@ -75,6 +75,14 @@
                 "*"
             ],
             "panel": "script-manager"
+        },
+        {
+            "key": "menu-configuration",
+            "name": "配置管理",
+            "pages": [
+                "*"
+            ],
+            "panel": "script-manager"
         }
     ],
     "actions": [
@@ -413,6 +421,70 @@
                 "*"
             ],
             "panel": "optimization-review-test"
+        },
+        {
+            "key": "side-configuration",
+            "name": "打开配置管理",
+            "pages": [
+                "*"
+            ],
+            "panel": "configuration"
+        },
+        {
+            "key": "config-export",
+            "name": "下载配置备份",
+            "pages": [
+                "*"
+            ],
+            "panel": "configuration"
+        },
+        {
+            "key": "config-choose-import",
+            "name": "选择配置文件",
+            "pages": [
+                "*"
+            ],
+            "panel": "configuration"
+        },
+        {
+            "key": "config-apply-import",
+            "name": "应用导入",
+            "pages": [
+                "*"
+            ],
+            "panel": "configuration"
+        },
+        {
+            "key": "config-restore-backup",
+            "name": "恢复导入前备份",
+            "pages": [
+                "*"
+            ],
+            "panel": "configuration"
+        },
+        {
+            "key": "config-save-setting",
+            "name": "保存全局设置",
+            "pages": [
+                "*"
+            ],
+            "panel": "configuration"
+        },
+        {
+            "key": "config-refresh-page",
+            "name": "刷新应用配置",
+            "pages": [
+                "*"
+            ],
+            "panel": "configuration"
+        },
+        {
+            "key": "panel-close-configuration",
+            "name": "关闭配置管理",
+            "pages": [
+                "*"
+            ],
+            "panel": "configuration"
         }
     ],
     "settings": [

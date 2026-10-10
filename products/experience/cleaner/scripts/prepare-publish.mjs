@@ -86,7 +86,6 @@ runPnpm(['run', 'maintenance:index'])
 runPnpm(['exec', 'vue-tsc', '-b'])
 runPnpm(['run', 'test'])
 runPnpm(['run', 'build:feedback'])
-// Product exploration currently uses the complete numbered build. Publish its
-// ordinary counterpart; leave other experiments on their existing versions.
-runPnpm(['run', 'build:variants', '--profile', 'desktop-toolkit'])
+// Current default release updates the full test channel only. Ordinary editions
+// are built deliberately when needed, not as a mandatory release matrix.
 writeManifest()

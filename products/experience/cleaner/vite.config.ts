@@ -41,7 +41,7 @@ export default defineConfig(({ mode }) => {
             __PACK_PLAYBACK__: JSON.stringify(!profile || profile.packs.includes('playback')),
             __PACK_LINKS__: JSON.stringify(!profile || profile.packs.includes('link-tools')),
             __BUILD_PROFILE__: JSON.stringify(profile?.id ?? (isFeedback ? 'development' : 'legacy')),
-            __BUILD_LABEL__: JSON.stringify(profile?.label ?? '完整工具包'),
+            __BUILD_LABEL__: JSON.stringify(profile?.label ?? '全量体验版'),
             __SETTING_SECTIONS__: JSON.stringify(classificationFor(profile)),
         },
         plugins: [

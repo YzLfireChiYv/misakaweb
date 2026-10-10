@@ -17,7 +17,7 @@
 <script setup lang="ts">
 import { IStringItem } from '@/types/item'
 import { logger } from '@/utils/logger'
-import { GM_getValue, GM_setValue } from '$'
+import { GM_getValue, GM_setValue } from '@/storage/configStorage'
 import { watchThrottled } from '@vueuse/core'
 import { ref } from 'vue'
 import FeedbackBadge from '@/feedback/Badge.vue'

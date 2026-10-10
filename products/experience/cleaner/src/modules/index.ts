@@ -1,7 +1,7 @@
 import { IListItem, INumberItem, IStringItem, ISwitchItem } from '@/types/item'
 import { waitForHead } from '@/utils/init'
 import { logger } from '@/utils/logger'
-import { GM_getValue } from '$'
+import { GM_getValue } from '@/storage/configStorage'
 import { useMagicKeys } from '@vueuse/core'
 import { articleFilters, commentFilters, dynamicFilters, loadFilterStyle, videoFilters } from './filters'
 import { installRuleWatch } from './filters/ruleSync'

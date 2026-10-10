@@ -7,7 +7,7 @@ describe('review classification matches actual controls', () => {
         const current = map.settings.filter((entry: { panels: string[] }) => entry.panels.includes('rule'))
         const byKey = new Map(reviewCatalog.map(entry => [entry.key, entry]))
         expect(byKey.size).toBe(reviewCatalog.length)
-        expect(current).toHaveLength(397)
+        expect(current).toHaveLength(401)
         for (const entry of current) {
             expect(byKey.get(entry.key)?.id).toBe(entry.id)
         }

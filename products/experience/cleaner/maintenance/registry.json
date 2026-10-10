@@ -46,6 +46,8 @@
         "src/components/",
         "src/views/",
         "src/modules/settings/",
+        "src/modules/configuration/",
+        "src/storage/",
         "src/stores/",
         "src/feedback/",
         "src/utils/panelGeometry.ts"
@@ -364,6 +366,18 @@
         "pnpm build:feedback"
       ],
       "live_verification": "Required on affected page with actual complete script; passing unit/build alone is insufficient."
+    },
+    {
+      "id": "touch-gestures",
+      "label": "播放器触摸手势",
+      "paths": [
+        "src/modules/touch/"
+      ],
+      "recommended_checks": [
+        "pnpm exec vue-tsc -b",
+        "pnpm build:feedback"
+      ],
+      "live_verification": "Real tablet input still required; desktop dispatched events are only a wiring check."
     }
   ],
   "sources": [
@@ -377,7 +391,7 @@
       "id": "evolved",
       "repository": "https://github.com/the1812/Bilibili-Evolved",
       "commit": "fa06dcec095dbccaba82f50ae2318c8d61c26671",
-      "relationship": "reference/candidate only; touch gestures not integrated",
+      "relationship": "gesture direction/sensitivity partially reused in touch prototype; local lifecycle/UI adapter. Comment/player-agent paths remain candidates, not integrated.",
       "candidate_paths": [
         "registry/lib/components/touch/player-gestures",
         "src/components/utils/comment-apis.ts",

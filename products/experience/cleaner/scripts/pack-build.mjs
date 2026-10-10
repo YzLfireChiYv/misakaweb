@@ -116,6 +116,7 @@ export const packSourcePlugin = profile => ({
         const file=id.split('?')[0].replaceAll('\\','/')
         if(!file.startsWith(productRoot.replaceAll('\\','/')+'/src/')) return
         if(file===themePath&&!profile.packs.includes('appearance'))return {code:"import { ref } from 'vue'; export const isDarkMode=ref(false); export const commonThemeItems=[]; export const toggleDarkMode=()=>{};",map:null}
+        if(file.endsWith('/modules/touch/index.ts')&&!profile.packs.includes('touch-controls'))return {code:'export const touchItems=[];',map:null}
         if(file.endsWith('.ts')&&(file.includes('/modules/rules/')||file.includes('/modules/filters/')||file.endsWith('/feedback/context-actions.ts')))return {code:pruneSource(code,file,profile),map:null}
     }
 })

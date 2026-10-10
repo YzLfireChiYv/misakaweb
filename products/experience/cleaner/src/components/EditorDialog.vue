@@ -37,7 +37,7 @@
 import { IEditorItem } from '@/types/item'
 import { logger } from '@/utils/logger'
 import { orderedUniq } from '@/utils/tool'
-import { GM_getValue, GM_setValue } from '$'
+import { GM_getValue, GM_setValue } from '@/storage/configStorage'
 import { computed, onUnmounted, ref, type WatchStopHandle } from 'vue'
 import { watchDebounced } from '@vueuse/core'
 import PanelComp from './PanelComp.vue'

@@ -1,4 +1,4 @@
-import { GM_deleteValue, GM_getValue, GM_listValues, GM_setValue } from '$'
+import { GM_deleteValue, GM_getValue, GM_listValues, GM_setValue } from '@/storage/configStorage'
 import { logger } from '@/utils/logger'
 
 /**

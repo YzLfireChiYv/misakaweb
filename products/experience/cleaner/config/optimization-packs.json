@@ -1,11 +1,11 @@
 {
   "schema_version": 1,
   "catalog_version": "2026-10-11.1",
-  "scope": "Product exploration uses the complete numbered build with classified setting sections. Nine earlier pack experiments remain available, but final profile lineup is undecided; touch integration is prepared, not implemented.",
+  "scope": "Three edition directions; full test integrates touch prototype and centralized configuration. Ordinary builds are on demand.",
   "counts": {
-    "existing_optimization_keys": 73,
-    "existing_groups": 6,
-    "reserved_groups": 1
+    "existing_optimization_keys": 77,
+    "existing_groups": 7,
+    "reserved_groups": 0
   },
   "pack_semantics": "Inclusion means capability exists; does not mean every setting is enabled.",
   "core_support": [
@@ -282,9 +282,19 @@
     {
       "id": "touch-controls",
       "label": "触摸操作",
-      "status": "planned-not-implemented",
-      "setting_ids": [],
-      "setting_keys": [],
+      "status": "prototype-integrated",
+      "setting_ids": [
+        "S529",
+        "S526",
+        "S527",
+        "S528"
+      ],
+      "setting_keys": [
+        "misakaweb-player-gestures",
+        "misakaweb-gesture-min-distance",
+        "misakaweb-gesture-seek-scale",
+        "misakaweb-gesture-vertical"
+      ],
       "rationale": "为平板/触屏版预留播放器滑动进度、音量、画面亮度和操作提示",
       "shared_capabilities": [
         "player-adapter",
@@ -337,39 +347,32 @@
     "artifacts": "multiple complete userscripts generated from pack profiles",
     "runtime_download_platform": false,
     "profile_registry": "config/build-profiles.json",
-    "current_testing_channel": "development-full-with-number-labels",
-    "profile_rollout": "paused-for-product-exploration; keep prior experimental links",
+    "current_testing_channel": "full-experience-development",
+    "profile_rollout": "three-directions-on-demand",
     "planned_profiles": [
       {
-        "id": "pure",
-        "label": "净化与过滤",
-        "packs": [],
-        "available": true
-      },
-      {
-        "id": "desktop-toolkit",
-        "label": "桌面工具包",
+        "id": "development",
+        "label": "全量体验版",
         "packs": [
           "text-style",
           "appearance",
           "layout",
           "playback",
           "reading-navigation",
-          "link-tools"
+          "link-tools",
+          "touch-controls"
         ],
         "available": true
       },
       {
-        "id": "tablet",
-        "label": "平板触摸版",
-        "packs": [
-          "touch-controls"
-        ],
-        "available": false
+        "id": "pure",
+        "label": "净化轻量版",
+        "packs": [],
+        "available": true
       },
       {
-        "id": "without-text-appearance",
-        "label": "交给外部字体主题脚本",
+        "id": "desktop-toolkit",
+        "label": "桌面实用版",
         "packs": [
           "layout",
           "playback",

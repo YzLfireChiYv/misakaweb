@@ -1,14 +1,41 @@
 {
   "schemaVersion": 1,
   "profiles": [
-    {"id":"pure","label":"净化与过滤","packs":[]},
-    {"id":"text-style","label":"净化＋文字与字幕","packs":["text-style"]},
-    {"id":"appearance","label":"净化＋主题与外观","packs":["appearance"]},
-    {"id":"layout","label":"净化＋页面布局","packs":["layout"]},
-    {"id":"playback","label":"净化＋播放控制","packs":["playback"]},
-    {"id":"reading-navigation","label":"净化＋阅读与导航","packs":["reading-navigation"]},
-    {"id":"link-tools","label":"净化＋链接工具","packs":["link-tools"]},
-    {"id":"desktop-toolkit","label":"完整工具包","packs":["text-style","appearance","layout","playback","reading-navigation","link-tools"]},
-    {"id":"without-text-appearance","label":"工具包（不含字体与主题）","packs":["layout","playback","reading-navigation","link-tools"]}
-  ]
+    {"id": "pure", "label": "净化轻量版", "packs": []},
+    {"id": "desktop-toolkit", "label": "桌面实用版", "packs": ["layout", "playback", "reading-navigation", "link-tools"]}
+  ],
+  "editions": [
+    {
+      "id": "development",
+      "label": "全量体验版",
+      "ordinaryProfile": false,
+      "implicitFeedback": true,
+      "artifact": "products/experience/misakaweb-feedback-test.user.js",
+      "updateURL": "https://raw.githubusercontent.com/YzLfireChiYv/misakaweb/main/products/experience/misakaweb-feedback-test.user.js",
+      "downloadURL": "https://raw.githubusercontent.com/YzLfireChiYv/misakaweb/main/products/experience/misakaweb-feedback-test.user.js",
+      "touch": "available-default-off"
+    },
+    {
+      "id": "pure",
+      "label": "净化轻量版",
+      "ordinaryProfile": true,
+      "profile": "pure",
+      "artifact": "products/experience/variants/misakaweb-pure.user.js",
+      "updateURL": "https://raw.githubusercontent.com/YzLfireChiYv/misakaweb/main/products/experience/variants/misakaweb-pure.user.js",
+      "downloadURL": "https://raw.githubusercontent.com/YzLfireChiYv/misakaweb/main/products/experience/variants/misakaweb-pure.user.js",
+      "touch": "absent"
+    },
+    {
+      "id": "desktop-toolkit",
+      "label": "桌面实用版",
+      "ordinaryProfile": true,
+      "profile": "desktop-toolkit",
+      "artifact": "products/experience/variants/misakaweb-desktop-toolkit.user.js",
+      "updateURL": "https://raw.githubusercontent.com/YzLfireChiYv/misakaweb/main/products/experience/variants/misakaweb-desktop-toolkit.user.js",
+      "downloadURL": "https://raw.githubusercontent.com/YzLfireChiYv/misakaweb/main/products/experience/variants/misakaweb-desktop-toolkit.user.js",
+      "touch": "absent"
+    }
+  ],
+  "ordinaryRetains": ["cleaning", "filters", "config-management"],
+  "demandBuild": true
 }

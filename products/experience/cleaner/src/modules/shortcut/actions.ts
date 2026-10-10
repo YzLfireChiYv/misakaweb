@@ -3,6 +3,7 @@ import {
     useCommentFilterPanelStore,
     useDynamicFilterPanelStore,
     useRulePanelStore,
+    useConfigurationPanelStore,
     useShortcutSettingsStore,
     useVideoFilterPanelStore,
 } from '@/stores/view'
@@ -19,6 +20,7 @@ export type QuickAction = {
 /** Shared page-entry actions for the header dropdown and the floating stack. */
 export const useQuickActions = (): Readonly<Ref<QuickAction[]>> => {
     const ruleStore = useRulePanelStore()
+    const configurationStore = useConfigurationPanelStore()
     const videoStore = useVideoFilterPanelStore()
     const commentStore = useCommentFilterPanelStore()
     const dynamicStore = useDynamicFilterPanelStore()
@@ -60,6 +62,13 @@ export const useQuickActions = (): Readonly<Ref<QuickAction[]>> => {
             isValid: true,
             actionKey: 'side-shortcut-settings',
             run: () => shortcutStore.show(),
+        },
+        {
+            text: '配置管理',
+            defaultHidden: true,
+            isValid: true,
+            actionKey: 'side-configuration',
+            run: () => configurationStore.show(),
         },
         {
             text: '页面净化',

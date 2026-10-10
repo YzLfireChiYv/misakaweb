@@ -1,4 +1,4 @@
-import { GM_getValue } from '$'
+import { GM_getValue } from '@/storage/configStorage'
 import { type CoreCheckExtra } from '@/modules/filters/core/core'
 import { Group } from '@/types/collection'
 import { SelectorResult } from '@/types/filter'

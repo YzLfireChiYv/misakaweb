@@ -1,4 +1,5 @@
 import { Group } from '@/types/collection'
+import { touchItems } from '@/modules/touch'
 import { videoBasicItems } from './groups/basic'
 import { videoDanmakuItems } from './groups/danmaku'
 import { videoDanmakuControlItems } from './groups/danmakuControl'
@@ -14,6 +15,11 @@ import { videoToolbarItems } from './groups/toolbar'
 import { videoUpInfoItems } from './groups/upInfo'
 
 export const videoGroups: Group[] = [
+    {
+        name: '播放器触摸操作',
+        fold: true,
+        items: touchItems,
+    },
     {
         name: '基本功能',
         fold: true,

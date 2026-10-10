@@ -4,11 +4,11 @@ import { describe, expect, it } from 'vitest'
 import { profileFor, profiles, excludedKeys, pruneSource, pruneSelector, cssPruningPlugin, itemDefinitions, auditBundle } from '../scripts/pack-build.mjs'
 
 describe('complete pack variants', () => {
-    it('keeps nine real profiles and refuses reserved touch profiles', () => {
-        expect(profiles).toHaveLength(9)
+    it('keeps two ordinary directions plus the implicit full test channel', () => {
+        expect(profiles).toHaveLength(2)
         expect(() => profileFor('tablet')).toThrow()
         const excluded = excludedKeys(profileFor('pure'))
-        expect(excluded.size).toBe(73)
+        expect(excluded.size).toBe(77)
         for (const key of ['homepage-increase-rcmd-load-size','homepage-rcmd-video-preload','video-page-simple-share','live-page-disable-hotkey-g-follow']) expect(excluded.has(key)).toBe(false)
     })
     it('removes optional objects before their initializer can touch the page', () => {
@@ -16,7 +16,7 @@ describe('complete pack variants', () => {
         const pure=pruneSource(code,'/modules/rules/common.ts',profileFor('pure'))
         expect(pure).not.toContain('UNWANTED_')
         expect(pure).toContain('CORE_BODY')
-        expect(pruneSource(code,'/modules/rules/common.ts',profileFor('text-style'))).toContain('UNWANTED_INIT')
+        expect(pruneSource(code,'/modules/rules/common.ts',{id:'development',packs:['text-style']})).toContain('UNWANTED_INIT')
     })
     it('removes link actions without removing adjacent filter actions', () => {
         const code=`menus.push({name:'复制视频链接',fn:()=>alert('COPY_BODY')});menus.push({name:'屏蔽视频',fn:()=>alert('BLOCK_BODY')});`

@@ -13,7 +13,7 @@ import {
     isPageVideo,
 } from '@/utils/pageType'
 import ShadowInstance from '@/utils/shadow'
-import { GM_getValue, GM_setValue } from '$'
+import { GM_getValue, GM_setValue } from '@/storage/configStorage'
 import { orderedUniq, showEle } from '@/utils/tool'
 import { bots, botsSet } from '../extra/bots'
 import {

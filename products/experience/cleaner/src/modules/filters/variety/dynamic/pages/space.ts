@@ -3,7 +3,7 @@ import config from '@/config'
 import { Group } from '@/types/collection'
 import { IMainFilter, SelectorResult, SubFilterPair } from '@/types/filter'
 import { logger } from '@/utils/logger'
-import { GM_getValue } from '$'
+import { GM_getValue } from '@/storage/configStorage'
 import { convertTimeToSec, showEle, waitForEle } from '@/utils/tool'
 import {
     DynContentFilter,

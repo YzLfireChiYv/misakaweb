@@ -31,6 +31,7 @@
 </template>
 
 <script setup lang="ts">
+import { deviceStorage } from '@/storage/configStorage'
 import { isDarkMode } from '@/modules/rules/common/groups/theme'
 import { useQuickActions } from '@/modules/shortcut/actions'
 import { useShortcutPreference } from '@/modules/shortcut/preference'
@@ -51,7 +52,7 @@ const visibleButtons = computed(() => actions.value.filter((btn) => btn.isValid)
 const target = ref<HTMLElement | null>(null)
 const { width, height } = useElementBounding(target, { windowScroll: false })
 
-const btnPos = useStorage('bili-cleaner-side-btn-pos', { right: 10, bottom: 180 }, localStorage)
+const btnPos = useStorage('bili-cleaner-side-btn-pos', { right: 10, bottom: 180 }, deviceStorage)
 
 const isDragging = ref(false)
 

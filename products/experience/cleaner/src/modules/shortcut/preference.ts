@@ -1,5 +1,5 @@
 import { getCurrentScope, onScopeDispose, ref, type Ref } from 'vue'
-import { GM_addValueChangeListener, GM_getValue, GM_removeValueChangeListener, GM_setValue } from '$'
+import { GM_addValueChangeListener, GM_getValue, GM_removeValueChangeListener, GM_setValue } from '@/storage/configStorage'
 
 /**
  * Device-local UI preference for the page quick entry.

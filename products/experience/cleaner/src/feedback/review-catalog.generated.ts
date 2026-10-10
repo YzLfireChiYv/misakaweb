@@ -6610,5 +6610,77 @@ export const reviewCatalog: ReviewEntry[] = [
         "rationale": "额外复制操作归优化候选；保留屏蔽/白名单等过滤操作",
         "pack": "link-tools",
         "packLabel": "链接工具"
+    },
+    {
+        "key": "misakaweb-player-gestures",
+        "id": "S529",
+        "names": [
+            "播放器触摸手势"
+        ],
+        "pages": [
+            "video",
+            "playlist"
+        ],
+        "groups": [
+            "播放器触摸操作"
+        ],
+        "category": "optimization",
+        "rationale": "社区手势接入，默认关闭，实际平板待验收",
+        "pack": "touch-controls",
+        "packLabel": "触摸操作"
+    },
+    {
+        "key": "misakaweb-gesture-min-distance",
+        "id": "S526",
+        "names": [
+            "触摸手势最小滑动距离"
+        ],
+        "pages": [
+            "video",
+            "playlist"
+        ],
+        "groups": [
+            "播放器触摸操作"
+        ],
+        "category": "optimization",
+        "rationale": "社区手势接入，默认关闭，实际平板待验收",
+        "pack": "touch-controls",
+        "packLabel": "触摸操作"
+    },
+    {
+        "key": "misakaweb-gesture-seek-scale",
+        "id": "S527",
+        "names": [
+            "触摸进度调节倍率"
+        ],
+        "pages": [
+            "video",
+            "playlist"
+        ],
+        "groups": [
+            "播放器触摸操作"
+        ],
+        "category": "optimization",
+        "rationale": "社区手势接入，默认关闭，实际平板待验收",
+        "pack": "touch-controls",
+        "packLabel": "触摸操作"
+    },
+    {
+        "key": "misakaweb-gesture-vertical",
+        "id": "S528",
+        "names": [
+            "触摸上下滑动调节亮度和音量"
+        ],
+        "pages": [
+            "video",
+            "playlist"
+        ],
+        "groups": [
+            "播放器触摸操作"
+        ],
+        "category": "optimization",
+        "rationale": "社区手势接入，默认关闭，实际平板待验收",
+        "pack": "touch-controls",
+        "packLabel": "触摸操作"
     }
 ]

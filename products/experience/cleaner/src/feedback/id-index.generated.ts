@@ -524,7 +524,11 @@ export const settingsByKey: Record<string, string> = {
     "watchlater-layout": "S522",
     "webscreen-scrollable": "S523",
     "biliweb-shortcut-enabled": "S524",
-    "biliweb-shortcut-location": "S525"
+    "biliweb-shortcut-location": "S525",
+    "misakaweb-gesture-min-distance": "S526",
+    "misakaweb-gesture-seek-scale": "S527",
+    "misakaweb-gesture-vertical": "S528",
+    "misakaweb-player-gestures": "S529"
 }
 export const menusByKey: Record<string, string> = {
     "menu-article-filter": "M01",
@@ -534,7 +538,8 @@ export const menusByKey: Record<string, string> = {
     "menu-feedback": "M05",
     "menu-rule-panel": "M06",
     "menu-side-btn": "M07",
-    "menu-video-filter": "M08"
+    "menu-video-filter": "M08",
+    "menu-configuration": "M09"
 }
 export const actionsByKey: Record<string, string> = {
     "ctx-block-article-author": "B01",
@@ -570,5 +575,13 @@ export const actionsByKey: Record<string, string> = {
     "review-scope-page": "B31",
     "review-toggle-remove": "B32",
     "review-pack-filter": "B33",
-    "maintenance-export-diagnostic": "B34"
+    "maintenance-export-diagnostic": "B34",
+    "config-apply-import": "B35",
+    "config-choose-import": "B36",
+    "config-export": "B37",
+    "config-refresh-page": "B38",
+    "config-restore-backup": "B39",
+    "config-save-setting": "B40",
+    "panel-close-configuration": "B41",
+    "side-configuration": "B42"
 }

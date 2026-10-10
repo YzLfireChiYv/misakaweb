@@ -1,9 +1,9 @@
 // ==UserScript==
 // @name         MisakaWeb
 // @namespace    https://github.com/YzLfireChiYv/misakaweb
-// @version      0.1.4.8
+// @version      0.1.5
 // @author       festoney8, MisakaWeb
-// @description  MisakaWeb · 净化与过滤。包含完整净化与过滤；只安装一种版本。
+// @description  MisakaWeb · 净化轻量版。包含完整净化与过滤；只安装一种版本。
 // @license      MIT
 // @icon         https://www.bilibili.com/favicon.ico
 // @homepage     https://github.com/YzLfireChiYv/misakaweb
@@ -1983,8 +1983,19 @@
 			};
 		}
 	});
+	var GM_getValue$1 = (...args) => _GM_getValue(...args);
+	var GM_setValue$1 = (...args) => _GM_setValue(...args);
+	var GM_deleteValue$1 = (...args) => _GM_deleteValue(...args);
+	var GM_listValues$1 = () => _GM_listValues();
+	var GM_addValueChangeListener$1 = (...args) => _GM_addValueChangeListener(...args);
+	var GM_removeValueChangeListener$1 = (...args) => _GM_removeValueChangeListener(...args);
+	var deviceStorage = {
+		getItem: (key) => window.localStorage.getItem(key),
+		setItem: (key, value) => window.localStorage.setItem(key, value),
+		removeItem: (key) => window.localStorage.removeItem(key)
+	};
 	var config_default = {
-		isDebugMode: _GM_getValue("debug-mode") === true || false,
+		isDebugMode: GM_getValue$1("debug-mode") === true || false,
 		filterVisitSign: "bili-cleaner-filtered",
 		filterHideSign: "bili-cleaner-hide"
 	};
@@ -3379,13 +3390,13 @@
 			let stopWatch = null;
 			const openEditor = (item) => {
 				currentItem.value = item;
-				const val = _GM_getValue(item.id, []).join("\n");
+				const val = GM_getValue$1(item.id, []).join("\n");
 				editorData.value = val ? val + "\n" : val;
 				stopWatch = watchDebounced(editorData, (value) => {
 					if (!currentItem.value) return;
 					try {
 						const data = orderedUniq(value.split("\n").filter((v) => v.trim() !== ""));
-						_GM_setValue(currentItem.value.id, data);
+						GM_setValue$1(currentItem.value.id, data);
 						currentItem.value.saveFn();
 					} catch (err) {
 						logger.error(`EditorDialog ${currentItem.value.id} saveData error`, err);
@@ -3396,7 +3407,7 @@
 			const closeEditor = () => {
 				if (currentItem.value) try {
 					const data = orderedUniq(editorData.value.split("\n").filter((v) => v.trim() !== ""));
-					_GM_setValue(currentItem.value.id, data);
+					GM_setValue$1(currentItem.value.id, data);
 					currentItem.value.saveFn();
 				} catch (err) {
 					logger.error(`EditorDialog ${currentItem.value.id} closeEditor error`, err);
@@ -3496,7 +3507,7 @@
 			const item = __props;
 			const feedbackCode = settingLabel(item.id);
 			const options = item.options;
-			const currValue = _GM_getValue(item.id, item.defaultValue);
+			const currValue = GM_getValue$1(item.id, item.defaultValue);
 			const currOption = options.find((v) => v.value === currValue);
 			const selectedOption = (0, vue.ref)(currOption ?? options[0]);
 			(0, vue.watch)(selectedOption, (newSelected) => {
@@ -3505,7 +3516,7 @@
 					document.documentElement.setAttribute(item.id, value);
 					for (const option of item.options) if (option.value === value && option.fn) option.fn()?.catch(() => {});
 				} else document.documentElement.removeAttribute(item.id);
-				_GM_setValue(item.id, value);
+				GM_setValue$1(item.id, value);
 			});
 			return (_ctx, _cache) => {
 				return (0, vue.openBlock)(), (0, vue.createElementBlock)(vue.Fragment, null, [(0, vue.createElementVNode)("div", _hoisted_1$11, [(0, vue.createElementVNode)("div", _hoisted_2$9, [(0, vue.createVNode)(Badge_default, { code: (0, vue.unref)(feedbackCode) }, null, 8, ["code"]), (0, vue.createTextVNode)(" " + (0, vue.toDisplayString)(__props.name), 1)]), (0, vue.createVNode)((0, vue.unref)(Ie), {
@@ -3577,7 +3588,7 @@
 		setup(__props) {
 			const item = __props;
 			const feedbackCode = settingLabel(item.id);
-			const currValue = (0, vue.ref)(_GM_getValue(item.id, item.defaultValue));
+			const currValue = (0, vue.ref)(GM_getValue$1(item.id, item.defaultValue));
 			watchThrottled(currValue, (newValue, oldValue) => {
 				try {
 					if (newValue > item.maxValue) currValue.value = item.maxValue;
@@ -3597,7 +3608,7 @@
 					} else if (currValue.value !== oldValue) item.fn(currValue.value)?.catch((err) => {
 						throw err;
 					});
-					_GM_setValue(item.id, currValue.value);
+					GM_setValue$1(item.id, currValue.value);
 				} catch (err) {
 					logger.error(`NumberComp ${item.id} error`, err);
 				}
@@ -3643,7 +3654,7 @@
 		setup(__props) {
 			const item = __props;
 			const feedbackCode = settingLabel(item.id);
-			const currValue = (0, vue.ref)(_GM_getValue(item.id, item.defaultValue));
+			const currValue = (0, vue.ref)(GM_getValue$1(item.id, item.defaultValue));
 			watchThrottled(currValue, (newValue, oldValue) => {
 				try {
 					if (oldValue === item.disableValue) {
@@ -3654,7 +3665,7 @@
 					} else if (currValue.value !== oldValue) item.fn(currValue.value)?.catch((err) => {
 						throw err;
 					});
-					_GM_setValue(item.id, currValue.value);
+					GM_setValue$1(item.id, currValue.value);
 				} catch (err) {
 					logger.error(`StringComp ${item.id} error`, err);
 				}
@@ -3694,19 +3705,19 @@
 		setup(__props) {
 			const item = __props;
 			const feedbackCode = settingLabel(item.id);
-			const enabled = (0, vue.ref)(_GM_getValue(item.id, item.defaultEnable));
+			const enabled = (0, vue.ref)(GM_getValue$1(item.id, item.defaultEnable));
 			(0, vue.watch)(enabled, () => {
 				try {
 					if (enabled.value) {
 						if (!item.noStyle) document.documentElement.setAttribute(item.attrName ?? item.id, "");
 						if (item.enableFn) item.enableFn()?.catch(() => {});
-						_GM_setValue(item.id, true);
+						GM_setValue$1(item.id, true);
 					} else {
 						if (!item.noStyle) document.documentElement.removeAttribute(item.attrName ?? item.id);
 						if (item.disableFn) item.disableFn()?.catch((err) => {
 							throw err;
 						});
-						_GM_setValue(item.id, false);
+						GM_setValue$1(item.id, false);
 					}
 				} catch (err) {
 					logger.error(`SwitchComp ${item.id} error`, err);
@@ -3743,7 +3754,7 @@
 	var _hoisted_4$3 = { class: "text-right whitespace-nowrap" };
 	var _hoisted_5$3 = { class: "text-right whitespace-nowrap" };
 	var _hoisted_6$3 = { class: "flex min-w-0 items-center gap-2" };
-	var _hoisted_7$3 = ["disabled"];
+	var _hoisted_7$2 = ["disabled"];
 	var WebdavComp_default = (0, vue.defineComponent)({
 		__name: "WebdavComp",
 		props: {
@@ -3764,7 +3775,7 @@
 			const passwordCode = settingLabel(item.passwordId);
 			const verifyCode = actionLabel("webdav-verify");
 			const readText = (key) => {
-				const value = _GM_getValue(key, "");
+				const value = GM_getValue$1(key, "");
 				return typeof value === "string" ? value : "";
 			};
 			const url = (0, vue.ref)(readText(item.urlId));
@@ -3778,9 +3789,9 @@
 				return "text-orange-900";
 			});
 			const save = () => {
-				_GM_setValue(item.urlId, url.value);
-				_GM_setValue(item.userId, user.value);
-				_GM_setValue(item.passwordId, password.value);
+				GM_setValue$1(item.urlId, url.value);
+				GM_setValue$1(item.userId, user.value);
+				GM_setValue$1(item.passwordId, password.value);
 			};
 			watchThrottled(() => `${url.value}\n${user.value}\n${password.value}`, () => {
 				try {
@@ -3844,7 +3855,7 @@
 						class: "inline-flex shrink-0 items-center justify-center rounded-md border border-gray-300 bg-white px-2 py-1 text-sm text-blue-900 outline-hidden disabled:opacity-50",
 						disabled: busy.value,
 						onClick: onVerify
-					}, [(0, vue.createVNode)(Badge_default, { code: (0, vue.unref)(verifyCode) }, null, 8, ["code"]), (0, vue.createTextVNode)(" " + (0, vue.toDisplayString)(busy.value ? "验证中" : "验证"), 1)], 8, _hoisted_7$3), (0, vue.createElementVNode)("span", { class: (0, vue.normalizeClass)(["min-w-0 text-sm", statusClass.value]) }, (0, vue.toDisplayString)(status.value), 3)])
+					}, [(0, vue.createVNode)(Badge_default, { code: (0, vue.unref)(verifyCode) }, null, 8, ["code"]), (0, vue.createTextVNode)(" " + (0, vue.toDisplayString)(busy.value ? "验证中" : "验证"), 1)], 8, _hoisted_7$2), (0, vue.createElementVNode)("span", { class: (0, vue.normalizeClass)(["min-w-0 text-sm", statusClass.value]) }, (0, vue.toDisplayString)(status.value), 3)])
 				], 2)]);
 			};
 		}
@@ -4544,11 +4555,11 @@
 		commentIsLinkFilter = new CommentIsLinkFilter();
 		commentIsMeFilter = new CommentIsMeFilter();
 		init() {
-			this.commentUsernameFilter.setParam(_GM_getValue(GM_KEYS$10.black.username.valueKey, []));
-			this.commentUsernameKeywordFilter.setParam(_GM_getValue(GM_KEYS$10.black.usernameKeyword.valueKey, []));
-			this.commentContentFilter.setParam(_GM_getValue(GM_KEYS$10.black.content.valueKey, []));
-			this.commentLevelFilter.setParam(_GM_getValue(GM_KEYS$10.black.level.valueKey, 0));
-			const chainLevel = _GM_getValue(GM_KEYS$10.black.chain.valueKey, 1);
+			this.commentUsernameFilter.setParam(GM_getValue$1(GM_KEYS$10.black.username.valueKey, []));
+			this.commentUsernameKeywordFilter.setParam(GM_getValue$1(GM_KEYS$10.black.usernameKeyword.valueKey, []));
+			this.commentContentFilter.setParam(GM_getValue$1(GM_KEYS$10.black.content.valueKey, []));
+			this.commentLevelFilter.setParam(GM_getValue$1(GM_KEYS$10.black.level.valueKey, 0));
+			const chainLevel = GM_getValue$1(GM_KEYS$10.black.chain.valueKey, 1);
 			this.commentChainLevel = typeof chainLevel === "number" ? Math.min(10, Math.max(0, chainLevel)) : 1;
 			this.commentBotFilter.setParam(bots);
 			this.commentAdFilter.setParam([`/(bili2233\\.cn|b23\\.tv)\\/(mall-|cm-)|领券|gaoneng\\.bilibili\\.com/`]);
@@ -4728,7 +4739,7 @@
 					editorTitle: "评论区 用户黑名单",
 					editorDescription: ["每行一个用户名，保存时自动去重"],
 					saveFn: async () => {
-						mainFilter$10.commentUsernameFilter.setParam(_GM_getValue(GM_KEYS$10.black.username.valueKey, []));
+						mainFilter$10.commentUsernameFilter.setParam(GM_getValue$1(GM_KEYS$10.black.username.valueKey, []));
 						mainFilter$10.check("full");
 					}
 				},
@@ -4757,7 +4768,7 @@
 						"正则默认 ius 模式，无需 flag，语法：/abc|\\d+/"
 					],
 					saveFn: async () => {
-						mainFilter$10.commentUsernameKeywordFilter.setParam(_GM_getValue(GM_KEYS$10.black.usernameKeyword.valueKey, []));
+						mainFilter$10.commentUsernameKeywordFilter.setParam(GM_getValue$1(GM_KEYS$10.black.usernameKeyword.valueKey, []));
 						mainFilter$10.check("full");
 					}
 				}
@@ -4791,7 +4802,7 @@
 					"鼠标划选评论内容并复制，即可得到表情包原文"
 				],
 				saveFn: async () => {
-					mainFilter$10.commentContentFilter.setParam(_GM_getValue(GM_KEYS$10.black.content.valueKey, []));
+					mainFilter$10.commentContentFilter.setParam(GM_getValue$1(GM_KEYS$10.black.content.valueKey, []));
 					mainFilter$10.check("full");
 				}
 			}]
@@ -5096,9 +5107,9 @@
 					try {
 						mainFilter$10.commentUsernameFilter.addParam(username);
 						mainFilter$10.check("full");
-						const arr = _GM_getValue(GM_KEYS$10.black.username.valueKey, []);
+						const arr = GM_getValue$1(GM_KEYS$10.black.username.valueKey, []);
 						arr.unshift(username);
-						_GM_setValue(GM_KEYS$10.black.username.valueKey, orderedUniq(arr));
+						GM_setValue$1(GM_KEYS$10.black.username.valueKey, orderedUniq(arr));
 					} catch (err) {
 						logger.error(`commentFilterCommonHandler add username ${username} failed`, err);
 					}
@@ -5185,12 +5196,12 @@
 		dynVideoTitleWhiteFilter = new DynVideoTitleWhiteFilter();
 		dynContentWhiteFilter = new DynContentWhiteFilter();
 		init() {
-			this.dynUploaderFilter.setParam(_GM_getValue(GM_KEYS$9.black.uploader.valueKey, []));
-			this.dynDurationFilter.setParam(_GM_getValue(GM_KEYS$9.black.duration.valueKey, 0));
-			this.dynVideoTitleFilter.setParam(_GM_getValue(GM_KEYS$9.black.title.valueKey, []));
-			this.dynContentFilter.setParam(_GM_getValue(GM_KEYS$9.black.content.valueKey, []));
-			this.dynVideoTitleWhiteFilter.setParam(_GM_getValue(GM_KEYS$9.white.title.valueKey, []));
-			this.dynContentWhiteFilter.setParam(_GM_getValue(GM_KEYS$9.white.content.valueKey, []));
+			this.dynUploaderFilter.setParam(GM_getValue$1(GM_KEYS$9.black.uploader.valueKey, []));
+			this.dynDurationFilter.setParam(GM_getValue$1(GM_KEYS$9.black.duration.valueKey, 0));
+			this.dynVideoTitleFilter.setParam(GM_getValue$1(GM_KEYS$9.black.title.valueKey, []));
+			this.dynContentFilter.setParam(GM_getValue$1(GM_KEYS$9.black.content.valueKey, []));
+			this.dynVideoTitleWhiteFilter.setParam(GM_getValue$1(GM_KEYS$9.white.title.valueKey, []));
+			this.dynContentWhiteFilter.setParam(GM_getValue$1(GM_KEYS$9.white.content.valueKey, []));
 		}
 		async check(mode) {
 			if (!this.target) return;
@@ -5286,7 +5297,7 @@
 				description: ["右键屏蔽的用户会出现在首行"],
 				editorDescription: ["一行一个用户名，保存时自动去重"],
 				saveFn: async () => {
-					mainFilter$9.dynUploaderFilter.setParam(_GM_getValue(GM_KEYS$9.black.uploader.valueKey, []));
+					mainFilter$9.dynUploaderFilter.setParam(GM_getValue$1(GM_KEYS$9.black.uploader.valueKey, []));
 					mainFilter$9.checkFull();
 				}
 			}]
@@ -5349,7 +5360,7 @@
 					"正则默认 ius 模式，无需 flag，语法：/abc|\\d+/"
 				],
 				saveFn: async () => {
-					mainFilter$9.dynVideoTitleFilter.setParam(_GM_getValue(GM_KEYS$9.black.title.valueKey, []));
+					mainFilter$9.dynVideoTitleFilter.setParam(GM_getValue$1(GM_KEYS$9.black.title.valueKey, []));
 					mainFilter$9.checkFull();
 				}
 			}]
@@ -5381,7 +5392,7 @@
 					"正则默认 ius 模式，无需 flag，语法：/abc|\\d+/"
 				],
 				saveFn: async () => {
-					mainFilter$9.dynContentFilter.setParam(_GM_getValue(GM_KEYS$9.black.content.valueKey, []));
+					mainFilter$9.dynContentFilter.setParam(GM_getValue$1(GM_KEYS$9.black.content.valueKey, []));
 					mainFilter$9.checkFull();
 				}
 			}]
@@ -5444,7 +5455,7 @@
 						"正则默认 ius 模式，无需 flag，语法：/abc|\\d+/"
 					],
 					saveFn: async () => {
-						mainFilter$9.dynVideoTitleWhiteFilter.setParam(_GM_getValue(GM_KEYS$9.white.title.valueKey, []));
+						mainFilter$9.dynVideoTitleWhiteFilter.setParam(GM_getValue$1(GM_KEYS$9.white.title.valueKey, []));
 						mainFilter$9.checkFull();
 					}
 				},
@@ -5474,7 +5485,7 @@
 						"正则默认 ius 模式，无需 flag，语法：/abc|\\d+/"
 					],
 					saveFn: async () => {
-						mainFilter$9.dynContentWhiteFilter.setParam(_GM_getValue(GM_KEYS$9.white.content.valueKey, []));
+						mainFilter$9.dynContentWhiteFilter.setParam(GM_getValue$1(GM_KEYS$9.white.content.valueKey, []));
 						mainFilter$9.checkFull();
 					}
 				}
@@ -5492,9 +5503,9 @@
 					try {
 						mainFilter$9.dynUploaderFilter.addParam(uploader);
 						mainFilter$9.checkFull();
-						const arr = _GM_getValue(GM_KEYS$9.black.uploader.valueKey, []);
+						const arr = GM_getValue$1(GM_KEYS$9.black.uploader.valueKey, []);
 						arr.unshift(uploader);
-						_GM_setValue(GM_KEYS$9.black.uploader.valueKey, orderedUniq(arr));
+						GM_setValue$1(GM_KEYS$9.black.uploader.valueKey, orderedUniq(arr));
 					} catch (err) {
 						logger.error(`dynamicFilterDynamicHandler add uploader ${uploader} failed`, err);
 					}
@@ -5548,11 +5559,11 @@
 		dynVideoTitleWhiteFilter = new DynVideoTitleWhiteFilter();
 		dynContentWhiteFilter = new DynContentWhiteFilter();
 		init() {
-			this.dynUploaderFilter.setParam(_GM_getValue(GM_KEYS$8.black.uploader.valueKey, []));
-			this.dynVideoTitleFilter.setParam(_GM_getValue(GM_KEYS$8.black.title.valueKey, []));
-			this.dynContentFilter.setParam(_GM_getValue(GM_KEYS$8.black.content.valueKey, []));
-			this.dynVideoTitleWhiteFilter.setParam(_GM_getValue(GM_KEYS$8.white.title.valueKey, []));
-			this.dynContentWhiteFilter.setParam(_GM_getValue(GM_KEYS$8.white.content.valueKey, []));
+			this.dynUploaderFilter.setParam(GM_getValue$1(GM_KEYS$8.black.uploader.valueKey, []));
+			this.dynVideoTitleFilter.setParam(GM_getValue$1(GM_KEYS$8.black.title.valueKey, []));
+			this.dynContentFilter.setParam(GM_getValue$1(GM_KEYS$8.black.content.valueKey, []));
+			this.dynVideoTitleWhiteFilter.setParam(GM_getValue$1(GM_KEYS$8.white.title.valueKey, []));
+			this.dynContentWhiteFilter.setParam(GM_getValue$1(GM_KEYS$8.white.content.valueKey, []));
 		}
 		async check(mode) {
 			if (!this.target) return;
@@ -5609,11 +5620,11 @@
 	var dynamicFilterHeaderEntry = async () => {
 		mainFilter$8.init();
 		mainFilter$8.observe();
-		if (_GM_getValue(GM_KEYS$8.black.uploader.statusKey)) mainFilter$8.dynUploaderFilter.enable();
-		if (_GM_getValue(GM_KEYS$8.black.title.statusKey)) mainFilter$8.dynVideoTitleFilter.enable();
-		if (_GM_getValue(GM_KEYS$8.black.content.statusKey)) mainFilter$8.dynContentFilter.enable();
-		if (_GM_getValue(GM_KEYS$8.white.title.statusKey)) mainFilter$8.dynVideoTitleWhiteFilter.enable();
-		if (_GM_getValue(GM_KEYS$8.white.content.statusKey)) mainFilter$8.dynContentWhiteFilter.enable();
+		if (GM_getValue$1(GM_KEYS$8.black.uploader.statusKey)) mainFilter$8.dynUploaderFilter.enable();
+		if (GM_getValue$1(GM_KEYS$8.black.title.statusKey)) mainFilter$8.dynVideoTitleFilter.enable();
+		if (GM_getValue$1(GM_KEYS$8.black.content.statusKey)) mainFilter$8.dynContentFilter.enable();
+		if (GM_getValue$1(GM_KEYS$8.white.title.statusKey)) mainFilter$8.dynVideoTitleWhiteFilter.enable();
+		if (GM_getValue$1(GM_KEYS$8.white.content.statusKey)) mainFilter$8.dynContentWhiteFilter.enable();
 	};
 	var GM_KEYS$7 = {
 		black: {
@@ -5675,11 +5686,11 @@
 		dynVideoTitleWhiteFilter = new DynVideoTitleWhiteFilter();
 		dynContentWhiteFilter = new DynContentWhiteFilter();
 		init() {
-			this.dynDurationFilter.setParam(_GM_getValue(GM_KEYS$7.black.duration.valueKey, 0));
-			this.dynVideoTitleFilter.setParam(_GM_getValue(GM_KEYS$7.black.title.valueKey, []));
-			this.dynContentFilter.setParam(_GM_getValue(GM_KEYS$7.black.content.valueKey, []));
-			this.dynVideoTitleWhiteFilter.setParam(_GM_getValue(GM_KEYS$7.white.title.valueKey, []));
-			this.dynContentWhiteFilter.setParam(_GM_getValue(GM_KEYS$7.white.content.valueKey, []));
+			this.dynDurationFilter.setParam(GM_getValue$1(GM_KEYS$7.black.duration.valueKey, 0));
+			this.dynVideoTitleFilter.setParam(GM_getValue$1(GM_KEYS$7.black.title.valueKey, []));
+			this.dynContentFilter.setParam(GM_getValue$1(GM_KEYS$7.black.content.valueKey, []));
+			this.dynVideoTitleWhiteFilter.setParam(GM_getValue$1(GM_KEYS$7.white.title.valueKey, []));
+			this.dynContentWhiteFilter.setParam(GM_getValue$1(GM_KEYS$7.white.content.valueKey, []));
 		}
 		async check(mode) {
 			if (!this.target) return;
@@ -5808,7 +5819,7 @@
 					"正则默认 ius 模式，无需 flag，语法：/abc|\\d+/"
 				],
 				saveFn: async () => {
-					mainFilter$7.dynVideoTitleFilter.setParam(_GM_getValue(GM_KEYS$7.black.title.valueKey, []));
+					mainFilter$7.dynVideoTitleFilter.setParam(GM_getValue$1(GM_KEYS$7.black.title.valueKey, []));
 					mainFilter$7.checkFull();
 				}
 			}]
@@ -5840,7 +5851,7 @@
 					"正则默认 ius 模式，无需 flag，语法：/abc|\\d+/"
 				],
 				saveFn: async () => {
-					mainFilter$7.dynContentFilter.setParam(_GM_getValue(GM_KEYS$7.black.content.valueKey, []));
+					mainFilter$7.dynContentFilter.setParam(GM_getValue$1(GM_KEYS$7.black.content.valueKey, []));
 					mainFilter$7.checkFull();
 				}
 			}]
@@ -5903,7 +5914,7 @@
 						"正则默认 ius 模式，无需 flag，语法：/abc|\\d+/"
 					],
 					saveFn: async () => {
-						mainFilter$7.dynVideoTitleWhiteFilter.setParam(_GM_getValue(GM_KEYS$7.white.title.valueKey, []));
+						mainFilter$7.dynVideoTitleWhiteFilter.setParam(GM_getValue$1(GM_KEYS$7.white.title.valueKey, []));
 						mainFilter$7.checkFull();
 					}
 				},
@@ -5933,7 +5944,7 @@
 						"正则默认 ius 模式，无需 flag，语法：/abc|\\d+/"
 					],
 					saveFn: async () => {
-						mainFilter$7.dynContentWhiteFilter.setParam(_GM_getValue(GM_KEYS$7.white.content.valueKey, []));
+						mainFilter$7.dynContentWhiteFilter.setParam(GM_getValue$1(GM_KEYS$7.white.content.valueKey, []));
 						mainFilter$7.checkFull();
 					}
 				}
@@ -6254,15 +6265,15 @@
 	};
 	var limit = pLimit(4);
 	var readNumber = (key) => {
-		const value = _GM_getValue(key, 0);
+		const value = GM_getValue$1(key, 0);
 		return typeof value === "number" && Number.isFinite(value) ? value : 0;
 	};
 	var readStatGate = () => ({
-		viewOn: Boolean(_GM_getValue(STAT_KEYS.viewStatus, false)),
-		likeOn: Boolean(_GM_getValue(STAT_KEYS.likeStatus, false)),
-		favOn: Boolean(_GM_getValue(STAT_KEYS.favStatus, false)),
-		likeRateOn: Boolean(_GM_getValue(STAT_KEYS.likeRateStatus, false)),
-		favRateOn: Boolean(_GM_getValue(STAT_KEYS.favRateStatus, false)),
+		viewOn: Boolean(GM_getValue$1(STAT_KEYS.viewStatus, false)),
+		likeOn: Boolean(GM_getValue$1(STAT_KEYS.likeStatus, false)),
+		favOn: Boolean(GM_getValue$1(STAT_KEYS.favStatus, false)),
+		likeRateOn: Boolean(GM_getValue$1(STAT_KEYS.likeRateStatus, false)),
+		favRateOn: Boolean(GM_getValue$1(STAT_KEYS.favRateStatus, false)),
 		viewMin: readNumber(STAT_KEYS.viewValue),
 		likeMin: readNumber(STAT_KEYS.likeValue),
 		favMin: readNumber(STAT_KEYS.favValue),
@@ -6467,14 +6478,14 @@
 		videoUploaderWhiteFilter = new VideoUploaderWhiteFilter();
 		videoTitleWhiteFilter = new VideoTitleWhiteFilter();
 		init() {
-			this.videoBvidFilter.setParam(_GM_getValue(GM_KEYS$6.black.bvid.valueKey, []));
-			this.videoDurationFilter.setParam(_GM_getValue(GM_KEYS$6.black.duration.valueKey, 0));
-			this.videoTitleFilter.setParam(_GM_getValue(GM_KEYS$6.black.title.valueKey, []));
-			this.videoPubdateFilter.setParam(_GM_getValue(GM_KEYS$6.black.pubdate.valueKey, 0));
-			this.videoUploaderFilter.setParam(_GM_getValue(GM_KEYS$6.black.uploader.valueKey, []));
-			this.videoUploaderKeywordFilter.setParam(_GM_getValue(GM_KEYS$6.black.uploaderKeyword.valueKey, []));
-			this.videoUploaderWhiteFilter.setParam(_GM_getValue(GM_KEYS$6.white.uploader.valueKey, []));
-			this.videoTitleWhiteFilter.setParam(_GM_getValue(GM_KEYS$6.white.title.valueKey, []));
+			this.videoBvidFilter.setParam(GM_getValue$1(GM_KEYS$6.black.bvid.valueKey, []));
+			this.videoDurationFilter.setParam(GM_getValue$1(GM_KEYS$6.black.duration.valueKey, 0));
+			this.videoTitleFilter.setParam(GM_getValue$1(GM_KEYS$6.black.title.valueKey, []));
+			this.videoPubdateFilter.setParam(GM_getValue$1(GM_KEYS$6.black.pubdate.valueKey, 0));
+			this.videoUploaderFilter.setParam(GM_getValue$1(GM_KEYS$6.black.uploader.valueKey, []));
+			this.videoUploaderKeywordFilter.setParam(GM_getValue$1(GM_KEYS$6.black.uploaderKeyword.valueKey, []));
+			this.videoUploaderWhiteFilter.setParam(GM_getValue$1(GM_KEYS$6.white.uploader.valueKey, []));
+			this.videoTitleWhiteFilter.setParam(GM_getValue$1(GM_KEYS$6.white.title.valueKey, []));
 		}
 		async check(mode) {
 			if (!this.target) return;
@@ -6605,7 +6616,7 @@
 					editorTitle: "UP主 黑名单",
 					editorDescription: ["每行一个UP主昵称，保存时自动去重"],
 					saveFn: async () => {
-						mainFilter$6.videoUploaderFilter.setParam(_GM_getValue(GM_KEYS$6.black.uploader.valueKey, []));
+						mainFilter$6.videoUploaderFilter.setParam(GM_getValue$1(GM_KEYS$6.black.uploader.valueKey, []));
 						mainFilter$6.checkFull();
 					}
 				},
@@ -6634,7 +6645,7 @@
 						"正则默认 ius 模式，无需 flag，语法：/abc|\\d+/"
 					],
 					saveFn: async () => {
-						mainFilter$6.videoUploaderKeywordFilter.setParam(_GM_getValue(GM_KEYS$6.black.uploaderKeyword.valueKey, []));
+						mainFilter$6.videoUploaderKeywordFilter.setParam(GM_getValue$1(GM_KEYS$6.black.uploaderKeyword.valueKey, []));
 						mainFilter$6.checkFull();
 					}
 				}
@@ -6666,7 +6677,7 @@
 					"正则默认 ius 模式，无需 flag，语法：/abc|\\d+/"
 				],
 				saveFn: async () => {
-					mainFilter$6.videoTitleFilter.setParam(_GM_getValue(GM_KEYS$6.black.title.valueKey, []));
+					mainFilter$6.videoTitleFilter.setParam(GM_getValue$1(GM_KEYS$6.black.title.valueKey, []));
 					mainFilter$6.checkFull();
 				}
 			}]
@@ -6694,7 +6705,7 @@
 				editorTitle: "BV号 黑名单",
 				editorDescription: ["每行一个BV号，保存时自动去重"],
 				saveFn: async () => {
-					mainFilter$6.videoBvidFilter.setParam(_GM_getValue(GM_KEYS$6.black.bvid.valueKey, []));
+					mainFilter$6.videoBvidFilter.setParam(GM_getValue$1(GM_KEYS$6.black.bvid.valueKey, []));
 					mainFilter$6.checkFull();
 				}
 			}]
@@ -6757,7 +6768,7 @@
 					editorTitle: "UP主 白名单",
 					editorDescription: ["每行一个UP主昵称，保存时自动去重"],
 					saveFn: async () => {
-						mainFilter$6.videoUploaderWhiteFilter.setParam(_GM_getValue(GM_KEYS$6.white.uploader.valueKey, []));
+						mainFilter$6.videoUploaderWhiteFilter.setParam(GM_getValue$1(GM_KEYS$6.white.uploader.valueKey, []));
 						mainFilter$6.checkFull();
 					}
 				},
@@ -6786,7 +6797,7 @@
 						"正则默认 ius 模式，无需 flag，语法：/abc|\\d+/"
 					],
 					saveFn: async () => {
-						mainFilter$6.videoTitleWhiteFilter.setParam(_GM_getValue(GM_KEYS$6.white.title.valueKey, []));
+						mainFilter$6.videoTitleWhiteFilter.setParam(GM_getValue$1(GM_KEYS$6.white.title.valueKey, []));
 						mainFilter$6.checkFull();
 					}
 				}
@@ -6807,9 +6818,9 @@
 						try {
 							mainFilter$6.videoUploaderFilter.addParam(uploader);
 							mainFilter$6.checkFull();
-							const arr = _GM_getValue(GM_KEYS$6.black.uploader.valueKey, []);
+							const arr = GM_getValue$1(GM_KEYS$6.black.uploader.valueKey, []);
 							arr.unshift(uploader);
-							_GM_setValue(GM_KEYS$6.black.uploader.valueKey, orderedUniq(arr));
+							GM_setValue$1(GM_KEYS$6.black.uploader.valueKey, orderedUniq(arr));
 						} catch (err) {
 							logger.error(`videoFilterChannelHandler add uploader ${uploader} failed`, err);
 						}
@@ -6821,9 +6832,9 @@
 						try {
 							mainFilter$6.videoUploaderWhiteFilter.addParam(uploader);
 							mainFilter$6.checkFull();
-							const arr = _GM_getValue(GM_KEYS$6.white.uploader.valueKey, []);
+							const arr = GM_getValue$1(GM_KEYS$6.white.uploader.valueKey, []);
 							arr.unshift(uploader);
-							_GM_setValue(GM_KEYS$6.white.uploader.valueKey, orderedUniq(arr));
+							GM_setValue$1(GM_KEYS$6.white.uploader.valueKey, orderedUniq(arr));
 						} catch (err) {
 							logger.error(`videoFilterChannelHandler add white uploader ${uploader} failed`, err);
 						}
@@ -6842,9 +6853,9 @@
 						try {
 							mainFilter$6.videoBvidFilter.addParam(bvid);
 							mainFilter$6.checkFull();
-							const arr = _GM_getValue(GM_KEYS$6.black.bvid.valueKey, []);
+							const arr = GM_getValue$1(GM_KEYS$6.black.bvid.valueKey, []);
 							arr.unshift(bvid);
-							_GM_setValue(GM_KEYS$6.black.bvid.valueKey, orderedUniq(arr));
+							GM_setValue$1(GM_KEYS$6.black.bvid.valueKey, orderedUniq(arr));
 						} catch (err) {
 							logger.error(`videoFilterChannelHandler add bvid ${bvid} failed`, err);
 						}
@@ -6940,15 +6951,15 @@
 		videoTitleWhiteFilter = new VideoTitleWhiteFilter();
 		videoIsFollowWhiteFilter = new VideoIsFollowWhiteFilter();
 		init() {
-			this.videoBvidFilter.setParam(_GM_getValue(GM_KEYS$5.black.bvid.valueKey, []));
-			this.videoDurationFilter.setParam(_GM_getValue(GM_KEYS$5.black.duration.valueKey, 0));
-			this.videoViewsFilter.setParam(_GM_getValue(GM_KEYS$5.black.views.valueKey, 0));
-			this.videoTitleFilter.setParam(_GM_getValue(GM_KEYS$5.black.title.valueKey, []));
-			this.videoPubdateFilter.setParam(_GM_getValue(GM_KEYS$5.black.pubdate.valueKey, 0));
-			this.videoUploaderFilter.setParam(_GM_getValue(GM_KEYS$5.black.uploader.valueKey, []));
-			this.videoUploaderKeywordFilter.setParam(_GM_getValue(GM_KEYS$5.black.uploaderKeyword.valueKey, []));
-			this.videoUploaderWhiteFilter.setParam(_GM_getValue(GM_KEYS$5.white.uploader.valueKey, []));
-			this.videoTitleWhiteFilter.setParam(_GM_getValue(GM_KEYS$5.white.title.valueKey, []));
+			this.videoBvidFilter.setParam(GM_getValue$1(GM_KEYS$5.black.bvid.valueKey, []));
+			this.videoDurationFilter.setParam(GM_getValue$1(GM_KEYS$5.black.duration.valueKey, 0));
+			this.videoViewsFilter.setParam(GM_getValue$1(GM_KEYS$5.black.views.valueKey, 0));
+			this.videoTitleFilter.setParam(GM_getValue$1(GM_KEYS$5.black.title.valueKey, []));
+			this.videoPubdateFilter.setParam(GM_getValue$1(GM_KEYS$5.black.pubdate.valueKey, 0));
+			this.videoUploaderFilter.setParam(GM_getValue$1(GM_KEYS$5.black.uploader.valueKey, []));
+			this.videoUploaderKeywordFilter.setParam(GM_getValue$1(GM_KEYS$5.black.uploaderKeyword.valueKey, []));
+			this.videoUploaderWhiteFilter.setParam(GM_getValue$1(GM_KEYS$5.white.uploader.valueKey, []));
+			this.videoTitleWhiteFilter.setParam(GM_getValue$1(GM_KEYS$5.white.title.valueKey, []));
 		}
 		async check(mode) {
 			if (!this.target) return;
@@ -7085,7 +7096,7 @@
 					editorTitle: "UP主 黑名单",
 					editorDescription: ["每行一个UP主昵称，保存时自动去重"],
 					saveFn: async () => {
-						mainFilter$5.videoUploaderFilter.setParam(_GM_getValue(GM_KEYS$5.black.uploader.valueKey, []));
+						mainFilter$5.videoUploaderFilter.setParam(GM_getValue$1(GM_KEYS$5.black.uploader.valueKey, []));
 						mainFilter$5.checkFull();
 					}
 				},
@@ -7114,7 +7125,7 @@
 						"正则默认 ius 模式，无需 flag，语法：/abc|\\d+/"
 					],
 					saveFn: async () => {
-						mainFilter$5.videoUploaderKeywordFilter.setParam(_GM_getValue(GM_KEYS$5.black.uploaderKeyword.valueKey, []));
+						mainFilter$5.videoUploaderKeywordFilter.setParam(GM_getValue$1(GM_KEYS$5.black.uploaderKeyword.valueKey, []));
 						mainFilter$5.checkFull();
 					}
 				}
@@ -7146,7 +7157,7 @@
 					"正则默认 ius 模式，无需 flag，语法：/abc|\\d+/"
 				],
 				saveFn: async () => {
-					mainFilter$5.videoTitleFilter.setParam(_GM_getValue(GM_KEYS$5.black.title.valueKey, []));
+					mainFilter$5.videoTitleFilter.setParam(GM_getValue$1(GM_KEYS$5.black.title.valueKey, []));
 					mainFilter$5.checkFull();
 				}
 			}]
@@ -7174,7 +7185,7 @@
 				editorTitle: "BV号 黑名单",
 				editorDescription: ["每行一个BV号，保存时自动去重"],
 				saveFn: async () => {
-					mainFilter$5.videoBvidFilter.setParam(_GM_getValue(GM_KEYS$5.black.bvid.valueKey, []));
+					mainFilter$5.videoBvidFilter.setParam(GM_getValue$1(GM_KEYS$5.black.bvid.valueKey, []));
 					mainFilter$5.checkFull();
 				}
 			}]
@@ -7286,7 +7297,7 @@
 					editorTitle: "UP主 白名单",
 					editorDescription: ["每行一个UP主昵称，保存时自动去重"],
 					saveFn: async () => {
-						mainFilter$5.videoUploaderWhiteFilter.setParam(_GM_getValue(GM_KEYS$5.white.uploader.valueKey, []));
+						mainFilter$5.videoUploaderWhiteFilter.setParam(GM_getValue$1(GM_KEYS$5.white.uploader.valueKey, []));
 						mainFilter$5.checkFull();
 					}
 				},
@@ -7315,7 +7326,7 @@
 						"正则默认 ius 模式，无需 flag，语法：/abc|\\d+/"
 					],
 					saveFn: async () => {
-						mainFilter$5.videoTitleWhiteFilter.setParam(_GM_getValue(GM_KEYS$5.white.title.valueKey, []));
+						mainFilter$5.videoTitleWhiteFilter.setParam(GM_getValue$1(GM_KEYS$5.white.title.valueKey, []));
 						mainFilter$5.checkFull();
 					}
 				}
@@ -7336,9 +7347,9 @@
 						try {
 							mainFilter$5.videoUploaderFilter.addParam(uploader);
 							mainFilter$5.checkFull();
-							const arr = _GM_getValue(GM_KEYS$5.black.uploader.valueKey, []);
+							const arr = GM_getValue$1(GM_KEYS$5.black.uploader.valueKey, []);
 							arr.unshift(uploader);
-							_GM_setValue(GM_KEYS$5.black.uploader.valueKey, orderedUniq(arr));
+							GM_setValue$1(GM_KEYS$5.black.uploader.valueKey, orderedUniq(arr));
 						} catch (err) {
 							logger.error(`videoFilterHomepageHandler add uploader ${uploader} failed`, err);
 						}
@@ -7350,9 +7361,9 @@
 						try {
 							mainFilter$5.videoUploaderWhiteFilter.addParam(uploader);
 							mainFilter$5.checkFull();
-							const arr = _GM_getValue(GM_KEYS$5.white.uploader.valueKey, []);
+							const arr = GM_getValue$1(GM_KEYS$5.white.uploader.valueKey, []);
 							arr.unshift(uploader);
-							_GM_setValue(GM_KEYS$5.white.uploader.valueKey, orderedUniq(arr));
+							GM_setValue$1(GM_KEYS$5.white.uploader.valueKey, orderedUniq(arr));
 						} catch (err) {
 							logger.error(`videoFilterHomepageHandler add white uploader ${uploader} failed`, err);
 						}
@@ -7371,9 +7382,9 @@
 						try {
 							mainFilter$5.videoBvidFilter.addParam(bvid);
 							mainFilter$5.checkFull();
-							const arr = _GM_getValue(GM_KEYS$5.black.bvid.valueKey, []);
+							const arr = GM_getValue$1(GM_KEYS$5.black.bvid.valueKey, []);
 							arr.unshift(bvid);
-							_GM_setValue(GM_KEYS$5.black.bvid.valueKey, orderedUniq(arr));
+							GM_setValue$1(GM_KEYS$5.black.bvid.valueKey, orderedUniq(arr));
 						} catch (err) {
 							logger.error(`videoFilterHomepageHandler add bvid ${bvid} failed`, err);
 						}
@@ -7463,14 +7474,14 @@
 		videoUploaderWhiteFilter = new VideoUploaderWhiteFilter();
 		videoTitleWhiteFilter = new VideoTitleWhiteFilter();
 		init() {
-			this.videoBvidFilter.setParam(_GM_getValue(GM_KEYS$4.black.bvid.valueKey, []));
-			this.videoDurationFilter.setParam(_GM_getValue(GM_KEYS$4.black.duration.valueKey, 0));
-			this.videoTitleFilter.setParam(_GM_getValue(GM_KEYS$4.black.title.valueKey, []));
-			this.videoUploaderFilter.setParam(_GM_getValue(GM_KEYS$4.black.uploader.valueKey, []));
-			this.videoUploaderKeywordFilter.setParam(_GM_getValue(GM_KEYS$4.black.uploaderKeyword.valueKey, []));
-			this.videoQualityFilter.setParam(_GM_getValue(GM_KEYS$4.black.quality.valueKey, 0));
-			this.videoUploaderWhiteFilter.setParam(_GM_getValue(GM_KEYS$4.white.uploader.valueKey, []));
-			this.videoTitleWhiteFilter.setParam(_GM_getValue(GM_KEYS$4.white.title.valueKey, []));
+			this.videoBvidFilter.setParam(GM_getValue$1(GM_KEYS$4.black.bvid.valueKey, []));
+			this.videoDurationFilter.setParam(GM_getValue$1(GM_KEYS$4.black.duration.valueKey, 0));
+			this.videoTitleFilter.setParam(GM_getValue$1(GM_KEYS$4.black.title.valueKey, []));
+			this.videoUploaderFilter.setParam(GM_getValue$1(GM_KEYS$4.black.uploader.valueKey, []));
+			this.videoUploaderKeywordFilter.setParam(GM_getValue$1(GM_KEYS$4.black.uploaderKeyword.valueKey, []));
+			this.videoQualityFilter.setParam(GM_getValue$1(GM_KEYS$4.black.quality.valueKey, 0));
+			this.videoUploaderWhiteFilter.setParam(GM_getValue$1(GM_KEYS$4.white.uploader.valueKey, []));
+			this.videoTitleWhiteFilter.setParam(GM_getValue$1(GM_KEYS$4.white.title.valueKey, []));
 		}
 		async check(mode) {
 			if (!this.target) return;
@@ -7595,7 +7606,7 @@
 					editorTitle: "UP主 黑名单",
 					editorDescription: ["每行一个UP主昵称，保存时自动去重"],
 					saveFn: async () => {
-						mainFilter$4.videoUploaderFilter.setParam(_GM_getValue(GM_KEYS$4.black.uploader.valueKey, []));
+						mainFilter$4.videoUploaderFilter.setParam(GM_getValue$1(GM_KEYS$4.black.uploader.valueKey, []));
 						mainFilter$4.checkFull();
 					}
 				},
@@ -7624,7 +7635,7 @@
 						"正则默认 ius 模式，无需 flag，语法：/abc|\\d+/"
 					],
 					saveFn: async () => {
-						mainFilter$4.videoUploaderKeywordFilter.setParam(_GM_getValue(GM_KEYS$4.black.uploaderKeyword.valueKey, []));
+						mainFilter$4.videoUploaderKeywordFilter.setParam(GM_getValue$1(GM_KEYS$4.black.uploaderKeyword.valueKey, []));
 						mainFilter$4.checkFull();
 					}
 				}
@@ -7706,7 +7717,7 @@
 					"正则默认 ius 模式，无需 flag，语法：/abc|\\d+/"
 				],
 				saveFn: async () => {
-					mainFilter$4.videoTitleFilter.setParam(_GM_getValue(GM_KEYS$4.black.title.valueKey, []));
+					mainFilter$4.videoTitleFilter.setParam(GM_getValue$1(GM_KEYS$4.black.title.valueKey, []));
 					mainFilter$4.checkFull();
 				}
 			}]
@@ -7734,7 +7745,7 @@
 				editorTitle: "BV号 黑名单",
 				editorDescription: ["每行一个BV号，保存时自动去重"],
 				saveFn: async () => {
-					mainFilter$4.videoBvidFilter.setParam(_GM_getValue(GM_KEYS$4.black.bvid.valueKey, []));
+					mainFilter$4.videoBvidFilter.setParam(GM_getValue$1(GM_KEYS$4.black.bvid.valueKey, []));
 					mainFilter$4.checkFull();
 				}
 			}]
@@ -7764,7 +7775,7 @@
 					editorTitle: "UP主 白名单",
 					editorDescription: ["每行一个UP主昵称，保存时自动去重"],
 					saveFn: async () => {
-						mainFilter$4.videoUploaderWhiteFilter.setParam(_GM_getValue(GM_KEYS$4.white.uploader.valueKey, []));
+						mainFilter$4.videoUploaderWhiteFilter.setParam(GM_getValue$1(GM_KEYS$4.white.uploader.valueKey, []));
 						mainFilter$4.checkFull();
 					}
 				},
@@ -7793,7 +7804,7 @@
 						"正则默认 ius 模式，无需 flag，语法：/abc|\\d+/"
 					],
 					saveFn: async () => {
-						mainFilter$4.videoTitleWhiteFilter.setParam(_GM_getValue(GM_KEYS$4.white.title.valueKey, []));
+						mainFilter$4.videoTitleWhiteFilter.setParam(GM_getValue$1(GM_KEYS$4.white.title.valueKey, []));
 						mainFilter$4.checkFull();
 					}
 				}
@@ -7813,9 +7824,9 @@
 						try {
 							mainFilter$4.videoUploaderFilter.addParam(uploader);
 							mainFilter$4.checkFull();
-							const arr = _GM_getValue(GM_KEYS$4.black.uploader.valueKey, []);
+							const arr = GM_getValue$1(GM_KEYS$4.black.uploader.valueKey, []);
 							arr.unshift(uploader);
-							_GM_setValue(GM_KEYS$4.black.uploader.valueKey, orderedUniq(arr));
+							GM_setValue$1(GM_KEYS$4.black.uploader.valueKey, orderedUniq(arr));
 						} catch (err) {
 							logger.error(`videoFilterPopularHandler add uploader ${uploader} failed`, err);
 						}
@@ -7827,9 +7838,9 @@
 						try {
 							mainFilter$4.videoUploaderWhiteFilter.addParam(uploader);
 							mainFilter$4.checkFull();
-							const arr = _GM_getValue(GM_KEYS$4.white.uploader.valueKey, []);
+							const arr = GM_getValue$1(GM_KEYS$4.white.uploader.valueKey, []);
 							arr.unshift(uploader);
-							_GM_setValue(GM_KEYS$4.white.uploader.valueKey, orderedUniq(arr));
+							GM_setValue$1(GM_KEYS$4.white.uploader.valueKey, orderedUniq(arr));
 						} catch (err) {
 							logger.error(`videoFilterPopularHandler add white uploader ${uploader} failed`, err);
 						}
@@ -7848,9 +7859,9 @@
 						try {
 							mainFilter$4.videoBvidFilter.addParam(bvid);
 							mainFilter$4.checkFull();
-							const arr = _GM_getValue(GM_KEYS$4.black.bvid.valueKey, []);
+							const arr = GM_getValue$1(GM_KEYS$4.black.bvid.valueKey, []);
 							arr.unshift(bvid);
-							_GM_setValue(GM_KEYS$4.black.bvid.valueKey, orderedUniq(arr));
+							GM_setValue$1(GM_KEYS$4.black.bvid.valueKey, orderedUniq(arr));
 						} catch (err) {
 							logger.error(`videoFilterPopularHandler add bvid ${bvid} failed`, err);
 						}
@@ -8037,14 +8048,14 @@
 		videoUploaderWhiteFilter = new VideoUploaderWhiteFilter();
 		videoTitleWhiteFilter = new VideoTitleWhiteFilter();
 		init() {
-			this.videoBvidFilter.setParam(_GM_getValue(GM_KEYS$3.black.bvid.valueKey, []));
-			this.videoDurationFilter.setParam(_GM_getValue(GM_KEYS$3.black.duration.valueKey, 0));
-			this.videoTitleFilter.setParam(_GM_getValue(GM_KEYS$3.black.title.valueKey, []));
-			this.videoUploaderFilter.setParam(_GM_getValue(GM_KEYS$3.black.uploader.valueKey, []));
-			this.videoUploaderKeywordFilter.setParam(_GM_getValue(GM_KEYS$3.black.uploaderKeyword.valueKey, []));
-			this.videoRelativityFilter.setParam(_GM_getValue(GM_KEYS$3.black.relativity.valueKey, 15));
-			this.videoUploaderWhiteFilter.setParam(_GM_getValue(GM_KEYS$3.white.uploader.valueKey, []));
-			this.videoTitleWhiteFilter.setParam(_GM_getValue(GM_KEYS$3.white.title.valueKey, []));
+			this.videoBvidFilter.setParam(GM_getValue$1(GM_KEYS$3.black.bvid.valueKey, []));
+			this.videoDurationFilter.setParam(GM_getValue$1(GM_KEYS$3.black.duration.valueKey, 0));
+			this.videoTitleFilter.setParam(GM_getValue$1(GM_KEYS$3.black.title.valueKey, []));
+			this.videoUploaderFilter.setParam(GM_getValue$1(GM_KEYS$3.black.uploader.valueKey, []));
+			this.videoUploaderKeywordFilter.setParam(GM_getValue$1(GM_KEYS$3.black.uploaderKeyword.valueKey, []));
+			this.videoRelativityFilter.setParam(GM_getValue$1(GM_KEYS$3.black.relativity.valueKey, 15));
+			this.videoUploaderWhiteFilter.setParam(GM_getValue$1(GM_KEYS$3.white.uploader.valueKey, []));
+			this.videoTitleWhiteFilter.setParam(GM_getValue$1(GM_KEYS$3.white.title.valueKey, []));
 		}
 		async check(mode) {
 			if (!this.target) return;
@@ -8238,7 +8249,7 @@
 					editorTitle: "UP主 黑名单",
 					editorDescription: ["每行一个UP主昵称，保存时自动去重"],
 					saveFn: async () => {
-						mainFilter$3.videoUploaderFilter.setParam(_GM_getValue(GM_KEYS$3.black.uploader.valueKey, []));
+						mainFilter$3.videoUploaderFilter.setParam(GM_getValue$1(GM_KEYS$3.black.uploader.valueKey, []));
 						mainFilter$3.checkFull();
 					}
 				},
@@ -8267,7 +8278,7 @@
 						"正则默认 ius 模式，无需 flag，语法：/abc|\\d+/"
 					],
 					saveFn: async () => {
-						mainFilter$3.videoUploaderKeywordFilter.setParam(_GM_getValue(GM_KEYS$3.black.uploaderKeyword.valueKey, []));
+						mainFilter$3.videoUploaderKeywordFilter.setParam(GM_getValue$1(GM_KEYS$3.black.uploaderKeyword.valueKey, []));
 						mainFilter$3.checkFull();
 					}
 				}
@@ -8299,7 +8310,7 @@
 					"正则默认 ius 模式，无需 flag，语法：/abc|\\d+/"
 				],
 				saveFn: async () => {
-					mainFilter$3.videoTitleFilter.setParam(_GM_getValue(GM_KEYS$3.black.title.valueKey, []));
+					mainFilter$3.videoTitleFilter.setParam(GM_getValue$1(GM_KEYS$3.black.title.valueKey, []));
 					mainFilter$3.checkFull();
 				}
 			}]
@@ -8327,7 +8338,7 @@
 				editorTitle: "BV号 黑名单",
 				editorDescription: ["每行一个BV号，保存时自动去重"],
 				saveFn: async () => {
-					mainFilter$3.videoBvidFilter.setParam(_GM_getValue(GM_KEYS$3.black.bvid.valueKey, []));
+					mainFilter$3.videoBvidFilter.setParam(GM_getValue$1(GM_KEYS$3.black.bvid.valueKey, []));
 					mainFilter$3.checkFull();
 				}
 			}]
@@ -8357,7 +8368,7 @@
 					editorTitle: "UP主 白名单",
 					editorDescription: ["每行一个UP主昵称，保存时自动去重"],
 					saveFn: async () => {
-						mainFilter$3.videoUploaderWhiteFilter.setParam(_GM_getValue(GM_KEYS$3.white.uploader.valueKey, []));
+						mainFilter$3.videoUploaderWhiteFilter.setParam(GM_getValue$1(GM_KEYS$3.white.uploader.valueKey, []));
 						mainFilter$3.checkFull();
 					}
 				},
@@ -8386,7 +8397,7 @@
 						"正则默认 ius 模式，无需 flag，语法：/abc|\\d+/"
 					],
 					saveFn: async () => {
-						mainFilter$3.videoTitleWhiteFilter.setParam(_GM_getValue(GM_KEYS$3.white.title.valueKey, []));
+						mainFilter$3.videoTitleWhiteFilter.setParam(GM_getValue$1(GM_KEYS$3.white.title.valueKey, []));
 						mainFilter$3.checkFull();
 					}
 				}
@@ -8407,9 +8418,9 @@
 						try {
 							mainFilter$3.videoUploaderFilter.addParam(uploader);
 							mainFilter$3.checkFull();
-							const arr = _GM_getValue(GM_KEYS$3.black.uploader.valueKey, []);
+							const arr = GM_getValue$1(GM_KEYS$3.black.uploader.valueKey, []);
 							arr.unshift(uploader);
-							_GM_setValue(GM_KEYS$3.black.uploader.valueKey, orderedUniq(arr));
+							GM_setValue$1(GM_KEYS$3.black.uploader.valueKey, orderedUniq(arr));
 						} catch (err) {
 							logger.error(`videoFilterSearchHandler add uploader ${uploader} failed`, err);
 						}
@@ -8421,9 +8432,9 @@
 						try {
 							mainFilter$3.videoUploaderWhiteFilter.addParam(uploader);
 							mainFilter$3.checkFull();
-							const arr = _GM_getValue(GM_KEYS$3.white.uploader.valueKey, []);
+							const arr = GM_getValue$1(GM_KEYS$3.white.uploader.valueKey, []);
 							arr.unshift(uploader);
-							_GM_setValue(GM_KEYS$3.white.uploader.valueKey, orderedUniq(arr));
+							GM_setValue$1(GM_KEYS$3.white.uploader.valueKey, orderedUniq(arr));
 						} catch (err) {
 							logger.error(`videoFilterSearchHandler add white uploader ${uploader} failed`, err);
 						}
@@ -8443,9 +8454,9 @@
 						try {
 							mainFilter$3.videoUploaderFilter.addParam(uploader);
 							mainFilter$3.checkFull();
-							const arr = _GM_getValue(GM_KEYS$3.black.uploader.valueKey, []);
+							const arr = GM_getValue$1(GM_KEYS$3.black.uploader.valueKey, []);
 							arr.unshift(uploader);
-							_GM_setValue(GM_KEYS$3.black.uploader.valueKey, orderedUniq(arr));
+							GM_setValue$1(GM_KEYS$3.black.uploader.valueKey, orderedUniq(arr));
 						} catch (err) {
 							logger.error(`videoFilterSearchHandler add uploader ${uploader} failed`, err);
 						}
@@ -8457,9 +8468,9 @@
 						try {
 							mainFilter$3.videoUploaderWhiteFilter.addParam(uploader);
 							mainFilter$3.checkFull();
-							const arr = _GM_getValue(GM_KEYS$3.white.uploader.valueKey, []);
+							const arr = GM_getValue$1(GM_KEYS$3.white.uploader.valueKey, []);
 							arr.unshift(uploader);
-							_GM_setValue(GM_KEYS$3.white.uploader.valueKey, orderedUniq(arr));
+							GM_setValue$1(GM_KEYS$3.white.uploader.valueKey, orderedUniq(arr));
 						} catch (err) {
 							logger.error(`videoFilterSearchHandler add white uploader ${uploader} failed`, err);
 						}
@@ -8478,9 +8489,9 @@
 						try {
 							mainFilter$3.videoBvidFilter.addParam(bvid);
 							mainFilter$3.checkFull();
-							const arr = _GM_getValue(GM_KEYS$3.black.bvid.valueKey, []);
+							const arr = GM_getValue$1(GM_KEYS$3.black.bvid.valueKey, []);
 							arr.unshift(bvid);
-							_GM_setValue(GM_KEYS$3.black.bvid.valueKey, orderedUniq(arr));
+							GM_setValue$1(GM_KEYS$3.black.bvid.valueKey, orderedUniq(arr));
 						} catch (err) {
 							logger.error(`videoFilterSearchHandler add bvid ${bvid} failed`, err);
 						}
@@ -8530,10 +8541,10 @@
 		videoTitleFilter = new VideoTitleFilter();
 		videoTitleWhiteFilter = new VideoTitleWhiteFilter();
 		init() {
-			this.videoBvidFilter.setParam(_GM_getValue(GM_KEYS$2.black.bvid.valueKey, []));
-			this.videoDurationFilter.setParam(_GM_getValue(GM_KEYS$2.black.duration.valueKey, 0));
-			this.videoTitleFilter.setParam(_GM_getValue(GM_KEYS$2.black.title.valueKey, []));
-			this.videoTitleWhiteFilter.setParam(_GM_getValue(GM_KEYS$2.white.title.valueKey, []));
+			this.videoBvidFilter.setParam(GM_getValue$1(GM_KEYS$2.black.bvid.valueKey, []));
+			this.videoDurationFilter.setParam(GM_getValue$1(GM_KEYS$2.black.duration.valueKey, 0));
+			this.videoTitleFilter.setParam(GM_getValue$1(GM_KEYS$2.black.title.valueKey, []));
+			this.videoTitleWhiteFilter.setParam(GM_getValue$1(GM_KEYS$2.white.title.valueKey, []));
 		}
 		async check(mode) {
 			if (!this.target) return;
@@ -8657,7 +8668,7 @@
 					"正则默认 ius 模式，无需 flag，语法：/abc|\\d+/"
 				],
 				saveFn: async () => {
-					mainFilter$2.videoTitleFilter.setParam(_GM_getValue(GM_KEYS$2.black.title.valueKey, []));
+					mainFilter$2.videoTitleFilter.setParam(GM_getValue$1(GM_KEYS$2.black.title.valueKey, []));
 					mainFilter$2.checkFull();
 				}
 			}]
@@ -8685,7 +8696,7 @@
 				editorTitle: "BV号 黑名单",
 				editorDescription: ["每行一个BV号，保存时自动去重"],
 				saveFn: async () => {
-					mainFilter$2.videoBvidFilter.setParam(_GM_getValue(GM_KEYS$2.black.bvid.valueKey, []));
+					mainFilter$2.videoBvidFilter.setParam(GM_getValue$1(GM_KEYS$2.black.bvid.valueKey, []));
 					mainFilter$2.checkFull();
 				}
 			}]
@@ -8716,7 +8727,7 @@
 					"正则默认 ius 模式，无需 flag，语法：/abc|\\d+/"
 				],
 				saveFn: async () => {
-					mainFilter$2.videoTitleWhiteFilter.setParam(_GM_getValue(GM_KEYS$2.white.title.valueKey, []));
+					mainFilter$2.videoTitleWhiteFilter.setParam(GM_getValue$1(GM_KEYS$2.white.title.valueKey, []));
 					mainFilter$2.checkFull();
 				}
 			}]
@@ -8736,9 +8747,9 @@
 						try {
 							mainFilter$2.videoBvidFilter.addParam(bvid);
 							mainFilter$2.checkFull();
-							const arr = _GM_getValue(GM_KEYS$2.black.bvid.valueKey, []);
+							const arr = GM_getValue$1(GM_KEYS$2.black.bvid.valueKey, []);
 							arr.unshift(bvid);
-							_GM_setValue(GM_KEYS$2.black.bvid.valueKey, orderedUniq(arr));
+							GM_setValue$1(GM_KEYS$2.black.bvid.valueKey, orderedUniq(arr));
 						} catch (err) {
 							logger.error(`videoFilterSearchHandler add bvid ${bvid} failed`, err);
 						}
@@ -8810,13 +8821,13 @@
 		videoUploaderWhiteFilter = new VideoUploaderWhiteFilter();
 		videoTitleWhiteFilter = new VideoTitleWhiteFilter();
 		init() {
-			this.videoBvidFilter.setParam(_GM_getValue(GM_KEYS$1.black.bvid.valueKey, []));
-			this.videoDurationFilter.setParam(_GM_getValue(GM_KEYS$1.black.duration.valueKey, 0));
-			this.videoTitleFilter.setParam(_GM_getValue(GM_KEYS$1.black.title.valueKey, []));
-			this.videoUploaderFilter.setParam(_GM_getValue(GM_KEYS$1.black.uploader.valueKey, []));
-			this.videoUploaderKeywordFilter.setParam(_GM_getValue(GM_KEYS$1.black.uploaderKeyword.valueKey, []));
-			this.videoUploaderWhiteFilter.setParam(_GM_getValue(GM_KEYS$1.white.uploader.valueKey, []));
-			this.videoTitleWhiteFilter.setParam(_GM_getValue(GM_KEYS$1.white.title.valueKey, []));
+			this.videoBvidFilter.setParam(GM_getValue$1(GM_KEYS$1.black.bvid.valueKey, []));
+			this.videoDurationFilter.setParam(GM_getValue$1(GM_KEYS$1.black.duration.valueKey, 0));
+			this.videoTitleFilter.setParam(GM_getValue$1(GM_KEYS$1.black.title.valueKey, []));
+			this.videoUploaderFilter.setParam(GM_getValue$1(GM_KEYS$1.black.uploader.valueKey, []));
+			this.videoUploaderKeywordFilter.setParam(GM_getValue$1(GM_KEYS$1.black.uploaderKeyword.valueKey, []));
+			this.videoUploaderWhiteFilter.setParam(GM_getValue$1(GM_KEYS$1.white.uploader.valueKey, []));
+			this.videoTitleWhiteFilter.setParam(GM_getValue$1(GM_KEYS$1.white.title.valueKey, []));
 		}
 		async check(mode) {
 			if (!this.target) return;
@@ -8951,7 +8962,7 @@
 					editorTitle: "UP主 黑名单",
 					editorDescription: ["每行一个UP主昵称，保存时自动去重"],
 					saveFn: async () => {
-						mainFilter$1.videoUploaderFilter.setParam(_GM_getValue(GM_KEYS$1.black.uploader.valueKey, []));
+						mainFilter$1.videoUploaderFilter.setParam(GM_getValue$1(GM_KEYS$1.black.uploader.valueKey, []));
 						mainFilter$1.checkFull();
 					}
 				},
@@ -8980,7 +8991,7 @@
 						"正则默认 ius 模式，无需 flag，语法：/abc|\\d+/"
 					],
 					saveFn: async () => {
-						mainFilter$1.videoUploaderKeywordFilter.setParam(_GM_getValue(GM_KEYS$1.black.uploaderKeyword.valueKey, []));
+						mainFilter$1.videoUploaderKeywordFilter.setParam(GM_getValue$1(GM_KEYS$1.black.uploaderKeyword.valueKey, []));
 						mainFilter$1.checkFull();
 					}
 				}
@@ -9012,7 +9023,7 @@
 					"正则默认 ius 模式，无需 flag，语法：/abc|\\d+/"
 				],
 				saveFn: async () => {
-					mainFilter$1.videoTitleFilter.setParam(_GM_getValue(GM_KEYS$1.black.title.valueKey, []));
+					mainFilter$1.videoTitleFilter.setParam(GM_getValue$1(GM_KEYS$1.black.title.valueKey, []));
 					mainFilter$1.checkFull();
 				}
 			}]
@@ -9040,7 +9051,7 @@
 				editorTitle: "BV号 黑名单",
 				editorDescription: ["每行一个BV号，保存时自动去重"],
 				saveFn: async () => {
-					mainFilter$1.videoBvidFilter.setParam(_GM_getValue(GM_KEYS$1.black.bvid.valueKey, []));
+					mainFilter$1.videoBvidFilter.setParam(GM_getValue$1(GM_KEYS$1.black.bvid.valueKey, []));
 					mainFilter$1.checkFull();
 				}
 			}]
@@ -9092,7 +9103,7 @@
 					editorTitle: "UP主 白名单",
 					editorDescription: ["每行一个UP主昵称，保存时自动去重"],
 					saveFn: async () => {
-						mainFilter$1.videoUploaderWhiteFilter.setParam(_GM_getValue(GM_KEYS$1.white.uploader.valueKey, []));
+						mainFilter$1.videoUploaderWhiteFilter.setParam(GM_getValue$1(GM_KEYS$1.white.uploader.valueKey, []));
 						mainFilter$1.checkFull();
 					}
 				},
@@ -9121,7 +9132,7 @@
 						"正则默认 ius 模式，无需 flag，语法：/abc|\\d+/"
 					],
 					saveFn: async () => {
-						mainFilter$1.videoTitleWhiteFilter.setParam(_GM_getValue(GM_KEYS$1.white.title.valueKey, []));
+						mainFilter$1.videoTitleWhiteFilter.setParam(GM_getValue$1(GM_KEYS$1.white.title.valueKey, []));
 						mainFilter$1.checkFull();
 					}
 				}
@@ -9142,9 +9153,9 @@
 						try {
 							mainFilter$1.videoUploaderFilter.addParam(uploader);
 							mainFilter$1.checkFull();
-							const arr = _GM_getValue(GM_KEYS$1.black.uploader.valueKey, []);
+							const arr = GM_getValue$1(GM_KEYS$1.black.uploader.valueKey, []);
 							arr.unshift(uploader);
-							_GM_setValue(GM_KEYS$1.black.uploader.valueKey, orderedUniq(arr));
+							GM_setValue$1(GM_KEYS$1.black.uploader.valueKey, orderedUniq(arr));
 						} catch (err) {
 							logger.error(`videoFilterVideoHandler add uploader ${uploader} failed`, err);
 						}
@@ -9156,9 +9167,9 @@
 						try {
 							mainFilter$1.videoUploaderWhiteFilter.addParam(uploader);
 							mainFilter$1.checkFull();
-							const arr = _GM_getValue(GM_KEYS$1.white.uploader.valueKey, []);
+							const arr = GM_getValue$1(GM_KEYS$1.white.uploader.valueKey, []);
 							arr.unshift(uploader);
-							_GM_setValue(GM_KEYS$1.white.uploader.valueKey, orderedUniq(arr));
+							GM_setValue$1(GM_KEYS$1.white.uploader.valueKey, orderedUniq(arr));
 						} catch (err) {
 							logger.error(`videoFilterVideoHandler add white uploader ${uploader} failed`, err);
 						}
@@ -9177,9 +9188,9 @@
 						try {
 							mainFilter$1.videoBvidFilter.addParam(bvid);
 							mainFilter$1.checkFull();
-							const arr = _GM_getValue(GM_KEYS$1.black.bvid.valueKey, []);
+							const arr = GM_getValue$1(GM_KEYS$1.black.bvid.valueKey, []);
 							arr.unshift(bvid);
-							_GM_setValue(GM_KEYS$1.black.bvid.valueKey, orderedUniq(arr));
+							GM_setValue$1(GM_KEYS$1.black.bvid.valueKey, orderedUniq(arr));
 						} catch (err) {
 							logger.error(`videoFilterVideoHandler add bvid ${bvid} failed`, err);
 						}
@@ -9236,11 +9247,11 @@
 		articleTitleKeywordFilter = new ArticleTitleKeywordFilter();
 		articleTitleKeywordWhiteFilter = new ArticleTitleKeywordWhiteFilter();
 		init() {
-			const blacklist = _GM_getValue(GM_KEYS.black.author.valueKey, []);
-			const keywordBlacklist = _GM_getValue(GM_KEYS.black.authorKeyword.valueKey, []);
-			const titleKeywordBlacklist = _GM_getValue(GM_KEYS.black.title.valueKey, []);
-			const whitelist = _GM_getValue(GM_KEYS.white.author.valueKey, []);
-			const titleKeywordWhitelist = _GM_getValue(GM_KEYS.white.title.valueKey, []);
+			const blacklist = GM_getValue$1(GM_KEYS.black.author.valueKey, []);
+			const keywordBlacklist = GM_getValue$1(GM_KEYS.black.authorKeyword.valueKey, []);
+			const titleKeywordBlacklist = GM_getValue$1(GM_KEYS.black.title.valueKey, []);
+			const whitelist = GM_getValue$1(GM_KEYS.white.author.valueKey, []);
+			const titleKeywordWhitelist = GM_getValue$1(GM_KEYS.white.title.valueKey, []);
 			this.articleAuthorFilter.setParam(blacklist);
 			this.articleAuthorKeywordFilter.setParam(keywordBlacklist);
 			this.articleTitleKeywordFilter.setParam(titleKeywordBlacklist);
@@ -9334,7 +9345,7 @@
 					editorTitle: "专栏作者 黑名单",
 					editorDescription: ["每行一个专栏作者昵称，保存时自动去重"],
 					saveFn: async () => {
-						mainFilter.articleAuthorFilter.setParam(_GM_getValue(GM_KEYS.black.author.valueKey, []));
+						mainFilter.articleAuthorFilter.setParam(GM_getValue$1(GM_KEYS.black.author.valueKey, []));
 						mainFilter.checkFull();
 					}
 				},
@@ -9363,7 +9374,7 @@
 						"正则默认 ius 模式，无需 flag，语法：/abc|\\d+/"
 					],
 					saveFn: async () => {
-						mainFilter.articleAuthorKeywordFilter.setParam(_GM_getValue(GM_KEYS.black.authorKeyword.valueKey, []));
+						mainFilter.articleAuthorKeywordFilter.setParam(GM_getValue$1(GM_KEYS.black.authorKeyword.valueKey, []));
 						mainFilter.checkFull();
 					}
 				}
@@ -9395,7 +9406,7 @@
 					"正则默认 ius 模式，无需 flag，语法：/abc|\\d+/"
 				],
 				saveFn: async () => {
-					mainFilter.articleTitleKeywordFilter.setParam(_GM_getValue(GM_KEYS.black.title.valueKey, []));
+					mainFilter.articleTitleKeywordFilter.setParam(GM_getValue$1(GM_KEYS.black.title.valueKey, []));
 					mainFilter.checkFull();
 				}
 			}]
@@ -9425,7 +9436,7 @@
 					editorTitle: "专栏作者 白名单",
 					editorDescription: ["每行一个专栏作者昵称，保存时自动去重"],
 					saveFn: async () => {
-						mainFilter.articleAuthorWhiteFilter.setParam(_GM_getValue(GM_KEYS.white.author.valueKey, []));
+						mainFilter.articleAuthorWhiteFilter.setParam(GM_getValue$1(GM_KEYS.white.author.valueKey, []));
 						mainFilter.checkFull();
 					}
 				},
@@ -9450,7 +9461,7 @@
 					editorTitle: "专栏标题关键词 白名单",
 					editorDescription: ["每行一个关键词或正则，不区分大小写、全半角", "正则默认 ius 模式，无需 flag，语法：/abc|\\d+/"],
 					saveFn: async () => {
-						mainFilter.articleTitleKeywordWhiteFilter.setParam(_GM_getValue(GM_KEYS.white.title.valueKey, []));
+						mainFilter.articleTitleKeywordWhiteFilter.setParam(GM_getValue$1(GM_KEYS.white.title.valueKey, []));
 						mainFilter.checkFull();
 					}
 				}
@@ -9471,9 +9482,9 @@
 						try {
 							mainFilter.articleAuthorFilter.addParam(author);
 							mainFilter.checkFull();
-							const arr = _GM_getValue(GM_KEYS.black.author.valueKey, []);
+							const arr = GM_getValue$1(GM_KEYS.black.author.valueKey, []);
 							arr.unshift(author);
-							_GM_setValue(GM_KEYS.black.author.valueKey, orderedUniq(arr));
+							GM_setValue$1(GM_KEYS.black.author.valueKey, orderedUniq(arr));
 						} catch (err) {
 							logger.error(`articleFilterHandler add author ${author} failed`, err);
 						}
@@ -9485,9 +9496,9 @@
 						try {
 							mainFilter.articleAuthorWhiteFilter.addParam(author);
 							mainFilter.checkFull();
-							const arr = _GM_getValue(GM_KEYS.white.author.valueKey, []);
+							const arr = GM_getValue$1(GM_KEYS.white.author.valueKey, []);
 							arr.unshift(author);
-							_GM_setValue(GM_KEYS.white.author.valueKey, orderedUniq(arr));
+							GM_setValue$1(GM_KEYS.white.author.valueKey, orderedUniq(arr));
 						} catch (err) {
 							logger.error(`articleFilterHandler add white author ${author} failed`, err);
 						}
@@ -9738,12 +9749,24 @@
 	var suppressDepth = 0;
 	var suppressUntil = 0;
 	var editTimer = 0;
+	var configImportPaused = false;
+	var withConfigImportSuppressed = (apply) => {
+		if (syncing) throw new Error("正在同步规则，请等待完成后再导入配置。");
+		window.clearTimeout(editTimer);
+		configImportPaused = true;
+		suppressDepth++;
+		try {
+			return apply();
+		} finally {
+			suppressDepth--;
+		}
+	};
 	var readText = (key) => {
-		const value = _GM_getValue(key, "");
+		const value = GM_getValue$1(key, "");
 		return typeof value === "string" ? value.trim() : "";
 	};
-	var syncEnabled = () => Boolean(_GM_getValue(SYNC_KEYS.enabled, false));
-	var canSync = () => syncEnabled() && readText(SYNC_KEYS.url) !== "" && readText(SYNC_KEYS.user) !== "";
+	var syncEnabled = () => Boolean(GM_getValue$1(SYNC_KEYS.enabled, false));
+	var canSync = () => !configImportPaused && syncEnabled() && readText(SYNC_KEYS.url) !== "" && readText(SYNC_KEYS.user) !== "";
 	var basicAuth = (user, password) => {
 		const bytes = new TextEncoder().encode(`${user}:${password}`);
 		let binary = "";
@@ -9772,9 +9795,9 @@
 			ontimeout: () => reject(new Error(`${details.method} ${details.url} timeout`))
 		});
 	});
-	var authHeaders = () => ({ Authorization: basicAuth(readText(SYNC_KEYS.user), _GM_getValue(SYNC_KEYS.password, "")) });
+	var authHeaders = () => ({ Authorization: basicAuth(readText(SYNC_KEYS.user), GM_getValue$1(SYNC_KEYS.password, "")) });
 	var localStamp = () => {
-		const value = _GM_getValue(SYNC_KEYS.stamp, 0);
+		const value = GM_getValue$1(SYNC_KEYS.stamp, 0);
 		return typeof value === "number" && Number.isFinite(value) ? value : 0;
 	};
 	var blobBytes = (bytes) => new Blob([bytes.buffer.slice(bytes.byteOffset, bytes.byteOffset + bytes.byteLength)]);
@@ -9851,7 +9874,7 @@
 		logger.debug(`mkcol status ${response.status}`);
 	};
 	var upload = async (base, stamp) => {
-		const pack = exportRulePack((key) => _GM_getValue(key, void 0));
+		const pack = exportRulePack((key) => GM_getValue$1(key, void 0));
 		const encoded = await gzipText(JSON.stringify(pack));
 		const body = bytesToBinary(encoded.bytes);
 		const type = encoded.gzip ? "application/gzip" : "application/json";
@@ -9865,14 +9888,14 @@
 		await putFile(joinUrl(base, STAMP_NAME), String(stamp), "text/plain");
 	};
 	var applyRemote = (pack, stamp) => {
-		const writes = planRuleImport(pack, (key) => _GM_getValue(key, void 0));
+		const writes = planRuleImport(pack, (key) => GM_getValue$1(key, void 0));
 		if (!writes) throw new Error("pack schema rejected");
 		suppressDepth++;
 		suppressUntil = Date.now() + 2e3;
 		try {
-			for (const write of writes) if (write.value === void 0) _GM_deleteValue(write.gm);
-			else _GM_setValue(write.gm, write.value);
-			_GM_setValue(SYNC_KEYS.stamp, stamp);
+			for (const write of writes) if (write.value === void 0) GM_deleteValue$1(write.gm);
+			else GM_setValue$1(write.gm, write.value);
+			GM_setValue$1(SYNC_KEYS.stamp, stamp);
 		} finally {
 			suppressDepth--;
 		}
@@ -9912,8 +9935,8 @@
 		return syncing;
 	};
 	var scheduleFromEdit = () => {
-		if (suppressDepth > 0 || Date.now() < suppressUntil) return;
-		_GM_setValue(SYNC_KEYS.stamp, Date.now());
+		if (configImportPaused || suppressDepth > 0 || Date.now() < suppressUntil) return;
+		GM_setValue$1(SYNC_KEYS.stamp, Date.now());
 		window.clearTimeout(editTimer);
 		editTimer = window.setTimeout(() => {
 			syncRulesNow();
@@ -9922,7 +9945,7 @@
 	var installRuleWatch = () => {
 		if (watchInstalled) return;
 		watchInstalled = true;
-		for (const field of RULE_FIELDS) _GM_addValueChangeListener(field.gm, () => {
+		for (const field of RULE_FIELDS) GM_addValueChangeListener$1(field.gm, () => {
 			scheduleFromEdit();
 		});
 	};
@@ -10107,6 +10130,23 @@
 			hide,
 			toggle,
 			isPageValid
+		};
+	});
+	var useConfigurationPanelStore = defineStore("ConfigurationPanel", () => {
+		const isShow = (0, vue.ref)(false);
+		const openToken = (0, vue.ref)(0);
+		const show = () => {
+			openToken.value++;
+			isShow.value = true;
+		};
+		const hide = () => {
+			isShow.value = false;
+		};
+		return {
+			isShow,
+			openToken,
+			show,
+			hide
 		};
 	});
 	var useVideoFilterPanelStore = defineStore("VideoFilterPanel", () => {
@@ -13154,6 +13194,7 @@
 			fold: true
 		}
 	];
+	var touchItems = [];
 	var videoBasicItems = [{
 		type: "switch",
 		id: "video-page-hide-fixed-header",
@@ -13485,6 +13526,11 @@
 	];
 	Element.prototype.getBoundingClientRect;
 	var videoGroups = [
+		{
+			name: "播放器触摸操作",
+			fold: true,
+			items: touchItems
+		},
 		{
 			name: "基本功能",
 			fold: true,
@@ -13903,53 +13949,23 @@
 			logger.error(`loadRuleStyle error, name=${rule.name}`, err);
 		}
 	};
-	var reviewCatalog = [];
-	new Map(reviewCatalog.map((entry) => [entry.key, entry]));
-	var categoryFor = (entry, state) => state.decisions[entry.key]?.category ?? entry.category;
-	var _hoisted_1$5 = ["data-review-key", "data-review-category"];
-	var _hoisted_2$3 = { key: 0 };
-	var _hoisted_3$3 = { key: 1 };
-	var _hoisted_4$2 = { key: 2 };
-	var _hoisted_5$2 = ["disabled", "aria-pressed"];
-	var _hoisted_6$2 = ["disabled"];
-	var _hoisted_7$2 = { class: "w-full" };
-	var _hoisted_8$2 = { class: "pt-1" };
-	var OptimizationReviewRow_default = (0, vue.defineComponent)({
-		__name: "OptimizationReviewRow",
-		props: {
-			entry: {},
-			store: {}
-		},
-		setup(__props) {
-			const props = __props;
-			const category = (0, vue.computed)(() => categoryFor(props.entry, props.store.state.value));
-			const removed = (0, vue.computed)(() => Boolean(props.store.state.value.decisions[props.entry.key]?.remove));
-			return (_ctx, _cache) => {
-				return (0, vue.openBlock)(), (0, vue.createElementBlock)("div", {
-					class: "mt-1 mb-2 flex flex-wrap items-center gap-2 rounded border border-gray-200 bg-gray-50 px-2 py-1 text-xs text-gray-700",
-					"data-review-key": __props.entry.key,
-					"data-review-category": category.value
-				}, [
-					category.value === "optimization" ? ((0, vue.openBlock)(), (0, vue.createElementBlock)("span", _hoisted_2$3, (0, vue.toDisplayString)(removed.value ? "已标记删除" : __props.entry.retention ? "可选保留 · 默认关闭" : "优化 · 待定"), 1)) : category.value === "cleaning" ? ((0, vue.openBlock)(), (0, vue.createElementBlock)("span", _hoisted_3$3, "净化 · 保留")) : ((0, vue.openBlock)(), (0, vue.createElementBlock)("span", _hoisted_4$2, "公共支撑 · 保留")),
-					category.value === "optimization" ? ((0, vue.openBlock)(), (0, vue.createElementBlock)("button", {
-						key: 3,
-						type: "button",
-						disabled: __props.store.readOnly.value,
-						"aria-pressed": removed.value,
-						class: (0, vue.normalizeClass)(["rounded border px-2 py-1 disabled:opacity-50", removed.value ? "border-red-600 text-red-700" : "border-gray-400"]),
-						onClick: _cache[0] || (_cache[0] = (0, vue.withModifiers)(($event) => __props.store.toggleRemove(__props.entry.key), ["stop"]))
-					}, [(0, vue.createVNode)(Badge_default, { code: (0, vue.unref)(actionLabel)("review-toggle-remove") }, null, 8, ["code"]), (0, vue.createTextVNode)((0, vue.toDisplayString)(removed.value ? "撤销删除" : "建议删除"), 1)], 10, _hoisted_5$2)) : (0, vue.createCommentVNode)("", true),
-					category.value !== "support" ? ((0, vue.openBlock)(), (0, vue.createElementBlock)("button", {
-						key: 4,
-						type: "button",
-						disabled: __props.store.readOnly.value,
-						class: "rounded border border-gray-400 px-2 py-1 disabled:opacity-50",
-						onClick: _cache[1] || (_cache[1] = (0, vue.withModifiers)(($event) => __props.store.changeCategory(__props.entry.key), ["stop"]))
-					}, [(0, vue.createVNode)(Badge_default, { code: (0, vue.unref)(actionLabel)("review-change-category") }, null, 8, ["code"]), (0, vue.createTextVNode)((0, vue.toDisplayString)(category.value === "cleaning" ? "归为优化" : "归为净化"), 1)], 8, _hoisted_6$2)) : (0, vue.createCommentVNode)("", true),
-					(0, vue.createElementVNode)("details", _hoisted_7$2, [_cache[2] || (_cache[2] = (0, vue.createElementVNode)("summary", { class: "cursor-pointer" }, "分类依据", -1)), (0, vue.createElementVNode)("p", _hoisted_8$2, (0, vue.toDisplayString)(__props.entry.rationale), 1)])
-				], 8, _hoisted_1$5);
+	var sectionGroups = (groups, classification) => groups.flatMap((group, groupIndex) => {
+		const sections = new Map();
+		for (const item of group.items) {
+			const entry = classification[item.id] ?? { category: "support" };
+			const suffix = entry.category === "cleaning" ? "净化" : entry.category === "optimization" ? "优化 - " + (entry.packLabel ?? "其他") : "公共设置";
+			const key = entry.category + ":" + (entry.pack ?? "");
+			const section = sections.get(key) ?? {
+				name: group.name + " - " + suffix,
+				fold: group.fold,
+				items: [],
+				sectionKey: groupIndex + ":" + key
 			};
+			section.items.push(item);
+			sections.set(key, section);
 		}
+		const rank = (section) => section.sectionKey.includes(":cleaning:") ? 0 : section.sectionKey.includes(":optimization:") ? 1 : 2;
+		return [...sections.values()].sort((a, b) => rank(a) - rank(b));
 	});
 	var object = (v) => Boolean(v) && typeof v === "object" && !Array.isArray(v);
 	var exactKeys = (v, keys) => {
@@ -14101,7 +14117,7 @@
 		return validateEvidence({
 			format: "misakaweb-structural-diagnostic",
 			schemaVersion: 1,
-			scriptVersion: "0.1.4.8",
+			scriptVersion: "0.1.5",
 			capturedAt: new Date().toISOString(),
 			pageType: pageType(),
 			site: location.hostname,
@@ -14120,253 +14136,415 @@
 		anchor.remove();
 		setTimeout(() => URL.revokeObjectURL(url), 1e4);
 	};
-	var _hoisted_1$4 = ["data-build-profile"];
-	var _hoisted_2$2 = {
+	var _hoisted_1$5 = ["data-build-profile"];
+	var _hoisted_2$3 = ["data-setting-section"];
+	var _hoisted_3$3 = ["data-setting-key"];
+	var _hoisted_4$2 = {
 		key: 0,
-		class: "mb-3 rounded-lg border border-blue-200 bg-blue-50 p-2 text-sm text-gray-800",
-		"data-review-toolbar": ""
+		class: "p-3 text-sm text-gray-500"
 	};
-	var _hoisted_3$2 = {
-		class: "my-2 flex flex-wrap gap-2",
-		role: "tablist",
-		"aria-label": "功能类别"
-	};
-	var _hoisted_4$1 = ["aria-selected", "onClick"];
-	var _hoisted_5$1 = {
-		class: "my-2 flex flex-wrap gap-2",
-		"aria-label": "查看范围"
-	};
-	var _hoisted_6$1 = ["aria-pressed"];
-	var _hoisted_7$1 = ["aria-pressed"];
-	var _hoisted_8$1 = ["disabled"];
-	var _hoisted_9$1 = {
+	var _hoisted_5$2 = { class: "mt-3 border-t border-gray-200 pt-2" };
+	var _hoisted_6$2 = {
 		key: 0,
 		role: "alert",
-		class: "mb-2 text-red-700"
-	};
-	var _hoisted_10$1 = {
-		key: 1,
-		class: "mt-2 block"
-	};
-	var _hoisted_11 = ["value"];
-	var _hoisted_12 = {
-		key: 2,
-		class: "mt-2 flex items-center gap-2"
-	};
-	var _hoisted_13 = { class: "mt-2" };
-	var _hoisted_14 = { class: "mt-1" };
-	var _hoisted_15 = {
-		key: 3,
-		role: "alert",
-		class: "mt-2 text-red-700"
-	};
-	var _hoisted_16 = {
-		key: 4,
-		role: "alert",
-		class: "mt-2 text-red-700"
-	};
-	var _hoisted_17 = {
-		key: 1,
-		"data-review-catalog": ""
-	};
-	var _hoisted_18 = {
-		key: 0,
-		class: "mt-1 text-xs font-bold text-blue-700"
-	};
-	var _hoisted_19 = { class: "mt-1 text-xs text-gray-500" };
-	var _hoisted_20 = {
-		key: 3,
-		class: "p-4 text-sm text-gray-600"
+		class: "mt-1 text-sm text-red-700"
 	};
 	var RulePanelView_default = (0, vue.defineComponent)({
 		__name: "RulePanelView",
 		setup(__props) {
 			const store = useRulePanelStore();
+			const configurationStore = useConfigurationPanelStore();
 			const buildProfile = "pure";
-			const buildLabel = "净化与过滤";
-			const scriptVersion = "0.1.4.8";
+			const buildLabel = "净化轻量版";
+			const scriptVersion = "0.1.5";
 			const editorDialogRef = (0, vue.ref)(null);
-			const handleEdit = (item) => {
-				editorDialogRef.value?.openEditor(item);
-			};
-			const review = null;
-			const category = (0, vue.ref)("cleaning");
-			const scope = (0, vue.ref)("page");
 			const query = (0, vue.ref)("");
-			const onlyMarked = (0, vue.ref)(false);
 			const diagnosticError = (0, vue.ref)("");
+			const handleEdit = (item) => editorDialogRef.value?.openEditor(item);
 			const exportDiagnostic = () => {
 				diagnosticError.value = "";
 				try {
 					downloadMaintenanceDiagnostic();
 				} catch {
-					diagnosticError.value = "诊断导出失败，请重试。不会导出设置、名单或账号数据。";
+					diagnosticError.value = "导出失败，请重试。";
 				}
 			};
-			const packFilter = (0, vue.ref)("");
-			const tabs = [
-				{
-					key: "cleaning",
-					name: "净化"
-				},
-				{
-					key: "optimization",
-					name: "优化"
-				},
-				{
-					key: "support",
-					name: "公共设置"
-				}
-			];
-			const catalogByKey = new Map(reviewCatalog.map((entry) => [entry.key, entry]));
-			const activeRules = (0, vue.computed)(() => rules.filter((rule) => rule.checkFn()));
-			const activeKeys = (0, vue.computed)(() => new Set(activeRules.value.flatMap((rule) => rule.groups.flatMap((group) => group.items.map((item) => item.id)))));
-			const activePages = (0, vue.computed)(() => new Set(activeRules.value.map((rule) => rule.name)));
-			const inScope = (entry) => scope.value === "all" || activeKeys.value.has(entry.key) || entry.id.startsWith("B") && entry.pages.some((page) => activePages.value.has(page));
-			const selected = (entry) => review;
-			const visibleEntries = (0, vue.computed)(() => reviewCatalog.filter((entry) => inScope(entry) && selected(entry)));
-			const counts = (0, vue.computed)(() => {
-				return {
-					cleaning: 0,
-					optimization: 0,
-					support: 0
-				};
+			const displayedRules = (0, vue.computed)(() => {
+				const search = query.value.trim().toLowerCase();
+				return rules.filter((rule) => rule.checkFn()).map((rule) => ({
+					...rule,
+					groups: sectionGroups(rule.groups, {
+						"bangumi-page-hide-bpx-player-record-item-wrap": { "category": "cleaning" },
+						"bangumi-page-hide-bpx-player-top-follow": { "category": "cleaning" },
+						"bangumi-page-hide-eplist-badge": { "category": "cleaning" },
+						"bangumi-page-hide-media-info": { "category": "cleaning" },
+						"bangumi-page-hide-recommend": { "category": "cleaning" },
+						"bangumi-page-hide-right-container-section-height": { "category": "cleaning" },
+						"bangumi-page-hide-sidenav-issue": { "category": "cleaning" },
+						"bangumi-page-hide-sponsor-module": { "category": "cleaning" },
+						"bangumi-page-hide-toolbar": { "category": "cleaning" },
+						"bangumi-page-hide-watch-together": { "category": "cleaning" },
+						"bangumi-page-simple-media-info": { "category": "cleaning" },
+						"channel-hide-carousel": { "category": "cleaning" },
+						"channel-hide-danmaku-count": { "category": "cleaning" },
+						"channel-hide-sticky-header": { "category": "cleaning" },
+						"channel-hide-subarea": { "category": "cleaning" },
+						"common-hide-nav-anime": { "category": "cleaning" },
+						"common-hide-nav-anime-popover": { "category": "cleaning" },
+						"common-hide-nav-avatar": { "category": "cleaning" },
+						"common-hide-nav-bdu": { "category": "cleaning" },
+						"common-hide-nav-blackboard": { "category": "cleaning" },
+						"common-hide-nav-bml": { "category": "cleaning" },
+						"common-hide-nav-channel-panel-popover": { "category": "cleaning" },
+						"common-hide-nav-download-app": { "category": "cleaning" },
+						"common-hide-nav-dynamic": { "category": "cleaning" },
+						"common-hide-nav-dynamic-red-num": { "category": "cleaning" },
+						"common-hide-nav-favorite": { "category": "cleaning" },
+						"common-hide-nav-game": { "category": "cleaning" },
+						"common-hide-nav-game-popover": { "category": "cleaning" },
+						"common-hide-nav-history": { "category": "cleaning" },
+						"common-hide-nav-homepage": { "category": "cleaning" },
+						"common-hide-nav-homepage-logo": { "category": "cleaning" },
+						"common-hide-nav-live": { "category": "cleaning" },
+						"common-hide-nav-live-popover": { "category": "cleaning" },
+						"common-hide-nav-manga": { "category": "cleaning" },
+						"common-hide-nav-manga-popover": { "category": "cleaning" },
+						"common-hide-nav-match": { "category": "cleaning" },
+						"common-hide-nav-member": { "category": "cleaning" },
+						"common-hide-nav-message": { "category": "cleaning" },
+						"common-hide-nav-message-red-num": { "category": "cleaning" },
+						"common-hide-nav-search-btn": { "category": "cleaning" },
+						"common-hide-nav-search-history": { "category": "cleaning" },
+						"common-hide-nav-search-rcmd": { "category": "cleaning" },
+						"common-hide-nav-search-trending": { "category": "cleaning" },
+						"common-hide-nav-upload": { "category": "cleaning" },
+						"common-hide-nav-vip": { "category": "cleaning" },
+						"common-hide-nav-vipshop": { "category": "cleaning" },
+						"debug-mode": { "category": "support" },
+						"dynamic-page-hide-all-comment": { "category": "cleaning" },
+						"dynamic-page-up-list-checked-item-hide": { "category": "cleaning" },
+						"dynamic-page-up-list-checked-item-opacity": { "category": "cleaning" },
+						"hide-dynamic-page-aside-left": { "category": "cleaning" },
+						"hide-dynamic-page-aside-right": { "category": "cleaning" },
+						"hide-dynamic-page-bili-dyn-ads": { "category": "cleaning" },
+						"hide-dynamic-page-bili-dyn-avatar-icon": { "category": "cleaning" },
+						"hide-dynamic-page-bili-dyn-avatar-pendent": { "category": "cleaning" },
+						"hide-dynamic-page-bili-dyn-banner": { "category": "cleaning" },
+						"hide-dynamic-page-bili-dyn-blocked": { "category": "cleaning" },
+						"hide-dynamic-page-bili-dyn-card-goods": { "category": "cleaning" },
+						"hide-dynamic-page-bili-dyn-card-reserve": { "category": "cleaning" },
+						"hide-dynamic-page-bili-dyn-charge-video": { "category": "cleaning" },
+						"hide-dynamic-page-bili-dyn-dispute": { "category": "cleaning" },
+						"hide-dynamic-page-bili-dyn-forward": { "category": "cleaning" },
+						"hide-dynamic-page-bili-dyn-item-interaction": { "category": "cleaning" },
+						"hide-dynamic-page-bili-dyn-list-tabs": { "category": "cleaning" },
+						"hide-dynamic-page-bili-dyn-live": { "category": "cleaning" },
+						"hide-dynamic-page-bili-dyn-live-users__item__living": { "category": "cleaning" },
+						"hide-dynamic-page-bili-dyn-lottery": { "category": "cleaning" },
+						"hide-dynamic-page-bili-dyn-my-info": { "category": "cleaning" },
+						"hide-dynamic-page-bili-dyn-official-topic": { "category": "cleaning" },
+						"hide-dynamic-page-bili-dyn-ornament": { "category": "cleaning" },
+						"hide-dynamic-page-bili-dyn-publishing": { "category": "cleaning" },
+						"hide-dynamic-page-bili-dyn-text-topic": { "category": "cleaning" },
+						"hide-dynamic-page-bili-dyn-topic-box": { "category": "cleaning" },
+						"hide-dynamic-page-bili-dyn-vote": { "category": "cleaning" },
+						"hide-dynamic-page-fixed-header": { "category": "cleaning" },
+						"hide-dynamic-page-sidebar-back-to-top": { "category": "cleaning" },
+						"hide-dynamic-page-sidebar-old-version": { "category": "cleaning" },
+						"hide-dynamic-page-up-list": { "category": "cleaning" },
+						"hide-footer": { "category": "cleaning" },
+						"hide-search-page-activity-game-list": { "category": "cleaning" },
+						"hide-search-page-ad": { "category": "cleaning" },
+						"hide-search-page-bangumi-pgc-list": { "category": "cleaning" },
+						"hide-search-page-btn-to-top": { "category": "cleaning" },
+						"hide-search-page-cheese-result": { "category": "cleaning" },
+						"hide-search-page-customer-service": { "category": "cleaning" },
+						"hide-search-page-danmaku-count": { "category": "cleaning" },
+						"hide-search-page-date": { "category": "cleaning" },
+						"hide-search-page-live-room-result": { "category": "cleaning" },
+						"hide-search-page-search-sticky-header": { "category": "cleaning" },
+						"hide-space-page-sidebar-feedback": { "category": "cleaning" },
+						"hide-space-page-sidebar-revert": { "category": "cleaning" },
+						"hide-space-page-video-card-charge": { "category": "cleaning" },
+						"hide-space-page-video-card-danmaku-count": { "category": "cleaning" },
+						"hide-watchlater-button": { "category": "cleaning" },
+						"homepage-hide-ad-card": { "category": "cleaning" },
+						"homepage-hide-adblock-tips": { "category": "cleaning" },
+						"homepage-hide-adcard-button": { "category": "cleaning" },
+						"homepage-hide-banner": { "category": "cleaning" },
+						"homepage-hide-bili-watch-later-tip": { "category": "cleaning" },
+						"homepage-hide-danmaku-count": { "category": "cleaning" },
+						"homepage-hide-desktop-download-tip": { "category": "cleaning" },
+						"homepage-hide-feed-roll-btn": { "category": "cleaning" },
+						"homepage-hide-feedback": { "category": "cleaning" },
+						"homepage-hide-flexible-roll-btn": { "category": "cleaning" },
+						"homepage-hide-flexible-roll-btn-text": { "category": "cleaning" },
+						"homepage-hide-inline-player-danmaku": { "category": "cleaning" },
+						"homepage-hide-live-card-recommend": { "category": "cleaning" },
+						"homepage-hide-no-interest": { "category": "cleaning" },
+						"homepage-hide-recommend-swipe": { "category": "cleaning" },
+						"homepage-hide-skeleton": { "category": "cleaning" },
+						"homepage-hide-skeleton-animation": { "category": "cleaning" },
+						"homepage-hide-skeleton-before-anchor": { "category": "cleaning" },
+						"homepage-hide-sticky-header": { "category": "cleaning" },
+						"homepage-hide-sticky-subarea": { "category": "cleaning" },
+						"homepage-hide-sub-area-card-recommend": { "category": "cleaning" },
+						"homepage-hide-subarea": { "category": "cleaning" },
+						"homepage-hide-top-btn": { "category": "cleaning" },
+						"homepage-hide-trial-feed-wrap": { "category": "cleaning" },
+						"homepage-hide-up-info-icon": { "category": "cleaning" },
+						"homepage-hide-video-info-date": { "category": "cleaning" },
+						"homepage-hide-watchlater-pip-button": { "category": "cleaning" },
+						"homepage-increase-rcmd-load-size": { "category": "cleaning" },
+						"homepage-rcmd-video-preload": { "category": "cleaning" },
+						"homepage-simple-sub-area-card-recommend": { "category": "cleaning" },
+						"live-page-announcement-cntr": { "category": "cleaning" },
+						"live-page-brush-prompt": { "category": "cleaning" },
+						"live-page-bulge-danmaku": { "category": "cleaning" },
+						"live-page-chat-control-panel": { "category": "cleaning" },
+						"live-page-chat-input-ctnr": { "category": "cleaning" },
+						"live-page-chat-input-ctnr-medal-section": { "category": "cleaning" },
+						"live-page-chat-input-ctnr-send-btn": { "category": "cleaning" },
+						"live-page-chat-item-background-color": { "category": "cleaning" },
+						"live-page-chat-item-top3-notice": { "category": "cleaning" },
+						"live-page-clean-all-danmaku-big-emoji": { "category": "cleaning" },
+						"live-page-clean-all-danmaku-small-emoji": { "category": "cleaning" },
+						"live-page-combo-card": { "category": "cleaning" },
+						"live-page-combo-danmaku": { "category": "cleaning" },
+						"live-page-control-panel-icon-row": { "category": "cleaning" },
+						"live-page-convention-msg": { "category": "cleaning" },
+						"live-page-default-skin": { "category": "cleaning" },
+						"live-page-disable-hotkey-g-follow": { "category": "cleaning" },
+						"live-page-fans-medal-item-ctnr": { "category": "cleaning" },
+						"live-page-flip-view": { "category": "cleaning" },
+						"live-page-fullscreen-danmaku-vm": { "category": "cleaning" },
+						"live-page-gift-control-vm": { "category": "cleaning" },
+						"live-page-gift-control-vm-show-lottery": { "category": "cleaning" },
+						"live-page-gift-item": { "category": "cleaning" },
+						"live-page-group-medal-ctnr": { "category": "cleaning" },
+						"live-page-head-info-avatar-pendant": { "category": "cleaning" },
+						"live-page-head-info-vm": { "category": "cleaning" },
+						"live-page-head-info-vm-upper-row-activity": { "category": "cleaning" },
+						"live-page-head-info-vm-upper-row-follow-ctnr": { "category": "cleaning" },
+						"live-page-head-info-vm-upper-row-hotrank": { "category": "cleaning" },
+						"live-page-head-web-player-announcement-wrapper": { "category": "cleaning" },
+						"live-page-head-web-player-awesome-pk-vm": { "category": "cleaning" },
+						"live-page-head-web-player-game-id": { "category": "cleaning" },
+						"live-page-head-web-player-icon-feedback": { "category": "cleaning" },
+						"live-page-head-web-player-live-lottery": { "category": "cleaning" },
+						"live-page-head-web-player-research-container": { "category": "cleaning" },
+						"live-page-head-web-player-shop-popover-vm": { "category": "cleaning" },
+						"live-page-header-avatar": { "category": "cleaning" },
+						"live-page-header-bili-download-panel": { "category": "cleaning" },
+						"live-page-header-entry-logo": { "category": "cleaning" },
+						"live-page-header-entry-title": { "category": "cleaning" },
+						"live-page-header-follow-panel": { "category": "cleaning" },
+						"live-page-header-go-live": { "category": "cleaning" },
+						"live-page-header-live": { "category": "cleaning" },
+						"live-page-header-mobile-game": { "category": "cleaning" },
+						"live-page-header-net-game": { "category": "cleaning" },
+						"live-page-header-recharge": { "category": "cleaning" },
+						"live-page-header-search-block": { "category": "cleaning" },
+						"live-page-header-search-btn": { "category": "cleaning" },
+						"live-page-header-showmore-link": { "category": "cleaning" },
+						"live-page-header-standalone-chatroom": { "category": "cleaning" },
+						"live-page-header-standalone-entertainment": { "category": "cleaning" },
+						"live-page-header-standalone-game": { "category": "cleaning" },
+						"live-page-header-standalone-helpmeplay": { "category": "cleaning" },
+						"live-page-header-standalone-interact": { "category": "cleaning" },
+						"live-page-header-standalone-knowledge": { "category": "cleaning" },
+						"live-page-header-standalone-living": { "category": "cleaning" },
+						"live-page-header-standalone-match": { "category": "cleaning" },
+						"live-page-header-standalone-radio": { "category": "cleaning" },
+						"live-page-header-standalone-shopping": { "category": "cleaning" },
+						"live-page-header-standalone-vtuber": { "category": "cleaning" },
+						"live-page-hide-web-player-background": { "category": "cleaning" },
+						"live-page-nav-search-history": { "category": "cleaning" },
+						"live-page-nav-search-rcmd": { "category": "cleaning" },
+						"live-page-nav-search-trending": { "category": "cleaning" },
+						"live-page-rank-icon": { "category": "cleaning" },
+						"live-page-rank-list-vm": { "category": "cleaning" },
+						"live-page-rank-list-vm-fold": { "category": "cleaning" },
+						"live-page-remove-wallpaper": { "category": "cleaning" },
+						"live-page-room-feed": { "category": "cleaning" },
+						"live-page-room-info-ctnr": { "category": "cleaning" },
+						"live-page-sections-vm": { "category": "cleaning" },
+						"live-page-sidebar-vm": { "category": "cleaning" },
+						"live-page-title-label": { "category": "cleaning" },
+						"live-page-wealth-medal-ctnr": { "category": "cleaning" },
+						"live-page-web-player-interactive-sticker": { "category": "cleaning" },
+						"live-page-web-player-watermark": { "category": "cleaning" },
+						"live-page-welcome-msg": { "category": "cleaning" },
+						"popular-hide-danmaku-count": { "category": "cleaning" },
+						"popular-hide-tips": { "category": "cleaning" },
+						"popular-history-hide-hint": { "category": "cleaning" },
+						"popular-hot-hide-tag": { "category": "cleaning" },
+						"popular-weekly-hide-hint": { "category": "cleaning" },
+						"url-cleaner": { "category": "cleaning" },
+						"video-page-bpx-player-bili-high-icon": { "category": "cleaning" },
+						"video-page-coin-disable-auto-like": { "category": "cleaning" },
+						"video-page-hide-below-activity-vote": { "category": "cleaning" },
+						"video-page-hide-below-bannerAd": { "category": "cleaning" },
+						"video-page-hide-below-info-desc": { "category": "cleaning" },
+						"video-page-hide-below-info-tag": { "category": "cleaning" },
+						"video-page-hide-below-info-video-ai-assistant": { "category": "cleaning" },
+						"video-page-hide-below-info-video-complaint": { "category": "cleaning" },
+						"video-page-hide-below-info-video-note": { "category": "cleaning" },
+						"video-page-hide-below-info-video-report-menu": { "category": "cleaning" },
+						"video-page-hide-bili-avatar-nft-icon": { "category": "cleaning" },
+						"video-page-hide-bili-avatar-pendent-dom": { "category": "cleaning" },
+						"video-page-hide-bpx-player-bili-clock": { "category": "cleaning" },
+						"video-page-hide-bpx-player-bili-cmd-shrink": { "category": "cleaning" },
+						"video-page-hide-bpx-player-bili-cmtime": { "category": "cleaning" },
+						"video-page-hide-bpx-player-bili-guide-all": { "category": "cleaning" },
+						"video-page-hide-bpx-player-bili-link": { "category": "cleaning" },
+						"video-page-hide-bpx-player-bili-qoe-feedback": { "category": "cleaning" },
+						"video-page-hide-bpx-player-bili-reserve": { "category": "cleaning" },
+						"video-page-hide-bpx-player-bili-score": { "category": "cleaning" },
+						"video-page-hide-bpx-player-bili-score-sum": { "category": "cleaning" },
+						"video-page-hide-bpx-player-bili-vote": { "category": "cleaning" },
+						"video-page-hide-bpx-player-cmd-dm-wrap": { "category": "cleaning" },
+						"video-page-hide-bpx-player-ctrl-eplist": { "category": "cleaning" },
+						"video-page-hide-bpx-player-ctrl-flac": { "category": "cleaning" },
+						"video-page-hide-bpx-player-ctrl-full": { "category": "cleaning" },
+						"video-page-hide-bpx-player-ctrl-next": { "category": "cleaning" },
+						"video-page-hide-bpx-player-ctrl-pip": { "category": "cleaning" },
+						"video-page-hide-bpx-player-ctrl-play": { "category": "cleaning" },
+						"video-page-hide-bpx-player-ctrl-playbackrate": { "category": "cleaning" },
+						"video-page-hide-bpx-player-ctrl-prev": { "category": "cleaning" },
+						"video-page-hide-bpx-player-ctrl-quality": { "category": "cleaning" },
+						"video-page-hide-bpx-player-ctrl-setting": { "category": "cleaning" },
+						"video-page-hide-bpx-player-ctrl-subtitle": { "category": "cleaning" },
+						"video-page-hide-bpx-player-ctrl-viewpoint": { "category": "cleaning" },
+						"video-page-hide-bpx-player-ctrl-volume": { "category": "cleaning" },
+						"video-page-hide-bpx-player-ctrl-web": { "category": "cleaning" },
+						"video-page-hide-bpx-player-ctrl-wide": { "category": "cleaning" },
+						"video-page-hide-bpx-player-dialog-wrap": { "category": "cleaning" },
+						"video-page-hide-bpx-player-dm-btn-send": { "category": "cleaning" },
+						"video-page-hide-bpx-player-dm-hint": { "category": "cleaning" },
+						"video-page-hide-bpx-player-dm-input": { "category": "cleaning" },
+						"video-page-hide-bpx-player-dm-setting": { "category": "cleaning" },
+						"video-page-hide-bpx-player-dm-switch": { "category": "cleaning" },
+						"video-page-hide-bpx-player-ending-related": { "category": "cleaning" },
+						"video-page-hide-bpx-player-mini-mode-danmaku": { "category": "cleaning" },
+						"video-page-hide-bpx-player-mini-mode-process": { "category": "cleaning" },
+						"video-page-hide-bpx-player-mini-when-ending": { "category": "cleaning" },
+						"video-page-hide-bpx-player-pbp-pin": { "category": "cleaning" },
+						"video-page-hide-bpx-player-postpanel": { "category": "cleaning" },
+						"video-page-hide-bpx-player-sending-area": { "category": "cleaning" },
+						"video-page-hide-bpx-player-shadow-progress-area": { "category": "cleaning" },
+						"video-page-hide-bpx-player-state-wrap": { "category": "cleaning" },
+						"video-page-hide-bpx-player-top-issue": { "category": "cleaning" },
+						"video-page-hide-bpx-player-top-left-follow": { "category": "cleaning" },
+						"video-page-hide-bpx-player-top-left-music": { "category": "cleaning" },
+						"video-page-hide-bpx-player-top-left-title": { "category": "cleaning" },
+						"video-page-hide-bpx-player-video-btn-dm": { "category": "cleaning" },
+						"video-page-hide-bpx-player-video-info-online": { "category": "cleaning" },
+						"video-page-hide-bpx-player-video-inputbar": { "category": "cleaning" },
+						"video-page-hide-comment": { "category": "cleaning" },
+						"video-page-hide-comment-user-card": { "category": "cleaning" },
+						"video-page-hide-contractor-box": { "category": "cleaning" },
+						"video-page-hide-emoji-large": { "category": "cleaning" },
+						"video-page-hide-emoji-popover": { "category": "cleaning" },
+						"video-page-hide-emoji-small": { "category": "cleaning" },
+						"video-page-hide-fan-badge": { "category": "cleaning" },
+						"video-page-hide-fixed-header": { "category": "cleaning" },
+						"video-page-hide-fixed-reply-box": { "category": "cleaning" },
+						"video-page-hide-jump-link-search-word": { "category": "cleaning" },
+						"video-page-hide-main-reply-box": { "category": "cleaning" },
+						"video-page-hide-note-prefix": { "category": "cleaning" },
+						"video-page-hide-reply-box-textarea-placeholder": { "category": "cleaning" },
+						"video-page-hide-reply-content-user-highlight": { "category": "cleaning" },
+						"video-page-hide-reply-decorate": { "category": "cleaning" },
+						"video-page-hide-reply-dislike-reply-btn": { "category": "cleaning" },
+						"video-page-hide-reply-notice": { "category": "cleaning" },
+						"video-page-hide-reply-tag-list": { "category": "cleaning" },
+						"video-page-hide-right-container": { "category": "cleaning" },
+						"video-page-hide-right-container-ad": { "category": "cleaning" },
+						"video-page-hide-right-container-danmaku": { "category": "cleaning" },
+						"video-page-hide-right-container-duration": { "category": "cleaning" },
+						"video-page-hide-right-container-live": { "category": "cleaning" },
+						"video-page-hide-right-container-reco-list-next-play": { "category": "cleaning" },
+						"video-page-hide-right-container-reco-list-next-play-next-button": { "category": "cleaning" },
+						"video-page-hide-right-container-reco-list-rec-footer": { "category": "cleaning" },
+						"video-page-hide-right-container-reco-list-rec-list": { "category": "cleaning" },
+						"video-page-hide-right-container-reco-list-rec-list-info-plays": { "category": "cleaning" },
+						"video-page-hide-right-container-reco-list-rec-list-info-up": { "category": "cleaning" },
+						"video-page-hide-right-container-right-bottom-banner": { "category": "cleaning" },
+						"video-page-hide-right-container-section-abstract": { "category": "cleaning" },
+						"video-page-hide-right-container-section-play-num": { "category": "cleaning" },
+						"video-page-hide-right-container-section-subscribe": { "category": "cleaning" },
+						"video-page-hide-right-container-video-page-game-card-small": { "category": "cleaning" },
+						"video-page-hide-sidenav-back-to-top": { "category": "cleaning" },
+						"video-page-hide-sidenav-customer-service": { "category": "cleaning" },
+						"video-page-hide-sidenav-mini": { "category": "cleaning" },
+						"video-page-hide-sidenav-right-container-live": { "category": "cleaning" },
+						"video-page-hide-top-vote-card": { "category": "cleaning" },
+						"video-page-hide-triple-oldfan-entry": { "category": "cleaning" },
+						"video-page-hide-up-bili-avatar-icon": { "category": "cleaning" },
+						"video-page-hide-up-bili-avatar-pendent-dom": { "category": "cleaning" },
+						"video-page-hide-up-charge": { "category": "cleaning" },
+						"video-page-hide-up-description": { "category": "cleaning" },
+						"video-page-hide-up-membersinfo-normal-header": { "category": "cleaning" },
+						"video-page-hide-up-sendmsg": { "category": "cleaning" },
+						"video-page-hide-up-usercard": { "category": "cleaning" },
+						"video-page-hide-user-level": { "category": "cleaning" },
+						"video-page-hide-video-info-argue": { "category": "cleaning" },
+						"video-page-hide-video-info-copyright": { "category": "cleaning" },
+						"video-page-hide-video-info-danmaku-count": { "category": "cleaning" },
+						"video-page-hide-video-info-honor": { "category": "cleaning" },
+						"video-page-hide-video-info-pubdate": { "category": "cleaning" },
+						"video-page-hide-video-share-popover": { "category": "cleaning" },
+						"video-page-hide-vote-info": { "category": "cleaning" },
+						"video-page-right-container-sticky-disable": { "category": "cleaning" },
+						"video-page-simple-share": { "category": "cleaning" },
+						"video-page-simple-video-share-popover": { "category": "cleaning" },
+						"watchlater-hide-feedback": { "category": "cleaning" }
+					}).map((group) => ({
+						...group,
+						items: !search || group.name.toLowerCase().includes(search) ? group.items : group.items.filter((item) => [item.name, settingLabel(item.id)].join(" ").toLowerCase().includes(search)),
+						fold: search ? false : group.fold,
+						sectionKey: group.sectionKey + (search ? "-search" : "")
+					})).filter((group) => group.items.length)
+				})).filter((rule) => rule.groups.length);
 			});
-			const markedCount = (0, vue.computed)(() => 0);
-			const displayedRules = (0, vue.computed)(() => activeRules.value);
-			const currentActionEntries = (0, vue.computed)(() => visibleEntries.value.filter((entry) => entry.id.startsWith("B")));
-			const packOptions = (0, vue.computed)(() => {
-				return [...new Map().values()];
-			});
-			const selectCategory = (next) => {
-				category.value = next;
-				onlyMarked.value = false;
-				packFilter.value = "";
-			};
-			const pageNames = {
-				homepage: "首页",
-				video: "视频页",
-				playlist: "播放列表",
-				bangumi: "番剧页",
-				live: "直播",
-				dynamic: "动态",
-				space: "用户空间",
-				popular: "热门",
-				channel: "分区",
-				search: "搜索",
-				watchlater: "稍后再看",
-				common: "全站",
-				comment: "评论区",
-				debug: "全站调试",
-				festival: "活动页"
-			};
-			const pageName = (key) => pageNames[key] ?? key;
 			return (_ctx, _cache) => {
 				return (0, vue.withDirectives)(((0, vue.openBlock)(), (0, vue.createBlock)(PanelComp_default, (0, vue.mergeProps)({
-					title: (0, vue.unref)(false) ? "MisakaWeb · 净化与优化取舍" : "bilibili 页面净化大师",
-					widthPercent: (0, vue.unref)(false) ? 36 : 28,
+					title: "MisakaWeb · 页面设置",
+					widthPercent: 32,
 					heightPercent: 85,
-					minWidth: (0, vue.unref)(false) ? 440 : 360,
+					minWidth: 400,
 					minHeight: 600,
 					closeAction: "panel-close-rule"
 				}, { onClose: (0, vue.unref)(store).hide }), {
 					default: (0, vue.withCtx)(() => [
 						(0, vue.createElementVNode)("p", {
-							class: "mb-2 rounded border border-blue-200 bg-blue-50 p-2 text-sm text-gray-800",
+							class: "mb-2 text-sm text-gray-500",
 							"data-build-profile": (0, vue.unref)(buildProfile)
-						}, " MisakaWeb · " + (0, vue.toDisplayString)((0, vue.unref)(buildLabel)) + " · " + (0, vue.toDisplayString)((0, vue.unref)(scriptVersion)) + "。净化与过滤全部保留；包含的优化仍可逐项开关。 ", 9, _hoisted_1$4),
-						(0, vue.unref)(review) ? ((0, vue.openBlock)(), (0, vue.createElementBlock)("div", _hoisted_2$2, [
-							_cache[15] || (_cache[15] = (0, vue.createElementVNode)("p", null, "净化全部保留。标记只记录取舍，不影响当前功能开关；未标记的优化仍待定。", -1)),
-							(0, vue.createElementVNode)("div", _hoisted_3$2, [((0, vue.openBlock)(), (0, vue.createElementBlock)(vue.Fragment, null, (0, vue.renderList)(tabs, (tab) => {
-								return (0, vue.createElementVNode)("button", {
-									key: tab.key,
-									type: "button",
-									role: "tab",
-									"aria-selected": category.value === tab.key,
-									class: (0, vue.normalizeClass)(["rounded border px-2 py-1", category.value === tab.key ? "border-blue-600 bg-blue-600 text-white" : "border-gray-400 bg-white"]),
-									onClick: ($event) => selectCategory(tab.key)
-								}, [(0, vue.createVNode)(Badge_default, { code: (0, vue.unref)(actionLabel)("review-category-" + tab.key) }, null, 8, ["code"]), (0, vue.createTextVNode)((0, vue.toDisplayString)(tab.name) + "（" + (0, vue.toDisplayString)(counts.value[tab.key]) + "）", 1)], 10, _hoisted_4$1);
-							}), 64))]),
-							(0, vue.createElementVNode)("div", _hoisted_5$1, [
-								(0, vue.createElementVNode)("button", {
-									type: "button",
-									"aria-pressed": scope.value === "page",
-									class: "rounded border border-gray-400 px-2 py-1",
-									onClick: _cache[0] || (_cache[0] = ($event) => scope.value = "page")
-								}, [(0, vue.createVNode)(Badge_default, { code: (0, vue.unref)(actionLabel)("review-scope-page") }, null, 8, ["code"]), _cache[8] || (_cache[8] = (0, vue.createTextVNode)("当前页面 ", -1))], 8, _hoisted_6$1),
-								(0, vue.createElementVNode)("button", {
-									type: "button",
-									"aria-pressed": scope.value === "all",
-									class: "rounded border border-gray-400 px-2 py-1",
-									onClick: _cache[1] || (_cache[1] = ($event) => scope.value = "all")
-								}, [(0, vue.createVNode)(Badge_default, { code: (0, vue.unref)(actionLabel)("review-scope-all") }, null, 8, ["code"]), _cache[9] || (_cache[9] = (0, vue.createTextVNode)("全站清单 ", -1))], 8, _hoisted_7$1),
-								(0, vue.createElementVNode)("button", {
-									type: "button",
-									class: "rounded border border-blue-600 bg-white px-2 py-1 text-blue-800",
-									disabled: (0, vue.unref)(review).readOnly.value,
-									onClick: _cache[2] || (_cache[2] = (...args) => (0, vue.unref)(review).download && (0, vue.unref)(review).download(...args))
-								}, [(0, vue.createVNode)(Badge_default, { code: (0, vue.unref)(actionLabel)("review-export") }, null, 8, ["code"]), _cache[10] || (_cache[10] = (0, vue.createTextVNode)("导出取舍反馈 ", -1))], 8, _hoisted_8$1)
-							]),
-							(0, vue.createElementVNode)("button", {
-								type: "button",
-								class: "mb-2 rounded border border-gray-400 bg-white px-2 py-1",
-								onClick: exportDiagnostic
-							}, [(0, vue.createVNode)(Badge_default, { code: (0, vue.unref)(actionLabel)("maintenance-export-diagnostic") }, null, 8, ["code"]), _cache[11] || (_cache[11] = (0, vue.createTextVNode)("导出维护诊断 ", -1))]),
-							diagnosticError.value ? ((0, vue.openBlock)(), (0, vue.createElementBlock)("p", _hoisted_9$1, (0, vue.toDisplayString)(diagnosticError.value), 1)) : (0, vue.createCommentVNode)("", true),
-							(0, vue.withDirectives)((0, vue.createElementVNode)("input", {
-								"onUpdate:modelValue": _cache[3] || (_cache[3] = ($event) => query.value = $event),
-								type: "search",
-								"aria-label": "搜索功能名称或编号",
-								placeholder: "搜索名称、编号（如 S205）",
-								onKeydown: _cache[4] || (_cache[4] = (0, vue.withModifiers)(() => {}, ["stop"])),
-								class: "w-full rounded border border-gray-400 bg-white px-2 py-1"
-							}, null, 544), [[vue.vModelText, query.value]]),
-							category.value === "optimization" ? ((0, vue.openBlock)(), (0, vue.createElementBlock)("label", _hoisted_10$1, [
-								(0, vue.createVNode)(Badge_default, { code: (0, vue.unref)(actionLabel)("review-pack-filter") }, null, 8, ["code"]),
-								_cache[13] || (_cache[13] = (0, vue.createTextVNode)("优化功能组 ", -1)),
-								(0, vue.withDirectives)((0, vue.createElementVNode)("select", {
-									"onUpdate:modelValue": _cache[5] || (_cache[5] = ($event) => packFilter.value = $event),
-									"aria-label": "优化功能组",
-									class: "ml-2 rounded border border-gray-400 bg-white px-2 py-1",
-									onKeydown: _cache[6] || (_cache[6] = (0, vue.withModifiers)(() => {}, ["stop"]))
-								}, [_cache[12] || (_cache[12] = (0, vue.createElementVNode)("option", { value: "" }, "全部功能组", -1)), ((0, vue.openBlock)(true), (0, vue.createElementBlock)(vue.Fragment, null, (0, vue.renderList)(packOptions.value, (pack) => {
-									return (0, vue.openBlock)(), (0, vue.createElementBlock)("option", {
-										key: pack.id,
-										value: pack.id
-									}, (0, vue.toDisplayString)(pack.label) + "（" + (0, vue.toDisplayString)(pack.count) + "）", 9, _hoisted_11);
-								}), 128))], 544), [[vue.vModelSelect, packFilter.value]])
-							])) : (0, vue.createCommentVNode)("", true),
-							category.value === "optimization" ? ((0, vue.openBlock)(), (0, vue.createElementBlock)("label", _hoisted_12, [(0, vue.withDirectives)((0, vue.createElementVNode)("input", {
-								"onUpdate:modelValue": _cache[7] || (_cache[7] = ($event) => onlyMarked.value = $event),
-								type: "checkbox"
-							}, null, 512), [[vue.vModelCheckbox, onlyMarked.value]]), _cache[14] || (_cache[14] = (0, vue.createTextVNode)("只看已标记删除", -1))])) : (0, vue.createCommentVNode)("", true),
-							(0, vue.createElementVNode)("p", _hoisted_13, (0, vue.toDisplayString)(scope.value === "all" ? "全站清单用于集中取舍；切回当前页面可操作原功能设置。" : "这里保留原功能开关，可边测试效果边标记。"), 1),
-							(0, vue.createElementVNode)("p", _hoisted_14, "已标记删除 " + (0, vue.toDisplayString)(markedCount.value) + " 项；同一配置跨页面共用标记。", 1),
-							(0, vue.unref)(review).readOnly.value ? ((0, vue.openBlock)(), (0, vue.createElementBlock)("p", _hoisted_15, "标记格式无法读取，已停止写入，请使用支持该格式的版本。")) : (0, vue.createCommentVNode)("", true),
-							(0, vue.unref)(review).error.value ? ((0, vue.openBlock)(), (0, vue.createElementBlock)("p", _hoisted_16, (0, vue.toDisplayString)((0, vue.unref)(review).error.value), 1)) : (0, vue.createCommentVNode)("", true)
-						])) : (0, vue.createCommentVNode)("", true),
-						(0, vue.unref)(review) && scope.value === "all" ? ((0, vue.openBlock)(), (0, vue.createElementBlock)("div", _hoisted_17, [((0, vue.openBlock)(true), (0, vue.createElementBlock)(vue.Fragment, null, (0, vue.renderList)(visibleEntries.value, (entry) => {
-							return (0, vue.openBlock)(), (0, vue.createElementBlock)("div", {
-								key: entry.key,
-								class: "mb-3 rounded border border-gray-200 p-2 text-sm text-gray-800"
-							}, [
-								(0, vue.createElementVNode)("div", null, [(0, vue.createVNode)(Badge_default, { code: entry.id }, null, 8, ["code"]), (0, vue.createTextVNode)((0, vue.toDisplayString)(entry.names.join(" / ")), 1)]),
-								entry.packLabel ? ((0, vue.openBlock)(), (0, vue.createElementBlock)("p", _hoisted_18, "功能组：" + (0, vue.toDisplayString)(entry.packLabel), 1)) : (0, vue.createCommentVNode)("", true),
-								(0, vue.createElementVNode)("p", _hoisted_19, (0, vue.toDisplayString)(entry.pages.map(pageName).join("、")) + " · " + (0, vue.toDisplayString)(entry.groups.join(" / ")), 1),
-								(0, vue.createVNode)(OptimizationReviewRow_default, {
-									entry,
-									store: (0, vue.unref)(review)
-								}, null, 8, ["entry", "store"])
-							]);
-						}), 128))])) : ((0, vue.openBlock)(), (0, vue.createElementBlock)(vue.Fragment, { key: 2 }, [((0, vue.openBlock)(true), (0, vue.createElementBlock)(vue.Fragment, null, (0, vue.renderList)(displayedRules.value, (rule) => {
+						}, (0, vue.toDisplayString)((0, vue.unref)(buildLabel)) + " · " + (0, vue.toDisplayString)((0, vue.unref)(scriptVersion)), 9, _hoisted_1$5),
+						(0, vue.withDirectives)((0, vue.createElementVNode)("input", {
+							"onUpdate:modelValue": _cache[0] || (_cache[0] = ($event) => query.value = $event),
+							type: "search",
+							"aria-label": "搜索设置",
+							placeholder: "搜索设置",
+							class: "mb-3 w-full rounded border border-gray-300 bg-white px-2 py-1.5 text-sm",
+							onKeydown: _cache[1] || (_cache[1] = (0, vue.withModifiers)(() => {}, ["stop"]))
+						}, null, 544), [[vue.vModelText, query.value]]),
+						((0, vue.openBlock)(true), (0, vue.createElementBlock)(vue.Fragment, null, (0, vue.renderList)(displayedRules.value, (rule) => {
 							return (0, vue.openBlock)(), (0, vue.createElementBlock)("div", { key: rule.name }, [((0, vue.openBlock)(true), (0, vue.createElementBlock)(vue.Fragment, null, (0, vue.renderList)(rule.groups, (group) => {
-								return (0, vue.openBlock)(), (0, vue.createElementBlock)("div", { key: group.name }, [(0, vue.createVNode)(DisclosureComp_default, (0, vue.mergeProps)({ ref_for: true }, {
+								return (0, vue.openBlock)(), (0, vue.createElementBlock)("section", {
+									key: group.sectionKey,
+									"data-setting-section": group.name
+								}, [(0, vue.createVNode)(DisclosureComp_default, (0, vue.mergeProps)({ ref_for: true }, {
 									title: group.name,
 									isFold: group.fold,
 									isSpecial: rule.isSpecial
 								}), {
 									default: (0, vue.withCtx)(() => [((0, vue.openBlock)(true), (0, vue.createElementBlock)(vue.Fragment, null, (0, vue.renderList)(group.items, (item) => {
-										return (0, vue.openBlock)(), (0, vue.createElementBlock)("div", { key: item.id }, [item.type === "switch" ? ((0, vue.openBlock)(), (0, vue.createBlock)(SwitchComp_default, (0, vue.mergeProps)({
+										return (0, vue.openBlock)(), (0, vue.createElementBlock)("div", {
+											key: item.id,
+											"data-setting-key": item.id
+										}, [item.type === "switch" ? ((0, vue.openBlock)(), (0, vue.createBlock)(SwitchComp_default, (0, vue.mergeProps)({
 											key: 0,
 											ref_for: true
 										}, item), null, 16)) : item.type === "number" ? ((0, vue.openBlock)(), (0, vue.createBlock)(NumberComp_default, (0, vue.mergeProps)({
@@ -14384,35 +14562,26 @@
 										}, item, { onEdit: handleEdit }), null, 16)) : item.type === "list" ? ((0, vue.openBlock)(), (0, vue.createBlock)(ListComp_default, (0, vue.mergeProps)({
 											key: 5,
 											ref_for: true
-										}, item), null, 16)) : (0, vue.createCommentVNode)("", true), (0, vue.unref)(review) && (0, vue.unref)(catalogByKey).has(item.id) ? ((0, vue.openBlock)(), (0, vue.createBlock)(OptimizationReviewRow_default, {
-											key: 6,
-											entry: (0, vue.unref)(catalogByKey).get(item.id),
-											store: (0, vue.unref)(review)
-										}, null, 8, ["entry", "store"])) : (0, vue.createCommentVNode)("", true)]);
+										}, item), null, 16)) : (0, vue.createCommentVNode)("", true)], 8, _hoisted_3$3);
 									}), 128))]),
 									_: 2
-								}, 1040)]);
+								}, 1040)], 8, _hoisted_2$3);
 							}), 128))]);
-						}), 128)), (0, vue.unref)(review) && currentActionEntries.value.length ? ((0, vue.openBlock)(), (0, vue.createBlock)(DisclosureComp_default, {
-							key: 0,
-							title: "右键菜单（无独立设置开关）"
-						}, {
-							default: (0, vue.withCtx)(() => [((0, vue.openBlock)(true), (0, vue.createElementBlock)(vue.Fragment, null, (0, vue.renderList)(currentActionEntries.value, (entry) => {
-								return (0, vue.openBlock)(), (0, vue.createElementBlock)("div", {
-									key: entry.key,
-									class: "text-sm text-gray-800"
-								}, [
-									(0, vue.createVNode)(Badge_default, { code: entry.id }, null, 8, ["code"]),
-									(0, vue.createTextVNode)((0, vue.toDisplayString)(entry.names.join(" / ")) + " ", 1),
-									(0, vue.createVNode)(OptimizationReviewRow_default, {
-										entry,
-										store: (0, vue.unref)(review)
-									}, null, 8, ["entry", "store"])
-								]);
-							}), 128))]),
-							_: 1
-						})) : (0, vue.createCommentVNode)("", true)], 64)),
-						(0, vue.unref)(review) && !visibleEntries.value.length ? ((0, vue.openBlock)(), (0, vue.createElementBlock)("p", _hoisted_20, "当前类别或搜索没有匹配项。可切换全站清单或清空搜索。")) : (0, vue.createCommentVNode)("", true),
+						}), 128)),
+						!displayedRules.value.length ? ((0, vue.openBlock)(), (0, vue.createElementBlock)("p", _hoisted_4$2, "没有匹配的设置。")) : (0, vue.createCommentVNode)("", true),
+						(0, vue.createElementVNode)("div", _hoisted_5$2, [
+							(0, vue.createElementVNode)("button", {
+								type: "button",
+								class: "mr-2 rounded border border-gray-300 px-2 py-1 text-sm text-gray-700",
+								onClick: _cache[2] || (_cache[2] = ($event) => (0, vue.unref)(configurationStore).show())
+							}, [(0, vue.createVNode)(Badge_default, { code: (0, vue.unref)(actionLabel)("side-configuration") }, null, 8, ["code"]), _cache[3] || (_cache[3] = (0, vue.createTextVNode)("配置管理 ", -1))]),
+							(0, vue.createElementVNode)("button", {
+								type: "button",
+								class: "rounded border border-gray-300 px-2 py-1 text-sm text-gray-700",
+								onClick: exportDiagnostic
+							}, [(0, vue.createVNode)(Badge_default, { code: (0, vue.unref)(actionLabel)("maintenance-export-diagnostic") }, null, 8, ["code"]), _cache[4] || (_cache[4] = (0, vue.createTextVNode)("导出维护信息 ", -1))]),
+							diagnosticError.value ? ((0, vue.openBlock)(), (0, vue.createElementBlock)("p", _hoisted_6$2, (0, vue.toDisplayString)(diagnosticError.value), 1)) : (0, vue.createCommentVNode)("", true)
+						]),
 						(0, vue.createVNode)(EditorDialog_default, {
 							ref_key: "editorDialogRef",
 							ref: editorDialogRef
@@ -14420,6 +14589,1262 @@
 					]),
 					_: 1
 				}, 16, ["onClose"])), [[vue.vShow, (0, vue.unref)(store).isShow]]);
+			};
+		}
+	});
+	var SHORTCUT_PREFERENCE_KEY = "biliweb-shortcut-entry";
+	var SHORTCUT_PREFERENCE_DEFAULT = {
+		enabled: true,
+		location: "header"
+	};
+	var isRecord = (value) => Boolean(value) && typeof value === "object" && !Array.isArray(value);
+	var isLocation = (value) => value === "header" || value === "floating";
+	var normalizeShortcutPreference = (raw) => {
+		if (!isRecord(raw)) return { ...SHORTCUT_PREFERENCE_DEFAULT };
+		return {
+			enabled: typeof raw.enabled === "boolean" ? raw.enabled : SHORTCUT_PREFERENCE_DEFAULT.enabled,
+			location: isLocation(raw.location) ? raw.location : SHORTCUT_PREFERENCE_DEFAULT.location
+		};
+	};
+	var readShortcutPreference = () => {
+		return normalizeShortcutPreference(GM_getValue$1(SHORTCUT_PREFERENCE_KEY));
+	};
+	var writeValidated = (value) => {
+		const next = normalizeShortcutPreference(value);
+		GM_setValue$1(SHORTCUT_PREFERENCE_KEY, {
+			enabled: next.enabled,
+			location: next.location
+		});
+		return next;
+	};
+	var shared = null;
+	var listenerId;
+	var holders = 0;
+	var samePref = (a, b) => a.enabled === b.enabled && a.location === b.location;
+	var attachListener = () => {
+		if (listenerId != null) return;
+		listenerId = GM_addValueChangeListener$1(SHORTCUT_PREFERENCE_KEY, (_name, _oldValue, newValue) => {
+			if (!shared) return;
+			const next = normalizeShortcutPreference(newValue);
+			if (samePref(shared.value, next)) return;
+			shared.value = next;
+		});
+	};
+	var detachListener = () => {
+		if (listenerId != null) {
+			GM_removeValueChangeListener$1(listenerId);
+			listenerId = void 0;
+		}
+	};
+	var ensureState = () => {
+		if (!shared) shared = (0, vue.ref)(readShortcutPreference());
+		else if (holders === 0) shared.value = readShortcutPreference();
+		attachListener();
+		return shared;
+	};
+	var useShortcutPreference = () => {
+		const state = ensureState();
+		holders += 1;
+		if ((0, vue.getCurrentScope)()) (0, vue.onScopeDispose)(() => {
+			holders -= 1;
+			if (holders <= 0) {
+				holders = 0;
+				detachListener();
+			}
+		});
+		const apply = (patch) => {
+			const current = readShortcutPreference();
+			const next = writeValidated({
+				enabled: patch.enabled ?? current.enabled,
+				location: patch.location ?? current.location
+			});
+			state.value = next;
+			return next;
+		};
+		return {
+			state,
+			setEnabled: (enabled) => apply({ enabled }),
+			setLocation: (location) => apply({ location }),
+			setPreference: apply
+		};
+	};
+	var ruleKeys = new Set(RULE_FIELDS.map((field) => field.gm));
+	var profile = "pure";
+	var pageLabels = {
+		homepage: "首页",
+		video: "播放页",
+		festival: "活动页",
+		bangumi: "番剧页",
+		dynamic: "动态页",
+		live: "直播页",
+		popular: "热门页",
+		channel: "分区页",
+		space: "空间页",
+		search: "搜索页",
+		watchlater: "稍后再看",
+		comment: "评论区",
+		common: "全站",
+		debug: "调试"
+	};
+	var suffix = (id) => {
+		const classification = {
+			"bangumi-page-hide-bpx-player-record-item-wrap": { "category": "cleaning" },
+			"bangumi-page-hide-bpx-player-top-follow": { "category": "cleaning" },
+			"bangumi-page-hide-eplist-badge": { "category": "cleaning" },
+			"bangumi-page-hide-media-info": { "category": "cleaning" },
+			"bangumi-page-hide-recommend": { "category": "cleaning" },
+			"bangumi-page-hide-right-container-section-height": { "category": "cleaning" },
+			"bangumi-page-hide-sidenav-issue": { "category": "cleaning" },
+			"bangumi-page-hide-sponsor-module": { "category": "cleaning" },
+			"bangumi-page-hide-toolbar": { "category": "cleaning" },
+			"bangumi-page-hide-watch-together": { "category": "cleaning" },
+			"bangumi-page-simple-media-info": { "category": "cleaning" },
+			"channel-hide-carousel": { "category": "cleaning" },
+			"channel-hide-danmaku-count": { "category": "cleaning" },
+			"channel-hide-sticky-header": { "category": "cleaning" },
+			"channel-hide-subarea": { "category": "cleaning" },
+			"common-hide-nav-anime": { "category": "cleaning" },
+			"common-hide-nav-anime-popover": { "category": "cleaning" },
+			"common-hide-nav-avatar": { "category": "cleaning" },
+			"common-hide-nav-bdu": { "category": "cleaning" },
+			"common-hide-nav-blackboard": { "category": "cleaning" },
+			"common-hide-nav-bml": { "category": "cleaning" },
+			"common-hide-nav-channel-panel-popover": { "category": "cleaning" },
+			"common-hide-nav-download-app": { "category": "cleaning" },
+			"common-hide-nav-dynamic": { "category": "cleaning" },
+			"common-hide-nav-dynamic-red-num": { "category": "cleaning" },
+			"common-hide-nav-favorite": { "category": "cleaning" },
+			"common-hide-nav-game": { "category": "cleaning" },
+			"common-hide-nav-game-popover": { "category": "cleaning" },
+			"common-hide-nav-history": { "category": "cleaning" },
+			"common-hide-nav-homepage": { "category": "cleaning" },
+			"common-hide-nav-homepage-logo": { "category": "cleaning" },
+			"common-hide-nav-live": { "category": "cleaning" },
+			"common-hide-nav-live-popover": { "category": "cleaning" },
+			"common-hide-nav-manga": { "category": "cleaning" },
+			"common-hide-nav-manga-popover": { "category": "cleaning" },
+			"common-hide-nav-match": { "category": "cleaning" },
+			"common-hide-nav-member": { "category": "cleaning" },
+			"common-hide-nav-message": { "category": "cleaning" },
+			"common-hide-nav-message-red-num": { "category": "cleaning" },
+			"common-hide-nav-search-btn": { "category": "cleaning" },
+			"common-hide-nav-search-history": { "category": "cleaning" },
+			"common-hide-nav-search-rcmd": { "category": "cleaning" },
+			"common-hide-nav-search-trending": { "category": "cleaning" },
+			"common-hide-nav-upload": { "category": "cleaning" },
+			"common-hide-nav-vip": { "category": "cleaning" },
+			"common-hide-nav-vipshop": { "category": "cleaning" },
+			"debug-mode": { "category": "support" },
+			"dynamic-page-hide-all-comment": { "category": "cleaning" },
+			"dynamic-page-up-list-checked-item-hide": { "category": "cleaning" },
+			"dynamic-page-up-list-checked-item-opacity": { "category": "cleaning" },
+			"hide-dynamic-page-aside-left": { "category": "cleaning" },
+			"hide-dynamic-page-aside-right": { "category": "cleaning" },
+			"hide-dynamic-page-bili-dyn-ads": { "category": "cleaning" },
+			"hide-dynamic-page-bili-dyn-avatar-icon": { "category": "cleaning" },
+			"hide-dynamic-page-bili-dyn-avatar-pendent": { "category": "cleaning" },
+			"hide-dynamic-page-bili-dyn-banner": { "category": "cleaning" },
+			"hide-dynamic-page-bili-dyn-blocked": { "category": "cleaning" },
+			"hide-dynamic-page-bili-dyn-card-goods": { "category": "cleaning" },
+			"hide-dynamic-page-bili-dyn-card-reserve": { "category": "cleaning" },
+			"hide-dynamic-page-bili-dyn-charge-video": { "category": "cleaning" },
+			"hide-dynamic-page-bili-dyn-dispute": { "category": "cleaning" },
+			"hide-dynamic-page-bili-dyn-forward": { "category": "cleaning" },
+			"hide-dynamic-page-bili-dyn-item-interaction": { "category": "cleaning" },
+			"hide-dynamic-page-bili-dyn-list-tabs": { "category": "cleaning" },
+			"hide-dynamic-page-bili-dyn-live": { "category": "cleaning" },
+			"hide-dynamic-page-bili-dyn-live-users__item__living": { "category": "cleaning" },
+			"hide-dynamic-page-bili-dyn-lottery": { "category": "cleaning" },
+			"hide-dynamic-page-bili-dyn-my-info": { "category": "cleaning" },
+			"hide-dynamic-page-bili-dyn-official-topic": { "category": "cleaning" },
+			"hide-dynamic-page-bili-dyn-ornament": { "category": "cleaning" },
+			"hide-dynamic-page-bili-dyn-publishing": { "category": "cleaning" },
+			"hide-dynamic-page-bili-dyn-text-topic": { "category": "cleaning" },
+			"hide-dynamic-page-bili-dyn-topic-box": { "category": "cleaning" },
+			"hide-dynamic-page-bili-dyn-vote": { "category": "cleaning" },
+			"hide-dynamic-page-fixed-header": { "category": "cleaning" },
+			"hide-dynamic-page-sidebar-back-to-top": { "category": "cleaning" },
+			"hide-dynamic-page-sidebar-old-version": { "category": "cleaning" },
+			"hide-dynamic-page-up-list": { "category": "cleaning" },
+			"hide-footer": { "category": "cleaning" },
+			"hide-search-page-activity-game-list": { "category": "cleaning" },
+			"hide-search-page-ad": { "category": "cleaning" },
+			"hide-search-page-bangumi-pgc-list": { "category": "cleaning" },
+			"hide-search-page-btn-to-top": { "category": "cleaning" },
+			"hide-search-page-cheese-result": { "category": "cleaning" },
+			"hide-search-page-customer-service": { "category": "cleaning" },
+			"hide-search-page-danmaku-count": { "category": "cleaning" },
+			"hide-search-page-date": { "category": "cleaning" },
+			"hide-search-page-live-room-result": { "category": "cleaning" },
+			"hide-search-page-search-sticky-header": { "category": "cleaning" },
+			"hide-space-page-sidebar-feedback": { "category": "cleaning" },
+			"hide-space-page-sidebar-revert": { "category": "cleaning" },
+			"hide-space-page-video-card-charge": { "category": "cleaning" },
+			"hide-space-page-video-card-danmaku-count": { "category": "cleaning" },
+			"hide-watchlater-button": { "category": "cleaning" },
+			"homepage-hide-ad-card": { "category": "cleaning" },
+			"homepage-hide-adblock-tips": { "category": "cleaning" },
+			"homepage-hide-adcard-button": { "category": "cleaning" },
+			"homepage-hide-banner": { "category": "cleaning" },
+			"homepage-hide-bili-watch-later-tip": { "category": "cleaning" },
+			"homepage-hide-danmaku-count": { "category": "cleaning" },
+			"homepage-hide-desktop-download-tip": { "category": "cleaning" },
+			"homepage-hide-feed-roll-btn": { "category": "cleaning" },
+			"homepage-hide-feedback": { "category": "cleaning" },
+			"homepage-hide-flexible-roll-btn": { "category": "cleaning" },
+			"homepage-hide-flexible-roll-btn-text": { "category": "cleaning" },
+			"homepage-hide-inline-player-danmaku": { "category": "cleaning" },
+			"homepage-hide-live-card-recommend": { "category": "cleaning" },
+			"homepage-hide-no-interest": { "category": "cleaning" },
+			"homepage-hide-recommend-swipe": { "category": "cleaning" },
+			"homepage-hide-skeleton": { "category": "cleaning" },
+			"homepage-hide-skeleton-animation": { "category": "cleaning" },
+			"homepage-hide-skeleton-before-anchor": { "category": "cleaning" },
+			"homepage-hide-sticky-header": { "category": "cleaning" },
+			"homepage-hide-sticky-subarea": { "category": "cleaning" },
+			"homepage-hide-sub-area-card-recommend": { "category": "cleaning" },
+			"homepage-hide-subarea": { "category": "cleaning" },
+			"homepage-hide-top-btn": { "category": "cleaning" },
+			"homepage-hide-trial-feed-wrap": { "category": "cleaning" },
+			"homepage-hide-up-info-icon": { "category": "cleaning" },
+			"homepage-hide-video-info-date": { "category": "cleaning" },
+			"homepage-hide-watchlater-pip-button": { "category": "cleaning" },
+			"homepage-increase-rcmd-load-size": { "category": "cleaning" },
+			"homepage-rcmd-video-preload": { "category": "cleaning" },
+			"homepage-simple-sub-area-card-recommend": { "category": "cleaning" },
+			"live-page-announcement-cntr": { "category": "cleaning" },
+			"live-page-brush-prompt": { "category": "cleaning" },
+			"live-page-bulge-danmaku": { "category": "cleaning" },
+			"live-page-chat-control-panel": { "category": "cleaning" },
+			"live-page-chat-input-ctnr": { "category": "cleaning" },
+			"live-page-chat-input-ctnr-medal-section": { "category": "cleaning" },
+			"live-page-chat-input-ctnr-send-btn": { "category": "cleaning" },
+			"live-page-chat-item-background-color": { "category": "cleaning" },
+			"live-page-chat-item-top3-notice": { "category": "cleaning" },
+			"live-page-clean-all-danmaku-big-emoji": { "category": "cleaning" },
+			"live-page-clean-all-danmaku-small-emoji": { "category": "cleaning" },
+			"live-page-combo-card": { "category": "cleaning" },
+			"live-page-combo-danmaku": { "category": "cleaning" },
+			"live-page-control-panel-icon-row": { "category": "cleaning" },
+			"live-page-convention-msg": { "category": "cleaning" },
+			"live-page-default-skin": { "category": "cleaning" },
+			"live-page-disable-hotkey-g-follow": { "category": "cleaning" },
+			"live-page-fans-medal-item-ctnr": { "category": "cleaning" },
+			"live-page-flip-view": { "category": "cleaning" },
+			"live-page-fullscreen-danmaku-vm": { "category": "cleaning" },
+			"live-page-gift-control-vm": { "category": "cleaning" },
+			"live-page-gift-control-vm-show-lottery": { "category": "cleaning" },
+			"live-page-gift-item": { "category": "cleaning" },
+			"live-page-group-medal-ctnr": { "category": "cleaning" },
+			"live-page-head-info-avatar-pendant": { "category": "cleaning" },
+			"live-page-head-info-vm": { "category": "cleaning" },
+			"live-page-head-info-vm-upper-row-activity": { "category": "cleaning" },
+			"live-page-head-info-vm-upper-row-follow-ctnr": { "category": "cleaning" },
+			"live-page-head-info-vm-upper-row-hotrank": { "category": "cleaning" },
+			"live-page-head-web-player-announcement-wrapper": { "category": "cleaning" },
+			"live-page-head-web-player-awesome-pk-vm": { "category": "cleaning" },
+			"live-page-head-web-player-game-id": { "category": "cleaning" },
+			"live-page-head-web-player-icon-feedback": { "category": "cleaning" },
+			"live-page-head-web-player-live-lottery": { "category": "cleaning" },
+			"live-page-head-web-player-research-container": { "category": "cleaning" },
+			"live-page-head-web-player-shop-popover-vm": { "category": "cleaning" },
+			"live-page-header-avatar": { "category": "cleaning" },
+			"live-page-header-bili-download-panel": { "category": "cleaning" },
+			"live-page-header-entry-logo": { "category": "cleaning" },
+			"live-page-header-entry-title": { "category": "cleaning" },
+			"live-page-header-follow-panel": { "category": "cleaning" },
+			"live-page-header-go-live": { "category": "cleaning" },
+			"live-page-header-live": { "category": "cleaning" },
+			"live-page-header-mobile-game": { "category": "cleaning" },
+			"live-page-header-net-game": { "category": "cleaning" },
+			"live-page-header-recharge": { "category": "cleaning" },
+			"live-page-header-search-block": { "category": "cleaning" },
+			"live-page-header-search-btn": { "category": "cleaning" },
+			"live-page-header-showmore-link": { "category": "cleaning" },
+			"live-page-header-standalone-chatroom": { "category": "cleaning" },
+			"live-page-header-standalone-entertainment": { "category": "cleaning" },
+			"live-page-header-standalone-game": { "category": "cleaning" },
+			"live-page-header-standalone-helpmeplay": { "category": "cleaning" },
+			"live-page-header-standalone-interact": { "category": "cleaning" },
+			"live-page-header-standalone-knowledge": { "category": "cleaning" },
+			"live-page-header-standalone-living": { "category": "cleaning" },
+			"live-page-header-standalone-match": { "category": "cleaning" },
+			"live-page-header-standalone-radio": { "category": "cleaning" },
+			"live-page-header-standalone-shopping": { "category": "cleaning" },
+			"live-page-header-standalone-vtuber": { "category": "cleaning" },
+			"live-page-hide-web-player-background": { "category": "cleaning" },
+			"live-page-nav-search-history": { "category": "cleaning" },
+			"live-page-nav-search-rcmd": { "category": "cleaning" },
+			"live-page-nav-search-trending": { "category": "cleaning" },
+			"live-page-rank-icon": { "category": "cleaning" },
+			"live-page-rank-list-vm": { "category": "cleaning" },
+			"live-page-rank-list-vm-fold": { "category": "cleaning" },
+			"live-page-remove-wallpaper": { "category": "cleaning" },
+			"live-page-room-feed": { "category": "cleaning" },
+			"live-page-room-info-ctnr": { "category": "cleaning" },
+			"live-page-sections-vm": { "category": "cleaning" },
+			"live-page-sidebar-vm": { "category": "cleaning" },
+			"live-page-title-label": { "category": "cleaning" },
+			"live-page-wealth-medal-ctnr": { "category": "cleaning" },
+			"live-page-web-player-interactive-sticker": { "category": "cleaning" },
+			"live-page-web-player-watermark": { "category": "cleaning" },
+			"live-page-welcome-msg": { "category": "cleaning" },
+			"popular-hide-danmaku-count": { "category": "cleaning" },
+			"popular-hide-tips": { "category": "cleaning" },
+			"popular-history-hide-hint": { "category": "cleaning" },
+			"popular-hot-hide-tag": { "category": "cleaning" },
+			"popular-weekly-hide-hint": { "category": "cleaning" },
+			"url-cleaner": { "category": "cleaning" },
+			"video-page-bpx-player-bili-high-icon": { "category": "cleaning" },
+			"video-page-coin-disable-auto-like": { "category": "cleaning" },
+			"video-page-hide-below-activity-vote": { "category": "cleaning" },
+			"video-page-hide-below-bannerAd": { "category": "cleaning" },
+			"video-page-hide-below-info-desc": { "category": "cleaning" },
+			"video-page-hide-below-info-tag": { "category": "cleaning" },
+			"video-page-hide-below-info-video-ai-assistant": { "category": "cleaning" },
+			"video-page-hide-below-info-video-complaint": { "category": "cleaning" },
+			"video-page-hide-below-info-video-note": { "category": "cleaning" },
+			"video-page-hide-below-info-video-report-menu": { "category": "cleaning" },
+			"video-page-hide-bili-avatar-nft-icon": { "category": "cleaning" },
+			"video-page-hide-bili-avatar-pendent-dom": { "category": "cleaning" },
+			"video-page-hide-bpx-player-bili-clock": { "category": "cleaning" },
+			"video-page-hide-bpx-player-bili-cmd-shrink": { "category": "cleaning" },
+			"video-page-hide-bpx-player-bili-cmtime": { "category": "cleaning" },
+			"video-page-hide-bpx-player-bili-guide-all": { "category": "cleaning" },
+			"video-page-hide-bpx-player-bili-link": { "category": "cleaning" },
+			"video-page-hide-bpx-player-bili-qoe-feedback": { "category": "cleaning" },
+			"video-page-hide-bpx-player-bili-reserve": { "category": "cleaning" },
+			"video-page-hide-bpx-player-bili-score": { "category": "cleaning" },
+			"video-page-hide-bpx-player-bili-score-sum": { "category": "cleaning" },
+			"video-page-hide-bpx-player-bili-vote": { "category": "cleaning" },
+			"video-page-hide-bpx-player-cmd-dm-wrap": { "category": "cleaning" },
+			"video-page-hide-bpx-player-ctrl-eplist": { "category": "cleaning" },
+			"video-page-hide-bpx-player-ctrl-flac": { "category": "cleaning" },
+			"video-page-hide-bpx-player-ctrl-full": { "category": "cleaning" },
+			"video-page-hide-bpx-player-ctrl-next": { "category": "cleaning" },
+			"video-page-hide-bpx-player-ctrl-pip": { "category": "cleaning" },
+			"video-page-hide-bpx-player-ctrl-play": { "category": "cleaning" },
+			"video-page-hide-bpx-player-ctrl-playbackrate": { "category": "cleaning" },
+			"video-page-hide-bpx-player-ctrl-prev": { "category": "cleaning" },
+			"video-page-hide-bpx-player-ctrl-quality": { "category": "cleaning" },
+			"video-page-hide-bpx-player-ctrl-setting": { "category": "cleaning" },
+			"video-page-hide-bpx-player-ctrl-subtitle": { "category": "cleaning" },
+			"video-page-hide-bpx-player-ctrl-viewpoint": { "category": "cleaning" },
+			"video-page-hide-bpx-player-ctrl-volume": { "category": "cleaning" },
+			"video-page-hide-bpx-player-ctrl-web": { "category": "cleaning" },
+			"video-page-hide-bpx-player-ctrl-wide": { "category": "cleaning" },
+			"video-page-hide-bpx-player-dialog-wrap": { "category": "cleaning" },
+			"video-page-hide-bpx-player-dm-btn-send": { "category": "cleaning" },
+			"video-page-hide-bpx-player-dm-hint": { "category": "cleaning" },
+			"video-page-hide-bpx-player-dm-input": { "category": "cleaning" },
+			"video-page-hide-bpx-player-dm-setting": { "category": "cleaning" },
+			"video-page-hide-bpx-player-dm-switch": { "category": "cleaning" },
+			"video-page-hide-bpx-player-ending-related": { "category": "cleaning" },
+			"video-page-hide-bpx-player-mini-mode-danmaku": { "category": "cleaning" },
+			"video-page-hide-bpx-player-mini-mode-process": { "category": "cleaning" },
+			"video-page-hide-bpx-player-mini-when-ending": { "category": "cleaning" },
+			"video-page-hide-bpx-player-pbp-pin": { "category": "cleaning" },
+			"video-page-hide-bpx-player-postpanel": { "category": "cleaning" },
+			"video-page-hide-bpx-player-sending-area": { "category": "cleaning" },
+			"video-page-hide-bpx-player-shadow-progress-area": { "category": "cleaning" },
+			"video-page-hide-bpx-player-state-wrap": { "category": "cleaning" },
+			"video-page-hide-bpx-player-top-issue": { "category": "cleaning" },
+			"video-page-hide-bpx-player-top-left-follow": { "category": "cleaning" },
+			"video-page-hide-bpx-player-top-left-music": { "category": "cleaning" },
+			"video-page-hide-bpx-player-top-left-title": { "category": "cleaning" },
+			"video-page-hide-bpx-player-video-btn-dm": { "category": "cleaning" },
+			"video-page-hide-bpx-player-video-info-online": { "category": "cleaning" },
+			"video-page-hide-bpx-player-video-inputbar": { "category": "cleaning" },
+			"video-page-hide-comment": { "category": "cleaning" },
+			"video-page-hide-comment-user-card": { "category": "cleaning" },
+			"video-page-hide-contractor-box": { "category": "cleaning" },
+			"video-page-hide-emoji-large": { "category": "cleaning" },
+			"video-page-hide-emoji-popover": { "category": "cleaning" },
+			"video-page-hide-emoji-small": { "category": "cleaning" },
+			"video-page-hide-fan-badge": { "category": "cleaning" },
+			"video-page-hide-fixed-header": { "category": "cleaning" },
+			"video-page-hide-fixed-reply-box": { "category": "cleaning" },
+			"video-page-hide-jump-link-search-word": { "category": "cleaning" },
+			"video-page-hide-main-reply-box": { "category": "cleaning" },
+			"video-page-hide-note-prefix": { "category": "cleaning" },
+			"video-page-hide-reply-box-textarea-placeholder": { "category": "cleaning" },
+			"video-page-hide-reply-content-user-highlight": { "category": "cleaning" },
+			"video-page-hide-reply-decorate": { "category": "cleaning" },
+			"video-page-hide-reply-dislike-reply-btn": { "category": "cleaning" },
+			"video-page-hide-reply-notice": { "category": "cleaning" },
+			"video-page-hide-reply-tag-list": { "category": "cleaning" },
+			"video-page-hide-right-container": { "category": "cleaning" },
+			"video-page-hide-right-container-ad": { "category": "cleaning" },
+			"video-page-hide-right-container-danmaku": { "category": "cleaning" },
+			"video-page-hide-right-container-duration": { "category": "cleaning" },
+			"video-page-hide-right-container-live": { "category": "cleaning" },
+			"video-page-hide-right-container-reco-list-next-play": { "category": "cleaning" },
+			"video-page-hide-right-container-reco-list-next-play-next-button": { "category": "cleaning" },
+			"video-page-hide-right-container-reco-list-rec-footer": { "category": "cleaning" },
+			"video-page-hide-right-container-reco-list-rec-list": { "category": "cleaning" },
+			"video-page-hide-right-container-reco-list-rec-list-info-plays": { "category": "cleaning" },
+			"video-page-hide-right-container-reco-list-rec-list-info-up": { "category": "cleaning" },
+			"video-page-hide-right-container-right-bottom-banner": { "category": "cleaning" },
+			"video-page-hide-right-container-section-abstract": { "category": "cleaning" },
+			"video-page-hide-right-container-section-play-num": { "category": "cleaning" },
+			"video-page-hide-right-container-section-subscribe": { "category": "cleaning" },
+			"video-page-hide-right-container-video-page-game-card-small": { "category": "cleaning" },
+			"video-page-hide-sidenav-back-to-top": { "category": "cleaning" },
+			"video-page-hide-sidenav-customer-service": { "category": "cleaning" },
+			"video-page-hide-sidenav-mini": { "category": "cleaning" },
+			"video-page-hide-sidenav-right-container-live": { "category": "cleaning" },
+			"video-page-hide-top-vote-card": { "category": "cleaning" },
+			"video-page-hide-triple-oldfan-entry": { "category": "cleaning" },
+			"video-page-hide-up-bili-avatar-icon": { "category": "cleaning" },
+			"video-page-hide-up-bili-avatar-pendent-dom": { "category": "cleaning" },
+			"video-page-hide-up-charge": { "category": "cleaning" },
+			"video-page-hide-up-description": { "category": "cleaning" },
+			"video-page-hide-up-membersinfo-normal-header": { "category": "cleaning" },
+			"video-page-hide-up-sendmsg": { "category": "cleaning" },
+			"video-page-hide-up-usercard": { "category": "cleaning" },
+			"video-page-hide-user-level": { "category": "cleaning" },
+			"video-page-hide-video-info-argue": { "category": "cleaning" },
+			"video-page-hide-video-info-copyright": { "category": "cleaning" },
+			"video-page-hide-video-info-danmaku-count": { "category": "cleaning" },
+			"video-page-hide-video-info-honor": { "category": "cleaning" },
+			"video-page-hide-video-info-pubdate": { "category": "cleaning" },
+			"video-page-hide-video-share-popover": { "category": "cleaning" },
+			"video-page-hide-vote-info": { "category": "cleaning" },
+			"video-page-right-container-sticky-disable": { "category": "cleaning" },
+			"video-page-simple-share": { "category": "cleaning" },
+			"video-page-simple-video-share-popover": { "category": "cleaning" },
+			"watchlater-hide-feedback": { "category": "cleaning" }
+		}[id];
+		return classification?.category === "optimization" ? `优化 - ${classification.packLabel ?? "其他"}` : classification?.category === "cleaning" ? "净化" : "公共设置";
+	};
+	var getConfigurationDefinitions = () => {
+		const definitions = new Map();
+		const add = (incoming) => {
+			const identity = incoming.storage + ":" + incoming.key;
+			const existing = definitions.get(identity);
+			if (!existing) {
+				definitions.set(identity, incoming);
+				return;
+			}
+			existing.groups = [...new Set([...existing.groups, ...incoming.groups])];
+			for (const value of incoming.defaults) if (!existing.defaults.some((v) => v.context === value.context)) existing.defaults.push(value);
+			if (incoming.min !== void 0) existing.min = Math.min(existing.min ?? incoming.min, incoming.min);
+			if (incoming.max !== void 0) existing.max = Math.max(existing.max ?? incoming.max, incoming.max);
+			if (incoming.disabled) existing.disabled = [...existing.disabled ?? [], ...incoming.disabled];
+			if (incoming.options) existing.options = [...new Map([...existing.options ?? [], ...incoming.options].map((v) => [v.value, v])).values()];
+		};
+		const addItem = (item, context, isFilter) => {
+			if (item.type === "webdav") {
+				for (const [key, name] of [
+					[item.urlId, "WebDAV 地址"],
+					[item.userId, "WebDAV 账号"],
+					[item.passwordId, "WebDAV 密码"]
+				]) add({
+					key,
+					name,
+					storage: "gm",
+					scope: "secrets",
+					kind: "string",
+					groups: ["当前设备 - WebDAV 连接"],
+					defaults: [{
+						context: "当前设备",
+						value: ""
+					}],
+					availableProfiles: [profile]
+				});
+				return;
+			}
+			const defaultValue = item.type === "switch" ? Boolean(item.defaultEnable) : item.type === "editor" ? [] : item.defaultValue;
+			const definition = {
+				key: item.id,
+				name: item.name,
+				storage: "gm",
+				scope: item.id === "biliweb-sync-enabled" ? "device" : ruleKeys.has(item.id) ? "rules" : "settings",
+				kind: item.type === "editor" ? "lines" : item.type === "list" ? "choice" : item.type,
+				groups: [context],
+				defaults: [{
+					context,
+					value: defaultValue
+				}],
+				availableProfiles: [profile]
+			};
+			if (isFilter && item.type === "editor") definition.scope = "rules";
+			if (item.type === "number") {
+				definition.min = item.minValue;
+				definition.max = item.maxValue;
+				definition.disabled = [item.disableValue];
+			}
+			if (item.type === "list") {
+				definition.options = item.options.map(({ value, name }) => ({
+					value,
+					name
+				}));
+				definition.disabled = [item.disableValue];
+			}
+			if (item.type === "string") definition.disabled = [item.disableValue];
+			add(definition);
+		};
+		for (const rule of rules) for (const group of rule.groups) for (const item of group.items) addItem(item, `${pageLabels[rule.name] ?? rule.name} / ${group.name} - ${suffix(item.id)}`, false);
+		for (const filter of [
+			...videoFilters,
+			...commentFilters,
+			...dynamicFilters,
+			...articleFilters
+		]) for (const group of filter.groups) for (const item of group.items) addItem(item, `${filter.name} / ${group.name}`, true);
+		for (const field of RULE_FIELDS) {
+			if (definitions.has("gm:" + field.gm)) continue;
+			add({
+				key: field.gm,
+				name: field.gm,
+				storage: "gm",
+				scope: "rules",
+				kind: field.kind === "list" ? "lines" : "number",
+				groups: ["全站 / 过滤规则"],
+				defaults: [{
+					context: "过滤器",
+					value: field.absent
+				}],
+				availableProfiles: [profile]
+			});
+		}
+		add({
+			key: SHORTCUT_PREFERENCE_KEY,
+			name: "页面快捷入口",
+			storage: "gm",
+			scope: "device",
+			kind: "shortcut",
+			groups: ["当前设备 / 快捷开关"],
+			defaults: [{
+				context: "当前设备",
+				value: SHORTCUT_PREFERENCE_DEFAULT
+			}],
+			availableProfiles: [profile]
+		});
+		add({
+			key: "bili-cleaner-side-btn-pos",
+			name: "悬浮按钮位置",
+			storage: "local",
+			scope: "device",
+			kind: "position",
+			groups: ["当前站点 / 界面位置"],
+			defaults: [{
+				context: "当前站点",
+				value: {
+					right: 10,
+					bottom: 180
+				}
+			}],
+			availableProfiles: [profile]
+		});
+		add({
+			key: "bili-cleaner-mini-player-pos",
+			name: "小窗播放器位置",
+			storage: "local",
+			scope: "device",
+			kind: "position",
+			groups: ["当前站点 / 界面位置"],
+			defaults: [{
+				context: "当前站点",
+				value: {
+					tx: 0,
+					ty: 0
+				}
+			}],
+			availableProfiles: [profile]
+		});
+		add({
+			key: "bili-cleaner-mini-player-zoom",
+			name: "小窗播放器缩放",
+			storage: "local",
+			scope: "device",
+			kind: "zoom",
+			min: .1,
+			max: 10,
+			groups: ["当前站点 / 界面位置"],
+			defaults: [{
+				context: "当前站点",
+				value: 1
+			}],
+			availableProfiles: [profile]
+		});
+		return [...definitions.values()];
+	};
+	var SCOPES = [
+		"settings",
+		"rules",
+		"device",
+		"secrets"
+	];
+	var MAX_TEXT = 4e6;
+	var record = (value) => value !== null && typeof value === "object" && !Array.isArray(value);
+	var ownKeys = (object, keys) => Object.keys(object).every((key) => keys.includes(key));
+	var safeKey = (key) => typeof key === "string" && /^[a-zA-Z0-9][a-zA-Z0-9_.:-]{0,159}$/.test(key);
+	var sameConfigValue = (a, b) => JSON.stringify(a) === JSON.stringify(b);
+	var isFiniteNumber = (v) => typeof v === "number" && Number.isFinite(v);
+	var isConfigValue = (value) => {
+		if (typeof value === "boolean" || isFiniteNumber(value)) return true;
+		if (typeof value === "string") return value.length <= 1e6;
+		if (Array.isArray(value)) return value.length <= 1e5 && value.every((v) => typeof v === "string" && v.length <= 1e5);
+		return record(value) && Object.keys(value).length <= 10 && Object.entries(value).every(([k, v]) => safeKey(k) && (typeof v === "boolean" || isFiniteNumber(v) || typeof v === "string" && v.length <= 1e3));
+	};
+	var validateConfigValue = (definition, value) => {
+		if (definition.disabled?.some((v) => sameConfigValue(v, value))) return true;
+		switch (definition.kind) {
+			case "switch": return typeof value === "boolean";
+			case "number":
+			case "zoom": return isFiniteNumber(value) && (definition.min === void 0 || value >= definition.min) && (definition.max === void 0 || value <= definition.max);
+			case "string": return typeof value === "string" && value.length <= 1e6;
+			case "choice": return typeof value === "string" && Boolean(definition.options?.some((option) => option.value === value));
+			case "lines": return Array.isArray(value) && value.length <= 1e5 && value.every((v) => typeof v === "string" && v.length <= 1e5);
+			case "shortcut": return record(value) && ownKeys(value, ["enabled", "location"]) && typeof value.enabled === "boolean" && (value.location === "header" || value.location === "floating");
+			case "position": {
+				const fields = definition.key.includes("side-btn") ? ["right", "bottom"] : ["tx", "ty"];
+				return record(value) && ownKeys(value, fields) && fields.every((key) => isFiniteNumber(value[key]) && Math.abs(value[key]) <= 1e5);
+			}
+		}
+	};
+	var createConfigurationBackup = (definitions, access, options) => {
+		const scopes = ["settings", "rules"];
+		if (options.includeDevice !== false) scopes.push("device");
+		if (options.includeSecrets === true) scopes.push("secrets");
+		const selected = definitions.filter((definition) => scopes.includes(definition.scope));
+		const entries = selected.map((definition) => {
+			const value = access.read(definition.storage, definition.key);
+			if (value === void 0 || value === null) return {
+				key: definition.key,
+				storage: definition.storage,
+				scope: definition.scope,
+				state: "absent"
+			};
+			if (!validateConfigValue(definition, value)) throw new Error(`「${definition.name}」的已保存值格式异常，请先修正再导出`);
+			return {
+				key: definition.key,
+				storage: definition.storage,
+				scope: definition.scope,
+				state: "saved",
+				value
+			};
+		});
+		const backup = {
+			format: "misakaweb-config-backup",
+			schemaVersion: 1,
+			product: "MisakaWeb",
+			scriptVersion: options.scriptVersion,
+			profile: options.profile,
+			exportedAt: options.now ?? new Date().toISOString(),
+			scopes,
+			definitions: selected,
+			entries
+		};
+		if (new TextEncoder().encode(JSON.stringify(backup)).length > MAX_TEXT) throw new Error("配置备份超过 4 MB，请精简规则后再导出");
+		return backup;
+	};
+	var parseConfigurationBackup = (input) => {
+		let raw = input;
+		if (typeof input === "string") {
+			if (input.length > MAX_TEXT || new TextEncoder().encode(input).length > MAX_TEXT) throw new Error("配置文件超过 4 MB，未读取");
+			try {
+				raw = JSON.parse(input);
+			} catch {
+				throw new Error("配置文件不是有效的 JSON");
+			}
+		}
+		if (!record(raw) || raw.format !== "misakaweb-config-backup" || raw.product !== "MisakaWeb") throw new Error("这不是 MisakaWeb 配置备份");
+		if (raw.schemaVersion !== 1) throw new Error("此备份格式版本尚不支持，请更新脚本后再导入");
+		if (!ownKeys(raw, [
+			"format",
+			"schemaVersion",
+			"product",
+			"scriptVersion",
+			"profile",
+			"exportedAt",
+			"scopes",
+			"definitions",
+			"entries"
+		]) || typeof raw.scriptVersion !== "string" || raw.scriptVersion.length > 80 || typeof raw.profile !== "string" || raw.profile.length > 100 || typeof raw.exportedAt !== "string" || !Number.isFinite(Date.parse(raw.exportedAt)) || !Array.isArray(raw.scopes) || raw.scopes.length > 4 || !raw.scopes.every((v) => SCOPES.includes(v)) || new Set(raw.scopes).size !== raw.scopes.length || !Array.isArray(raw.entries) || raw.entries.length > 2e3 || !Array.isArray(raw.definitions) || raw.definitions.length > 2e3) throw new Error("配置备份结构异常，未修改本机数据");
+		const keys = new Set();
+		for (const entry of raw.entries) {
+			if (!record(entry) || !ownKeys(entry, [
+				"key",
+				"storage",
+				"scope",
+				"state",
+				"value"
+			]) || !safeKey(entry.key) || entry.storage !== "gm" && entry.storage !== "local" || !raw.scopes.includes(entry.scope) || entry.state !== "saved" && entry.state !== "absent" || (entry.state === "saved" ? !isConfigValue(entry.value) : Object.prototype.hasOwnProperty.call(entry, "value"))) throw new Error("配置条目结构异常，未修改本机数据");
+			const identity = `${entry.storage}:${entry.key}`;
+			if (keys.has(identity)) throw new Error("配置文件存在重复条目，未修改本机数据");
+			keys.add(identity);
+		}
+		for (const definition of raw.definitions) if (!record(definition) || !safeKey(definition.key) || typeof definition.name !== "string" || definition.name.length > 500 || !Array.isArray(definition.groups) || !definition.groups.every((v) => typeof v === "string" && v.length < 500) || !Array.isArray(definition.defaults) || definition.defaults.length > 100 || !definition.defaults.every((v) => record(v) && typeof v.context === "string" && v.context.length < 500 && isConfigValue(v.value)) || !Array.isArray(definition.availableProfiles) || definition.availableProfiles.length > 30 || !definition.availableProfiles.every((v) => typeof v === "string" && v.length < 100)) throw new Error("配置定义结构异常，未修改本机数据");
+		return raw;
+	};
+	var planConfigurationImport = (input, definitions, access, mode = "merge", options = {}) => {
+		const backup = parseConfigurationBackup(input);
+		const registry = new Map(definitions.map((definition) => [`${definition.storage}:${definition.key}`, definition]));
+		const plan = {
+			backup,
+			writes: [],
+			ignored: [],
+			notices: [],
+			unchanged: 0,
+			mode
+		};
+		for (const entry of backup.entries) {
+			const definition = registry.get(`${entry.storage}:${entry.key}`);
+			if (!definition) {
+				plan.ignored.push(entry.key);
+				continue;
+			}
+			if (entry.scope !== definition.scope) throw new Error(`「${definition.name}」的数据分类不符，未修改本机数据`);
+			if (entry.state === "absent" && mode === "merge") {
+				plan.unchanged++;
+				continue;
+			}
+			let incoming = entry.state === "saved" ? entry.value : void 0;
+			if (entry.state === "saved" && !validateConfigValue(definition, incoming)) throw new Error(`「${definition.name}」的值不合法，未修改本机数据`);
+			const manualSyncEnable = options.allowManualSyncEnable === true && backup.entries.length === 1 && entry.key === "biliweb-sync-enabled" && entry.storage === "gm";
+			if (entry.key === "biliweb-sync-enabled" && incoming === true && !manualSyncEnable) {
+				incoming = false;
+				plan.notices.push("WebDAV 同步开关保持关闭；请检查连接后手动启用。");
+			}
+			const before = access.read(entry.storage, entry.key);
+			if (sameConfigValue(before, incoming)) {
+				plan.unchanged++;
+				continue;
+			}
+			plan.writes.push({
+				...entry,
+				value: incoming,
+				before
+			});
+		}
+		if (plan.writes.length && access.read("gm", "biliweb-sync-enabled") === true && !plan.writes.some((v) => v.key === "biliweb-sync-enabled")) {
+			plan.writes.push({
+				key: "biliweb-sync-enabled",
+				storage: "gm",
+				scope: "device",
+				state: "saved",
+				value: false,
+				before: true
+			});
+			plan.notices.push("当前 WebDAV 自动同步将关闭，避免刷新后覆盖刚导入的数据；请检查连接和规则后手动启用。");
+		}
+		if (backup.scopes.includes("secrets")) plan.notices.push("文件包含 WebDAV 连接信息和密码，将仅保存在当前设备。");
+		if (mode === "restore") plan.notices.push("完整恢复会删除备份中明确标为「未保存」的设置，使其重新继承本版本默认值。");
+		return plan;
+	};
+	var applyConfigurationPlan = (plan, access) => {
+		for (const write of plan.writes) if (!sameConfigValue(access.read(write.storage, write.key), write.before)) throw new Error("预览后设置已发生变化，请重新预览再应用");
+		const applied = [];
+		try {
+			const writes = [...plan.writes].sort((a, b) => a.key === "biliweb-sync-enabled" ? -1 : b.key === "biliweb-sync-enabled" ? 1 : 0);
+			for (const write of writes) {
+				applied.push(write);
+				if (write.value === void 0) access.remove(write.storage, write.key);
+				else access.write(write.storage, write.key, write.value);
+			}
+		} catch (error) {
+			let failed = false;
+			for (const write of applied.reverse()) try {
+				if (write.before === void 0 || write.before === null) access.remove(write.storage, write.key);
+				else access.write(write.storage, write.key, write.before);
+			} catch {
+				failed = true;
+			}
+			throw new Error(failed ? "保存失败，部分数据未能回滚。请从导入前备份恢复。" : `保存失败，已恢复导入前的数据：${String(error)}`);
+		}
+		return plan.writes.length;
+	};
+	var LAST_BACKUP_KEY = "misakaweb-config-preimport-backup";
+	var configurationAccess = {
+		read: (storage, key) => {
+			if (storage === "gm") return GM_getValue$1(key, void 0);
+			const raw = deviceStorage.getItem(key);
+			if (raw === null) return void 0;
+			try {
+				return JSON.parse(raw);
+			} catch {
+				throw new Error(`「${key}」的本机数据不是有效 JSON`);
+			}
+		},
+		write: (storage, key, value) => {
+			if (storage === "gm") GM_setValue$1(key, value);
+			else deviceStorage.setItem(key, JSON.stringify(value));
+		},
+		remove: (storage, key) => {
+			if (storage === "gm") GM_deleteValue$1(key);
+			else deviceStorage.removeItem(key);
+		}
+	};
+	var makeConfigurationBackup = (includeDevice = true, includeSecrets = false) => createConfigurationBackup(getConfigurationDefinitions(), configurationAccess, {
+		scriptVersion: "0.1.5",
+		profile: "pure",
+		includeDevice,
+		includeSecrets
+	});
+	var readPreImportBackup = () => {
+		const raw = GM_getValue$1(LAST_BACKUP_KEY, void 0);
+		if (raw === void 0) return null;
+		return parseConfigurationBackup(raw);
+	};
+	var commitConfigurationPlan = (plan) => {
+		if (!plan.writes.length) return 0;
+		return withConfigImportSuppressed(() => {
+			const previous = makeConfigurationBackup(true, true);
+			const serialized = JSON.stringify(previous);
+			if (new TextEncoder().encode(serialized).byteLength > 4e6) throw new Error("导入前备份超过 4 MB，请先手动导出并精简规则");
+			GM_setValue$1(LAST_BACKUP_KEY, serialized);
+			return applyConfigurationPlan(plan, configurationAccess);
+		});
+	};
+	var saveSingleConfiguration = (definitionKey, storage, value) => {
+		const definition = getConfigurationDefinitions().find((v) => v.key === definitionKey && v.storage === storage);
+		if (!definition) throw new Error("此版本没有这项设置");
+		const backup = createConfigurationBackup([definition], configurationAccess, {
+			scriptVersion: "0.1.5",
+			profile: "pure",
+			includeDevice: true,
+			includeSecrets: true
+		});
+		backup.entries = [{
+			key: definition.key,
+			storage,
+			scope: definition.scope,
+			state: value === void 0 ? "absent" : "saved",
+			...value === void 0 ? {} : { value }
+		}];
+		return backup;
+	};
+	var downloadConfigurationBackup = (backup) => {
+		const blob = new Blob([JSON.stringify(backup, null, 2)], { type: "application/json;charset=utf-8" });
+		if (blob.size > 4e6) throw new Error("配置备份超过 4 MB，请精简规则后再导出");
+		const url = URL.createObjectURL(blob);
+		const anchor = document.createElement("a");
+		anchor.href = url;
+		anchor.download = `MisakaWeb-配置-${backup.exportedAt.replace(/[:.]/g, "-")}.json`;
+		anchor.click();
+		window.setTimeout(() => URL.revokeObjectURL(url), 1e3);
+	};
+	var _hoisted_1$4 = {
+		key: 0,
+		role: "status",
+		class: "rounded-md bg-gray-100 p-3 leading-6"
+	};
+	var _hoisted_2$2 = { class: "rounded-lg border border-gray-200 p-3" };
+	var _hoisted_3$2 = { class: "mr-4 inline-flex items-center gap-2 py-1" };
+	var _hoisted_4$1 = { class: "inline-flex items-center gap-2 py-1" };
+	var _hoisted_5$1 = {
+		key: 0,
+		class: "mt-1 text-amber-700"
+	};
+	var _hoisted_6$1 = { class: "flex flex-wrap gap-2" };
+	var _hoisted_7$1 = ["disabled"];
+	var _hoisted_8$1 = {
+		key: 1,
+		class: "mt-3 rounded-md bg-gray-50 p-3"
+	};
+	var _hoisted_9$1 = { class: "font-bold" };
+	var _hoisted_10$1 = { class: "my-2 flex items-center gap-2" };
+	var _hoisted_11 = { class: "my-2" };
+	var _hoisted_12 = {
+		key: 0,
+		class: "my-2"
+	};
+	var _hoisted_13 = { class: "mt-2 max-h-44 overflow-auto text-[13px] leading-6" };
+	var _hoisted_14 = ["disabled"];
+	var _hoisted_15 = { class: "rounded-lg border border-gray-200 p-3" };
+	var _hoisted_16 = { class: "flex flex-wrap gap-2" };
+	var _hoisted_17 = { class: "mb-2 font-bold" };
+	var _hoisted_18 = {
+		key: 0,
+		class: "flex items-center gap-2"
+	};
+	var _hoisted_19 = ["value"];
+	var _hoisted_20 = ["type"];
+	var _hoisted_21 = {
+		key: 5,
+		class: "mt-1 text-[13px] text-gray-600"
+	};
+	var _hoisted_22 = {
+		key: 6,
+		class: "mt-1 text-[13px] text-gray-600"
+	};
+	var _hoisted_23 = {
+		key: 7,
+		class: "mt-1 text-[13px] text-gray-600"
+	};
+	var _hoisted_24 = { class: "my-2 text-[13px]" };
+	var _hoisted_25 = { class: "flex flex-wrap gap-2" };
+	var _hoisted_26 = { class: "mb-1 text-[13px] text-gray-500" };
+	var _hoisted_27 = { class: "flex items-start justify-between gap-3" };
+	var _hoisted_28 = { class: "min-w-0 flex-1" };
+	var _hoisted_29 = { class: "mt-1 text-[12px] leading-5 text-gray-500" };
+	var _hoisted_30 = { class: "mt-1 text-[13px] break-words text-gray-600" };
+	var _hoisted_31 = ["onClick"];
+	var ConfigurationPanelView_default = (0, vue.defineComponent)({
+		__name: "ConfigurationPanelView",
+		setup(__props) {
+			const store = useConfigurationPanelStore();
+			const definitions = (0, vue.ref)([]);
+			const includeDevice = (0, vue.ref)(true);
+			const includeSecrets = (0, vue.ref)(false);
+			const message = (0, vue.ref)("");
+			const needsRefresh = (0, vue.ref)(false);
+			const hasPrevious = (0, vue.ref)(false);
+			const fileInput = (0, vue.ref)(null);
+			const incoming = (0, vue.ref)(null);
+			const incomingName = (0, vue.ref)("");
+			const preview = (0, vue.ref)(null);
+			const restoreMode = (0, vue.ref)(false);
+			const search = (0, vue.ref)("");
+			const selectedScope = (0, vue.ref)("");
+			const shownCount = (0, vue.ref)(40);
+			const editing = (0, vue.ref)(null);
+			const editText = (0, vue.ref)("");
+			const editBoolean = (0, vue.ref)(false);
+			const editSection = (0, vue.ref)(null);
+			const revision = (0, vue.ref)(0);
+			const errorMessage = (error) => error instanceof Error ? error.message : String(error);
+			const filtered = (0, vue.computed)(() => {
+				const query = search.value.trim().toLowerCase();
+				return definitions.value.filter((v) => (!selectedScope.value || v.scope === selectedScope.value) && (!query || [
+					v.name,
+					v.key,
+					...v.groups,
+					settingLabel(v.key)
+				].join(" ").toLowerCase().includes(query)));
+			});
+			const visibleDefinitions = (0, vue.computed)(() => filtered.value.slice(0, shownCount.value));
+			(0, vue.watch)([search, selectedScope], () => {
+				shownCount.value = 40;
+			});
+			(0, vue.watch)(() => store.openToken, () => {
+				definitions.value = getConfigurationDefinitions();
+				revision.value++;
+				try {
+					hasPrevious.value = Boolean(readPreImportBackup());
+				} catch {
+					hasPrevious.value = false;
+				}
+			});
+			const definitionName = (key, storage) => definitions.value.find((v) => v.key === key && v.storage === storage)?.name ?? key;
+			const formatValue = (value, definition) => {
+				if (definition.scope === "secrets") return value ? "已保存（不展示）" : "空";
+				if (Array.isArray(value)) return `${value.length} 条规则`;
+				if (typeof value === "boolean") return value ? "开启" : "关闭";
+				if (definition.kind === "choice") return definition.options?.find((v) => v.value === value)?.name ?? String(value);
+				return typeof value === "object" ? JSON.stringify(value) : String(value);
+			};
+			const storedDescription = (definition) => {
+				revision.value;
+				try {
+					const value = configurationAccess.read(definition.storage, definition.key);
+					if (value !== void 0 && value !== null) return "已保存：" + formatValue(value, definition);
+					const uniqueDefaults = [...new Set(definition.defaults.map((v) => formatValue(v.value, definition)))];
+					return uniqueDefaults.length === 1 ? "继承默认：" + uniqueDefaults[0] : "继承各页面默认值（不同页面存在差异）";
+				} catch (error) {
+					return errorMessage(error);
+				}
+			};
+			const exportBackup = () => {
+				try {
+					downloadConfigurationBackup(makeConfigurationBackup(includeDevice.value, includeSecrets.value));
+					message.value = "配置备份已交给浏览器下载。";
+				} catch (error) {
+					message.value = errorMessage(error);
+				}
+			};
+			const rebuildPreview = () => {
+				preview.value = null;
+				if (!incoming.value) return;
+				try {
+					preview.value = planConfigurationImport(incoming.value, definitions.value, configurationAccess, restoreMode.value ? "restore" : "merge");
+				} catch (error) {
+					message.value = errorMessage(error);
+				}
+			};
+			const chooseFile = async (event) => {
+				const input = event.target;
+				const file = input.files?.[0];
+				input.value = "";
+				if (!file) return;
+				incoming.value = null;
+				preview.value = null;
+				try {
+					if (file.size > 4e6) throw new Error("配置文件超过 4 MB，未读取");
+					incoming.value = parseConfigurationBackup(await file.text());
+					incomingName.value = file.name;
+					restoreMode.value = false;
+					message.value = "";
+					rebuildPreview();
+				} catch (error) {
+					message.value = errorMessage(error);
+				}
+			};
+			const previewPrevious = () => {
+				try {
+					const previous = readPreImportBackup();
+					if (!previous) throw new Error("当前设备没有上次保存前的备份");
+					incoming.value = previous;
+					incomingName.value = "上次保存前的本机备份";
+					restoreMode.value = true;
+					rebuildPreview();
+				} catch (error) {
+					message.value = errorMessage(error);
+				}
+			};
+			const applied = (count, notices = []) => {
+				message.value = `已保存 ${count} 项。刷新页面后完整应用。${notices.join(" ")}`;
+				needsRefresh.value = count > 0 || needsRefresh.value;
+				hasPrevious.value = true;
+				revision.value++;
+				preview.value = null;
+				incoming.value = null;
+			};
+			const applyPreview = () => {
+				if (!preview.value) return;
+				try {
+					const plan = preview.value;
+					applied(commitConfigurationPlan(plan), plan.notices);
+				} catch (error) {
+					message.value = errorMessage(error);
+				}
+			};
+			const beginEdit = async (definition) => {
+				try {
+					const value = configurationAccess.read(definition.storage, definition.key) ?? definition.defaults[0]?.value;
+					editing.value = definition;
+					editBoolean.value = value === true;
+					editText.value = Array.isArray(value) ? value.join("\n") : typeof value === "object" ? JSON.stringify(value, null, 2) : String(value ?? "");
+					await (0, vue.nextTick)();
+					editSection.value?.scrollIntoView({ block: "nearest" });
+				} catch (error) {
+					message.value = errorMessage(error);
+				}
+			};
+			const saveEdit = (reset) => {
+				const definition = editing.value;
+				if (!definition) return;
+				try {
+					let value;
+					if (reset) value = void 0;
+					else if (definition.kind === "switch") value = editBoolean.value;
+					else if (definition.kind === "number" || definition.kind === "zoom") {
+						if (!editText.value.trim()) throw new Error("请填写数值");
+						value = Number(editText.value);
+					} else if (definition.kind === "lines") value = [...new Set(editText.value.split("\n").filter((v) => v.trim() !== ""))];
+					else if (definition.kind === "position" || definition.kind === "shortcut") value = JSON.parse(editText.value);
+					else value = editText.value;
+					const plan = planConfigurationImport(saveSingleConfiguration(definition.key, definition.storage, value), definitions.value, configurationAccess, "restore", { allowManualSyncEnable: definition.key === "biliweb-sync-enabled" && value === true });
+					applied(commitConfigurationPlan(plan), plan.notices.filter((v) => !v.startsWith("完整恢复") && !v.startsWith("文件包含")));
+					editing.value = null;
+				} catch (error) {
+					message.value = errorMessage(error);
+				}
+			};
+			const reloadPage = () => window.location.reload();
+			return (_ctx, _cache) => {
+				return (0, vue.withDirectives)(((0, vue.openBlock)(), (0, vue.createBlock)(PanelComp_default, {
+					title: "配置管理",
+					"width-percent": 58,
+					"height-percent": 88,
+					"min-width": 360,
+					"min-height": 480,
+					"close-action": "panel-close-configuration",
+					"center-on-open": true,
+					"open-token": (0, vue.unref)(store).openToken,
+					onClose: (0, vue.unref)(store).hide
+				}, {
+					default: (0, vue.withCtx)(() => [(0, vue.unref)(store).isShow ? ((0, vue.openBlock)(), (0, vue.createElementBlock)("div", {
+						key: 0,
+						class: "flex flex-col gap-3 p-1 text-sm text-black",
+						onKeydown: _cache[15] || (_cache[15] = (0, vue.withModifiers)(() => {}, ["stop"]))
+					}, [
+						_cache[34] || (_cache[34] = (0, vue.createElementVNode)("p", { class: "rounded-lg bg-blue-50 p-3 leading-6" }, " 这里统一管理净化、过滤和优化设置。备份可以带到另一台设备，导入前会先显示变动。 页面中的设置面板仍可照常使用。 ", -1)),
+						message.value ? ((0, vue.openBlock)(), (0, vue.createElementBlock)("p", _hoisted_1$4, (0, vue.toDisplayString)(message.value), 1)) : (0, vue.createCommentVNode)("", true),
+						needsRefresh.value ? ((0, vue.openBlock)(), (0, vue.createElementBlock)("button", {
+							key: 1,
+							type: "button",
+							class: "rounded-md bg-[#00AEEC] px-3 py-2 text-white",
+							onClick: reloadPage
+						}, [(0, vue.createVNode)(Badge_default, { code: (0, vue.unref)(actionLabel)("config-refresh-page") }, null, 8, ["code"]), _cache[16] || (_cache[16] = (0, vue.createTextVNode)("刷新页面，应用已保存设置 ", -1))])) : (0, vue.createCommentVNode)("", true),
+						(0, vue.createElementVNode)("section", _hoisted_2$2, [
+							_cache[26] || (_cache[26] = (0, vue.createElementVNode)("h2", { class: "mb-2 text-base font-bold" }, "备份与恢复", -1)),
+							(0, vue.createElementVNode)("label", _hoisted_3$2, [(0, vue.withDirectives)((0, vue.createElementVNode)("input", {
+								"onUpdate:modelValue": _cache[0] || (_cache[0] = ($event) => includeDevice.value = $event),
+								type: "checkbox"
+							}, null, 512), [[vue.vModelCheckbox, includeDevice.value]]), _cache[17] || (_cache[17] = (0, vue.createTextVNode)("包含当前设备的入口与窗口位置", -1))]),
+							(0, vue.createElementVNode)("label", _hoisted_4$1, [(0, vue.withDirectives)((0, vue.createElementVNode)("input", {
+								"onUpdate:modelValue": _cache[1] || (_cache[1] = ($event) => includeSecrets.value = $event),
+								type: "checkbox"
+							}, null, 512), [[vue.vModelCheckbox, includeSecrets.value]]), _cache[18] || (_cache[18] = (0, vue.createTextVNode)("包含 WebDAV 连接和密码", -1))]),
+							includeSecrets.value ? ((0, vue.openBlock)(), (0, vue.createElementBlock)("p", _hoisted_5$1, " 下载的文件将包含明文密码，请仅保存在自己的安全位置。 ")) : (0, vue.createCommentVNode)("", true),
+							_cache[27] || (_cache[27] = (0, vue.createElementVNode)("p", { class: "my-2 text-[13px] leading-5 text-gray-600" }, " 默认包含全部设置和过滤规则，不包含 WebDAV 连接、缓存、同步历史或旧测试取舍记录。未保存项保留各页面的默认值说明，不会为导出而写入默认值。 ", -1)),
+							(0, vue.createElementVNode)("div", _hoisted_6$1, [
+								(0, vue.createElementVNode)("button", {
+									type: "button",
+									class: "rounded-md bg-[#00AEEC] px-3 py-2 text-white",
+									onClick: exportBackup
+								}, [(0, vue.createVNode)(Badge_default, { code: (0, vue.unref)(actionLabel)("config-export") }, null, 8, ["code"]), _cache[19] || (_cache[19] = (0, vue.createTextVNode)("下载配置备份 ", -1))]),
+								(0, vue.createElementVNode)("button", {
+									type: "button",
+									class: "rounded-md border border-gray-300 px-3 py-2",
+									onClick: _cache[2] || (_cache[2] = ($event) => fileInput.value?.click())
+								}, [(0, vue.createVNode)(Badge_default, { code: (0, vue.unref)(actionLabel)("config-choose-import") }, null, 8, ["code"]), _cache[20] || (_cache[20] = (0, vue.createTextVNode)("选择配置文件 ", -1))]),
+								(0, vue.createElementVNode)("button", {
+									type: "button",
+									disabled: !hasPrevious.value,
+									class: "rounded-md border border-gray-300 px-3 py-2 disabled:opacity-40",
+									onClick: previewPrevious
+								}, [(0, vue.createVNode)(Badge_default, { code: (0, vue.unref)(actionLabel)("config-restore-backup") }, null, 8, ["code"]), _cache[21] || (_cache[21] = (0, vue.createTextVNode)("恢复上次保存前的配置 ", -1))], 8, _hoisted_7$1),
+								(0, vue.createElementVNode)("input", {
+									ref_key: "fileInput",
+									ref: fileInput,
+									type: "file",
+									accept: ".json,application/json",
+									class: "hidden",
+									onChange: chooseFile
+								}, null, 544)
+							]),
+							incoming.value ? ((0, vue.openBlock)(), (0, vue.createElementBlock)("div", _hoisted_8$1, [
+								(0, vue.createElementVNode)("p", _hoisted_9$1, (0, vue.toDisplayString)(incomingName.value) + " · 来自 " + (0, vue.toDisplayString)(incoming.value.scriptVersion) + " / " + (0, vue.toDisplayString)(incoming.value.profile), 1),
+								(0, vue.createElementVNode)("label", _hoisted_10$1, [(0, vue.withDirectives)((0, vue.createElementVNode)("input", {
+									"onUpdate:modelValue": _cache[3] || (_cache[3] = ($event) => restoreMode.value = $event),
+									type: "checkbox",
+									onChange: rebuildPreview
+								}, null, 544), [[vue.vModelCheckbox, restoreMode.value]]), _cache[22] || (_cache[22] = (0, vue.createTextVNode)("完整恢复：让文件中明确未保存的设置重新继承默认值", -1))]),
+								_cache[25] || (_cache[25] = (0, vue.createElementVNode)("p", { class: "text-[13px] leading-5 text-gray-600" }, " 默认只合并文件中的已保存值。文件未包含的设置和未勾选导出的设备、连接信息都保持原样。 ", -1)),
+								preview.value ? ((0, vue.openBlock)(), (0, vue.createElementBlock)(vue.Fragment, { key: 0 }, [
+									(0, vue.createElementVNode)("p", _hoisted_11, " 将改变 " + (0, vue.toDisplayString)(preview.value.writes.length) + " 项；" + (0, vue.toDisplayString)(preview.value.unchanged) + " 项保持原样；" + (0, vue.toDisplayString)(preview.value.ignored.length) + " 项不在当前版本中，将跳过。 ", 1),
+									((0, vue.openBlock)(true), (0, vue.createElementBlock)(vue.Fragment, null, (0, vue.renderList)(preview.value.notices, (notice) => {
+										return (0, vue.openBlock)(), (0, vue.createElementBlock)("p", {
+											key: notice,
+											class: "mb-1 text-amber-700"
+										}, (0, vue.toDisplayString)(notice), 1);
+									}), 128)),
+									preview.value.writes.length || preview.value.ignored.length ? ((0, vue.openBlock)(), (0, vue.createElementBlock)("details", _hoisted_12, [_cache[23] || (_cache[23] = (0, vue.createElementVNode)("summary", { class: "cursor-pointer" }, "查看涉及的设置", -1)), (0, vue.createElementVNode)("ul", _hoisted_13, [((0, vue.openBlock)(true), (0, vue.createElementBlock)(vue.Fragment, null, (0, vue.renderList)(preview.value.writes, (write) => {
+										return (0, vue.openBlock)(), (0, vue.createElementBlock)("li", { key: write.storage + write.key }, (0, vue.toDisplayString)(definitionName(write.key, write.storage)) + "：" + (0, vue.toDisplayString)(write.value === void 0 ? "回到默认值" : "更新已保存值"), 1);
+									}), 128)), ((0, vue.openBlock)(true), (0, vue.createElementBlock)(vue.Fragment, null, (0, vue.renderList)(preview.value.ignored, (key) => {
+										return (0, vue.openBlock)(), (0, vue.createElementBlock)("li", {
+											key,
+											class: "text-gray-500"
+										}, "跳过：" + (0, vue.toDisplayString)(key), 1);
+									}), 128))])])) : (0, vue.createCommentVNode)("", true),
+									(0, vue.createElementVNode)("button", {
+										type: "button",
+										disabled: !preview.value.writes.length,
+										class: "rounded-md bg-[#00AEEC] px-3 py-2 text-white disabled:opacity-40",
+										onClick: applyPreview
+									}, [(0, vue.createVNode)(Badge_default, { code: (0, vue.unref)(actionLabel)("config-apply-import") }, null, 8, ["code"]), _cache[24] || (_cache[24] = (0, vue.createTextVNode)("应用这些变动 ", -1))], 8, _hoisted_14)
+								], 64)) : (0, vue.createCommentVNode)("", true)
+							])) : (0, vue.createCommentVNode)("", true)
+						]),
+						(0, vue.createElementVNode)("section", _hoisted_15, [
+							_cache[32] || (_cache[32] = (0, vue.createElementVNode)("h2", { class: "mb-2 text-base font-bold" }, "全部设置", -1)),
+							(0, vue.createElementVNode)("div", _hoisted_16, [(0, vue.withDirectives)((0, vue.createElementVNode)("input", {
+								"onUpdate:modelValue": _cache[4] || (_cache[4] = ($event) => search.value = $event),
+								type: "search",
+								placeholder: "搜索名称、栏目或编号",
+								class: "min-w-40 flex-1 rounded-md border border-gray-300 px-2 py-2"
+							}, null, 512), [[vue.vModelText, search.value]]), (0, vue.withDirectives)((0, vue.createElementVNode)("select", {
+								"onUpdate:modelValue": _cache[5] || (_cache[5] = ($event) => selectedScope.value = $event),
+								class: "rounded-md border border-gray-300 bg-white px-2 py-2"
+							}, [..._cache[28] || (_cache[28] = [
+								(0, vue.createElementVNode)("option", { value: "" }, "全部类型", -1),
+								(0, vue.createElementVNode)("option", { value: "settings" }, "功能设置", -1),
+								(0, vue.createElementVNode)("option", { value: "rules" }, "过滤规则", -1),
+								(0, vue.createElementVNode)("option", { value: "device" }, "当前设备", -1),
+								(0, vue.createElementVNode)("option", { value: "secrets" }, "WebDAV 连接", -1)
+							])], 512), [[vue.vModelSelect, selectedScope.value]])]),
+							_cache[33] || (_cache[33] = (0, vue.createElementVNode)("p", { class: "my-2 text-[13px] leading-5 text-gray-600" }, " 同名键只列一次；共用的设置会列出所在栏目。这里修改后显式保存并刷新，避免在不相关页面启动功能。 ", -1)),
+							editing.value ? ((0, vue.openBlock)(), (0, vue.createElementBlock)("div", {
+								key: 0,
+								ref_key: "editSection",
+								ref: editSection,
+								class: "my-3 rounded-lg border border-blue-300 bg-blue-50 p-3"
+							}, [
+								(0, vue.createElementVNode)("p", _hoisted_17, [(0, vue.createVNode)(Badge_default, { code: (0, vue.unref)(settingLabel)(editing.value.key) }, null, 8, ["code"]), (0, vue.createTextVNode)((0, vue.toDisplayString)(editing.value.name), 1)]),
+								editing.value.kind === "switch" ? ((0, vue.openBlock)(), (0, vue.createElementBlock)("label", _hoisted_18, [(0, vue.withDirectives)((0, vue.createElementVNode)("input", {
+									"onUpdate:modelValue": _cache[6] || (_cache[6] = ($event) => editBoolean.value = $event),
+									type: "checkbox"
+								}, null, 512), [[vue.vModelCheckbox, editBoolean.value]]), _cache[29] || (_cache[29] = (0, vue.createTextVNode)("启用", -1))])) : editing.value.kind === "choice" ? (0, vue.withDirectives)(((0, vue.openBlock)(), (0, vue.createElementBlock)("select", {
+									key: 1,
+									"onUpdate:modelValue": _cache[7] || (_cache[7] = ($event) => editText.value = $event),
+									class: "w-full rounded-md border border-gray-300 bg-white p-2"
+								}, [((0, vue.openBlock)(true), (0, vue.createElementBlock)(vue.Fragment, null, (0, vue.renderList)(editing.value.options, (option) => {
+									return (0, vue.openBlock)(), (0, vue.createElementBlock)("option", {
+										key: option.value,
+										value: option.value
+									}, (0, vue.toDisplayString)(option.name), 9, _hoisted_19);
+								}), 128))], 512)), [[vue.vModelSelect, editText.value]]) : editing.value.kind === "number" || editing.value.kind === "zoom" ? (0, vue.withDirectives)(((0, vue.openBlock)(), (0, vue.createElementBlock)("input", {
+									key: 2,
+									"onUpdate:modelValue": _cache[8] || (_cache[8] = ($event) => editText.value = $event),
+									type: "number",
+									step: "any",
+									class: "w-full rounded-md border border-gray-300 bg-white p-2"
+								}, null, 512)), [[vue.vModelText, editText.value]]) : editing.value.kind === "string" ? (0, vue.withDirectives)(((0, vue.openBlock)(), (0, vue.createElementBlock)("input", {
+									key: 3,
+									"onUpdate:modelValue": _cache[9] || (_cache[9] = ($event) => editText.value = $event),
+									type: editing.value.key.endsWith("password") ? "password" : "text",
+									class: "w-full rounded-md border border-gray-300 bg-white p-2"
+								}, null, 8, _hoisted_20)), [[vue.vModelDynamic, editText.value]]) : (0, vue.withDirectives)(((0, vue.openBlock)(), (0, vue.createElementBlock)("textarea", {
+									key: 4,
+									"onUpdate:modelValue": _cache[10] || (_cache[10] = ($event) => editText.value = $event),
+									class: "min-h-32 w-full resize-y rounded-md border border-gray-300 bg-white p-2",
+									spellcheck: "false"
+								}, null, 512)), [[vue.vModelText, editText.value]]),
+								editing.value.kind === "lines" ? ((0, vue.openBlock)(), (0, vue.createElementBlock)("p", _hoisted_21, " 每行一条规则，空行不保存。 ")) : (0, vue.createCommentVNode)("", true),
+								editing.value.kind === "position" || editing.value.kind === "shortcut" ? ((0, vue.openBlock)(), (0, vue.createElementBlock)("p", _hoisted_22, " 保留所显示的字段名，仅修改对应的值。 ")) : (0, vue.createCommentVNode)("", true),
+								editing.value.defaults.length > 1 ? ((0, vue.openBlock)(), (0, vue.createElementBlock)("p", _hoisted_23, " 此项在多个页面共用；各页面默认值可能不同。恢复默认会保留这种差异。 ")) : (0, vue.createCommentVNode)("", true),
+								(0, vue.createElementVNode)("details", _hoisted_24, [_cache[30] || (_cache[30] = (0, vue.createElementVNode)("summary", { class: "cursor-pointer" }, "所在栏目与默认值", -1)), ((0, vue.openBlock)(true), (0, vue.createElementBlock)(vue.Fragment, null, (0, vue.renderList)(editing.value.defaults, (item) => {
+									return (0, vue.openBlock)(), (0, vue.createElementBlock)("p", {
+										key: item.context,
+										class: "mt-1"
+									}, (0, vue.toDisplayString)(item.context) + "：" + (0, vue.toDisplayString)(formatValue(item.value, editing.value)), 1);
+								}), 128))]),
+								(0, vue.createElementVNode)("div", _hoisted_25, [
+									(0, vue.createElementVNode)("button", {
+										type: "button",
+										class: "rounded-md bg-[#00AEEC] px-3 py-2 text-white",
+										onClick: _cache[11] || (_cache[11] = ($event) => saveEdit(false))
+									}, [(0, vue.createVNode)(Badge_default, { code: (0, vue.unref)(actionLabel)("config-save-setting") }, null, 8, ["code"]), _cache[31] || (_cache[31] = (0, vue.createTextVNode)("保存此项 ", -1))]),
+									(0, vue.createElementVNode)("button", {
+										type: "button",
+										class: "rounded-md border border-gray-300 px-3 py-2",
+										onClick: _cache[12] || (_cache[12] = ($event) => saveEdit(true))
+									}, " 恢复默认 "),
+									(0, vue.createElementVNode)("button", {
+										type: "button",
+										class: "rounded-md border border-gray-300 px-3 py-2",
+										onClick: _cache[13] || (_cache[13] = ($event) => editing.value = null)
+									}, " 取消 ")
+								])
+							], 512)) : (0, vue.createCommentVNode)("", true),
+							(0, vue.createElementVNode)("p", _hoisted_26, "共 " + (0, vue.toDisplayString)(filtered.value.length) + " 项", 1),
+							((0, vue.openBlock)(true), (0, vue.createElementBlock)(vue.Fragment, null, (0, vue.renderList)(visibleDefinitions.value, (definition) => {
+								return (0, vue.openBlock)(), (0, vue.createElementBlock)("div", {
+									key: definition.storage + definition.key,
+									class: "border-t border-gray-100 py-2"
+								}, [(0, vue.createElementVNode)("div", _hoisted_27, [(0, vue.createElementVNode)("div", _hoisted_28, [
+									(0, vue.createElementVNode)("p", null, [(0, vue.createVNode)(Badge_default, { code: (0, vue.unref)(settingLabel)(definition.key) }, null, 8, ["code"]), (0, vue.createTextVNode)((0, vue.toDisplayString)(definition.name), 1)]),
+									(0, vue.createElementVNode)("p", _hoisted_29, (0, vue.toDisplayString)(definition.groups.join("；")), 1),
+									(0, vue.createElementVNode)("p", _hoisted_30, (0, vue.toDisplayString)(storedDescription(definition)), 1)
+								]), (0, vue.createElementVNode)("button", {
+									type: "button",
+									class: "shrink-0 rounded-md border border-gray-300 px-3 py-1",
+									onClick: ($event) => beginEdit(definition)
+								}, " 修改 ", 8, _hoisted_31)])]);
+							}), 128)),
+							shownCount.value < filtered.value.length ? ((0, vue.openBlock)(), (0, vue.createElementBlock)("button", {
+								key: 1,
+								type: "button",
+								class: "mt-2 w-full rounded-md bg-gray-100 p-2",
+								onClick: _cache[14] || (_cache[14] = ($event) => shownCount.value += 40)
+							}, " 再显示 40 项 ")) : (0, vue.createCommentVNode)("", true)
+						])
+					], 32)) : (0, vue.createCommentVNode)("", true)]),
+					_: 1
+				}, 8, ["open-token", "onClose"])), [[vue.vShow, (0, vue.unref)(store).isShow]]);
 			};
 		}
 	});
@@ -14484,6 +15909,7 @@
 	});
 	var useQuickActions = () => {
 		const ruleStore = useRulePanelStore();
+		const configurationStore = useConfigurationPanelStore();
 		const videoStore = useVideoFilterPanelStore();
 		const commentStore = useCommentFilterPanelStore();
 		const dynamicStore = useDynamicFilterPanelStore();
@@ -14517,6 +15943,13 @@
 				isValid: true,
 				actionKey: "side-shortcut-settings",
 				run: () => shortcutStore.show()
+			},
+			{
+				text: "配置管理",
+				defaultHidden: true,
+				isValid: true,
+				actionKey: "side-configuration",
+				run: () => configurationStore.show()
 			},
 			{
 				text: "页面净化",
@@ -15104,82 +16537,6 @@
 			observedHeader: () => observedHeader
 		};
 	};
-	var SHORTCUT_PREFERENCE_KEY = "biliweb-shortcut-entry";
-	var SHORTCUT_PREFERENCE_DEFAULT = {
-		enabled: true,
-		location: "header"
-	};
-	var isRecord = (value) => Boolean(value) && typeof value === "object" && !Array.isArray(value);
-	var isLocation = (value) => value === "header" || value === "floating";
-	var normalizeShortcutPreference = (raw) => {
-		if (!isRecord(raw)) return { ...SHORTCUT_PREFERENCE_DEFAULT };
-		return {
-			enabled: typeof raw.enabled === "boolean" ? raw.enabled : SHORTCUT_PREFERENCE_DEFAULT.enabled,
-			location: isLocation(raw.location) ? raw.location : SHORTCUT_PREFERENCE_DEFAULT.location
-		};
-	};
-	var readShortcutPreference = () => {
-		return normalizeShortcutPreference(_GM_getValue(SHORTCUT_PREFERENCE_KEY));
-	};
-	var writeValidated = (value) => {
-		const next = normalizeShortcutPreference(value);
-		_GM_setValue(SHORTCUT_PREFERENCE_KEY, {
-			enabled: next.enabled,
-			location: next.location
-		});
-		return next;
-	};
-	var shared = null;
-	var listenerId;
-	var holders = 0;
-	var samePref = (a, b) => a.enabled === b.enabled && a.location === b.location;
-	var attachListener = () => {
-		if (listenerId != null) return;
-		listenerId = _GM_addValueChangeListener(SHORTCUT_PREFERENCE_KEY, (_name, _oldValue, newValue) => {
-			if (!shared) return;
-			const next = normalizeShortcutPreference(newValue);
-			if (samePref(shared.value, next)) return;
-			shared.value = next;
-		});
-	};
-	var detachListener = () => {
-		if (listenerId != null) {
-			_GM_removeValueChangeListener(listenerId);
-			listenerId = void 0;
-		}
-	};
-	var ensureState = () => {
-		if (!shared) shared = (0, vue.ref)(readShortcutPreference());
-		else if (holders === 0) shared.value = readShortcutPreference();
-		attachListener();
-		return shared;
-	};
-	var useShortcutPreference = () => {
-		const state = ensureState();
-		holders += 1;
-		if ((0, vue.getCurrentScope)()) (0, vue.onScopeDispose)(() => {
-			holders -= 1;
-			if (holders <= 0) {
-				holders = 0;
-				detachListener();
-			}
-		});
-		const apply = (patch) => {
-			const current = readShortcutPreference();
-			const next = writeValidated({
-				enabled: patch.enabled ?? current.enabled,
-				location: patch.location ?? current.location
-			});
-			state.value = next;
-			return next;
-		};
-		return {
-			state,
-			setEnabled: (enabled) => apply({ enabled }),
-			setLocation: (location) => apply({ location }),
-			setPreference: apply
-		};
-	};
 	var _hoisted_1$3 = {
 		class: "hidden",
 		"aria-hidden": "true"
@@ -15298,7 +16655,7 @@
 			const btnPos = useStorage("bili-cleaner-side-btn-pos", {
 				right: 10,
 				bottom: 180
-			}, localStorage);
+			}, deviceStorage);
 			const isDragging = (0, vue.ref)(false);
 			const windowSize = useWindowSize({ includeScrollbar: false });
 			const maxPos = (0, vue.computed)(() => {
@@ -15450,6 +16807,7 @@
 			return (_ctx, _cache) => {
 				return (0, vue.openBlock)(), (0, vue.createElementBlock)("div", _hoisted_1, [
 					(0, vue.createVNode)(RulePanelView_default),
+					(0, vue.createVNode)(ConfigurationPanelView_default),
 					(0, vue.createVNode)(VideoFilterPanelView_default),
 					(0, vue.createVNode)(CommentFilterPanelView_default),
 					(0, vue.createVNode)(DynamicFilterPanelView_default),
@@ -15490,7 +16848,7 @@
 		}
 	}).getInstance();
 	var loadSwitchItem = (item) => {
-		if (_GM_getValue(item.id, item.defaultEnable)) {
+		if (GM_getValue$1(item.id, item.defaultEnable)) {
 			if (!item.noStyle) document.documentElement.setAttribute(item.attrName ?? item.id, "");
 			if (item.enableFn) {
 				if (item.enableFnRunAt === "document-end" && document.readyState === "loading") document.addEventListener("DOMContentLoaded", () => {
@@ -15501,21 +16859,21 @@
 		}
 	};
 	var loadNumberItem = (item) => {
-		const value = _GM_getValue(item.id, item.defaultValue);
+		const value = GM_getValue$1(item.id, item.defaultValue);
 		if (value !== item.disableValue) {
 			if (!item.noStyle) document.documentElement.setAttribute(item.attrName ?? item.id, "");
 			item.fn(value)?.catch(() => {});
 		}
 	};
 	var loadStringItem = (item) => {
-		const value = _GM_getValue(item.id, item.defaultValue);
+		const value = GM_getValue$1(item.id, item.defaultValue);
 		if (value !== item.disableValue) {
 			if (!item.noStyle) document.documentElement.setAttribute(item.attrName ?? item.id, "");
 			item.fn(value)?.catch(() => {});
 		}
 	};
 	var loadListItem = (item) => {
-		const value = _GM_getValue(item.id, item.defaultValue);
+		const value = GM_getValue$1(item.id, item.defaultValue);
 		for (const option of item.options) if (option.value === value && option.fn) option.fn()?.catch(() => {});
 		if (value !== item.disableValue) document.documentElement.setAttribute(item.id, value);
 	};
@@ -15613,13 +16971,13 @@
 		watchRoute();
 		logger.info("loadFilters done");
 	};
-	var style_css_default = _style("/*! tailwindcss v4.3.3 | MIT License | https://tailwindcss.com */\n@layer properties{*,:before,:after,::backdrop{--tw-translate-x:0;--tw-translate-y:0;--tw-translate-z:0;--tw-rotate-x:initial;--tw-rotate-y:initial;--tw-rotate-z:initial;--tw-skew-x:initial;--tw-skew-y:initial;--tw-space-y-reverse:0;--tw-border-style:solid;--tw-leading:initial;--tw-font-weight:initial;--tw-shadow:0 0 #0000;--tw-shadow-color:initial;--tw-shadow-alpha:100%;--tw-inset-shadow:0 0 #0000;--tw-inset-shadow-color:initial;--tw-inset-shadow-alpha:100%;--tw-ring-color:initial;--tw-ring-shadow:0 0 #0000;--tw-inset-ring-color:initial;--tw-inset-ring-shadow:0 0 #0000;--tw-ring-inset:initial;--tw-ring-offset-width:0px;--tw-ring-offset-color:#fff;--tw-ring-offset-shadow:0 0 #0000;--tw-outline-style:solid;--tw-blur:initial;--tw-brightness:initial;--tw-contrast:initial;--tw-grayscale:initial;--tw-hue-rotate:initial;--tw-invert:initial;--tw-opacity:initial;--tw-saturate:initial;--tw-sepia:initial;--tw-drop-shadow:initial;--tw-drop-shadow-color:initial;--tw-drop-shadow-alpha:100%;--tw-drop-shadow-size:initial;--tw-duration:initial;--tw-ease:initial}}@layer theme{:host,:host{--font-sans:-apple-system, BlinkMacSystemFont, \"Segoe UI\", Roboto, \"Helvetica Neue\", \"Noto Sans\", Arial, sans-serif, \"Apple Color Emoji\", \"Segoe UI Emoji\", \"Segoe UI Symbol\", \"Noto Color Emoji\";--font-mono:ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, \"Liberation Mono\", \"Courier New\", monospace;--color-red-500:oklch(63.7% .237 25.331);--color-red-600:oklch(57.7% .245 27.325);--color-red-700:oklch(50.5% .213 27.518);--color-orange-900:oklch(40.8% .123 38.172);--color-amber-300:oklch(87.9% .169 91.605);--color-green-700:oklch(52.7% .154 150.069);--color-blue-50:oklch(97% .014 254.604);--color-blue-100:oklch(93.2% .032 255.585);--color-blue-200:oklch(88.2% .059 254.128);--color-blue-500:oklch(62.3% .214 259.815);--color-blue-600:oklch(54.6% .245 262.881);--color-blue-700:oklch(48.8% .243 264.376);--color-blue-800:oklch(42.4% .199 265.638);--color-blue-900:oklch(37.9% .146 265.522);--color-indigo-500:oklch(58.5% .233 277.117);--color-purple-100:oklch(94.6% .033 307.174);--color-purple-500:oklch(62.7% .265 303.9);--color-purple-600:oklch(55.8% .288 302.321);--color-purple-900:oklch(38.1% .176 304.987);--color-gray-50:oklch(98.5% .002 247.839);--color-gray-200:oklch(92.8% .006 264.531);--color-gray-300:oklch(87.2% .01 258.338);--color-gray-400:oklch(70.7% .022 261.325);--color-gray-500:oklch(55.1% .027 264.364);--color-gray-600:oklch(44.6% .03 256.802);--color-gray-700:oklch(37.3% .034 259.733);--color-gray-800:oklch(27.8% .033 256.848);--color-gray-900:oklch(21% .034 264.665);--color-black:#000;--color-white:#fff;--spacing:4px;--text-xs:12px;--text-xs--line-height:calc(1 / .75);--text-sm:14px;--text-sm--line-height:calc(1.25 / .875);--text-base:16px;--text-base--line-height:calc(1.5 / 1);--text-xl:20px;--text-xl--line-height:calc(1.75 / 1.25);--font-weight-normal:400;--font-weight-medium:500;--font-weight-bold:700;--font-weight-black:900;--radius-md:6px;--radius-lg:8px;--radius-xl:12px;--ease-in:cubic-bezier(.4, 0, 1, 1);--default-transition-duration:.15s;--default-transition-timing-function:cubic-bezier(.4, 0, .2, 1);--default-font-family:var(--font-sans);--default-mono-font-family:var(--font-mono)}}@layer base{*,:after,:before,::backdrop{box-sizing:border-box;border:0 solid;margin:0;padding:0}::file-selector-button{box-sizing:border-box;border:0 solid;margin:0;padding:0}html,:host{-webkit-text-size-adjust:100%;tab-size:4;line-height:1.5;font-family:var(--default-font-family,-apple-system, BlinkMacSystemFont, \"Segoe UI\", Roboto, \"Helvetica Neue\", \"Noto Sans\", Arial, sans-serif, \"Apple Color Emoji\", \"Segoe UI Emoji\", \"Segoe UI Symbol\", \"Noto Color Emoji\");font-feature-settings:var(--default-font-feature-settings,normal);font-variation-settings:var(--default-font-variation-settings,normal);-webkit-tap-highlight-color:transparent}hr{height:0;color:inherit;border-top-width:1px}abbr:where([title]){-webkit-text-decoration:underline dotted;text-decoration:underline dotted}h1,h2,h3,h4,h5,h6{font-size:inherit;font-weight:inherit}a{color:inherit;-webkit-text-decoration:inherit;-webkit-text-decoration:inherit;-webkit-text-decoration:inherit;-webkit-text-decoration:inherit;text-decoration:inherit}b,strong{font-weight:bolder}code,kbd,samp,pre{font-family:var(--default-mono-font-family,ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, \"Liberation Mono\", \"Courier New\", monospace);font-feature-settings:var(--default-mono-font-feature-settings,normal);font-variation-settings:var(--default-mono-font-variation-settings,normal);font-size:1em}small{font-size:80%}sub,sup{vertical-align:baseline;font-size:75%;line-height:0;position:relative}sub{bottom:-.25em}sup{top:-.5em}table{text-indent:0;border-color:inherit;border-collapse:collapse}:-moz-focusring:where(:not(iframe)){outline:auto}progress{vertical-align:baseline}summary{display:list-item}ol,ul,menu{list-style:none}img,svg,video,canvas,audio,iframe,embed,object{vertical-align:middle;display:block}img,video{max-width:100%;height:auto}button,input,select,optgroup,textarea{font:inherit;font-feature-settings:inherit;font-variation-settings:inherit;letter-spacing:inherit;color:inherit;opacity:1;background-color:#0000;border-radius:0}::file-selector-button{font:inherit;font-feature-settings:inherit;font-variation-settings:inherit;letter-spacing:inherit;color:inherit;opacity:1;background-color:#0000;border-radius:0}:where(select:is([multiple],[size])) optgroup{font-weight:bolder}:where(select:is([multiple],[size])) optgroup option{padding-inline-start:20px}::file-selector-button{margin-inline-end:4px}::placeholder{opacity:1}@supports (not ((-webkit-appearance:-apple-pay-button))) or (contain-intrinsic-size:1px){::placeholder{color:currentColor}@supports (color:color-mix(in lab, red, red)){::placeholder{color:color-mix(in oklab, currentcolor 50%, transparent)}}}textarea{resize:vertical}::-webkit-search-decoration{-webkit-appearance:none}::-webkit-date-and-time-value{min-height:1lh;text-align:inherit}::-webkit-datetime-edit{display:inline-flex}::-webkit-datetime-edit-fields-wrapper{padding:0}::-webkit-datetime-edit{padding-block:0}::-webkit-datetime-edit-year-field{padding-block:0}::-webkit-datetime-edit-month-field{padding-block:0}::-webkit-datetime-edit-day-field{padding-block:0}::-webkit-datetime-edit-hour-field{padding-block:0}::-webkit-datetime-edit-minute-field{padding-block:0}::-webkit-datetime-edit-second-field{padding-block:0}::-webkit-datetime-edit-millisecond-field{padding-block:0}::-webkit-datetime-edit-meridiem-field{padding-block:0}::-webkit-calendar-picker-indicator{line-height:1}:-moz-ui-invalid{box-shadow:none}button,input:where([type=button],[type=reset],[type=submit]){appearance:button}::file-selector-button{appearance:button}::-webkit-inner-spin-button{height:auto}::-webkit-outer-spin-button{height:auto}[hidden]:where(:not([hidden=until-found])){display:none!important}:host{font-family:PingFang SC,HarmonyOS_Regular,Helvetica Neue,Microsoft YaHei,sans-serif!important}input[type=number]::-webkit-inner-spin-button{appearance:none;margin:0}input[type=number]::-webkit-outer-spin-button{appearance:none;margin:0}input[type=number]{-moz-appearance:textfield}}@layer components;@layer utilities{.pointer-events-none{pointer-events:none}.collapse{visibility:collapse}.visible{visibility:visible}.absolute{position:absolute}.fixed{position:fixed}.relative{position:relative}.static{position:static}.sticky{position:sticky}.inset-y-0{inset-block:0}.-top-1{top:calc(var(--spacing) * -1)}.top-0{top:0}.top-1\\.5{top:calc(var(--spacing) * 1.5)}.right-0{right:0}.right-10{right:calc(var(--spacing) * 10)}.-left-1{left:calc(var(--spacing) * -1)}.left-0{left:0}.z-10{z-index:10}.z-100{z-index:100}.z-2000{z-index:2000}.z-100000{z-index:100000}.z-10000000{z-index:10000000}.container{width:100%}@media (width>=40rem){.container{max-width:640px}}@media (width>=48rem){.container{max-width:768px}}@media (width>=64rem){.container{max-width:1024px}}@media (width>=80rem){.container{max-width:1280px}}@media (width>=96rem){.container{max-width:1536px}}.m-0\\.5{margin:calc(var(--spacing) * .5)}.m-1{margin:var(--spacing)}.mx-2{margin-inline:calc(var(--spacing) * 2)}.mx-auto{margin-inline:auto}.my-1{margin-block:var(--spacing)}.my-2{margin-block:calc(var(--spacing) * 2)}.mt-1{margin-top:var(--spacing)}.mt-2{margin-top:calc(var(--spacing) * 2)}.mr-0\\.5{margin-right:calc(var(--spacing) * .5)}.mr-1{margin-right:var(--spacing)}.mb-0\\.5{margin-bottom:calc(var(--spacing) * .5)}.mb-1{margin-bottom:var(--spacing)}.mb-1\\.5{margin-bottom:calc(var(--spacing) * 1.5)}.mb-2{margin-bottom:calc(var(--spacing) * 2)}.mb-3{margin-bottom:calc(var(--spacing) * 3)}.ml-2{margin-left:calc(var(--spacing) * 2)}.ml-4{margin-left:calc(var(--spacing) * 4)}.ml-auto{margin-left:auto}.block{display:block}.contents{display:contents}.flex{display:flex}.grid{display:grid}.hidden{display:none}.inline{display:inline}.inline-block{display:inline-block}.inline-flex{display:inline-flex}.table{display:table}.size-8{width:calc(var(--spacing) * 8);height:calc(var(--spacing) * 8)}.h-4{height:calc(var(--spacing) * 4)}.h-5{height:calc(var(--spacing) * 5)}.h-6{height:calc(var(--spacing) * 6)}.h-10{height:calc(var(--spacing) * 10)}.h-fit{height:fit-content}.max-h-60{max-height:calc(var(--spacing) * 60)}.min-h-\\[calc\\(100\\%-2\\.5rem\\)\\]{min-height:calc(100% - 40px)}.w-1\\/5{width:20%}.w-2\\/5{width:40%}.w-4{width:calc(var(--spacing) * 4)}.w-5{width:calc(var(--spacing) * 5)}.w-6{width:calc(var(--spacing) * 6)}.w-10{width:calc(var(--spacing) * 10)}.w-11{width:calc(var(--spacing) * 11)}.w-full{width:100%}.min-w-0{min-width:0}.flex-1{flex:1}.shrink-0{flex-shrink:0}.translate-x-1{--tw-translate-x:var(--spacing);translate:var(--tw-translate-x) var(--tw-translate-y)}.translate-x-6{--tw-translate-x:calc(var(--spacing) * 6);translate:var(--tw-translate-x) var(--tw-translate-y)}.rotate-90{rotate:90deg}.rotate-180{rotate:180deg}.transform{transform:var(--tw-rotate-x,) var(--tw-rotate-y,) var(--tw-rotate-z,) var(--tw-skew-x,) var(--tw-skew-y,)}.cursor-default{cursor:default}.cursor-move{cursor:move}.cursor-pointer{cursor:pointer}.resize{resize:both}.resize-none{resize:none}.grid-cols-\\[4\\.5rem_minmax\\(0\\,1fr\\)\\]{grid-template-columns:72px minmax(0,1fr)}.grid-cols-\\[auto_minmax\\(0\\,1fr\\)\\]{grid-template-columns:auto minmax(0,1fr)}.flex-col{flex-direction:column}.flex-row{flex-direction:row}.flex-wrap{flex-wrap:wrap}.items-center{align-items:center}.justify-between{justify-content:space-between}.justify-center{justify-content:center}.justify-end{justify-content:flex-end}.gap-2{gap:calc(var(--spacing) * 2)}.gap-3{gap:calc(var(--spacing) * 3)}:where(.space-y-3>:not(:last-child)){--tw-space-y-reverse:0;margin-block-start:calc(calc(var(--spacing) * 3) * var(--tw-space-y-reverse));margin-block-end:calc(calc(var(--spacing) * 3) * calc(1 - var(--tw-space-y-reverse)))}.gap-x-3{column-gap:calc(var(--spacing) * 3)}.gap-y-2{row-gap:calc(var(--spacing) * 2)}.self-center{align-self:center}.truncate{text-overflow:ellipsis;white-space:nowrap;overflow:hidden}.overflow-auto{overflow:auto}.overflow-hidden{overflow:hidden}.overscroll-none{overscroll-behavior:none}.rounded{border-radius:4px}.rounded-full{border-radius:2147483647px}.rounded-lg{border-radius:var(--radius-lg)}.rounded-md{border-radius:var(--radius-md)}.rounded-xl{border-radius:var(--radius-xl)}.border{border-style:var(--tw-border-style);border-width:1px}.border-0{border-style:var(--tw-border-style);border-width:0}.border-2{border-style:var(--tw-border-style);border-width:2px}.border-\\[\\#2f3134\\]{border-color:#2f3134}.border-blue-200{border-color:var(--color-blue-200)}.border-blue-600{border-color:var(--color-blue-600)}.border-gray-200{border-color:var(--color-gray-200)}.border-gray-300{border-color:var(--color-gray-300)}.border-gray-400{border-color:var(--color-gray-400)}.border-red-600{border-color:var(--color-red-600)}.bg-\\[\\#00AEEC\\]{background-color:#00aeec}.bg-\\[\\#242628\\]{background-color:#242628}.bg-amber-300{background-color:var(--color-amber-300)}.bg-blue-50{background-color:var(--color-blue-50)}.bg-blue-100\\/60{background-color:#dbeafe99}@supports (color:color-mix(in lab, red, red)){.bg-blue-100\\/60{background-color:color-mix(in oklab, var(--color-blue-100) 60%, transparent)}}.bg-blue-600{background-color:var(--color-blue-600)}.bg-gray-50{background-color:var(--color-gray-50)}.bg-gray-200{background-color:var(--color-gray-200)}.bg-purple-100{background-color:var(--color-purple-100)}.bg-purple-100\\/60{background-color:#f3e8ff99}@supports (color:color-mix(in lab, red, red)){.bg-purple-100\\/60{background-color:color-mix(in oklab, var(--color-purple-100) 60%, transparent)}}.bg-transparent{background-color:#0000}.bg-white{background-color:var(--color-white)}.p-0{padding:0}.p-1{padding:var(--spacing)}.p-1\\.5{padding:calc(var(--spacing) * 1.5)}.p-2{padding:calc(var(--spacing) * 2)}.p-4{padding:calc(var(--spacing) * 4)}.px-0\\.5{padding-inline:calc(var(--spacing) * .5)}.px-1{padding-inline:var(--spacing)}.px-2{padding-inline:calc(var(--spacing) * 2)}.px-2\\.5{padding-inline:calc(var(--spacing) * 2.5)}.px-3{padding-inline:calc(var(--spacing) * 3)}.px-4{padding-inline:calc(var(--spacing) * 4)}.py-1{padding-block:var(--spacing)}.py-1\\.5{padding-block:calc(var(--spacing) * 1.5)}.py-2{padding-block:calc(var(--spacing) * 2)}.py-px{padding-block:1px}.pt-1{padding-top:var(--spacing)}.pt-2{padding-top:calc(var(--spacing) * 2)}.pr-2{padding-right:calc(var(--spacing) * 2)}.pr-4{padding-right:calc(var(--spacing) * 4)}.pl-1{padding-left:var(--spacing)}.pl-3{padding-left:calc(var(--spacing) * 3)}.pl-9{padding-left:calc(var(--spacing) * 9)}.pl-10{padding-left:calc(var(--spacing) * 10)}.text-center{text-align:center}.text-left{text-align:left}.text-right{text-align:right}.align-middle{vertical-align:middle}.font-mono{font-family:var(--font-mono)}.text-base{font-size:var(--text-base);line-height:var(--tw-leading,var(--text-base--line-height))}.text-sm{font-size:var(--text-sm);line-height:var(--tw-leading,var(--text-sm--line-height))}.text-xl{font-size:var(--text-xl);line-height:var(--tw-leading,var(--text-xl--line-height))}.text-xs{font-size:var(--text-xs);line-height:var(--tw-leading,var(--text-xs--line-height))}.text-\\[9px\\]{font-size:9px}.text-\\[11px\\]{font-size:11px}.text-\\[12px\\]{font-size:12px}.text-\\[13px\\]{font-size:13px}.text-\\[15px\\]{font-size:15px}.leading-4{--tw-leading:calc(var(--spacing) * 4);line-height:calc(var(--spacing) * 4)}.leading-5{--tw-leading:calc(var(--spacing) * 5);line-height:calc(var(--spacing) * 5)}.leading-6{--tw-leading:calc(var(--spacing) * 6);line-height:calc(var(--spacing) * 6)}.leading-\\[12px\\]{--tw-leading:12px;line-height:12px}.font-black{--tw-font-weight:var(--font-weight-black);font-weight:var(--font-weight-black)}.font-bold{--tw-font-weight:var(--font-weight-bold);font-weight:var(--font-weight-bold)}.font-medium{--tw-font-weight:var(--font-weight-medium);font-weight:var(--font-weight-medium)}.font-normal{--tw-font-weight:var(--font-weight-normal);font-weight:var(--font-weight-normal)}.whitespace-nowrap{white-space:nowrap}.text-black{color:var(--color-black)}.text-black\\/50{color:#00000080}@supports (color:color-mix(in lab, red, red)){.text-black\\/50{color:color-mix(in oklab, var(--color-black) 50%, transparent)}}.text-blue-500{color:var(--color-blue-500)}.text-blue-700{color:var(--color-blue-700)}.text-blue-800{color:var(--color-blue-800)}.text-blue-900{color:var(--color-blue-900)}.text-gray-400{color:var(--color-gray-400)}.text-gray-500{color:var(--color-gray-500)}.text-gray-600{color:var(--color-gray-600)}.text-gray-700{color:var(--color-gray-700)}.text-gray-800{color:var(--color-gray-800)}.text-gray-900{color:var(--color-gray-900)}.text-green-700{color:var(--color-green-700)}.text-orange-900{color:var(--color-orange-900)}.text-purple-500{color:var(--color-purple-500)}.text-purple-600{color:var(--color-purple-600)}.text-purple-900{color:var(--color-purple-900)}.text-red-700{color:var(--color-red-700)}.text-white{color:var(--color-white)}.text-white\\/50{color:#ffffff80}@supports (color:color-mix(in lab, red, red)){.text-white\\/50{color:color-mix(in oklab, var(--color-white) 50%, transparent)}}.accent-\\[\\#00AEEC\\]{accent-color:#00aeec}.opacity-0{opacity:0}.opacity-100{opacity:1}.shadow{--tw-shadow:0 1px 3px 0 var(--tw-shadow-color,#0000001a), 0 1px 2px -1px var(--tw-shadow-color,#0000001a);box-shadow:var(--tw-inset-shadow), var(--tw-inset-ring-shadow), var(--tw-ring-offset-shadow), var(--tw-ring-shadow), var(--tw-shadow)}.shadow-lg{--tw-shadow:0 10px 15px -3px var(--tw-shadow-color,#0000001a), 0 4px 6px -4px var(--tw-shadow-color,#0000001a);box-shadow:var(--tw-inset-shadow), var(--tw-inset-ring-shadow), var(--tw-ring-offset-shadow), var(--tw-ring-shadow), var(--tw-shadow)}.ring-1{--tw-ring-shadow:var(--tw-ring-inset,) 0 0 0 calc(1px + var(--tw-ring-offset-width)) var(--tw-ring-color,currentcolor);box-shadow:var(--tw-inset-shadow), var(--tw-inset-ring-shadow), var(--tw-ring-offset-shadow), var(--tw-ring-shadow), var(--tw-shadow)}.shadow-black\\/20{--tw-shadow-color:#0003}@supports (color:color-mix(in lab, red, red)){.shadow-black\\/20{--tw-shadow-color:color-mix(in oklab, color-mix(in oklab, var(--color-black) 20%, transparent) var(--tw-shadow-alpha), transparent)}}.ring-black\\/5{--tw-ring-color:#0000000d}@supports (color:color-mix(in lab, red, red)){.ring-black\\/5{--tw-ring-color:color-mix(in oklab, var(--color-black) 5%, transparent)}}.outline-hidden{--tw-outline-style:none;outline-style:none}@media (forced-colors:active){.outline-hidden{outline-offset:2px;outline:2px solid #0000}}.outline{outline-style:var(--tw-outline-style);outline-width:1px}.filter{filter:var(--tw-blur,) var(--tw-brightness,) var(--tw-contrast,) var(--tw-grayscale,) var(--tw-hue-rotate,) var(--tw-invert,) var(--tw-saturate,) var(--tw-sepia,) var(--tw-drop-shadow,)}.transition{transition-property:color,background-color,border-color,outline-color,text-decoration-color,fill,stroke,--tw-gradient-from,--tw-gradient-via,--tw-gradient-to,opacity,box-shadow,transform,translate,scale,rotate,filter,-webkit-backdrop-filter,backdrop-filter,display,content-visibility,overlay,pointer-events;transition-timing-function:var(--tw-ease,var(--default-transition-timing-function));transition-duration:var(--tw-duration,var(--default-transition-duration))}.transition-colors{transition-property:color,background-color,border-color,outline-color,text-decoration-color,fill,stroke,--tw-gradient-from,--tw-gradient-via,--tw-gradient-to;transition-timing-function:var(--tw-ease,var(--default-transition-timing-function));transition-duration:var(--tw-duration,var(--default-transition-duration))}.transition-transform{transition-property:transform,translate,scale,rotate;transition-timing-function:var(--tw-ease,var(--default-transition-timing-function));transition-duration:var(--tw-duration,var(--default-transition-duration))}.duration-100{--tw-duration:.1s;transition-duration:.1s}.duration-200{--tw-duration:.2s;transition-duration:.2s}.ease-in{--tw-ease:var(--ease-in);transition-timing-function:var(--ease-in)}.will-change-\\[right\\,bottom\\]{will-change:right,bottom}.will-change-\\[top\\,left\\]{will-change:top,left}.select-none{-webkit-user-select:none;user-select:none}@media (hover:hover){.group-hover\\:flex:is(:where(.group):hover *){display:flex}}.invalid\\:border-2:invalid{border-style:var(--tw-border-style);border-width:2px}.invalid\\:border-red-500:invalid{border-color:var(--color-red-500)}@media (hover:hover){.hover\\:rounded-full:hover{border-radius:2147483647px}.hover\\:border-none:hover{--tw-border-style:none;border-style:none}.hover\\:bg-\\[\\#00AEEC\\]:hover,.hover\\:bg-\\[\\#00aeec\\]:hover{background-color:#00aeec}.hover\\:bg-blue-50\\/50:hover{background-color:#eff6ff80}@supports (color:color-mix(in lab, red, red)){.hover\\:bg-blue-50\\/50:hover{background-color:color-mix(in oklab, var(--color-blue-50) 50%, transparent)}}.hover\\:bg-blue-100:hover{background-color:var(--color-blue-100)}.hover\\:bg-purple-100:hover{background-color:var(--color-purple-100)}.hover\\:bg-white\\/40:hover{background-color:#fff6}@supports (color:color-mix(in lab, red, red)){.hover\\:bg-white\\/40:hover{background-color:color-mix(in oklab, var(--color-white) 40%, transparent)}}.hover\\:text-black:hover{color:var(--color-black)}.hover\\:text-white:hover{color:var(--color-white)}}.focus\\:border-gray-400:focus{border-color:var(--color-gray-400)}.focus\\:border-gray-500:focus{border-color:var(--color-gray-500)}.focus\\:outline-hidden:focus{--tw-outline-style:none;outline-style:none}@media (forced-colors:active){.focus\\:outline-hidden:focus{outline-offset:2px;outline:2px solid #0000}}.focus\\:invalid\\:border-red-500:focus:invalid{border-color:var(--color-red-500)}.focus-visible\\:border-indigo-500:focus-visible{border-color:var(--color-indigo-500)}.disabled\\:opacity-50:disabled{opacity:.5}@media (width>=40rem){.sm\\:text-sm{font-size:var(--text-sm);line-height:var(--tw-leading,var(--text-sm--line-height))}}}.no-scrollbar::-webkit-scrollbar{display:none}.no-scrollbar{-ms-overflow-style:none;scrollbar-width:none}@property --tw-translate-x{syntax:\"*\";inherits:false;initial-value:0}@property --tw-translate-y{syntax:\"*\";inherits:false;initial-value:0}@property --tw-translate-z{syntax:\"*\";inherits:false;initial-value:0}@property --tw-rotate-x{syntax:\"*\";inherits:false}@property --tw-rotate-y{syntax:\"*\";inherits:false}@property --tw-rotate-z{syntax:\"*\";inherits:false}@property --tw-skew-x{syntax:\"*\";inherits:false}@property --tw-skew-y{syntax:\"*\";inherits:false}@property --tw-space-y-reverse{syntax:\"*\";inherits:false;initial-value:0}@property --tw-border-style{syntax:\"*\";inherits:false;initial-value:solid}@property --tw-leading{syntax:\"*\";inherits:false}@property --tw-font-weight{syntax:\"*\";inherits:false}@property --tw-shadow{syntax:\"*\";inherits:false;initial-value:0 0 #0000}@property --tw-shadow-color{syntax:\"*\";inherits:false}@property --tw-shadow-alpha{syntax:\"<percentage>\";inherits:false;initial-value:100%}@property --tw-inset-shadow{syntax:\"*\";inherits:false;initial-value:0 0 #0000}@property --tw-inset-shadow-color{syntax:\"*\";inherits:false}@property --tw-inset-shadow-alpha{syntax:\"<percentage>\";inherits:false;initial-value:100%}@property --tw-ring-color{syntax:\"*\";inherits:false}@property --tw-ring-shadow{syntax:\"*\";inherits:false;initial-value:0 0 #0000}@property --tw-inset-ring-color{syntax:\"*\";inherits:false}@property --tw-inset-ring-shadow{syntax:\"*\";inherits:false;initial-value:0 0 #0000}@property --tw-ring-inset{syntax:\"*\";inherits:false}@property --tw-ring-offset-width{syntax:\"<length>\";inherits:false;initial-value:0}@property --tw-ring-offset-color{syntax:\"*\";inherits:false;initial-value:#fff}@property --tw-ring-offset-shadow{syntax:\"*\";inherits:false;initial-value:0 0 #0000}@property --tw-outline-style{syntax:\"*\";inherits:false;initial-value:solid}@property --tw-blur{syntax:\"*\";inherits:false}@property --tw-brightness{syntax:\"*\";inherits:false}@property --tw-contrast{syntax:\"*\";inherits:false}@property --tw-grayscale{syntax:\"*\";inherits:false}@property --tw-hue-rotate{syntax:\"*\";inherits:false}@property --tw-invert{syntax:\"*\";inherits:false}@property --tw-opacity{syntax:\"*\";inherits:false}@property --tw-saturate{syntax:\"*\";inherits:false}@property --tw-sepia{syntax:\"*\";inherits:false}@property --tw-drop-shadow{syntax:\"*\";inherits:false}@property --tw-drop-shadow-color{syntax:\"*\";inherits:false}@property --tw-drop-shadow-alpha{syntax:\"<percentage>\";inherits:false;initial-value:100%}@property --tw-drop-shadow-size{syntax:\"*\";inherits:false}@property --tw-duration{syntax:\"*\";inherits:false}@property --tw-ease{syntax:\"*\";inherits:false}");
+	var style_css_default = _style("/*! tailwindcss v4.3.3 | MIT License | https://tailwindcss.com */\n@layer properties{*,:before,:after,::backdrop{--tw-translate-x:0;--tw-translate-y:0;--tw-translate-z:0;--tw-rotate-x:initial;--tw-rotate-y:initial;--tw-rotate-z:initial;--tw-skew-x:initial;--tw-skew-y:initial;--tw-space-y-reverse:0;--tw-border-style:solid;--tw-leading:initial;--tw-font-weight:initial;--tw-shadow:0 0 #0000;--tw-shadow-color:initial;--tw-shadow-alpha:100%;--tw-inset-shadow:0 0 #0000;--tw-inset-shadow-color:initial;--tw-inset-shadow-alpha:100%;--tw-ring-color:initial;--tw-ring-shadow:0 0 #0000;--tw-inset-ring-color:initial;--tw-inset-ring-shadow:0 0 #0000;--tw-ring-inset:initial;--tw-ring-offset-width:0px;--tw-ring-offset-color:#fff;--tw-ring-offset-shadow:0 0 #0000;--tw-outline-style:solid;--tw-blur:initial;--tw-brightness:initial;--tw-contrast:initial;--tw-grayscale:initial;--tw-hue-rotate:initial;--tw-invert:initial;--tw-opacity:initial;--tw-saturate:initial;--tw-sepia:initial;--tw-drop-shadow:initial;--tw-drop-shadow-color:initial;--tw-drop-shadow-alpha:100%;--tw-drop-shadow-size:initial;--tw-duration:initial;--tw-ease:initial}}@layer theme{:host,:host{--font-sans:-apple-system, BlinkMacSystemFont, \"Segoe UI\", Roboto, \"Helvetica Neue\", \"Noto Sans\", Arial, sans-serif, \"Apple Color Emoji\", \"Segoe UI Emoji\", \"Segoe UI Symbol\", \"Noto Color Emoji\";--font-mono:ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, \"Liberation Mono\", \"Courier New\", monospace;--color-red-500:oklch(63.7% .237 25.331);--color-red-600:oklch(57.7% .245 27.325);--color-red-700:oklch(50.5% .213 27.518);--color-orange-900:oklch(40.8% .123 38.172);--color-amber-300:oklch(87.9% .169 91.605);--color-amber-700:oklch(55.5% .163 48.998);--color-green-700:oklch(52.7% .154 150.069);--color-blue-50:oklch(97% .014 254.604);--color-blue-100:oklch(93.2% .032 255.585);--color-blue-300:oklch(80.9% .105 251.813);--color-blue-500:oklch(62.3% .214 259.815);--color-blue-900:oklch(37.9% .146 265.522);--color-indigo-500:oklch(58.5% .233 277.117);--color-purple-100:oklch(94.6% .033 307.174);--color-purple-500:oklch(62.7% .265 303.9);--color-purple-600:oklch(55.8% .288 302.321);--color-purple-900:oklch(38.1% .176 304.987);--color-gray-50:oklch(98.5% .002 247.839);--color-gray-100:oklch(96.7% .003 264.542);--color-gray-200:oklch(92.8% .006 264.531);--color-gray-300:oklch(87.2% .01 258.338);--color-gray-400:oklch(70.7% .022 261.325);--color-gray-500:oklch(55.1% .027 264.364);--color-gray-600:oklch(44.6% .03 256.802);--color-gray-700:oklch(37.3% .034 259.733);--color-gray-800:oklch(27.8% .033 256.848);--color-gray-900:oklch(21% .034 264.665);--color-black:#000;--color-white:#fff;--spacing:4px;--text-xs:12px;--text-xs--line-height:calc(1 / .75);--text-sm:14px;--text-sm--line-height:calc(1.25 / .875);--text-base:16px;--text-base--line-height:calc(1.5 / 1);--text-xl:20px;--text-xl--line-height:calc(1.75 / 1.25);--font-weight-normal:400;--font-weight-medium:500;--font-weight-bold:700;--font-weight-black:900;--radius-md:6px;--radius-lg:8px;--radius-xl:12px;--ease-in:cubic-bezier(.4, 0, 1, 1);--default-transition-duration:.15s;--default-transition-timing-function:cubic-bezier(.4, 0, .2, 1);--default-font-family:var(--font-sans);--default-mono-font-family:var(--font-mono)}}@layer base{*,:after,:before,::backdrop{box-sizing:border-box;border:0 solid;margin:0;padding:0}::file-selector-button{box-sizing:border-box;border:0 solid;margin:0;padding:0}html,:host{-webkit-text-size-adjust:100%;tab-size:4;line-height:1.5;font-family:var(--default-font-family,-apple-system, BlinkMacSystemFont, \"Segoe UI\", Roboto, \"Helvetica Neue\", \"Noto Sans\", Arial, sans-serif, \"Apple Color Emoji\", \"Segoe UI Emoji\", \"Segoe UI Symbol\", \"Noto Color Emoji\");font-feature-settings:var(--default-font-feature-settings,normal);font-variation-settings:var(--default-font-variation-settings,normal);-webkit-tap-highlight-color:transparent}hr{height:0;color:inherit;border-top-width:1px}abbr:where([title]){-webkit-text-decoration:underline dotted;text-decoration:underline dotted}h1,h2,h3,h4,h5,h6{font-size:inherit;font-weight:inherit}a{color:inherit;-webkit-text-decoration:inherit;-webkit-text-decoration:inherit;-webkit-text-decoration:inherit;-webkit-text-decoration:inherit;text-decoration:inherit}b,strong{font-weight:bolder}code,kbd,samp,pre{font-family:var(--default-mono-font-family,ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, \"Liberation Mono\", \"Courier New\", monospace);font-feature-settings:var(--default-mono-font-feature-settings,normal);font-variation-settings:var(--default-mono-font-variation-settings,normal);font-size:1em}small{font-size:80%}sub,sup{vertical-align:baseline;font-size:75%;line-height:0;position:relative}sub{bottom:-.25em}sup{top:-.5em}table{text-indent:0;border-color:inherit;border-collapse:collapse}:-moz-focusring:where(:not(iframe)){outline:auto}progress{vertical-align:baseline}summary{display:list-item}ol,ul,menu{list-style:none}img,svg,video,canvas,audio,iframe,embed,object{vertical-align:middle;display:block}img,video{max-width:100%;height:auto}button,input,select,optgroup,textarea{font:inherit;font-feature-settings:inherit;font-variation-settings:inherit;letter-spacing:inherit;color:inherit;opacity:1;background-color:#0000;border-radius:0}::file-selector-button{font:inherit;font-feature-settings:inherit;font-variation-settings:inherit;letter-spacing:inherit;color:inherit;opacity:1;background-color:#0000;border-radius:0}:where(select:is([multiple],[size])) optgroup{font-weight:bolder}:where(select:is([multiple],[size])) optgroup option{padding-inline-start:20px}::file-selector-button{margin-inline-end:4px}::placeholder{opacity:1}@supports (not ((-webkit-appearance:-apple-pay-button))) or (contain-intrinsic-size:1px){::placeholder{color:currentColor}@supports (color:color-mix(in lab, red, red)){::placeholder{color:color-mix(in oklab, currentcolor 50%, transparent)}}}textarea{resize:vertical}::-webkit-search-decoration{-webkit-appearance:none}::-webkit-date-and-time-value{min-height:1lh;text-align:inherit}::-webkit-datetime-edit{display:inline-flex}::-webkit-datetime-edit-fields-wrapper{padding:0}::-webkit-datetime-edit{padding-block:0}::-webkit-datetime-edit-year-field{padding-block:0}::-webkit-datetime-edit-month-field{padding-block:0}::-webkit-datetime-edit-day-field{padding-block:0}::-webkit-datetime-edit-hour-field{padding-block:0}::-webkit-datetime-edit-minute-field{padding-block:0}::-webkit-datetime-edit-second-field{padding-block:0}::-webkit-datetime-edit-millisecond-field{padding-block:0}::-webkit-datetime-edit-meridiem-field{padding-block:0}::-webkit-calendar-picker-indicator{line-height:1}:-moz-ui-invalid{box-shadow:none}button,input:where([type=button],[type=reset],[type=submit]){appearance:button}::file-selector-button{appearance:button}::-webkit-inner-spin-button{height:auto}::-webkit-outer-spin-button{height:auto}[hidden]:where(:not([hidden=until-found])){display:none!important}:host{font-family:PingFang SC,HarmonyOS_Regular,Helvetica Neue,Microsoft YaHei,sans-serif!important}input[type=number]::-webkit-inner-spin-button{appearance:none;margin:0}input[type=number]::-webkit-outer-spin-button{appearance:none;margin:0}input[type=number]{-moz-appearance:textfield}}@layer components;@layer utilities{.pointer-events-none{pointer-events:none}.collapse{visibility:collapse}.visible{visibility:visible}.absolute{position:absolute}.fixed{position:fixed}.relative{position:relative}.static{position:static}.sticky{position:sticky}.inset-y-0{inset-block:0}.-top-1{top:calc(var(--spacing) * -1)}.top-0{top:0}.top-1\\.5{top:calc(var(--spacing) * 1.5)}.right-0{right:0}.right-10{right:calc(var(--spacing) * 10)}.-left-1{left:calc(var(--spacing) * -1)}.left-0{left:0}.z-10{z-index:10}.z-100{z-index:100}.z-2000{z-index:2000}.z-100000{z-index:100000}.z-10000000{z-index:10000000}.container{width:100%}@media (width>=40rem){.container{max-width:640px}}@media (width>=48rem){.container{max-width:768px}}@media (width>=64rem){.container{max-width:1024px}}@media (width>=80rem){.container{max-width:1280px}}@media (width>=96rem){.container{max-width:1536px}}.m-0\\.5{margin:calc(var(--spacing) * .5)}.m-1{margin:var(--spacing)}.mx-2{margin-inline:calc(var(--spacing) * 2)}.mx-auto{margin-inline:auto}.my-1{margin-block:var(--spacing)}.my-2{margin-block:calc(var(--spacing) * 2)}.my-3{margin-block:calc(var(--spacing) * 3)}.mt-1{margin-top:var(--spacing)}.mt-2{margin-top:calc(var(--spacing) * 2)}.mt-3{margin-top:calc(var(--spacing) * 3)}.mr-0\\.5{margin-right:calc(var(--spacing) * .5)}.mr-1{margin-right:var(--spacing)}.mr-2{margin-right:calc(var(--spacing) * 2)}.mr-4{margin-right:calc(var(--spacing) * 4)}.mb-0\\.5{margin-bottom:calc(var(--spacing) * .5)}.mb-1{margin-bottom:var(--spacing)}.mb-1\\.5{margin-bottom:calc(var(--spacing) * 1.5)}.mb-2{margin-bottom:calc(var(--spacing) * 2)}.mb-3{margin-bottom:calc(var(--spacing) * 3)}.ml-2{margin-left:calc(var(--spacing) * 2)}.ml-4{margin-left:calc(var(--spacing) * 4)}.ml-auto{margin-left:auto}.block{display:block}.contents{display:contents}.flex{display:flex}.grid{display:grid}.hidden{display:none}.inline{display:inline}.inline-block{display:inline-block}.inline-flex{display:inline-flex}.table{display:table}.size-8{width:calc(var(--spacing) * 8);height:calc(var(--spacing) * 8)}.h-4{height:calc(var(--spacing) * 4)}.h-5{height:calc(var(--spacing) * 5)}.h-6{height:calc(var(--spacing) * 6)}.h-10{height:calc(var(--spacing) * 10)}.h-fit{height:fit-content}.max-h-44{max-height:calc(var(--spacing) * 44)}.max-h-60{max-height:calc(var(--spacing) * 60)}.min-h-32{min-height:calc(var(--spacing) * 32)}.min-h-\\[calc\\(100\\%-2\\.5rem\\)\\]{min-height:calc(100% - 40px)}.w-1\\/5{width:20%}.w-2\\/5{width:40%}.w-4{width:calc(var(--spacing) * 4)}.w-5{width:calc(var(--spacing) * 5)}.w-6{width:calc(var(--spacing) * 6)}.w-10{width:calc(var(--spacing) * 10)}.w-11{width:calc(var(--spacing) * 11)}.w-full{width:100%}.min-w-0{min-width:0}.min-w-40{min-width:calc(var(--spacing) * 40)}.flex-1{flex:1}.shrink-0{flex-shrink:0}.translate-x-1{--tw-translate-x:var(--spacing);translate:var(--tw-translate-x) var(--tw-translate-y)}.translate-x-6{--tw-translate-x:calc(var(--spacing) * 6);translate:var(--tw-translate-x) var(--tw-translate-y)}.rotate-90{rotate:90deg}.rotate-180{rotate:180deg}.transform{transform:var(--tw-rotate-x,) var(--tw-rotate-y,) var(--tw-rotate-z,) var(--tw-skew-x,) var(--tw-skew-y,)}.cursor-default{cursor:default}.cursor-move{cursor:move}.cursor-pointer{cursor:pointer}.resize{resize:both}.resize-none{resize:none}.resize-y{resize:vertical}.grid-cols-\\[4\\.5rem_minmax\\(0\\,1fr\\)\\]{grid-template-columns:72px minmax(0,1fr)}.grid-cols-\\[auto_minmax\\(0\\,1fr\\)\\]{grid-template-columns:auto minmax(0,1fr)}.flex-col{flex-direction:column}.flex-row{flex-direction:row}.flex-wrap{flex-wrap:wrap}.items-center{align-items:center}.items-start{align-items:flex-start}.justify-between{justify-content:space-between}.justify-center{justify-content:center}.justify-end{justify-content:flex-end}.gap-2{gap:calc(var(--spacing) * 2)}.gap-3{gap:calc(var(--spacing) * 3)}:where(.space-y-3>:not(:last-child)){--tw-space-y-reverse:0;margin-block-start:calc(calc(var(--spacing) * 3) * var(--tw-space-y-reverse));margin-block-end:calc(calc(var(--spacing) * 3) * calc(1 - var(--tw-space-y-reverse)))}.gap-x-3{column-gap:calc(var(--spacing) * 3)}.gap-y-2{row-gap:calc(var(--spacing) * 2)}.self-center{align-self:center}.truncate{text-overflow:ellipsis;white-space:nowrap;overflow:hidden}.overflow-auto{overflow:auto}.overflow-hidden{overflow:hidden}.overscroll-none{overscroll-behavior:none}.rounded{border-radius:4px}.rounded-full{border-radius:2147483647px}.rounded-lg{border-radius:var(--radius-lg)}.rounded-md{border-radius:var(--radius-md)}.rounded-xl{border-radius:var(--radius-xl)}.border{border-style:var(--tw-border-style);border-width:1px}.border-0{border-style:var(--tw-border-style);border-width:0}.border-2{border-style:var(--tw-border-style);border-width:2px}.border-t{border-top-style:var(--tw-border-style);border-top-width:1px}.border-\\[\\#2f3134\\]{border-color:#2f3134}.border-blue-300{border-color:var(--color-blue-300)}.border-gray-100{border-color:var(--color-gray-100)}.border-gray-200{border-color:var(--color-gray-200)}.border-gray-300{border-color:var(--color-gray-300)}.border-gray-400{border-color:var(--color-gray-400)}.border-red-600{border-color:var(--color-red-600)}.bg-\\[\\#00AEEC\\]{background-color:#00aeec}.bg-\\[\\#242628\\]{background-color:#242628}.bg-amber-300{background-color:var(--color-amber-300)}.bg-blue-50{background-color:var(--color-blue-50)}.bg-blue-100\\/60{background-color:#dbeafe99}@supports (color:color-mix(in lab, red, red)){.bg-blue-100\\/60{background-color:color-mix(in oklab, var(--color-blue-100) 60%, transparent)}}.bg-gray-50{background-color:var(--color-gray-50)}.bg-gray-100{background-color:var(--color-gray-100)}.bg-gray-200{background-color:var(--color-gray-200)}.bg-purple-100{background-color:var(--color-purple-100)}.bg-purple-100\\/60{background-color:#f3e8ff99}@supports (color:color-mix(in lab, red, red)){.bg-purple-100\\/60{background-color:color-mix(in oklab, var(--color-purple-100) 60%, transparent)}}.bg-transparent{background-color:#0000}.bg-white{background-color:var(--color-white)}.p-0{padding:0}.p-1{padding:var(--spacing)}.p-1\\.5{padding:calc(var(--spacing) * 1.5)}.p-2{padding:calc(var(--spacing) * 2)}.p-3{padding:calc(var(--spacing) * 3)}.px-0\\.5{padding-inline:calc(var(--spacing) * .5)}.px-1{padding-inline:var(--spacing)}.px-2{padding-inline:calc(var(--spacing) * 2)}.px-2\\.5{padding-inline:calc(var(--spacing) * 2.5)}.px-3{padding-inline:calc(var(--spacing) * 3)}.px-4{padding-inline:calc(var(--spacing) * 4)}.py-1{padding-block:var(--spacing)}.py-1\\.5{padding-block:calc(var(--spacing) * 1.5)}.py-2{padding-block:calc(var(--spacing) * 2)}.py-px{padding-block:1px}.pt-1{padding-top:var(--spacing)}.pt-2{padding-top:calc(var(--spacing) * 2)}.pr-2{padding-right:calc(var(--spacing) * 2)}.pr-4{padding-right:calc(var(--spacing) * 4)}.pl-1{padding-left:var(--spacing)}.pl-3{padding-left:calc(var(--spacing) * 3)}.pl-9{padding-left:calc(var(--spacing) * 9)}.pl-10{padding-left:calc(var(--spacing) * 10)}.text-center{text-align:center}.text-left{text-align:left}.text-right{text-align:right}.align-middle{vertical-align:middle}.font-mono{font-family:var(--font-mono)}.text-base{font-size:var(--text-base);line-height:var(--tw-leading,var(--text-base--line-height))}.text-sm{font-size:var(--text-sm);line-height:var(--tw-leading,var(--text-sm--line-height))}.text-xl{font-size:var(--text-xl);line-height:var(--tw-leading,var(--text-xl--line-height))}.text-xs{font-size:var(--text-xs);line-height:var(--tw-leading,var(--text-xs--line-height))}.text-\\[9px\\]{font-size:9px}.text-\\[11px\\]{font-size:11px}.text-\\[12px\\]{font-size:12px}.text-\\[13px\\]{font-size:13px}.text-\\[15px\\]{font-size:15px}.leading-4{--tw-leading:calc(var(--spacing) * 4);line-height:calc(var(--spacing) * 4)}.leading-5{--tw-leading:calc(var(--spacing) * 5);line-height:calc(var(--spacing) * 5)}.leading-6{--tw-leading:calc(var(--spacing) * 6);line-height:calc(var(--spacing) * 6)}.leading-\\[12px\\]{--tw-leading:12px;line-height:12px}.font-black{--tw-font-weight:var(--font-weight-black);font-weight:var(--font-weight-black)}.font-bold{--tw-font-weight:var(--font-weight-bold);font-weight:var(--font-weight-bold)}.font-medium{--tw-font-weight:var(--font-weight-medium);font-weight:var(--font-weight-medium)}.font-normal{--tw-font-weight:var(--font-weight-normal);font-weight:var(--font-weight-normal)}.break-words{overflow-wrap:break-word}.whitespace-nowrap{white-space:nowrap}.text-amber-700{color:var(--color-amber-700)}.text-black{color:var(--color-black)}.text-black\\/50{color:#00000080}@supports (color:color-mix(in lab, red, red)){.text-black\\/50{color:color-mix(in oklab, var(--color-black) 50%, transparent)}}.text-blue-500{color:var(--color-blue-500)}.text-blue-900{color:var(--color-blue-900)}.text-gray-400{color:var(--color-gray-400)}.text-gray-500{color:var(--color-gray-500)}.text-gray-600{color:var(--color-gray-600)}.text-gray-700{color:var(--color-gray-700)}.text-gray-800{color:var(--color-gray-800)}.text-gray-900{color:var(--color-gray-900)}.text-green-700{color:var(--color-green-700)}.text-orange-900{color:var(--color-orange-900)}.text-purple-500{color:var(--color-purple-500)}.text-purple-600{color:var(--color-purple-600)}.text-purple-900{color:var(--color-purple-900)}.text-red-700{color:var(--color-red-700)}.text-white{color:var(--color-white)}.text-white\\/50{color:#ffffff80}@supports (color:color-mix(in lab, red, red)){.text-white\\/50{color:color-mix(in oklab, var(--color-white) 50%, transparent)}}.accent-\\[\\#00AEEC\\]{accent-color:#00aeec}.opacity-0{opacity:0}.opacity-100{opacity:1}.shadow{--tw-shadow:0 1px 3px 0 var(--tw-shadow-color,#0000001a), 0 1px 2px -1px var(--tw-shadow-color,#0000001a);box-shadow:var(--tw-inset-shadow), var(--tw-inset-ring-shadow), var(--tw-ring-offset-shadow), var(--tw-ring-shadow), var(--tw-shadow)}.shadow-lg{--tw-shadow:0 10px 15px -3px var(--tw-shadow-color,#0000001a), 0 4px 6px -4px var(--tw-shadow-color,#0000001a);box-shadow:var(--tw-inset-shadow), var(--tw-inset-ring-shadow), var(--tw-ring-offset-shadow), var(--tw-ring-shadow), var(--tw-shadow)}.ring-1{--tw-ring-shadow:var(--tw-ring-inset,) 0 0 0 calc(1px + var(--tw-ring-offset-width)) var(--tw-ring-color,currentcolor);box-shadow:var(--tw-inset-shadow), var(--tw-inset-ring-shadow), var(--tw-ring-offset-shadow), var(--tw-ring-shadow), var(--tw-shadow)}.shadow-black\\/20{--tw-shadow-color:#0003}@supports (color:color-mix(in lab, red, red)){.shadow-black\\/20{--tw-shadow-color:color-mix(in oklab, color-mix(in oklab, var(--color-black) 20%, transparent) var(--tw-shadow-alpha), transparent)}}.ring-black\\/5{--tw-ring-color:#0000000d}@supports (color:color-mix(in lab, red, red)){.ring-black\\/5{--tw-ring-color:color-mix(in oklab, var(--color-black) 5%, transparent)}}.outline-hidden{--tw-outline-style:none;outline-style:none}@media (forced-colors:active){.outline-hidden{outline-offset:2px;outline:2px solid #0000}}.outline{outline-style:var(--tw-outline-style);outline-width:1px}.filter{filter:var(--tw-blur,) var(--tw-brightness,) var(--tw-contrast,) var(--tw-grayscale,) var(--tw-hue-rotate,) var(--tw-invert,) var(--tw-saturate,) var(--tw-sepia,) var(--tw-drop-shadow,)}.transition{transition-property:color,background-color,border-color,outline-color,text-decoration-color,fill,stroke,--tw-gradient-from,--tw-gradient-via,--tw-gradient-to,opacity,box-shadow,transform,translate,scale,rotate,filter,-webkit-backdrop-filter,backdrop-filter,display,content-visibility,overlay,pointer-events;transition-timing-function:var(--tw-ease,var(--default-transition-timing-function));transition-duration:var(--tw-duration,var(--default-transition-duration))}.transition-colors{transition-property:color,background-color,border-color,outline-color,text-decoration-color,fill,stroke,--tw-gradient-from,--tw-gradient-via,--tw-gradient-to;transition-timing-function:var(--tw-ease,var(--default-transition-timing-function));transition-duration:var(--tw-duration,var(--default-transition-duration))}.transition-transform{transition-property:transform,translate,scale,rotate;transition-timing-function:var(--tw-ease,var(--default-transition-timing-function));transition-duration:var(--tw-duration,var(--default-transition-duration))}.duration-100{--tw-duration:.1s;transition-duration:.1s}.duration-200{--tw-duration:.2s;transition-duration:.2s}.ease-in{--tw-ease:var(--ease-in);transition-timing-function:var(--ease-in)}.will-change-\\[right\\,bottom\\]{will-change:right,bottom}.will-change-\\[top\\,left\\]{will-change:top,left}.select-none{-webkit-user-select:none;user-select:none}@media (hover:hover){.group-hover\\:flex:is(:where(.group):hover *){display:flex}}.invalid\\:border-2:invalid{border-style:var(--tw-border-style);border-width:2px}.invalid\\:border-red-500:invalid{border-color:var(--color-red-500)}@media (hover:hover){.hover\\:rounded-full:hover{border-radius:2147483647px}.hover\\:border-none:hover{--tw-border-style:none;border-style:none}.hover\\:bg-\\[\\#00AEEC\\]:hover,.hover\\:bg-\\[\\#00aeec\\]:hover{background-color:#00aeec}.hover\\:bg-blue-50\\/50:hover{background-color:#eff6ff80}@supports (color:color-mix(in lab, red, red)){.hover\\:bg-blue-50\\/50:hover{background-color:color-mix(in oklab, var(--color-blue-50) 50%, transparent)}}.hover\\:bg-blue-100:hover{background-color:var(--color-blue-100)}.hover\\:bg-purple-100:hover{background-color:var(--color-purple-100)}.hover\\:bg-white\\/40:hover{background-color:#fff6}@supports (color:color-mix(in lab, red, red)){.hover\\:bg-white\\/40:hover{background-color:color-mix(in oklab, var(--color-white) 40%, transparent)}}.hover\\:text-black:hover{color:var(--color-black)}.hover\\:text-white:hover{color:var(--color-white)}}.focus\\:border-gray-400:focus{border-color:var(--color-gray-400)}.focus\\:border-gray-500:focus{border-color:var(--color-gray-500)}.focus\\:outline-hidden:focus{--tw-outline-style:none;outline-style:none}@media (forced-colors:active){.focus\\:outline-hidden:focus{outline-offset:2px;outline:2px solid #0000}}.focus\\:invalid\\:border-red-500:focus:invalid{border-color:var(--color-red-500)}.focus-visible\\:border-indigo-500:focus-visible{border-color:var(--color-indigo-500)}.disabled\\:opacity-40:disabled{opacity:.4}.disabled\\:opacity-50:disabled{opacity:.5}@media (width>=40rem){.sm\\:text-sm{font-size:var(--text-sm);line-height:var(--tw-leading,var(--text-sm--line-height))}}}.no-scrollbar::-webkit-scrollbar{display:none}.no-scrollbar{-ms-overflow-style:none;scrollbar-width:none}@property --tw-translate-x{syntax:\"*\";inherits:false;initial-value:0}@property --tw-translate-y{syntax:\"*\";inherits:false;initial-value:0}@property --tw-translate-z{syntax:\"*\";inherits:false;initial-value:0}@property --tw-rotate-x{syntax:\"*\";inherits:false}@property --tw-rotate-y{syntax:\"*\";inherits:false}@property --tw-rotate-z{syntax:\"*\";inherits:false}@property --tw-skew-x{syntax:\"*\";inherits:false}@property --tw-skew-y{syntax:\"*\";inherits:false}@property --tw-space-y-reverse{syntax:\"*\";inherits:false;initial-value:0}@property --tw-border-style{syntax:\"*\";inherits:false;initial-value:solid}@property --tw-leading{syntax:\"*\";inherits:false}@property --tw-font-weight{syntax:\"*\";inherits:false}@property --tw-shadow{syntax:\"*\";inherits:false;initial-value:0 0 #0000}@property --tw-shadow-color{syntax:\"*\";inherits:false}@property --tw-shadow-alpha{syntax:\"<percentage>\";inherits:false;initial-value:100%}@property --tw-inset-shadow{syntax:\"*\";inherits:false;initial-value:0 0 #0000}@property --tw-inset-shadow-color{syntax:\"*\";inherits:false}@property --tw-inset-shadow-alpha{syntax:\"<percentage>\";inherits:false;initial-value:100%}@property --tw-ring-color{syntax:\"*\";inherits:false}@property --tw-ring-shadow{syntax:\"*\";inherits:false;initial-value:0 0 #0000}@property --tw-inset-ring-color{syntax:\"*\";inherits:false}@property --tw-inset-ring-shadow{syntax:\"*\";inherits:false;initial-value:0 0 #0000}@property --tw-ring-inset{syntax:\"*\";inherits:false}@property --tw-ring-offset-width{syntax:\"<length>\";inherits:false;initial-value:0}@property --tw-ring-offset-color{syntax:\"*\";inherits:false;initial-value:#fff}@property --tw-ring-offset-shadow{syntax:\"*\";inherits:false;initial-value:0 0 #0000}@property --tw-outline-style{syntax:\"*\";inherits:false;initial-value:solid}@property --tw-blur{syntax:\"*\";inherits:false}@property --tw-brightness{syntax:\"*\";inherits:false}@property --tw-contrast{syntax:\"*\";inherits:false}@property --tw-grayscale{syntax:\"*\";inherits:false}@property --tw-hue-rotate{syntax:\"*\";inherits:false}@property --tw-invert{syntax:\"*\";inherits:false}@property --tw-opacity{syntax:\"*\";inherits:false}@property --tw-saturate{syntax:\"*\";inherits:false}@property --tw-sepia{syntax:\"*\";inherits:false}@property --tw-drop-shadow{syntax:\"*\";inherits:false}@property --tw-drop-shadow-color{syntax:\"*\";inherits:false}@property --tw-drop-shadow-alpha{syntax:\"<percentage>\";inherits:false;initial-value:100%}@property --tw-drop-shadow-size{syntax:\"*\";inherits:false}@property --tw-duration{syntax:\"*\";inherits:false}@property --tw-ease{syntax:\"*\";inherits:false}");
 	var migrate = async () => {
-		if (_GM_getValue("__MIGRATED__") === "4.4.0") return;
+		if (GM_getValue$1("__MIGRATED__") === "4.4.0") return;
 		const prefix = "BILICLEANER_";
-		const keys = _GM_listValues().filter((key) => key.startsWith(prefix));
-		for (const key of keys) _GM_setValue(key.slice(12), _GM_getValue(key));
-		keys.forEach((key) => _GM_deleteValue(key));
+		const keys = GM_listValues$1().filter((key) => key.startsWith(prefix));
+		for (const key of keys) GM_setValue$1(key.slice(12), GM_getValue$1(key));
+		keys.forEach((key) => GM_deleteValue$1(key));
 		logger.info(`Migrate ${keys.length} storage keys`);
 		for (const [key, valueMap] of Object.entries({
 			"channel-layout": {
@@ -15658,11 +17016,11 @@
 				"common-theme-dark-default": "default"
 			}
 		})) {
-			const value = _GM_getValue(key);
-			if (value in valueMap) _GM_setValue(key, valueMap[value]);
+			const value = GM_getValue$1(key);
+			if (value in valueMap) GM_setValue$1(key, valueMap[value]);
 		}
 		logger.info(`Convert storage values complete`);
-		_GM_setValue("__MIGRATED__", "4.4.0");
+		GM_setValue$1("__MIGRATED__", "4.4.0");
 		logger.info(`Migrate storage complete`);
 	};
 	var redirect = () => {
@@ -15691,6 +17049,7 @@
 	var menu = () => {
 		if (isPageLive() && self !== top) return;
 		const ruleStore = useRulePanelStore();
+		const configurationStore = useConfigurationPanelStore();
 		const videoStore = useVideoFilterPanelStore();
 		const commentStore = useCommentFilterPanelStore();
 		const dynamicStore = useDynamicFilterPanelStore();
@@ -15699,6 +17058,7 @@
 		_GM_registerMenuCommand(withMenuId("menu-rule-panel", "✅ 页面净化优化"), () => {
 			ruleStore.toggle();
 		});
+		_GM_registerMenuCommand(withMenuId("menu-configuration", "⚙ 配置管理"), () => configurationStore.show());
 		if (videoStore.isPageValid()) _GM_registerMenuCommand(withMenuId("menu-video-filter", "✅ 视频过滤设置"), () => {
 			videoStore.toggle();
 		});
