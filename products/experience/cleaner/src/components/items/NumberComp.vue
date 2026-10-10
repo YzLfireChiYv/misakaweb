@@ -1,6 +1,9 @@
 <template>
     <div class="my-1 flex items-center py-1 text-black">
-        <div>{{ name }}</div>
+        <div>
+            <FeedbackBadge :code="feedbackCode" />
+            {{ name }}
+        </div>
         <input
             type="number"
             :step="step"
@@ -19,9 +22,12 @@ import { logger } from '@/utils/logger'
 import { GM_getValue, GM_setValue } from '$'
 import { watchThrottled } from '@vueuse/core'
 import { ref } from 'vue'
+import FeedbackBadge from '@/feedback/Badge.vue'
+import { settingLabel } from '@/feedback'
 import DescriptionComp from './DescriptionComp.vue'
 
 const item = defineProps<INumberItem>()
+const feedbackCode = settingLabel(item.id)
 
 const currValue = ref(GM_getValue(item.id, item.defaultValue))
 

@@ -6,6 +6,7 @@
             heightPercent: 85,
             minWidth: 360,
             minHeight: 600,
+            closeAction: 'panel-close-article-filter',
         }"
         v-show="store.isShow"
         @close="store.hide"

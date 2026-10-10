@@ -7,6 +7,7 @@
         <div v-for="(menu, index) in menuList" :key="index">
             <div @click="menu.fn()?.catch(() => {})" class="px-2.5 py-1 hover:bg-[#00aeec] hover:text-white">
                 <span class="mr-0.5">◎</span>
+                <FeedbackBadge :code="actionLabel(contextActionKey(menu.name))" />
                 {{ menu.name }}
             </div>
             <hr class="border-gray-300" v-if="index < menuList.length - 1" />
@@ -19,6 +20,9 @@ import { FilterContextMenu } from '@/types/filter'
 import { logger } from '@/utils/logger'
 import { useEventListener } from '@vueuse/core'
 import { reactive, ref } from 'vue'
+import FeedbackBadge from '@/feedback/Badge.vue'
+import { actionLabel } from '@/feedback'
+import { contextActionKey } from '@/feedback/context-actions'
 
 const show = ref(false)
 const pos = reactive({

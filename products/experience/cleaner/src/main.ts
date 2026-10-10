@@ -1,4 +1,5 @@
 import { GM_registerMenuCommand } from '$'
+import { withMenuId } from '@/feedback'
 import { createPinia } from 'pinia'
 import { createApp } from 'vue'
 import App from './App.vue'
@@ -9,7 +10,7 @@ import {
     useCommentFilterPanelStore,
     useDynamicFilterPanelStore,
     useRulePanelStore,
-    useSideBtnStore,
+    useShortcutSettingsStore,
     useVideoFilterPanelStore,
 } from './stores/view'
 import css from './style.css?style'
@@ -63,57 +64,57 @@ const menu = () => {
     const commentStore = useCommentFilterPanelStore()
     const dynamicStore = useDynamicFilterPanelStore()
     const articleStore = useArticleFilterPanelStore()
-    const sideBtnStore = useSideBtnStore()
+    const shortcutSettingsStore = useShortcutSettingsStore()
 
-    GM_registerMenuCommand('✅ 页面净化优化', () => {
+    GM_registerMenuCommand(withMenuId('menu-rule-panel', '✅ 页面净化优化'), () => {
         ruleStore.toggle()
     })
     if (videoStore.isPageValid()) {
-        GM_registerMenuCommand('✅ 视频过滤设置', () => {
+        GM_registerMenuCommand(withMenuId('menu-video-filter', '✅ 视频过滤设置'), () => {
             videoStore.toggle()
         })
     } else {
-        GM_registerMenuCommand('🚫 视频过滤设置', () => {
+        GM_registerMenuCommand(withMenuId('menu-video-filter', '🚫 视频过滤设置'), () => {
             alert('[bilibili-cleaner] 本页面不支持视频过滤')
         })
     }
 
     if (commentStore.isPageValid()) {
-        GM_registerMenuCommand('✅ 评论过滤设置', () => {
+        GM_registerMenuCommand(withMenuId('menu-comment-filter', '✅ 评论过滤设置'), () => {
             commentStore.toggle()
         })
     } else {
-        GM_registerMenuCommand('🚫 评论过滤设置', () => {
+        GM_registerMenuCommand(withMenuId('menu-comment-filter', '🚫 评论过滤设置'), () => {
             alert('[bilibili-cleaner] 本页面不支持评论过滤')
         })
     }
     if (dynamicStore.isPageValid()) {
-        GM_registerMenuCommand('✅ 动态过滤设置', () => {
+        GM_registerMenuCommand(withMenuId('menu-dynamic-filter', '✅ 动态过滤设置'), () => {
             dynamicStore.toggle()
         })
     } else {
-        GM_registerMenuCommand('🚫 动态过滤设置', () => {
+        GM_registerMenuCommand(withMenuId('menu-dynamic-filter', '🚫 动态过滤设置'), () => {
             alert('[bilibili-cleaner] 本页面不支持动态过滤')
         })
     }
 
     if (articleStore.isPageValid()) {
-        GM_registerMenuCommand('✅ 专栏过滤设置', () => {
+        GM_registerMenuCommand(withMenuId('menu-article-filter', '✅ 专栏过滤设置'), () => {
             articleStore.toggle()
         })
     } else {
-        GM_registerMenuCommand('🚫 专栏过滤设置', () => {
+        GM_registerMenuCommand(withMenuId('menu-article-filter', '🚫 专栏过滤设置'), () => {
             alert('[bilibili-cleaner] 本页面不支持专栏过滤')
         })
     }
 
-    GM_registerMenuCommand('⚡ 夜间模式开关', () => {
+    GM_registerMenuCommand(withMenuId('menu-dark-mode', '⚡ 夜间模式开关'), () => {
         toggleDarkMode()
     })
-    GM_registerMenuCommand('⚡ 快捷按钮开关', () => {
-        sideBtnStore.toggle()
+    GM_registerMenuCommand(withMenuId('menu-side-btn', '⚙ 快捷开关设置'), () => {
+        shortcutSettingsStore.show()
     })
-    GM_registerMenuCommand('💬 问题反馈', () => {
+    GM_registerMenuCommand(withMenuId('menu-feedback', '💬 问题反馈'), () => {
         window.open('https://github.com/YzLfireChiYv/misakaweb/issues', '_blank')
     })
 }

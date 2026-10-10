@@ -6,6 +6,11 @@
     "scripts": {
         "dev": "vite",
         "build": "vue-tsc -b && vite build",
+        "build:feedback": "vue-tsc -b && vite build --mode feedback-test",
+        "feedback:map": "node scripts/update-control-map.mjs",
+        "release:prepare": "node scripts/prepare-publish.mjs",
+        "test": "vitest run",
+        "test:fixture": "node tests/feedback-playwright.mjs",
         "prepare": "husky"
     },
     "dependencies": {

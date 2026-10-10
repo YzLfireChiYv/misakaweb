@@ -6,6 +6,8 @@
         <DynamicFilterPanelView></DynamicFilterPanelView>
         <ContextMenuView></ContextMenuView>
         <SideBtnView></SideBtnView>
+        <HeaderShortcutView></HeaderShortcutView>
+        <ShortcutSettingsPanelView></ShortcutSettingsPanelView>
         <ArticleFilterPanelView></ArticleFilterPanelView>
     </div>
 </template>
@@ -15,6 +17,8 @@ import ContextMenuView from './views/ContextMenuView.vue'
 import DynamicFilterPanelView from './views/DynamicFilterPanelView.vue'
 import RulePanelView from './views/RulePanelView.vue'
 import ArticleFilterPanelView from './views/ArticleFilterPanelView.vue'
+import HeaderShortcutView from './views/HeaderShortcutView.vue'
+import ShortcutSettingsPanelView from './views/ShortcutSettingsPanelView.vue'
 import SideBtnView from './views/SideBtnView.vue'
 import VideoFilterPanelView from './views/VideoFilterPanelView.vue'
 </script>

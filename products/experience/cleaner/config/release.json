@@ -1,0 +1,11 @@
+{
+  "schemaVersion": 1,
+  "development": {
+    "version": "0.1.4.5",
+    "url": "https://raw.githubusercontent.com/YzLfireChiYv/misakaweb/main/products/experience/misakaweb-feedback-test.user.js"
+  },
+  "legacy": {
+    "version": "0.1.4",
+    "url": "https://raw.githubusercontent.com/YzLfireChiYv/misakaweb/main/products/experience/misakaweb.user.js"
+  }
+}

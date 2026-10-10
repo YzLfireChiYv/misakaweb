@@ -1,7 +1,7 @@
 <template>
     <div
-        class="group fixed flex flex-col justify-end will-change-[right,bottom]"
-        v-if="sideBtnStore.isShow"
+        class="group fixed flex flex-col justify-end will-change-[right,bottom] select-none"
+        v-if="floatingVisible"
         ref="target"
         :style="{ right: btnPos.right + 'px', bottom: btnPos.bottom + 'px' }"
         :class="[
@@ -10,8 +10,8 @@
         ]"
     >
         <div
-            class="mt-1 h-10 w-10 cursor-pointer items-center justify-center rounded-lg border transition-colors hover:border-none hover:bg-[#00AEEC] hover:text-white"
-            v-for="(btn, index) in buttons.filter((btn) => btn.isValid)"
+            class="relative mt-1 h-10 w-10 cursor-pointer items-center justify-center rounded-lg border transition-colors hover:border-none hover:bg-[#00AEEC] hover:text-white"
+            v-for="(btn, index) in visibleButtons"
             :key="index"
             :class="[
                 // 主题
@@ -19,34 +19,34 @@
                 // 显示
                 btn.defaultHidden && !isDragging ? 'hidden group-hover:flex' : 'flex',
             ]"
-            @click="btn.click()"
+            @click="onSideClick(btn.run)"
         >
+            <FeedbackBadge :code="actionLabel(btn.actionKey)" compact />
             <div>
-                <p class="text-center text-[13px] leading-4 select-none">{{ btn.text.value.substring(0, 2) }}</p>
-                <p class="text-center text-[13px] leading-4 select-none">{{ btn.text.value.substring(2, 4) }}</p>
+                <p class="text-center text-[13px] leading-4 select-none">{{ btn.text.substring(0, 2) }}</p>
+                <p class="text-center text-[13px] leading-4 select-none">{{ btn.text.substring(2, 4) }}</p>
             </div>
         </div>
     </div>
 </template>
 
 <script setup lang="ts">
-import { isDarkMode, toggleDarkMode } from '@/modules/rules/common/groups/theme'
-import {
-    useCommentFilterPanelStore,
-    useDynamicFilterPanelStore,
-    useRulePanelStore,
-    useSideBtnStore,
-    useVideoFilterPanelStore,
-} from '@/stores/view'
+import { isDarkMode } from '@/modules/rules/common/groups/theme'
+import { useQuickActions } from '@/modules/shortcut/actions'
+import { useShortcutPreference } from '@/modules/shortcut/preference'
 import { isPageBangumi, isPageVideo } from '@/utils/pageType'
 import { Position, useDraggable, useElementBounding, useStorage, useWindowSize } from '@vueuse/core'
-import { computed, Ref, ref } from 'vue'
+import { computed, ref, watch } from 'vue'
+import FeedbackBadge from '@/feedback/Badge.vue'
+import { actionLabel } from '@/feedback'
+import { clampSideBtnInset, exceededDragThreshold } from '@/utils/panelGeometry'
 
-const ruleStore = useRulePanelStore()
-const videoStore = useVideoFilterPanelStore()
-const commentStore = useCommentFilterPanelStore()
-const dynamicStore = useDynamicFilterPanelStore()
-const sideBtnStore = useSideBtnStore()
+const { state: shortcutState } = useShortcutPreference()
+const actions = useQuickActions()
+const floatingVisible = computed(
+    () => shortcutState.value.enabled && shortcutState.value.location === 'floating',
+)
+const visibleButtons = computed(() => actions.value.filter((btn) => btn.isValid))
 
 const target = ref<HTMLElement | null>(null)
 const { width, height } = useElementBounding(target, { windowScroll: false })
@@ -64,83 +64,53 @@ const maxPos = computed(() => {
     }
 })
 
-// 功能按钮列表
-const buttons: {
-    text: Ref<string>
-    defaultHidden: boolean
-    isValid: boolean
-    click: () => void
-}[] = [
-    {
-        text: computed(() => (isDarkMode.value ? '日间模式' : '夜间模式')),
-        defaultHidden: true,
-        isValid: true,
-        click: toggleDarkMode,
-    },
-    {
-        text: ref('动态过滤'),
-        defaultHidden: true,
-        isValid: dynamicStore.isPageValid(),
-        click: () => dynamicStore.toggle(),
-    },
-    {
-        text: ref('评论过滤'),
-        defaultHidden: true,
-        isValid: commentStore.isPageValid(),
-        click: () => commentStore.toggle(),
-    },
-    {
-        text: ref('视频过滤'),
-        defaultHidden: true,
-        isValid: videoStore.isPageValid(),
-        click: () => videoStore.toggle(),
-    },
-    {
-        text: ref('页面净化'),
-        defaultHidden: false,
-        isValid: ruleStore.isPageValid(),
-        click: () => {
-            if (!isDragging.value) {
-                ruleStore.toggle()
-            }
-        },
-    },
-]
+const onSideClick = (fn: () => void) => {
+    if (!isDragging.value) {
+        fn()
+    }
+}
 
-let rAF = 0
+const applySideClamp = () => {
+    const next = clampSideBtnInset(
+        btnPos.value,
+        { width: windowSize.width.value, height: windowSize.height.value },
+        { width: width.value, height: height.value },
+    )
+    if (next.right !== btnPos.value.right || next.bottom !== btnPos.value.bottom) {
+        btnPos.value.right = next.right
+        btnPos.value.bottom = next.bottom
+    }
+}
+
+watch([() => windowSize.width.value, () => windowSize.height.value, width, height], applySideClamp)
+
+let pointerOrigin: { x: number; y: number } | null = null
+
 useDraggable(target, {
     initialValue: {
         x: windowSize.width.value - btnPos.value.right,
         y: windowSize.height.value - btnPos.value.bottom,
     },
-    preventDefault: true,
+    preventDefault: false,
     handle: computed(() => target.value),
-    onMove: (pos: Position) => {
+    onStart: (_pos, event) => {
+        pointerOrigin = { x: event.clientX, y: event.clientY }
+        isDragging.value = false
+    },
+    onMove: (pos: Position, event) => {
+        if (!exceededDragThreshold(pointerOrigin, { x: event.clientX, y: event.clientY })) {
+            return
+        }
         isDragging.value = true
         btnPos.value.right = maxPos.value.x - pos.x
         btnPos.value.bottom = maxPos.value.y - pos.y
-
-        // 限制拖拽范围
-        cancelAnimationFrame(rAF)
-        rAF = requestAnimationFrame(() => {
-            if (btnPos.value.right < 0) {
-                btnPos.value.right = 0
-            }
-            if (btnPos.value.bottom < 0) {
-                btnPos.value.bottom = 0
-            }
-            if (btnPos.value.bottom > maxPos.value.y) {
-                btnPos.value.bottom = maxPos.value.y
-            }
-            if (btnPos.value.right > maxPos.value.x) {
-                btnPos.value.right = maxPos.value.x
-            }
-        })
+        applySideClamp()
     },
     onEnd: () => {
-        setTimeout(() => {
+        pointerOrigin = null
+        window.setTimeout(() => {
             isDragging.value = false
-        }, 50)
+        }, 0)
     },
 })
 </script>

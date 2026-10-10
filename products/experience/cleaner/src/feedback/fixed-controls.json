@@ -1,0 +1,442 @@
+{
+    "menus": [
+        {
+            "key": "menu-rule-panel",
+            "name": "页面净化优化",
+            "pages": [
+                "*"
+            ],
+            "panel": "script-manager"
+        },
+        {
+            "key": "menu-video-filter",
+            "name": "视频过滤设置",
+            "pages": [
+                "homepage",
+                "video",
+                "playlist",
+                "popular",
+                "channel",
+                "search",
+                "space"
+            ],
+            "panel": "script-manager"
+        },
+        {
+            "key": "menu-comment-filter",
+            "name": "评论过滤设置",
+            "pages": [
+                "video",
+                "bangumi",
+                "dynamic",
+                "space",
+                "playlist",
+                "festival"
+            ],
+            "panel": "script-manager"
+        },
+        {
+            "key": "menu-dynamic-filter",
+            "name": "动态过滤设置",
+            "pages": [
+                "dynamic",
+                "space"
+            ],
+            "panel": "script-manager"
+        },
+        {
+            "key": "menu-article-filter",
+            "name": "专栏过滤设置",
+            "pages": [
+                "search"
+            ],
+            "panel": "script-manager"
+        },
+        {
+            "key": "menu-dark-mode",
+            "name": "夜间模式开关",
+            "pages": [
+                "*"
+            ],
+            "panel": "script-manager"
+        },
+        {
+            "key": "menu-side-btn",
+            "name": "快捷开关设置",
+            "pages": [
+                "*"
+            ],
+            "panel": "script-manager"
+        },
+        {
+            "key": "menu-feedback",
+            "name": "问题反馈",
+            "pages": [
+                "*"
+            ],
+            "panel": "script-manager"
+        }
+    ],
+    "actions": [
+        {
+            "key": "panel-close-rule",
+            "name": "关闭页面净化面板",
+            "pages": [
+                "*"
+            ],
+            "panel": "rule"
+        },
+        {
+            "key": "panel-close-video-filter",
+            "name": "关闭视频过滤面板",
+            "pages": [
+                "homepage",
+                "video",
+                "playlist",
+                "popular",
+                "channel",
+                "search",
+                "space"
+            ],
+            "panel": "video-filter"
+        },
+        {
+            "key": "panel-close-comment-filter",
+            "name": "关闭评论过滤面板",
+            "pages": [
+                "video",
+                "bangumi",
+                "dynamic",
+                "space",
+                "playlist",
+                "festival"
+            ],
+            "panel": "comment-filter"
+        },
+        {
+            "key": "panel-close-dynamic-filter",
+            "name": "关闭动态过滤面板",
+            "pages": [
+                "dynamic",
+                "space"
+            ],
+            "panel": "dynamic-filter"
+        },
+        {
+            "key": "panel-close-article-filter",
+            "name": "关闭专栏过滤面板",
+            "pages": [
+                "search"
+            ],
+            "panel": "article-filter"
+        },
+        {
+            "key": "panel-close-editor",
+            "name": "关闭编辑器面板",
+            "pages": [
+                "*"
+            ],
+            "panel": "editor"
+        },
+        {
+            "key": "webdav-verify",
+            "name": "验证 WebDAV",
+            "pages": [
+                "homepage",
+                "video",
+                "playlist",
+                "popular",
+                "channel",
+                "search",
+                "space",
+                "dynamic",
+                "bangumi",
+                "festival"
+            ],
+            "panel": "filter-sync"
+        },
+        {
+            "key": "side-dark-mode",
+            "name": "快捷按钮 夜间/日间模式",
+            "pages": [
+                "*"
+            ],
+            "panel": "side-btn"
+        },
+        {
+            "key": "side-dynamic-filter",
+            "name": "快捷按钮 动态过滤",
+            "pages": [
+                "dynamic",
+                "space"
+            ],
+            "panel": "side-btn"
+        },
+        {
+            "key": "side-comment-filter",
+            "name": "快捷按钮 评论过滤",
+            "pages": [
+                "video",
+                "bangumi",
+                "dynamic",
+                "space",
+                "playlist",
+                "festival"
+            ],
+            "panel": "side-btn"
+        },
+        {
+            "key": "side-video-filter",
+            "name": "快捷按钮 视频过滤",
+            "pages": [
+                "homepage",
+                "video",
+                "playlist",
+                "popular",
+                "channel",
+                "search",
+                "space"
+            ],
+            "panel": "side-btn"
+        },
+        {
+            "key": "side-rule-panel",
+            "name": "快捷按钮 页面净化",
+            "pages": [
+                "*"
+            ],
+            "panel": "side-btn"
+        },
+        {
+            "key": "ctx-block-uploader",
+            "name": "右键 屏蔽UP主",
+            "pages": [
+                "homepage",
+                "video",
+                "playlist",
+                "popular",
+                "channel",
+                "search"
+            ],
+            "panel": "context-menu"
+        },
+        {
+            "key": "ctx-whitelist-uploader",
+            "name": "右键 将UP主加入白名单",
+            "pages": [
+                "homepage",
+                "video",
+                "playlist",
+                "popular",
+                "channel",
+                "search"
+            ],
+            "panel": "context-menu"
+        },
+        {
+            "key": "ctx-copy-space-url",
+            "name": "右键 复制主页链接",
+            "pages": [
+                "homepage",
+                "video",
+                "playlist",
+                "channel",
+                "search"
+            ],
+            "panel": "context-menu"
+        },
+        {
+            "key": "ctx-block-bvid",
+            "name": "右键 屏蔽视频",
+            "pages": [
+                "homepage",
+                "video",
+                "playlist",
+                "popular",
+                "channel",
+                "search",
+                "space"
+            ],
+            "panel": "context-menu"
+        },
+        {
+            "key": "ctx-copy-video-url",
+            "name": "右键 复制视频链接",
+            "pages": [
+                "homepage",
+                "video",
+                "playlist",
+                "popular",
+                "channel",
+                "search",
+                "space"
+            ],
+            "panel": "context-menu"
+        },
+        {
+            "key": "ctx-block-comment-user",
+            "name": "右键 屏蔽用户",
+            "pages": [
+                "video",
+                "bangumi",
+                "dynamic",
+                "space",
+                "playlist",
+                "festival"
+            ],
+            "panel": "context-menu"
+        },
+        {
+            "key": "ctx-hide-dyn-uploader",
+            "name": "右键 隐藏用户动态",
+            "pages": [
+                "dynamic"
+            ],
+            "panel": "context-menu"
+        },
+        {
+            "key": "ctx-block-article-author",
+            "name": "右键 屏蔽专栏作者",
+            "pages": [
+                "search"
+            ],
+            "panel": "context-menu"
+        },
+        {
+            "key": "ctx-whitelist-article-author",
+            "name": "右键 将专栏作者加入白名单",
+            "pages": [
+                "search"
+            ],
+            "panel": "context-menu"
+        },
+        {
+            "key": "panel-close-shortcut-settings",
+            "name": "关闭快捷开关设置",
+            "pages": [
+                "*"
+            ],
+            "panel": "shortcut-settings"
+        },
+        {
+            "key": "side-shortcut-settings",
+            "name": "快捷入口 打开设置",
+            "pages": [
+                "*"
+            ],
+            "panel": "side-btn"
+        },
+        {
+            "key": "header-shortcut-toggle",
+            "name": "顶栏快捷入口 展开或收起",
+            "pages": [
+                "*"
+            ],
+            "panel": "side-btn"
+        },
+        {
+            "key": "review-category-cleaning",
+            "name": "取舍面板 净化类别",
+            "pages": [
+                "*"
+            ],
+            "panel": "optimization-review-test"
+        },
+        {
+            "key": "review-category-optimization",
+            "name": "取舍面板 优化类别",
+            "pages": [
+                "*"
+            ],
+            "panel": "optimization-review-test"
+        },
+        {
+            "key": "review-category-support",
+            "name": "取舍面板 公共设置",
+            "pages": [
+                "*"
+            ],
+            "panel": "optimization-review-test"
+        },
+        {
+            "key": "review-scope-page",
+            "name": "取舍面板 当前页面",
+            "pages": [
+                "*"
+            ],
+            "panel": "optimization-review-test"
+        },
+        {
+            "key": "review-scope-all",
+            "name": "取舍面板 全站清单",
+            "pages": [
+                "*"
+            ],
+            "panel": "optimization-review-test"
+        },
+        {
+            "key": "review-toggle-remove",
+            "name": "取舍面板 建议删除或撤销",
+            "pages": [
+                "*"
+            ],
+            "panel": "optimization-review-test"
+        },
+        {
+            "key": "review-change-category",
+            "name": "取舍面板 校正分类",
+            "pages": [
+                "*"
+            ],
+            "panel": "optimization-review-test"
+        },
+        {
+            "key": "review-export",
+            "name": "取舍面板 导出取舍反馈",
+            "pages": [
+                "*"
+            ],
+            "panel": "optimization-review-test"
+        },
+        {
+            "key": "review-pack-filter",
+            "name": "取舍面板 优化功能组筛选",
+            "pages": [
+                "*"
+            ],
+            "panel": "optimization-review-test"
+        }
+    ],
+    "settings": [
+        {
+            "key": "biliweb-shortcut-enabled",
+            "storage": {
+                "key": "biliweb-shortcut-entry",
+                "field": "enabled",
+                "scope": "device"
+            },
+            "name": "启用页面快捷入口",
+            "type": "switch",
+            "pages": [
+                "*"
+            ],
+            "panel": "shortcut-settings",
+            "group": "快捷入口"
+        },
+        {
+            "key": "biliweb-shortcut-location",
+            "storage": {
+                "key": "biliweb-shortcut-entry",
+                "field": "location",
+                "scope": "device"
+            },
+            "name": "快捷入口位置",
+            "type": "choice",
+            "pages": [
+                "*"
+            ],
+            "panel": "shortcut-settings",
+            "group": "快捷入口"
+        }
+    ]
+}

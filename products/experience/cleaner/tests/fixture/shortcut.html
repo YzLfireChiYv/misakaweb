@@ -1,0 +1,74 @@
+<!doctype html>
+<html lang="zh-CN">
+    <head>
+        <meta charset="UTF-8" />
+        <title>MisakaWeb shortcut fixture</title>
+        <style>
+            html,
+            body {
+                margin: 0;
+                height: 100%;
+                background: #e8e8e8;
+            }
+            .bili-header {
+                display: flex;
+                align-items: center;
+                height: 52px;
+                padding: 0 16px;
+                background: #fff;
+                position: relative;
+                z-index: 10;
+            }
+            #nav-searchform {
+                display: flex;
+                align-items: center;
+                width: 376px;
+                height: 40px;
+                border: 1px solid #ccc;
+                border-radius: 8px;
+                padding: 0 8px;
+                background: #f6f7f8;
+            }
+            .nav-search-content {
+                display: flex;
+                align-items: center;
+                width: 100%;
+            }
+            .nav-search-input {
+                flex: 1;
+                border: 0;
+                background: transparent;
+                height: 32px;
+            }
+            .nav-search-btn,
+            .search-btn {
+                width: 32px;
+                height: 32px;
+                display: flex;
+                align-items: center;
+                justify-content: center;
+                cursor: pointer;
+            }
+            #nav-link {
+                margin-left: 12px;
+                color: #18191c;
+                text-decoration: none;
+            }
+        </style>
+    </head>
+    <body>
+        <header class="bili-header" id="page-header">
+            <form id="nav-searchform">
+                <div class="nav-search-content">
+                    <input class="nav-search-input" id="search-input" />
+                    <div class="nav-search-btn" id="search-btn" title="搜索">🔍</div>
+                </div>
+            </form>
+            <a id="nav-link" href="#nav">番剧</a>
+        </header>
+        <p id="search-clicks">0</p>
+        <p id="search-submits">0</p>
+        <div id="app"></div>
+        <script type="module" src="./shortcut.ts"></script>
+    </body>
+</html>

@@ -6,6 +6,7 @@
             heightPercent: 85,
             minWidth: 360,
             minHeight: 600,
+            closeAction: 'panel-close-editor',
         }"
         v-if="isEditorShow"
         @close="closeEditor"
@@ -16,6 +17,9 @@
                 v-if="currentItem?.editorDescription?.length"
                 :description="currentItem.editorDescription"
             ></DescriptionComp>
+            <div v-if="editorCode" class="mb-1">
+                <FeedbackBadge :code="editorCode" />
+            </div>
             <textarea
                 v-model="editorData"
                 @keydown.stop
@@ -23,6 +27,7 @@
                 style="scrollbar-width: thin; scrollbar-color: #999 #00000000"
                 spellcheck="false"
                 placeholder="请输入内容..."
+                :data-feedback-id="editorCode || undefined"
             ></textarea>
         </div>
     </PanelComp>
@@ -33,14 +38,17 @@ import { IEditorItem } from '@/types/item'
 import { logger } from '@/utils/logger'
 import { orderedUniq } from '@/utils/tool'
 import { GM_getValue, GM_setValue } from '$'
-import { onUnmounted, ref, type WatchStopHandle } from 'vue'
+import { computed, onUnmounted, ref, type WatchStopHandle } from 'vue'
 import { watchDebounced } from '@vueuse/core'
 import PanelComp from './PanelComp.vue'
 import DescriptionComp from './items/DescriptionComp.vue'
+import FeedbackBadge from '@/feedback/Badge.vue'
+import { settingLabel } from '@/feedback'
 
 const isEditorShow = ref(false)
 const editorData = ref('')
 const currentItem = ref<IEditorItem | null>(null)
+const editorCode = computed(() => (currentItem.value ? settingLabel(currentItem.value.id) : ''))
 
 let stopWatch: WatchStopHandle | null = null
 

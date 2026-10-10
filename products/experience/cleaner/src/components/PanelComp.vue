@@ -6,9 +6,15 @@
     >
         <div ref="bar" class="sticky top-0 z-10 w-full cursor-move bg-[#00AEEC] py-1.5 text-center">
             <div class="text-xl font-black text-white">{{ title }}</div>
-            <i
-                class="absolute top-0 right-0 m-1 cursor-pointer text-white hover:rounded-full hover:bg-white/40"
-                @click="emit('close')"
+            <span v-if="closeCode" class="pointer-events-none absolute top-1.5 right-10">
+                <FeedbackBadge :code="closeCode" />
+            </span>
+            <button
+                ref="closeBtn"
+                type="button"
+                class="absolute top-0 right-0 m-1 cursor-pointer border-0 bg-transparent p-0 text-white hover:rounded-full hover:bg-white/40"
+                aria-label="关闭"
+                @click.stop="emit('close')"
             >
                 <svg
                     xmlns="http://www.w3.org/2000/svg"
@@ -20,7 +26,7 @@
                 >
                     <path stroke-linecap="round" stroke-linejoin="round" d="M6 18 18 6M6 6l12 12" />
                 </svg>
-            </i>
+            </button>
         </div>
         <div class="no-scrollbar flex min-h-[calc(100%-2.5rem)] flex-1 flex-col p-2">
             <slot />
@@ -29,8 +35,11 @@
 </template>
 
 <script setup lang="ts">
-import { Position, useDraggable, useElementBounding, useWindowSize } from '@vueuse/core'
-import { computed, ref } from 'vue'
+import { Position, useDraggable, useWindowSize } from '@vueuse/core'
+import { computed, ref, watch } from 'vue'
+import FeedbackBadge from '@/feedback/Badge.vue'
+import { actionLabel } from '@/feedback'
+import { capPanelSize, centeredPanelPosition, clampPanelPosition, isCloseHandleEvent } from '@/utils/panelGeometry'
 
 const emit = defineEmits(['close'])
 
@@ -40,63 +49,88 @@ const props = defineProps<{
     heightPercent: number // 单位vh
     minWidth: number // 单位px
     minHeight: number // 单位px
+    closeAction?: string
+    /** Opt-in: recenter using the current viewport whenever openToken changes. */
+    centerOnOpen?: boolean
+    openToken?: number
 }>()
+
+const closeCode = computed(() => (props.closeAction ? actionLabel(props.closeAction) : ''))
 
 const panel = ref<HTMLElement | null>(null)
 const bar = ref<HTMLElement | null>(null)
+const closeBtn = ref<HTMLButtonElement | null>(null)
 
 const windowSize = useWindowSize({ includeScrollbar: false })
-const { width, height } = useElementBounding(bar, { windowScroll: false }) // bar元素长宽
 
-const maxPos = computed(() => {
-    return {
-        x: windowSize.width.value - width.value,
-        y: windowSize.height.value - height.value,
-    }
-})
-let rAF = 0
-const { style } = useDraggable(panel, {
+const viewport = computed(() => ({
+    width: windowSize.width.value,
+    height: windowSize.height.value,
+}))
+
+const cappedSize = computed(() =>
+    capPanelSize(viewport.value, {
+        widthPercent: props.widthPercent,
+        heightPercent: props.heightPercent,
+        minWidth: props.minWidth,
+        minHeight: props.minHeight,
+    }),
+)
+
+const applyClamp = (pos: Position) => {
+    const next = clampPanelPosition(pos, viewport.value, cappedSize.value)
+    pos.x = next.x
+    pos.y = next.y
+}
+
+const { x, y, style } = useDraggable(panel, {
     // 在bewly首页iframe内位置异常，强制在左上角显示
     initialValue: {
-        x: Math.max(
-            windowSize.width.value / 2 -
-                Math.max((windowSize.width.value * props.widthPercent) / 100, props.minWidth) / 2,
-            0,
-        ),
-        y: Math.max(
-            windowSize.height.value / 2 -
-                Math.max((windowSize.height.value * props.heightPercent) / 100, props.minHeight) / 2,
-            0,
-        ),
+        x: Math.max(windowSize.width.value / 2 - cappedSize.value.width / 2, 0),
+        y: Math.max(windowSize.height.value / 2 - cappedSize.value.height / 2, 0),
     },
     handle: computed(() => bar.value),
     preventDefault: true,
-    // 限制拖拽范围
+    onStart: (_pos, event) => {
+        if (isCloseHandleEvent(event, closeBtn.value)) {
+            return false
+        }
+    },
     onMove: (pos: Position) => {
-        cancelAnimationFrame(rAF)
-        rAF = requestAnimationFrame(() => {
-            if (pos.x < 0) {
-                pos.x = 0
-            }
-            if (pos.y < 0) {
-                pos.y = 0
-            }
-            if (pos.x > maxPos.value.x) {
-                pos.x = maxPos.value.x
-            }
-            if (pos.y > maxPos.value.y) {
-                pos.y = maxPos.value.y
-            }
-        })
+        applyClamp(pos)
     },
 })
 
+watch([viewport, cappedSize], () => {
+    const next = clampPanelPosition({ x: x.value, y: y.value }, viewport.value, cappedSize.value)
+    if (x.value !== next.x) {
+        x.value = next.x
+    }
+    if (y.value !== next.y) {
+        y.value = next.y
+    }
+})
+
+watch(
+    () => (props.centerOnOpen ? props.openToken : undefined),
+    (token) => {
+        if (!props.centerOnOpen || token === undefined) {
+            return
+        }
+        // A resize event may not have reached VueUse before a menu opens.
+        // Measure now so this opening is centered in the current viewport.
+        windowSize.width.value = document.documentElement.clientWidth || window.innerWidth
+        windowSize.height.value = window.innerHeight
+        const next = centeredPanelPosition(viewport.value, cappedSize.value)
+        x.value = next.x
+        y.value = next.y
+    },
+)
+
 const panelStyle = computed(() => {
     return {
-        width: props.widthPercent + 'vw',
-        height: props.heightPercent + 'vh',
-        minWidth: props.minWidth + 'px',
-        minHeight: props.minHeight + 'px',
+        width: cappedSize.value.width + 'px',
+        height: cappedSize.value.height + 'px',
     }
 })
 </script>

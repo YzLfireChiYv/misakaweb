@@ -1,6 +1,9 @@
 <template>
     <div class="flex items-center justify-between py-1">
-        <div class="text-black">{{ name }}</div>
+        <div class="text-black">
+            <FeedbackBadge :code="feedbackCode" />
+            {{ name }}
+        </div>
         <Listbox v-model="selectedOption">
             <div class="relative w-2/5">
                 <ListboxButton
@@ -58,9 +61,12 @@ import { GM_getValue, GM_setValue } from '$'
 import { Listbox, ListboxButton, ListboxOption, ListboxOptions } from '@headlessui/vue'
 import { CheckIcon, ChevronUpDownIcon } from '@heroicons/vue/20/solid'
 import { ref, watch } from 'vue'
+import FeedbackBadge from '@/feedback/Badge.vue'
+import { settingLabel } from '@/feedback'
 import DescriptionComp from './DescriptionComp.vue'
 
 const item = defineProps<IListItem>()
+const feedbackCode = settingLabel(item.id)
 const options = item.options
 const currValue = GM_getValue(item.id, item.defaultValue)
 const currOption = options.find((v) => v.value === currValue)

@@ -12,7 +12,10 @@
                         class="inline-block h-4 w-4 transform rounded-full bg-white transition-transform"
                     />
                 </Switch>
-                <p class="ml-2 flex-1">{{ name }}</p>
+                <p class="ml-2 flex-1">
+                    <FeedbackBadge :code="feedbackCode" />
+                    {{ name }}
+                </p>
             </SwitchLabel>
         </div>
     </SwitchGroup>
@@ -25,9 +28,12 @@ import { logger } from '@/utils/logger'
 import { GM_getValue, GM_setValue } from '$'
 import { Switch, SwitchGroup, SwitchLabel } from '@headlessui/vue'
 import { ref, watch } from 'vue'
+import FeedbackBadge from '@/feedback/Badge.vue'
+import { settingLabel } from '@/feedback'
 import DescriptionComp from './DescriptionComp.vue'
 
 const item = defineProps<ISwitchItem>()
+const feedbackCode = settingLabel(item.id)
 
 const enabled = ref(GM_getValue(item.id, item.defaultEnable))
 

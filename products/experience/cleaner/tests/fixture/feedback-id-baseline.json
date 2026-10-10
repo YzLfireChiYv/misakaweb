@@ -1,0 +1,2216 @@
+{
+    "settings": [
+        {
+            "key": "activity-live-auto-jump",
+            "id": "S001"
+        },
+        {
+            "key": "auto-best-quality",
+            "id": "S002"
+        },
+        {
+            "key": "bangumi-page-hide-bpx-player-record-item-wrap",
+            "id": "S003"
+        },
+        {
+            "key": "bangumi-page-hide-bpx-player-top-follow",
+            "id": "S004"
+        },
+        {
+            "key": "bangumi-page-hide-eplist-badge",
+            "id": "S005"
+        },
+        {
+            "key": "bangumi-page-hide-media-info",
+            "id": "S006"
+        },
+        {
+            "key": "bangumi-page-hide-recommend",
+            "id": "S007"
+        },
+        {
+            "key": "bangumi-page-hide-right-container-section-height",
+            "id": "S008"
+        },
+        {
+            "key": "bangumi-page-hide-sidenav-issue",
+            "id": "S009"
+        },
+        {
+            "key": "bangumi-page-hide-sponsor-module",
+            "id": "S010"
+        },
+        {
+            "key": "bangumi-page-hide-toolbar",
+            "id": "S011"
+        },
+        {
+            "key": "bangumi-page-hide-watch-together",
+            "id": "S012"
+        },
+        {
+            "key": "bangumi-page-simple-media-info",
+            "id": "S013"
+        },
+        {
+            "key": "beauty-scrollbar",
+            "id": "S014"
+        },
+        {
+            "key": "biliweb-stat-fav-min",
+            "id": "S015"
+        },
+        {
+            "key": "biliweb-stat-fav-rate-min",
+            "id": "S016"
+        },
+        {
+            "key": "biliweb-stat-fav-rate-status",
+            "id": "S017"
+        },
+        {
+            "key": "biliweb-stat-fav-status",
+            "id": "S018"
+        },
+        {
+            "key": "biliweb-stat-like-min",
+            "id": "S019"
+        },
+        {
+            "key": "biliweb-stat-like-rate-min",
+            "id": "S020"
+        },
+        {
+            "key": "biliweb-stat-like-rate-status",
+            "id": "S021"
+        },
+        {
+            "key": "biliweb-stat-like-status",
+            "id": "S022"
+        },
+        {
+            "key": "biliweb-stat-view-min",
+            "id": "S023"
+        },
+        {
+            "key": "biliweb-stat-view-status",
+            "id": "S024"
+        },
+        {
+            "key": "biliweb-sync-enabled",
+            "id": "S025"
+        },
+        {
+            "key": "biliweb-sync-form",
+            "id": "S026"
+        },
+        {
+            "key": "biliweb-sync-password",
+            "id": "S027"
+        },
+        {
+            "key": "biliweb-sync-url",
+            "id": "S028"
+        },
+        {
+            "key": "biliweb-sync-user",
+            "id": "S029"
+        },
+        {
+            "key": "border-radius",
+            "id": "S030"
+        },
+        {
+            "key": "channel-bvid-filter-status",
+            "id": "S031"
+        },
+        {
+            "key": "channel-duration-filter-status",
+            "id": "S032"
+        },
+        {
+            "key": "channel-hide-carousel",
+            "id": "S033"
+        },
+        {
+            "key": "channel-hide-danmaku-count",
+            "id": "S034"
+        },
+        {
+            "key": "channel-hide-sticky-header",
+            "id": "S035"
+        },
+        {
+            "key": "channel-hide-subarea",
+            "id": "S036"
+        },
+        {
+            "key": "channel-increase-rcmd-list-font-size",
+            "id": "S037"
+        },
+        {
+            "key": "channel-layout",
+            "id": "S038"
+        },
+        {
+            "key": "channel-layout-padding",
+            "id": "S039"
+        },
+        {
+            "key": "channel-pubdate-filter-status",
+            "id": "S040"
+        },
+        {
+            "key": "channel-title-keyword-filter-status",
+            "id": "S041"
+        },
+        {
+            "key": "channel-title-keyword-whitelist-filter-status",
+            "id": "S042"
+        },
+        {
+            "key": "channel-uploader-filter-status",
+            "id": "S043"
+        },
+        {
+            "key": "channel-uploader-keyword-filter-status",
+            "id": "S044"
+        },
+        {
+            "key": "channel-uploader-whitelist-filter-status",
+            "id": "S045"
+        },
+        {
+            "key": "common-header-bar-padding-left",
+            "id": "S046"
+        },
+        {
+            "key": "common-header-bar-padding-right",
+            "id": "S047"
+        },
+        {
+            "key": "common-header-bar-search-margin-left",
+            "id": "S048"
+        },
+        {
+            "key": "common-header-bar-search-width",
+            "id": "S049"
+        },
+        {
+            "key": "common-hide-nav-anime",
+            "id": "S050"
+        },
+        {
+            "key": "common-hide-nav-anime-popover",
+            "id": "S051"
+        },
+        {
+            "key": "common-hide-nav-avatar",
+            "id": "S052"
+        },
+        {
+            "key": "common-hide-nav-bdu",
+            "id": "S053"
+        },
+        {
+            "key": "common-hide-nav-blackboard",
+            "id": "S054"
+        },
+        {
+            "key": "common-hide-nav-bml",
+            "id": "S055"
+        },
+        {
+            "key": "common-hide-nav-channel-panel-popover",
+            "id": "S056"
+        },
+        {
+            "key": "common-hide-nav-download-app",
+            "id": "S057"
+        },
+        {
+            "key": "common-hide-nav-dynamic",
+            "id": "S058"
+        },
+        {
+            "key": "common-hide-nav-dynamic-red-num",
+            "id": "S059"
+        },
+        {
+            "key": "common-hide-nav-favorite",
+            "id": "S060"
+        },
+        {
+            "key": "common-hide-nav-game",
+            "id": "S061"
+        },
+        {
+            "key": "common-hide-nav-game-popover",
+            "id": "S062"
+        },
+        {
+            "key": "common-hide-nav-history",
+            "id": "S063"
+        },
+        {
+            "key": "common-hide-nav-homepage",
+            "id": "S064"
+        },
+        {
+            "key": "common-hide-nav-homepage-logo",
+            "id": "S065"
+        },
+        {
+            "key": "common-hide-nav-live",
+            "id": "S066"
+        },
+        {
+            "key": "common-hide-nav-live-popover",
+            "id": "S067"
+        },
+        {
+            "key": "common-hide-nav-manga",
+            "id": "S068"
+        },
+        {
+            "key": "common-hide-nav-manga-popover",
+            "id": "S069"
+        },
+        {
+            "key": "common-hide-nav-match",
+            "id": "S070"
+        },
+        {
+            "key": "common-hide-nav-member",
+            "id": "S071"
+        },
+        {
+            "key": "common-hide-nav-message",
+            "id": "S072"
+        },
+        {
+            "key": "common-hide-nav-message-red-num",
+            "id": "S073"
+        },
+        {
+            "key": "common-hide-nav-search-btn",
+            "id": "S074"
+        },
+        {
+            "key": "common-hide-nav-search-history",
+            "id": "S075"
+        },
+        {
+            "key": "common-hide-nav-search-rcmd",
+            "id": "S076"
+        },
+        {
+            "key": "common-hide-nav-search-trending",
+            "id": "S077"
+        },
+        {
+            "key": "common-hide-nav-upload",
+            "id": "S078"
+        },
+        {
+            "key": "common-hide-nav-vip",
+            "id": "S079"
+        },
+        {
+            "key": "common-hide-nav-vipshop",
+            "id": "S080"
+        },
+        {
+            "key": "common-nav-favorite-select-watchlater",
+            "id": "S081"
+        },
+        {
+            "key": "common-nav-search-middle-justify",
+            "id": "S082"
+        },
+        {
+            "key": "common-theme-dark",
+            "id": "S083"
+        },
+        {
+            "key": "common-unify-font",
+            "id": "S084"
+        },
+        {
+            "key": "debug-mode",
+            "id": "S085"
+        },
+        {
+            "key": "default-webscreen",
+            "id": "S086"
+        },
+        {
+            "key": "default-widescreen",
+            "id": "S087"
+        },
+        {
+            "key": "dyn-content-keyword-filter-status",
+            "id": "S088"
+        },
+        {
+            "key": "dyn-content-white-filter-status",
+            "id": "S089"
+        },
+        {
+            "key": "dyn-duration-filter-status",
+            "id": "S090"
+        },
+        {
+            "key": "dyn-dyn-video-filter-status",
+            "id": "S091"
+        },
+        {
+            "key": "dyn-playback-filter-status",
+            "id": "S092"
+        },
+        {
+            "key": "dyn-title-keyword-filter-status",
+            "id": "S093"
+        },
+        {
+            "key": "dyn-uploader-filter-status",
+            "id": "S094"
+        },
+        {
+            "key": "dyn-uploader-filter-value",
+            "id": "S095"
+        },
+        {
+            "key": "dyn-video-title-white-filter-status",
+            "id": "S096"
+        },
+        {
+            "key": "dynamic-detail-width",
+            "id": "S097"
+        },
+        {
+            "key": "dynamic-list-width",
+            "id": "S098"
+        },
+        {
+            "key": "dynamic-page-hide-all-comment",
+            "id": "S099"
+        },
+        {
+            "key": "dynamic-page-unfold-dynamic",
+            "id": "S100"
+        },
+        {
+            "key": "dynamic-page-unfold-dynamic-content",
+            "id": "S101"
+        },
+        {
+            "key": "dynamic-page-up-list-checked-item-hide",
+            "id": "S102"
+        },
+        {
+            "key": "dynamic-page-up-list-checked-item-opacity",
+            "id": "S103"
+        },
+        {
+            "key": "dynamic-page-up-list-dual-line-mode",
+            "id": "S104"
+        },
+        {
+            "key": "exchange-dynamic-page-left-right-aside",
+            "id": "S105"
+        },
+        {
+            "key": "fullscreen-key-f-scrollable",
+            "id": "S106"
+        },
+        {
+            "key": "fullscreen-scrollable",
+            "id": "S107"
+        },
+        {
+            "key": "global-article-author-filter-value",
+            "id": "S108"
+        },
+        {
+            "key": "global-article-author-keyword-filter-value",
+            "id": "S109"
+        },
+        {
+            "key": "global-article-author-whitelist-filter-value",
+            "id": "S110"
+        },
+        {
+            "key": "global-article-title-keyword-filter-value",
+            "id": "S111"
+        },
+        {
+            "key": "global-article-title-keyword-whitelist-filter-value",
+            "id": "S112"
+        },
+        {
+            "key": "global-bvid-filter-value",
+            "id": "S113"
+        },
+        {
+            "key": "global-comment-content-filter-value",
+            "id": "S114"
+        },
+        {
+            "key": "global-comment-level-filter-value",
+            "id": "S115"
+        },
+        {
+            "key": "global-comment-username-filter-value",
+            "id": "S116"
+        },
+        {
+            "key": "global-comment-username-keyword-filter-value",
+            "id": "S117"
+        },
+        {
+            "key": "global-content-keyword-filter-value",
+            "id": "S118"
+        },
+        {
+            "key": "global-content-keyword-whitelist-filter-value",
+            "id": "S119"
+        },
+        {
+            "key": "global-duration-filter-value",
+            "id": "S120"
+        },
+        {
+            "key": "global-pubdate-filter-value",
+            "id": "S121"
+        },
+        {
+            "key": "global-quality-filter-value",
+            "id": "S122"
+        },
+        {
+            "key": "global-title-keyword-filter-value",
+            "id": "S123"
+        },
+        {
+            "key": "global-title-keyword-whitelist-filter-value",
+            "id": "S124"
+        },
+        {
+            "key": "global-uploader-filter-value",
+            "id": "S125"
+        },
+        {
+            "key": "global-uploader-keyword-filter-value",
+            "id": "S126"
+        },
+        {
+            "key": "global-uploader-whitelist-filter-value",
+            "id": "S127"
+        },
+        {
+            "key": "global-views-filter-value",
+            "id": "S128"
+        },
+        {
+            "key": "hide-dynamic-page-aside-left",
+            "id": "S129"
+        },
+        {
+            "key": "hide-dynamic-page-aside-right",
+            "id": "S130"
+        },
+        {
+            "key": "hide-dynamic-page-bili-dyn-ads",
+            "id": "S131"
+        },
+        {
+            "key": "hide-dynamic-page-bili-dyn-avatar-icon",
+            "id": "S132"
+        },
+        {
+            "key": "hide-dynamic-page-bili-dyn-avatar-pendent",
+            "id": "S133"
+        },
+        {
+            "key": "hide-dynamic-page-bili-dyn-banner",
+            "id": "S134"
+        },
+        {
+            "key": "hide-dynamic-page-bili-dyn-blocked",
+            "id": "S135"
+        },
+        {
+            "key": "hide-dynamic-page-bili-dyn-card-goods",
+            "id": "S136"
+        },
+        {
+            "key": "hide-dynamic-page-bili-dyn-card-reserve",
+            "id": "S137"
+        },
+        {
+            "key": "hide-dynamic-page-bili-dyn-charge-video",
+            "id": "S138"
+        },
+        {
+            "key": "hide-dynamic-page-bili-dyn-dispute",
+            "id": "S139"
+        },
+        {
+            "key": "hide-dynamic-page-bili-dyn-forward",
+            "id": "S140"
+        },
+        {
+            "key": "hide-dynamic-page-bili-dyn-item-interaction",
+            "id": "S141"
+        },
+        {
+            "key": "hide-dynamic-page-bili-dyn-list-tabs",
+            "id": "S142"
+        },
+        {
+            "key": "hide-dynamic-page-bili-dyn-live",
+            "id": "S143"
+        },
+        {
+            "key": "hide-dynamic-page-bili-dyn-live-users__item__living",
+            "id": "S144"
+        },
+        {
+            "key": "hide-dynamic-page-bili-dyn-lottery",
+            "id": "S145"
+        },
+        {
+            "key": "hide-dynamic-page-bili-dyn-my-info",
+            "id": "S146"
+        },
+        {
+            "key": "hide-dynamic-page-bili-dyn-official-topic",
+            "id": "S147"
+        },
+        {
+            "key": "hide-dynamic-page-bili-dyn-ornament",
+            "id": "S148"
+        },
+        {
+            "key": "hide-dynamic-page-bili-dyn-publishing",
+            "id": "S149"
+        },
+        {
+            "key": "hide-dynamic-page-bili-dyn-text-topic",
+            "id": "S150"
+        },
+        {
+            "key": "hide-dynamic-page-bili-dyn-topic-box",
+            "id": "S151"
+        },
+        {
+            "key": "hide-dynamic-page-bili-dyn-vote",
+            "id": "S152"
+        },
+        {
+            "key": "hide-dynamic-page-fixed-header",
+            "id": "S153"
+        },
+        {
+            "key": "hide-dynamic-page-sidebar-back-to-top",
+            "id": "S154"
+        },
+        {
+            "key": "hide-dynamic-page-sidebar-old-version",
+            "id": "S155"
+        },
+        {
+            "key": "hide-dynamic-page-up-list",
+            "id": "S156"
+        },
+        {
+            "key": "hide-footer",
+            "id": "S157"
+        },
+        {
+            "key": "hide-search-page-activity-game-list",
+            "id": "S158"
+        },
+        {
+            "key": "hide-search-page-ad",
+            "id": "S159"
+        },
+        {
+            "key": "hide-search-page-bangumi-pgc-list",
+            "id": "S160"
+        },
+        {
+            "key": "hide-search-page-btn-to-top",
+            "id": "S161"
+        },
+        {
+            "key": "hide-search-page-cheese-result",
+            "id": "S162"
+        },
+        {
+            "key": "hide-search-page-customer-service",
+            "id": "S163"
+        },
+        {
+            "key": "hide-search-page-danmaku-count",
+            "id": "S164"
+        },
+        {
+            "key": "hide-search-page-date",
+            "id": "S165"
+        },
+        {
+            "key": "hide-search-page-live-room-result",
+            "id": "S166"
+        },
+        {
+            "key": "hide-search-page-search-sticky-header",
+            "id": "S167"
+        },
+        {
+            "key": "hide-space-page-sidebar-feedback",
+            "id": "S168"
+        },
+        {
+            "key": "hide-space-page-sidebar-revert",
+            "id": "S169"
+        },
+        {
+            "key": "hide-space-page-video-card-charge",
+            "id": "S170"
+        },
+        {
+            "key": "hide-space-page-video-card-danmaku-count",
+            "id": "S171"
+        },
+        {
+            "key": "hide-watchlater-button",
+            "id": "S172"
+        },
+        {
+            "key": "homepage-bvid-filter-status",
+            "id": "S173"
+        },
+        {
+            "key": "homepage-duration-filter-status",
+            "id": "S174"
+        },
+        {
+            "key": "homepage-following-whitelist-filter-status",
+            "id": "S175"
+        },
+        {
+            "key": "homepage-hide-ad-card",
+            "id": "S176"
+        },
+        {
+            "key": "homepage-hide-adblock-tips",
+            "id": "S177"
+        },
+        {
+            "key": "homepage-hide-adcard-button",
+            "id": "S178"
+        },
+        {
+            "key": "homepage-hide-banner",
+            "id": "S179"
+        },
+        {
+            "key": "homepage-hide-bili-watch-later-tip",
+            "id": "S180"
+        },
+        {
+            "key": "homepage-hide-danmaku-count",
+            "id": "S181"
+        },
+        {
+            "key": "homepage-hide-desktop-download-tip",
+            "id": "S182"
+        },
+        {
+            "key": "homepage-hide-feed-roll-btn",
+            "id": "S183"
+        },
+        {
+            "key": "homepage-hide-feedback",
+            "id": "S184"
+        },
+        {
+            "key": "homepage-hide-flexible-roll-btn",
+            "id": "S185"
+        },
+        {
+            "key": "homepage-hide-flexible-roll-btn-text",
+            "id": "S186"
+        },
+        {
+            "key": "homepage-hide-inline-player-danmaku",
+            "id": "S187"
+        },
+        {
+            "key": "homepage-hide-live-card-recommend",
+            "id": "S188"
+        },
+        {
+            "key": "homepage-hide-no-interest",
+            "id": "S189"
+        },
+        {
+            "key": "homepage-hide-recommend-swipe",
+            "id": "S190"
+        },
+        {
+            "key": "homepage-hide-skeleton",
+            "id": "S191"
+        },
+        {
+            "key": "homepage-hide-skeleton-animation",
+            "id": "S192"
+        },
+        {
+            "key": "homepage-hide-skeleton-before-anchor",
+            "id": "S193"
+        },
+        {
+            "key": "homepage-hide-sticky-header",
+            "id": "S194"
+        },
+        {
+            "key": "homepage-hide-sticky-subarea",
+            "id": "S195"
+        },
+        {
+            "key": "homepage-hide-sub-area-card-recommend",
+            "id": "S196"
+        },
+        {
+            "key": "homepage-hide-subarea",
+            "id": "S197"
+        },
+        {
+            "key": "homepage-hide-top-btn",
+            "id": "S198"
+        },
+        {
+            "key": "homepage-hide-trial-feed-wrap",
+            "id": "S199"
+        },
+        {
+            "key": "homepage-hide-up-info-icon",
+            "id": "S200"
+        },
+        {
+            "key": "homepage-hide-video-info-date",
+            "id": "S201"
+        },
+        {
+            "key": "homepage-hide-watchlater-pip-button",
+            "id": "S202"
+        },
+        {
+            "key": "homepage-increase-rcmd-list-font-size",
+            "id": "S203"
+        },
+        {
+            "key": "homepage-increase-rcmd-load-size",
+            "id": "S204"
+        },
+        {
+            "key": "homepage-layout",
+            "id": "S205"
+        },
+        {
+            "key": "homepage-layout-padding",
+            "id": "S206"
+        },
+        {
+            "key": "homepage-move-no-interest",
+            "id": "S207"
+        },
+        {
+            "key": "homepage-pubdate-filter-status",
+            "id": "S208"
+        },
+        {
+            "key": "homepage-rcmd-video-preload",
+            "id": "S209"
+        },
+        {
+            "key": "homepage-revert-channel-dynamic-icon",
+            "id": "S210"
+        },
+        {
+            "key": "homepage-simple-sub-area-card-recommend",
+            "id": "S211"
+        },
+        {
+            "key": "homepage-title-keyword-filter-status",
+            "id": "S212"
+        },
+        {
+            "key": "homepage-title-keyword-whitelist-filter-status",
+            "id": "S213"
+        },
+        {
+            "key": "homepage-uploader-filter-status",
+            "id": "S214"
+        },
+        {
+            "key": "homepage-uploader-keyword-filter-status",
+            "id": "S215"
+        },
+        {
+            "key": "homepage-uploader-whitelist-filter-status",
+            "id": "S216"
+        },
+        {
+            "key": "homepage-views-filter-status",
+            "id": "S217"
+        },
+        {
+            "key": "increase-space-page-video-card-font-size",
+            "id": "S218"
+        },
+        {
+            "key": "live-page-announcement-cntr",
+            "id": "S219"
+        },
+        {
+            "key": "live-page-brush-prompt",
+            "id": "S220"
+        },
+        {
+            "key": "live-page-bulge-danmaku",
+            "id": "S221"
+        },
+        {
+            "key": "live-page-chat-control-panel",
+            "id": "S222"
+        },
+        {
+            "key": "live-page-chat-input-ctnr",
+            "id": "S223"
+        },
+        {
+            "key": "live-page-chat-input-ctnr-medal-section",
+            "id": "S224"
+        },
+        {
+            "key": "live-page-chat-input-ctnr-send-btn",
+            "id": "S225"
+        },
+        {
+            "key": "live-page-chat-item-background-color",
+            "id": "S226"
+        },
+        {
+            "key": "live-page-chat-item-top3-notice",
+            "id": "S227"
+        },
+        {
+            "key": "live-page-clean-all-danmaku-big-emoji",
+            "id": "S228"
+        },
+        {
+            "key": "live-page-clean-all-danmaku-small-emoji",
+            "id": "S229"
+        },
+        {
+            "key": "live-page-combo-card",
+            "id": "S230"
+        },
+        {
+            "key": "live-page-combo-danmaku",
+            "id": "S231"
+        },
+        {
+            "key": "live-page-control-panel-icon-row",
+            "id": "S232"
+        },
+        {
+            "key": "live-page-convention-msg",
+            "id": "S233"
+        },
+        {
+            "key": "live-page-danmaku-font-size",
+            "id": "S234"
+        },
+        {
+            "key": "live-page-default-skin",
+            "id": "S235"
+        },
+        {
+            "key": "live-page-disable-hotkey-g-follow",
+            "id": "S236"
+        },
+        {
+            "key": "live-page-fans-medal-item-ctnr",
+            "id": "S237"
+        },
+        {
+            "key": "live-page-flip-view",
+            "id": "S238"
+        },
+        {
+            "key": "live-page-fullscreen-danmaku-vm",
+            "id": "S239"
+        },
+        {
+            "key": "live-page-gift-control-vm",
+            "id": "S240"
+        },
+        {
+            "key": "live-page-gift-control-vm-show-lottery",
+            "id": "S241"
+        },
+        {
+            "key": "live-page-gift-item",
+            "id": "S242"
+        },
+        {
+            "key": "live-page-group-medal-ctnr",
+            "id": "S243"
+        },
+        {
+            "key": "live-page-head-info-avatar-pendant",
+            "id": "S244"
+        },
+        {
+            "key": "live-page-head-info-vm",
+            "id": "S245"
+        },
+        {
+            "key": "live-page-head-info-vm-upper-row-activity",
+            "id": "S246"
+        },
+        {
+            "key": "live-page-head-info-vm-upper-row-follow-ctnr",
+            "id": "S247"
+        },
+        {
+            "key": "live-page-head-info-vm-upper-row-hotrank",
+            "id": "S248"
+        },
+        {
+            "key": "live-page-head-web-player-announcement-wrapper",
+            "id": "S249"
+        },
+        {
+            "key": "live-page-head-web-player-awesome-pk-vm",
+            "id": "S250"
+        },
+        {
+            "key": "live-page-head-web-player-game-id",
+            "id": "S251"
+        },
+        {
+            "key": "live-page-head-web-player-icon-feedback",
+            "id": "S252"
+        },
+        {
+            "key": "live-page-head-web-player-live-lottery",
+            "id": "S253"
+        },
+        {
+            "key": "live-page-head-web-player-research-container",
+            "id": "S254"
+        },
+        {
+            "key": "live-page-head-web-player-shop-popover-vm",
+            "id": "S255"
+        },
+        {
+            "key": "live-page-header-avatar",
+            "id": "S256"
+        },
+        {
+            "key": "live-page-header-bili-download-panel",
+            "id": "S257"
+        },
+        {
+            "key": "live-page-header-entry-logo",
+            "id": "S258"
+        },
+        {
+            "key": "live-page-header-entry-title",
+            "id": "S259"
+        },
+        {
+            "key": "live-page-header-follow-panel",
+            "id": "S260"
+        },
+        {
+            "key": "live-page-header-go-live",
+            "id": "S261"
+        },
+        {
+            "key": "live-page-header-live",
+            "id": "S262"
+        },
+        {
+            "key": "live-page-header-mobile-game",
+            "id": "S263"
+        },
+        {
+            "key": "live-page-header-net-game",
+            "id": "S264"
+        },
+        {
+            "key": "live-page-header-recharge",
+            "id": "S265"
+        },
+        {
+            "key": "live-page-header-search-block",
+            "id": "S266"
+        },
+        {
+            "key": "live-page-header-search-btn",
+            "id": "S267"
+        },
+        {
+            "key": "live-page-header-showmore-link",
+            "id": "S268"
+        },
+        {
+            "key": "live-page-header-standalone-chatroom",
+            "id": "S269"
+        },
+        {
+            "key": "live-page-header-standalone-entertainment",
+            "id": "S270"
+        },
+        {
+            "key": "live-page-header-standalone-game",
+            "id": "S271"
+        },
+        {
+            "key": "live-page-header-standalone-helpmeplay",
+            "id": "S272"
+        },
+        {
+            "key": "live-page-header-standalone-interact",
+            "id": "S273"
+        },
+        {
+            "key": "live-page-header-standalone-knowledge",
+            "id": "S274"
+        },
+        {
+            "key": "live-page-header-standalone-living",
+            "id": "S275"
+        },
+        {
+            "key": "live-page-header-standalone-match",
+            "id": "S276"
+        },
+        {
+            "key": "live-page-header-standalone-radio",
+            "id": "S277"
+        },
+        {
+            "key": "live-page-header-standalone-shopping",
+            "id": "S278"
+        },
+        {
+            "key": "live-page-header-standalone-vtuber",
+            "id": "S279"
+        },
+        {
+            "key": "live-page-hide-web-player-background",
+            "id": "S280"
+        },
+        {
+            "key": "live-page-nav-search-history",
+            "id": "S281"
+        },
+        {
+            "key": "live-page-nav-search-rcmd",
+            "id": "S282"
+        },
+        {
+            "key": "live-page-nav-search-trending",
+            "id": "S283"
+        },
+        {
+            "key": "live-page-rank-icon",
+            "id": "S284"
+        },
+        {
+            "key": "live-page-rank-list-vm",
+            "id": "S285"
+        },
+        {
+            "key": "live-page-rank-list-vm-fold",
+            "id": "S286"
+        },
+        {
+            "key": "live-page-remove-wallpaper",
+            "id": "S287"
+        },
+        {
+            "key": "live-page-room-feed",
+            "id": "S288"
+        },
+        {
+            "key": "live-page-room-info-ctnr",
+            "id": "S289"
+        },
+        {
+            "key": "live-page-sections-vm",
+            "id": "S290"
+        },
+        {
+            "key": "live-page-sidebar-vm",
+            "id": "S291"
+        },
+        {
+            "key": "live-page-title-label",
+            "id": "S292"
+        },
+        {
+            "key": "live-page-wealth-medal-ctnr",
+            "id": "S293"
+        },
+        {
+            "key": "live-page-web-player-interactive-sticker",
+            "id": "S294"
+        },
+        {
+            "key": "live-page-web-player-watermark",
+            "id": "S295"
+        },
+        {
+            "key": "live-page-welcome-msg",
+            "id": "S296"
+        },
+        {
+            "key": "live-page-width",
+            "id": "S297"
+        },
+        {
+            "key": "normalscreen-width",
+            "id": "S298"
+        },
+        {
+            "key": "popular-bvid-filter-status",
+            "id": "S299"
+        },
+        {
+            "key": "popular-dimension-filter-status",
+            "id": "S300"
+        },
+        {
+            "key": "popular-duration-filter-status",
+            "id": "S301"
+        },
+        {
+            "key": "popular-hide-danmaku-count",
+            "id": "S302"
+        },
+        {
+            "key": "popular-hide-tips",
+            "id": "S303"
+        },
+        {
+            "key": "popular-history-hide-hint",
+            "id": "S304"
+        },
+        {
+            "key": "popular-hot-hide-tag",
+            "id": "S305"
+        },
+        {
+            "key": "popular-layout",
+            "id": "S306"
+        },
+        {
+            "key": "popular-quality-filter-status",
+            "id": "S307"
+        },
+        {
+            "key": "popular-title-keyword-filter-status",
+            "id": "S308"
+        },
+        {
+            "key": "popular-title-keyword-whitelist-filter-status",
+            "id": "S309"
+        },
+        {
+            "key": "popular-uploader-filter-status",
+            "id": "S310"
+        },
+        {
+            "key": "popular-uploader-keyword-filter-status",
+            "id": "S311"
+        },
+        {
+            "key": "popular-uploader-whitelist-filter-status",
+            "id": "S312"
+        },
+        {
+            "key": "popular-weekly-hide-hint",
+            "id": "S313"
+        },
+        {
+            "key": "screen-scrollable-enable-mini-player",
+            "id": "S314"
+        },
+        {
+            "key": "screen-scrollable-move-header-bottom",
+            "id": "S315"
+        },
+        {
+            "key": "search-article-author-filter-status",
+            "id": "S316"
+        },
+        {
+            "key": "search-article-author-keyword-filter-status",
+            "id": "S317"
+        },
+        {
+            "key": "search-article-author-whitelist-filter-status",
+            "id": "S318"
+        },
+        {
+            "key": "search-article-title-keyword-filter-status",
+            "id": "S319"
+        },
+        {
+            "key": "search-article-title-keyword-whitelist-filter-status",
+            "id": "S320"
+        },
+        {
+            "key": "search-bvid-filter-status",
+            "id": "S321"
+        },
+        {
+            "key": "search-duration-filter-status",
+            "id": "S322"
+        },
+        {
+            "key": "search-relativity-filter-status",
+            "id": "S323"
+        },
+        {
+            "key": "search-relativity-threshold-value",
+            "id": "S324"
+        },
+        {
+            "key": "search-title-keyword-filter-status",
+            "id": "S325"
+        },
+        {
+            "key": "search-title-keyword-whitelist-filter-status",
+            "id": "S326"
+        },
+        {
+            "key": "search-uploader-filter-status",
+            "id": "S327"
+        },
+        {
+            "key": "search-uploader-keyword-filter-status",
+            "id": "S328"
+        },
+        {
+            "key": "search-uploader-whitelist-filter-status",
+            "id": "S329"
+        },
+        {
+            "key": "space-bvid-filter-status",
+            "id": "S330"
+        },
+        {
+            "key": "space-duration-filter-status",
+            "id": "S331"
+        },
+        {
+            "key": "space-dyn-content-keyword-filter-status",
+            "id": "S332"
+        },
+        {
+            "key": "space-dyn-content-white-filter-status",
+            "id": "S333"
+        },
+        {
+            "key": "space-dyn-duration-filter-status",
+            "id": "S334"
+        },
+        {
+            "key": "space-dyn-title-keyword-filter-status",
+            "id": "S335"
+        },
+        {
+            "key": "space-dyn-video-filter-status",
+            "id": "S336"
+        },
+        {
+            "key": "space-dyn-video-title-white-filter-status",
+            "id": "S337"
+        },
+        {
+            "key": "space-page-redirect-to-video",
+            "id": "S338"
+        },
+        {
+            "key": "space-playback-filter-status",
+            "id": "S339"
+        },
+        {
+            "key": "space-title-keyword-filter-status",
+            "id": "S340"
+        },
+        {
+            "key": "space-title-keyword-whitelist-filter-status",
+            "id": "S341"
+        },
+        {
+            "key": "url-cleaner",
+            "id": "S342"
+        },
+        {
+            "key": "video-bvid-filter-status",
+            "id": "S343"
+        },
+        {
+            "key": "video-comment-ad-filter-status",
+            "id": "S344"
+        },
+        {
+            "key": "video-comment-bot-filter-status",
+            "id": "S345"
+        },
+        {
+            "key": "video-comment-call-bot-filter-status",
+            "id": "S346"
+        },
+        {
+            "key": "video-comment-call-user-filter-status",
+            "id": "S347"
+        },
+        {
+            "key": "video-comment-call-user-noreply-filter-status",
+            "id": "S348"
+        },
+        {
+            "key": "video-comment-call-user-only-filter-status",
+            "id": "S349"
+        },
+        {
+            "key": "video-comment-call-user-only-noreply-filter-status",
+            "id": "S350"
+        },
+        {
+            "key": "video-comment-chain-filter-status",
+            "id": "S351"
+        },
+        {
+            "key": "video-comment-chain-level-value",
+            "id": "S352"
+        },
+        {
+            "key": "video-comment-content-filter-status",
+            "id": "S353"
+        },
+        {
+            "key": "video-comment-emoji-only-filter-status",
+            "id": "S354"
+        },
+        {
+            "key": "video-comment-level-filter-status",
+            "id": "S355"
+        },
+        {
+            "key": "video-comment-link-whitelist-status",
+            "id": "S356"
+        },
+        {
+            "key": "video-comment-noface-filter-status",
+            "id": "S357"
+        },
+        {
+            "key": "video-comment-note-whitelist-status",
+            "id": "S358"
+        },
+        {
+            "key": "video-comment-pinned-whitelist-status",
+            "id": "S359"
+        },
+        {
+            "key": "video-comment-root-whitelist-status",
+            "id": "S360"
+        },
+        {
+            "key": "video-comment-sub-whitelist-status",
+            "id": "S361"
+        },
+        {
+            "key": "video-comment-uploader-whitelist-status",
+            "id": "S362"
+        },
+        {
+            "key": "video-comment-username-filter-status",
+            "id": "S363"
+        },
+        {
+            "key": "video-comment-username-keyword-filter-status",
+            "id": "S364"
+        },
+        {
+            "key": "video-duration-filter-status",
+            "id": "S365"
+        },
+        {
+            "key": "video-page-bpx-player-bili-dm-normal-white",
+            "id": "S366"
+        },
+        {
+            "key": "video-page-bpx-player-bili-dm-vip-white",
+            "id": "S367"
+        },
+        {
+            "key": "video-page-bpx-player-bili-high-icon",
+            "id": "S368"
+        },
+        {
+            "key": "video-page-bpx-player-mini-mode-position-record",
+            "id": "S369"
+        },
+        {
+            "key": "video-page-bpx-player-mini-mode-wheel-adjust",
+            "id": "S370"
+        },
+        {
+            "key": "video-page-bv2av",
+            "id": "S371"
+        },
+        {
+            "key": "video-page-coin-disable-auto-like",
+            "id": "S372"
+        },
+        {
+            "key": "video-page-danmaku-font-family",
+            "id": "S373"
+        },
+        {
+            "key": "video-page-danmaku-font-weight",
+            "id": "S374"
+        },
+        {
+            "key": "video-page-exchange-player-position",
+            "id": "S375"
+        },
+        {
+            "key": "video-page-fix-note-thumbnail-scale",
+            "id": "S376"
+        },
+        {
+            "key": "video-page-hide-below-activity-vote",
+            "id": "S377"
+        },
+        {
+            "key": "video-page-hide-below-bannerAd",
+            "id": "S378"
+        },
+        {
+            "key": "video-page-hide-below-info-desc",
+            "id": "S379"
+        },
+        {
+            "key": "video-page-hide-below-info-tag",
+            "id": "S380"
+        },
+        {
+            "key": "video-page-hide-below-info-video-ai-assistant",
+            "id": "S381"
+        },
+        {
+            "key": "video-page-hide-below-info-video-complaint",
+            "id": "S382"
+        },
+        {
+            "key": "video-page-hide-below-info-video-note",
+            "id": "S383"
+        },
+        {
+            "key": "video-page-hide-below-info-video-report-menu",
+            "id": "S384"
+        },
+        {
+            "key": "video-page-hide-bili-avatar-nft-icon",
+            "id": "S385"
+        },
+        {
+            "key": "video-page-hide-bili-avatar-pendent-dom",
+            "id": "S386"
+        },
+        {
+            "key": "video-page-hide-bpx-player-bili-clock",
+            "id": "S387"
+        },
+        {
+            "key": "video-page-hide-bpx-player-bili-cmd-shrink",
+            "id": "S388"
+        },
+        {
+            "key": "video-page-hide-bpx-player-bili-cmtime",
+            "id": "S389"
+        },
+        {
+            "key": "video-page-hide-bpx-player-bili-guide-all",
+            "id": "S390"
+        },
+        {
+            "key": "video-page-hide-bpx-player-bili-link",
+            "id": "S391"
+        },
+        {
+            "key": "video-page-hide-bpx-player-bili-qoe-feedback",
+            "id": "S392"
+        },
+        {
+            "key": "video-page-hide-bpx-player-bili-reserve",
+            "id": "S393"
+        },
+        {
+            "key": "video-page-hide-bpx-player-bili-score",
+            "id": "S394"
+        },
+        {
+            "key": "video-page-hide-bpx-player-bili-score-sum",
+            "id": "S395"
+        },
+        {
+            "key": "video-page-hide-bpx-player-bili-vote",
+            "id": "S396"
+        },
+        {
+            "key": "video-page-hide-bpx-player-cmd-dm-wrap",
+            "id": "S397"
+        },
+        {
+            "key": "video-page-hide-bpx-player-ctrl-eplist",
+            "id": "S398"
+        },
+        {
+            "key": "video-page-hide-bpx-player-ctrl-flac",
+            "id": "S399"
+        },
+        {
+            "key": "video-page-hide-bpx-player-ctrl-full",
+            "id": "S400"
+        },
+        {
+            "key": "video-page-hide-bpx-player-ctrl-next",
+            "id": "S401"
+        },
+        {
+            "key": "video-page-hide-bpx-player-ctrl-pip",
+            "id": "S402"
+        },
+        {
+            "key": "video-page-hide-bpx-player-ctrl-play",
+            "id": "S403"
+        },
+        {
+            "key": "video-page-hide-bpx-player-ctrl-playbackrate",
+            "id": "S404"
+        },
+        {
+            "key": "video-page-hide-bpx-player-ctrl-prev",
+            "id": "S405"
+        },
+        {
+            "key": "video-page-hide-bpx-player-ctrl-quality",
+            "id": "S406"
+        },
+        {
+            "key": "video-page-hide-bpx-player-ctrl-setting",
+            "id": "S407"
+        },
+        {
+            "key": "video-page-hide-bpx-player-ctrl-subtitle",
+            "id": "S408"
+        },
+        {
+            "key": "video-page-hide-bpx-player-ctrl-viewpoint",
+            "id": "S409"
+        },
+        {
+            "key": "video-page-hide-bpx-player-ctrl-volume",
+            "id": "S410"
+        },
+        {
+            "key": "video-page-hide-bpx-player-ctrl-web",
+            "id": "S411"
+        },
+        {
+            "key": "video-page-hide-bpx-player-ctrl-wide",
+            "id": "S412"
+        },
+        {
+            "key": "video-page-hide-bpx-player-dialog-wrap",
+            "id": "S413"
+        },
+        {
+            "key": "video-page-hide-bpx-player-dm-btn-send",
+            "id": "S414"
+        },
+        {
+            "key": "video-page-hide-bpx-player-dm-hint",
+            "id": "S415"
+        },
+        {
+            "key": "video-page-hide-bpx-player-dm-input",
+            "id": "S416"
+        },
+        {
+            "key": "video-page-hide-bpx-player-dm-setting",
+            "id": "S417"
+        },
+        {
+            "key": "video-page-hide-bpx-player-dm-switch",
+            "id": "S418"
+        },
+        {
+            "key": "video-page-hide-bpx-player-ending-related",
+            "id": "S419"
+        },
+        {
+            "key": "video-page-hide-bpx-player-mini-mode-danmaku",
+            "id": "S420"
+        },
+        {
+            "key": "video-page-hide-bpx-player-mini-mode-process",
+            "id": "S421"
+        },
+        {
+            "key": "video-page-hide-bpx-player-mini-when-ending",
+            "id": "S422"
+        },
+        {
+            "key": "video-page-hide-bpx-player-pbp-pin",
+            "id": "S423"
+        },
+        {
+            "key": "video-page-hide-bpx-player-postpanel",
+            "id": "S424"
+        },
+        {
+            "key": "video-page-hide-bpx-player-sending-area",
+            "id": "S425"
+        },
+        {
+            "key": "video-page-hide-bpx-player-shadow-progress-area",
+            "id": "S426"
+        },
+        {
+            "key": "video-page-hide-bpx-player-state-wrap",
+            "id": "S427"
+        },
+        {
+            "key": "video-page-hide-bpx-player-top-issue",
+            "id": "S428"
+        },
+        {
+            "key": "video-page-hide-bpx-player-top-left-follow",
+            "id": "S429"
+        },
+        {
+            "key": "video-page-hide-bpx-player-top-left-music",
+            "id": "S430"
+        },
+        {
+            "key": "video-page-hide-bpx-player-top-left-title",
+            "id": "S431"
+        },
+        {
+            "key": "video-page-hide-bpx-player-video-btn-dm",
+            "id": "S432"
+        },
+        {
+            "key": "video-page-hide-bpx-player-video-info-online",
+            "id": "S433"
+        },
+        {
+            "key": "video-page-hide-bpx-player-video-inputbar",
+            "id": "S434"
+        },
+        {
+            "key": "video-page-hide-comment",
+            "id": "S435"
+        },
+        {
+            "key": "video-page-hide-comment-user-card",
+            "id": "S436"
+        },
+        {
+            "key": "video-page-hide-contractor-box",
+            "id": "S437"
+        },
+        {
+            "key": "video-page-hide-emoji-large",
+            "id": "S438"
+        },
+        {
+            "key": "video-page-hide-emoji-large-zoom",
+            "id": "S439"
+        },
+        {
+            "key": "video-page-hide-emoji-popover",
+            "id": "S440"
+        },
+        {
+            "key": "video-page-hide-emoji-small",
+            "id": "S441"
+        },
+        {
+            "key": "video-page-hide-fan-badge",
+            "id": "S442"
+        },
+        {
+            "key": "video-page-hide-fixed-header",
+            "id": "S443"
+        },
+        {
+            "key": "video-page-hide-fixed-reply-box",
+            "id": "S444"
+        },
+        {
+            "key": "video-page-hide-jump-link-search-word",
+            "id": "S445"
+        },
+        {
+            "key": "video-page-hide-main-reply-box",
+            "id": "S446"
+        },
+        {
+            "key": "video-page-hide-note-prefix",
+            "id": "S447"
+        },
+        {
+            "key": "video-page-hide-reply-box-textarea-placeholder",
+            "id": "S448"
+        },
+        {
+            "key": "video-page-hide-reply-content-user-highlight",
+            "id": "S449"
+        },
+        {
+            "key": "video-page-hide-reply-decorate",
+            "id": "S450"
+        },
+        {
+            "key": "video-page-hide-reply-dislike-reply-btn",
+            "id": "S451"
+        },
+        {
+            "key": "video-page-hide-reply-notice",
+            "id": "S452"
+        },
+        {
+            "key": "video-page-hide-reply-tag-list",
+            "id": "S453"
+        },
+        {
+            "key": "video-page-hide-right-container",
+            "id": "S454"
+        },
+        {
+            "key": "video-page-hide-right-container-ad",
+            "id": "S455"
+        },
+        {
+            "key": "video-page-hide-right-container-danmaku",
+            "id": "S456"
+        },
+        {
+            "key": "video-page-hide-right-container-duration",
+            "id": "S457"
+        },
+        {
+            "key": "video-page-hide-right-container-live",
+            "id": "S458"
+        },
+        {
+            "key": "video-page-hide-right-container-multi-page-add-counter",
+            "id": "S459"
+        },
+        {
+            "key": "video-page-hide-right-container-reco-list-next-play",
+            "id": "S460"
+        },
+        {
+            "key": "video-page-hide-right-container-reco-list-next-play-next-button",
+            "id": "S461"
+        },
+        {
+            "key": "video-page-hide-right-container-reco-list-rec-footer",
+            "id": "S462"
+        },
+        {
+            "key": "video-page-hide-right-container-reco-list-rec-list",
+            "id": "S463"
+        },
+        {
+            "key": "video-page-hide-right-container-reco-list-rec-list-info-plays",
+            "id": "S464"
+        },
+        {
+            "key": "video-page-hide-right-container-reco-list-rec-list-info-up",
+            "id": "S465"
+        },
+        {
+            "key": "video-page-hide-right-container-right-bottom-banner",
+            "id": "S466"
+        },
+        {
+            "key": "video-page-hide-right-container-section-abstract",
+            "id": "S467"
+        },
+        {
+            "key": "video-page-hide-right-container-section-height",
+            "id": "S468"
+        },
+        {
+            "key": "video-page-hide-right-container-section-play-num",
+            "id": "S469"
+        },
+        {
+            "key": "video-page-hide-right-container-section-subscribe",
+            "id": "S470"
+        },
+        {
+            "key": "video-page-hide-right-container-video-page-game-card-small",
+            "id": "S471"
+        },
+        {
+            "key": "video-page-hide-sidenav-back-to-top",
+            "id": "S472"
+        },
+        {
+            "key": "video-page-hide-sidenav-customer-service",
+            "id": "S473"
+        },
+        {
+            "key": "video-page-hide-sidenav-mini",
+            "id": "S474"
+        },
+        {
+            "key": "video-page-hide-sidenav-right-container-live",
+            "id": "S475"
+        },
+        {
+            "key": "video-page-hide-top-vote-card",
+            "id": "S476"
+        },
+        {
+            "key": "video-page-hide-triple-oldfan-entry",
+            "id": "S477"
+        },
+        {
+            "key": "video-page-hide-up-bili-avatar-icon",
+            "id": "S478"
+        },
+        {
+            "key": "video-page-hide-up-bili-avatar-pendent-dom",
+            "id": "S479"
+        },
+        {
+            "key": "video-page-hide-up-charge",
+            "id": "S480"
+        },
+        {
+            "key": "video-page-hide-up-description",
+            "id": "S481"
+        },
+        {
+            "key": "video-page-hide-up-membersinfo-normal-header",
+            "id": "S482"
+        },
+        {
+            "key": "video-page-hide-up-sendmsg",
+            "id": "S483"
+        },
+        {
+            "key": "video-page-hide-up-usercard",
+            "id": "S484"
+        },
+        {
+            "key": "video-page-hide-user-level",
+            "id": "S485"
+        },
+        {
+            "key": "video-page-hide-video-info-argue",
+            "id": "S486"
+        },
+        {
+            "key": "video-page-hide-video-info-copyright",
+            "id": "S487"
+        },
+        {
+            "key": "video-page-hide-video-info-danmaku-count",
+            "id": "S488"
+        },
+        {
+            "key": "video-page-hide-video-info-honor",
+            "id": "S489"
+        },
+        {
+            "key": "video-page-hide-video-info-pubdate",
+            "id": "S490"
+        },
+        {
+            "key": "video-page-hide-video-share-popover",
+            "id": "S491"
+        },
+        {
+            "key": "video-page-hide-vote-info",
+            "id": "S492"
+        },
+        {
+            "key": "video-page-reply-user-name-color-default",
+            "id": "S493"
+        },
+        {
+            "key": "video-page-reply-user-name-color-pink",
+            "id": "S494"
+        },
+        {
+            "key": "video-page-right-container-section-unfold-title",
+            "id": "S495"
+        },
+        {
+            "key": "video-page-right-container-set-info-bottom",
+            "id": "S496"
+        },
+        {
+            "key": "video-page-right-container-sticky-disable",
+            "id": "S497"
+        },
+        {
+            "key": "video-page-right-container-sticky-optimize",
+            "id": "S498"
+        },
+        {
+            "key": "video-page-show-bpx-player-pbp",
+            "id": "S499"
+        },
+        {
+            "key": "video-page-show-bpx-player-shadow-progress-area-fullscreen",
+            "id": "S500"
+        },
+        {
+            "key": "video-page-show-fullscreen-bpx-player-video-info-online",
+            "id": "S501"
+        },
+        {
+            "key": "video-page-simple-share",
+            "id": "S502"
+        },
+        {
+            "key": "video-page-simple-share-domain",
+            "id": "S503"
+        },
+        {
+            "key": "video-page-simple-video-share-popover",
+            "id": "S504"
+        },
+        {
+            "key": "video-page-subtitle-font-color",
+            "id": "S505"
+        },
+        {
+            "key": "video-page-subtitle-font-family",
+            "id": "S506"
+        },
+        {
+            "key": "video-page-subtitle-font-weight",
+            "id": "S507"
+        },
+        {
+            "key": "video-page-subtitle-text-stroke-color",
+            "id": "S508"
+        },
+        {
+            "key": "video-page-subtitle-text-stroke-width",
+            "id": "S509"
+        },
+        {
+            "key": "video-page-unfold-below-info-desc",
+            "id": "S510"
+        },
+        {
+            "key": "video-page-unfold-right-container-danmaku",
+            "id": "S511"
+        },
+        {
+            "key": "video-page-unfold-right-container-reco-list",
+            "id": "S512"
+        },
+        {
+            "key": "video-page-unfold-video-info-title",
+            "id": "S513"
+        },
+        {
+            "key": "video-related-filter-status",
+            "id": "S514"
+        },
+        {
+            "key": "video-title-keyword-filter-status",
+            "id": "S515"
+        },
+        {
+            "key": "video-title-keyword-whitelist-filter-status",
+            "id": "S516"
+        },
+        {
+            "key": "video-uploader-filter-status",
+            "id": "S517"
+        },
+        {
+            "key": "video-uploader-keyword-filter-status",
+            "id": "S518"
+        },
+        {
+            "key": "video-uploader-whitelist-filter-status",
+            "id": "S519"
+        },
+        {
+            "key": "watchlater-hide-feedback",
+            "id": "S520"
+        },
+        {
+            "key": "watchlater-increase-font-size",
+            "id": "S521"
+        },
+        {
+            "key": "watchlater-layout",
+            "id": "S522"
+        },
+        {
+            "key": "webscreen-scrollable",
+            "id": "S523"
+        }
+    ],
+    "menus": [
+        {
+            "key": "menu-article-filter",
+            "id": "M01"
+        },
+        {
+            "key": "menu-comment-filter",
+            "id": "M02"
+        },
+        {
+            "key": "menu-dark-mode",
+            "id": "M03"
+        },
+        {
+            "key": "menu-dynamic-filter",
+            "id": "M04"
+        },
+        {
+            "key": "menu-feedback",
+            "id": "M05"
+        },
+        {
+            "key": "menu-rule-panel",
+            "id": "M06"
+        },
+        {
+            "key": "menu-side-btn",
+            "id": "M07"
+        },
+        {
+            "key": "menu-video-filter",
+            "id": "M08"
+        }
+    ],
+    "actions": [
+        {
+            "key": "ctx-block-article-author",
+            "id": "B01"
+        },
+        {
+            "key": "ctx-block-bvid",
+            "id": "B02"
+        },
+        {
+            "key": "ctx-block-comment-user",
+            "id": "B03"
+        },
+        {
+            "key": "ctx-block-uploader",
+            "id": "B04"
+        },
+        {
+            "key": "ctx-copy-space-url",
+            "id": "B05"
+        },
+        {
+            "key": "ctx-copy-video-url",
+            "id": "B06"
+        },
+        {
+            "key": "ctx-hide-dyn-uploader",
+            "id": "B07"
+        },
+        {
+            "key": "ctx-whitelist-article-author",
+            "id": "B08"
+        },
+        {
+            "key": "ctx-whitelist-uploader",
+            "id": "B09"
+        },
+        {
+            "key": "panel-close-article-filter",
+            "id": "B10"
+        },
+        {
+            "key": "panel-close-comment-filter",
+            "id": "B11"
+        },
+        {
+            "key": "panel-close-dynamic-filter",
+            "id": "B12"
+        },
+        {
+            "key": "panel-close-editor",
+            "id": "B13"
+        },
+        {
+            "key": "panel-close-rule",
+            "id": "B14"
+        },
+        {
+            "key": "panel-close-video-filter",
+            "id": "B15"
+        },
+        {
+            "key": "side-comment-filter",
+            "id": "B16"
+        },
+        {
+            "key": "side-dark-mode",
+            "id": "B17"
+        },
+        {
+            "key": "side-dynamic-filter",
+            "id": "B18"
+        },
+        {
+            "key": "side-rule-panel",
+            "id": "B19"
+        },
+        {
+            "key": "side-video-filter",
+            "id": "B20"
+        },
+        {
+            "key": "webdav-verify",
+            "id": "B21"
+        }
+    ]
+}

@@ -1,0 +1,16 @@
+@import 'tailwindcss';
+@source "../../src/components/PanelComp.vue";
+@source "../../src/views/SideBtnView.vue";
+@source "../../src/views/ShortcutSettingsPanelView.vue";
+@source "../../src/views/HeaderShortcutView.vue";
+@source "../../src/feedback/Badge.vue";
+@source "./PanelHarness.vue";
+
+.no-scrollbar::-webkit-scrollbar {
+    display: none;
+}
+
+.no-scrollbar {
+    -ms-overflow-style: none;
+    scrollbar-width: none;
+}

@@ -10,7 +10,6 @@ import {
     isPageSpace,
     isPageVideo,
 } from '@/utils/pageType'
-import { useStorage } from '@vueuse/core'
 import { defineStore } from 'pinia'
 import { ref } from 'vue'
 
@@ -94,9 +93,13 @@ export const useDynamicFilterPanelStore = defineStore('DynamicFilterPanel', () =
     return { isShow, show, hide, toggle, isPageValid }
 })
 
-// 快捷按钮
+/**
+ * Legacy floating-button visibility store. The localStorage key
+ * `bili-cleaner-side-btn-show` is retained in the browser and is no longer
+ * read or written here; page entry visibility comes from GM shortcut prefs.
+ */
 export const useSideBtnStore = defineStore('SideBtn', () => {
-    const isShow = useStorage('bili-cleaner-side-btn-show', false, localStorage)
+    const isShow = ref(false)
     const show = () => {
         isShow.value = true
     }
@@ -107,6 +110,19 @@ export const useSideBtnStore = defineStore('SideBtn', () => {
         isShow.value = !isShow.value
     }
     return { isShow, show, hide, toggle }
+})
+
+export const useShortcutSettingsStore = defineStore('ShortcutSettings', () => {
+    const isShow = ref(false)
+    const openToken = ref(0)
+    const show = () => {
+        openToken.value += 1
+        isShow.value = true
+    }
+    const hide = () => {
+        isShow.value = false
+    }
+    return { isShow, openToken, show, hide }
 })
 
 export const useArticleFilterPanelStore = defineStore('ArticleFilterPanel', () => {

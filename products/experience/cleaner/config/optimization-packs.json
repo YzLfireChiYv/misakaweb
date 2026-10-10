@@ -1,0 +1,380 @@
+{
+  "schema_version": 1,
+  "catalog_version": "2026-10-11.1",
+  "scope": "Public optimization grouping and future build input. Grouping is implemented; exclusion builds are not yet implemented.",
+  "counts": {
+    "existing_optimization_keys": 73,
+    "existing_groups": 6,
+    "reserved_groups": 1
+  },
+  "pack_semantics": "Inclusion means capability exists; does not mean every setting is enabled.",
+  "core_support": [
+    {
+      "key": "homepage-increase-rcmd-load-size",
+      "id": "S204",
+      "name": "增大 视频载入 视频数量",
+      "category": "cleaning",
+      "not_optional_optimization": true
+    },
+    {
+      "key": "homepage-rcmd-video-preload",
+      "id": "S209",
+      "name": "启用 视频列表预加载 (不稳定功能)",
+      "category": "cleaning",
+      "not_optional_optimization": true
+    }
+  ],
+  "packs": [
+    {
+      "id": "text-style",
+      "label": "文字与字幕",
+      "status": "grouped-existing-capabilities",
+      "setting_ids": [
+        "S037",
+        "S084",
+        "S203",
+        "S218",
+        "S234",
+        "S373",
+        "S374",
+        "S505",
+        "S506",
+        "S507",
+        "S508",
+        "S509",
+        "S521"
+      ],
+      "setting_keys": [
+        "channel-increase-rcmd-list-font-size",
+        "common-unify-font",
+        "homepage-increase-rcmd-list-font-size",
+        "increase-space-page-video-card-font-size",
+        "live-page-danmaku-font-size",
+        "video-page-danmaku-font-family",
+        "video-page-danmaku-font-weight",
+        "video-page-subtitle-font-color",
+        "video-page-subtitle-font-family",
+        "video-page-subtitle-font-weight",
+        "video-page-subtitle-text-stroke-color",
+        "video-page-subtitle-text-stroke-width",
+        "watchlater-increase-font-size"
+      ],
+      "rationale": "字体、字号、字重与字幕样式；共同使用文字样式管理，按页面适配",
+      "shared_capabilities": [
+        "text-style-service"
+      ],
+      "compatibility": "与外部字体/字幕脚本重复时，整组排除；组内保留分项开关",
+      "retention": "keep-as-optional-group; individual switches remain",
+      "default_policy": "existing values unchanged; new defaults decided separately",
+      "confirmed_default_off_keys": [
+        "common-unify-font"
+      ]
+    },
+    {
+      "id": "appearance",
+      "label": "主题与外观",
+      "status": "grouped-existing-capabilities",
+      "setting_ids": [
+        "S014",
+        "S030",
+        "S083",
+        "S366",
+        "S367",
+        "S376",
+        "S439",
+        "S493",
+        "S494"
+      ],
+      "setting_keys": [
+        "beauty-scrollbar",
+        "border-radius",
+        "common-theme-dark",
+        "video-page-bpx-player-bili-dm-normal-white",
+        "video-page-bpx-player-bili-dm-vip-white",
+        "video-page-fix-note-thumbnail-scale",
+        "video-page-hide-emoji-large-zoom",
+        "video-page-reply-user-name-color-default",
+        "video-page-reply-user-name-color-pink"
+      ],
+      "rationale": "夜间模式、圆角、滚动条与视觉表现；主题接管和一般CSS仍各自可关闭",
+      "shared_capabilities": [
+        "appearance-style-service"
+      ],
+      "compatibility": "有独立主题脚本时可整组排除；停用不能覆盖别人后续接管的样式或主题",
+      "retention": "keep-as-optional-group; individual switches remain",
+      "default_policy": "existing values unchanged; new defaults decided separately",
+      "confirmed_default_off_keys": [
+        "border-radius",
+        "common-theme-dark"
+      ]
+    },
+    {
+      "id": "layout",
+      "label": "页面布局",
+      "status": "grouped-existing-capabilities",
+      "setting_ids": [
+        "S038",
+        "S039",
+        "S046",
+        "S047",
+        "S048",
+        "S049",
+        "S082",
+        "S097",
+        "S098",
+        "S104",
+        "S105",
+        "S205",
+        "S206",
+        "S207",
+        "S297",
+        "S298",
+        "S306",
+        "S375",
+        "S468",
+        "S496",
+        "S498",
+        "S522"
+      ],
+      "setting_keys": [
+        "channel-layout",
+        "channel-layout-padding",
+        "common-header-bar-padding-left",
+        "common-header-bar-padding-right",
+        "common-header-bar-search-margin-left",
+        "common-header-bar-search-width",
+        "common-nav-search-middle-justify",
+        "dynamic-detail-width",
+        "dynamic-list-width",
+        "dynamic-page-up-list-dual-line-mode",
+        "exchange-dynamic-page-left-right-aside",
+        "homepage-layout",
+        "homepage-layout-padding",
+        "homepage-move-no-interest",
+        "live-page-width",
+        "normalscreen-width",
+        "popular-layout",
+        "video-page-exchange-player-position",
+        "video-page-hide-right-container-section-height",
+        "video-page-right-container-set-info-bottom",
+        "video-page-right-container-sticky-optimize",
+        "watchlater-layout"
+      ],
+      "rationale": "列数、边距、宽度、位置、列表高度与吸附策略；不包含已经归为净化的取消吸附功能",
+      "shared_capabilities": [
+        "layout-style-service"
+      ],
+      "compatibility": "与外部首页/宽屏/顶栏布局脚本重复时，可排除此组",
+      "retention": "keep-as-optional-group; individual switches remain",
+      "default_policy": "existing values unchanged; new defaults decided separately",
+      "confirmed_default_off_keys": []
+    },
+    {
+      "id": "playback",
+      "label": "播放控制",
+      "status": "grouped-existing-capabilities",
+      "setting_ids": [
+        "S002",
+        "S086",
+        "S087",
+        "S106",
+        "S107",
+        "S314",
+        "S315",
+        "S369",
+        "S370",
+        "S499",
+        "S500",
+        "S501",
+        "S523"
+      ],
+      "setting_keys": [
+        "auto-best-quality",
+        "default-webscreen",
+        "default-widescreen",
+        "fullscreen-key-f-scrollable",
+        "fullscreen-scrollable",
+        "screen-scrollable-enable-mini-player",
+        "screen-scrollable-move-header-bottom",
+        "video-page-bpx-player-mini-mode-position-record",
+        "video-page-bpx-player-mini-mode-wheel-adjust",
+        "video-page-show-bpx-player-pbp",
+        "video-page-show-bpx-player-shadow-progress-area-fullscreen",
+        "video-page-show-fullscreen-bpx-player-video-info-online",
+        "webscreen-scrollable"
+      ],
+      "rationale": "播放模式、全屏滚动、小窗和播放信息增强；复用播放器及快捷键适配",
+      "shared_capabilities": [
+        "player-adapter",
+        "keyboard-service"
+      ],
+      "compatibility": "与外部播放器增强可能重复；提供不含此组的成品",
+      "retention": "keep-as-optional-group; individual switches remain",
+      "default_policy": "existing values unchanged; new defaults decided separately",
+      "confirmed_default_off_keys": []
+    },
+    {
+      "id": "reading-navigation",
+      "label": "阅读与导航",
+      "status": "grouped-existing-capabilities",
+      "setting_ids": [
+        "S001",
+        "S081",
+        "S100",
+        "S101",
+        "S210",
+        "S338",
+        "S459",
+        "S495",
+        "S510",
+        "S511",
+        "S512",
+        "S513"
+      ],
+      "setting_keys": [
+        "activity-live-auto-jump",
+        "common-nav-favorite-select-watchlater",
+        "dynamic-page-unfold-dynamic",
+        "dynamic-page-unfold-dynamic-content",
+        "homepage-revert-channel-dynamic-icon",
+        "space-page-redirect-to-video",
+        "video-page-hide-right-container-multi-page-add-counter",
+        "video-page-right-container-section-unfold-title",
+        "video-page-unfold-below-info-desc",
+        "video-page-unfold-right-container-danmaku",
+        "video-page-unfold-right-container-reco-list",
+        "video-page-unfold-video-info-title"
+      ],
+      "rationale": "自动展开、页面跳转、默认选中、恢复编号/入口等操作便利",
+      "shared_capabilities": [
+        "page-lifecycle"
+      ],
+      "compatibility": "与外部自动展开/导航脚本重复时，可排除此组",
+      "retention": "keep-as-optional-group; individual switches remain",
+      "default_policy": "existing values unchanged; new defaults decided separately",
+      "confirmed_default_off_keys": []
+    },
+    {
+      "id": "link-tools",
+      "label": "链接工具",
+      "status": "grouped-existing-capabilities",
+      "setting_ids": [
+        "S371",
+        "S503",
+        "B05",
+        "B06"
+      ],
+      "setting_keys": [
+        "video-page-bv2av",
+        "video-page-simple-share-domain",
+        "ctx-copy-space-url",
+        "ctx-copy-video-url"
+      ],
+      "rationale": "短域名、BV/AV形式与复制链接；分享净化仍在净化核心",
+      "shared_capabilities": [
+        "link-codec"
+      ],
+      "compatibility": "不随本组移除净化分享；数据/链接转换辅助按实际依赖共享",
+      "retention": "keep-as-optional-group; individual switches remain",
+      "default_policy": "existing values unchanged; new defaults decided separately",
+      "confirmed_default_off_keys": []
+    },
+    {
+      "id": "touch-controls",
+      "label": "触摸操作",
+      "status": "planned-not-implemented",
+      "setting_ids": [],
+      "setting_keys": [],
+      "rationale": "为平板/触屏版预留播放器滑动进度、音量、画面亮度和操作提示",
+      "shared_capabilities": [
+        "player-adapter",
+        "page-lifecycle",
+        "gesture-input",
+        "gesture-overlay"
+      ],
+      "compatibility": "同一个播放器只保留一套手势接管；未启用不绑定触摸事件",
+      "retention": "keep-as-optional-group; individual switches remain",
+      "default_policy": "existing values unchanged; new defaults decided separately",
+      "confirmed_default_off_keys": []
+    }
+  ],
+  "shared_capabilities": {
+    "status": "interface candidates, not already-extracted services",
+    "rule": "Shared capabilities are dependencies, not optional visible features. Keep required minimal parts when a pack is excluded; import must not start unused functionality."
+  },
+  "external_sources": [
+    {
+      "id": "evolved-player-gestures",
+      "pack": "touch-controls",
+      "status": "source-reviewed; not integrated",
+      "repository": "https://github.com/the1812/Bilibili-Evolved",
+      "commit": "fa06dcec095dbccaba82f50ae2318c8d61c26671",
+      "path": "registry/lib/components/touch/player-gestures",
+      "runtime_dependencies": [
+        "Evolved playerAgent",
+        "videoChange observer",
+        "component settings",
+        "Vue 2 mount and UI",
+        "unsafeWindow.player",
+        "optional videoshot API"
+      ],
+      "reuse_plan": "Reuse gesture recognition and mappings; supply our player/lifecycle/settings/overlay adapters instead of importing the whole Evolved runtime.",
+      "checks_needed": [
+        "Touch cancel/multitouch and native scroll",
+        "rotate/fullscreen/video replacement",
+        "idempotent mount/unmount and no handlers when disabled",
+        "volume behavior on actual tablet browsers",
+        "brightness affects picture, not system backlight",
+        "optional thumbnail network budget"
+      ],
+      "maintenance": "Pin source/hash, record local changes and compare upstream; direct integration transfers update work to us, not automatic upstream adaptation.",
+      "support": "Our repository handles support; retain original license and source attribution when copying code."
+    }
+  ],
+  "distribution": {
+    "source_of_truth": "single shared source tree",
+    "artifacts": "multiple complete userscripts generated from pack profiles",
+    "runtime_download_platform": false,
+    "planned_profiles": [
+      {
+        "id": "pure",
+        "label": "净化与过滤",
+        "packs": [],
+        "available": false
+      },
+      {
+        "id": "desktop-toolkit",
+        "label": "桌面工具包",
+        "packs": [
+          "text-style",
+          "appearance",
+          "layout",
+          "playback",
+          "reading-navigation",
+          "link-tools"
+        ],
+        "available": false
+      },
+      {
+        "id": "tablet",
+        "label": "平板触摸版",
+        "packs": [
+          "touch-controls"
+        ],
+        "available": false
+      },
+      {
+        "id": "without-text-appearance",
+        "label": "交给外部字体主题脚本",
+        "packs": [
+          "layout",
+          "playback",
+          "reading-navigation",
+          "link-tools"
+        ],
+        "available": false
+      }
+    ],
+    "variant_rules": "Whole-pack additions/removals with dependency closure; do not claim a pack excluded merely because its settings are hidden. Stable URL per profile; one installed variant at a time."
+  }
+}

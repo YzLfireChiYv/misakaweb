@@ -6,6 +6,7 @@
             heightPercent: 85,
             minWidth: 360,
             minHeight: 600,
+            closeAction: 'panel-close-video-filter',
         }"
         v-show="store.isShow"
         @close="store.hide"

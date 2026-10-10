@@ -1,0 +1,56 @@
+name: Build and publish development userscript
+
+on:
+  push:
+    branches: [main]
+    paths:
+      - 'products/experience/cleaner/**'
+      - '.github/workflows/userscript.yml'
+  workflow_dispatch:
+
+permissions:
+  contents: write
+
+concurrency:
+  group: userscript-main
+  cancel-in-progress: true
+
+jobs:
+  publish:
+    runs-on: ubuntu-latest
+    env:
+      HUSKY: '0'
+    defaults:
+      run:
+        working-directory: products/experience/cleaner
+    steps:
+      - uses: actions/checkout@v6
+      - uses: pnpm/setup@v2
+        with:
+          version: 12.3.4
+          runtime: node@24
+          package-json-file: products/experience/cleaner/package.json
+          cache-dependency-path: products/experience/cleaner/pnpm-lock.yaml
+          cache: true
+          install: false
+      - name: Install locked dependencies
+        run: pnpm install --frozen-lockfile
+      - name: Check and build installable script
+        run: pnpm release:prepare
+      - name: Publish generated files without replacing newer source
+        working-directory: .
+        run: |
+          current=$(git ls-remote origin refs/heads/main | cut -f1)
+          if [ "$current" != "$(git rev-parse HEAD)" ]; then
+            echo 'Newer source exists; its build will publish instead.'
+            exit 0
+          fi
+          git add -- products/experience/misakaweb-feedback-test.user.js products/experience/release-manifest.json
+          if git diff --cached --quiet; then
+            echo 'Published files already match this build.'
+            exit 0
+          fi
+          git config user.name 'github-actions[bot]'
+          git config user.email '41898282+github-actions[bot]@users.noreply.github.com'
+          git commit -m 'build: refresh development userscript [skip ci]'
+          git push origin HEAD:main

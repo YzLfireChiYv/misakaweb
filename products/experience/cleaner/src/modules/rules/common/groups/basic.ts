@@ -68,7 +68,7 @@ export const commonBasicItems: Item[] = [
         id: 'url-cleaner',
         name: 'URL参数净化',
         description: ['给 UP 充电时若报错，尝试关闭本功能并刷新'],
-        defaultEnable: true,
+        defaultEnable: false,
         noStyle: true,
         /**
          * URL净化，移除query string中的跟踪参数/无用参数
