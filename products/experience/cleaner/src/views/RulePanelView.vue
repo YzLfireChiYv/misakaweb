@@ -4,6 +4,9 @@
         v-show="store.isShow"
         @close="store.hide"
     >
+        <p class="mb-2 rounded border border-blue-200 bg-blue-50 p-2 text-sm text-gray-800" :data-build-profile="buildProfile">
+            MisakaWeb · {{ buildLabel }} · {{ scriptVersion }}。净化与过滤全部保留；包含的优化仍可逐项开关。
+        </p>
         <div v-if="review" class="mb-3 rounded-lg border border-blue-200 bg-blue-50 p-2 text-sm text-gray-800" data-review-toolbar>
             <p>净化全部保留。标记只记录取舍，不影响当前功能开关；未标记的优化仍待定。</p>
             <div class="my-2 flex flex-wrap gap-2" role="tablist" aria-label="功能类别">
@@ -100,6 +103,9 @@ import type { ReviewCategory, ReviewEntry } from '@/feedback/review-types'
 import { downloadMaintenanceDiagnostic } from '@/modules/maintenance/diagnostics'
 
 const store = useRulePanelStore()
+const buildProfile = __BUILD_PROFILE__
+const buildLabel = __BUILD_LABEL__
+const scriptVersion = __SCRIPT_VERSION__
 const editorDialogRef = ref<InstanceType<typeof EditorDialog> | null>(null)
 
 const handleEdit = (item: IEditorItem) => {

@@ -10,6 +10,11 @@ export default defineConfig({
     define: {
         'import.meta.env.VITE_FEEDBACK_LABELS': JSON.stringify('true'),
         __SCRIPT_VERSION__: JSON.stringify(release.development.version),
+        __PACK_APPEARANCE__: true,
+        __PACK_PLAYBACK__: true,
+        __PACK_LINKS__: true,
+        __BUILD_PROFILE__: JSON.stringify('development'),
+        __BUILD_LABEL__: JSON.stringify('开发测试版（完整能力）'),
     },
     resolve: {
         alias: {

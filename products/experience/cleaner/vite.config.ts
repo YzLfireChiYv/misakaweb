@@ -6,6 +6,8 @@ import { defineConfig } from 'vite'
 import monkey, { cdn } from 'vite-plugin-monkey'
 import tailwindcss from '@tailwindcss/vite'
 import tailwindShadowDOM from 'vite-plugin-tailwind-shadowdom'
+import remToPx from '@thedutchcoder/postcss-rem-to-px'
+import { profileFor, packSourcePlugin, cssPruningPlugin } from './scripts/pack-build.mjs'
 
 const release = JSON.parse(fs.readFileSync(new URL('./config/release.json', import.meta.url), 'utf8'))
 
@@ -23,14 +25,26 @@ const copyFeedbackArtifact = () => ({
 // https://vitejs.dev/config/
 export default defineConfig(({ mode }) => {
     const isFeedback = mode === 'feedback-test'
-    const channel = isFeedback ? release.development : release.legacy
+    const profile = process.env.MISAKA_PROFILE ? profileFor(process.env.MISAKA_PROFILE) : null
+    const channel = profile ? {
+        version: release.development.version,
+        url: `https://raw.githubusercontent.com/YzLfireChiYv/misakaweb/main/products/experience/variants/misakaweb-${profile.id}.user.js`,
+    } : isFeedback ? release.development : release.legacy
     const feedbackIndex = isFeedback
         ? fileURLToPath(new URL('./src/feedback/id-index.generated.ts', import.meta.url))
         : fileURLToPath(new URL('./src/feedback/id-index.empty.ts', import.meta.url))
 
     return {
-        define: { __SCRIPT_VERSION__: JSON.stringify(channel.version) },
+        define: {
+            __SCRIPT_VERSION__: JSON.stringify(channel.version),
+            __PACK_APPEARANCE__: JSON.stringify(!profile || profile.packs.includes('appearance')),
+            __PACK_PLAYBACK__: JSON.stringify(!profile || profile.packs.includes('playback')),
+            __PACK_LINKS__: JSON.stringify(!profile || profile.packs.includes('link-tools')),
+            __BUILD_PROFILE__: JSON.stringify(profile?.id ?? (isFeedback ? 'development' : 'legacy')),
+            __BUILD_LABEL__: JSON.stringify(profile?.label ?? (isFeedback ? '开发测试版（完整能力）' : '完整能力')),
+        },
         plugins: [
+            ...(profile ? [packSourcePlugin(profile)] : []),
             tailwindcss(),
             tailwindShadowDOM(),
             vue(),
@@ -40,7 +54,7 @@ export default defineConfig(({ mode }) => {
                     name: 'MisakaWeb',
                     namespace: 'https://github.com/YzLfireChiYv/misakaweb',
                     version: channel.version,
-                    description: isFeedback
+                    description: profile ? `MisakaWeb · ${profile.label}。包含完整净化与过滤；只安装一种版本。` : isFeedback
                         ? '大量借用社区上游项目。反馈测试编号版，开发分组。'
                         : '大量借用社区上游项目。',
                     author: 'festoney8, MisakaWeb',
@@ -77,13 +91,13 @@ export default defineConfig(({ mode }) => {
                     'run-at': 'document-start',
                 },
                 build: {
-                    fileName: isFeedback ? 'misakaweb-feedback-test.user.js' : 'misakaweb.user.js',
+                    fileName: profile ? `misakaweb-${profile.id}.user.js` : isFeedback ? 'misakaweb-feedback-test.user.js' : 'misakaweb.user.js',
                     externalGlobals: {
                         vue: cdn.npmmirror('Vue', 'dist/vue.global.prod.js'),
                     },
                 },
             }),
-            ...(isFeedback ? [copyFeedbackArtifact()] : []),
+            ...(isFeedback && !profile ? [copyFeedbackArtifact()] : []),
         ],
         resolve: {
             alias: {
@@ -93,7 +107,7 @@ export default defineConfig(({ mode }) => {
             },
         },
         css: {
-            postcss: './postcss.config.js',
+            postcss: profile ? { plugins: [remToPx(), cssPruningPlugin(profile)] } : './postcss.config.js',
         },
     }
 })

@@ -2,12 +2,12 @@
   "counts": {
     "actions": 34,
     "controls": 567,
-    "diverged": 32,
+    "diverged": 35,
     "files": 259,
     "menus": 8,
     "noBaseline": 30,
     "settings": 525,
-    "unchanged": 197,
+    "unchanged": 194,
     "unresolved": 35
   },
   "external": [
@@ -740,7 +740,7 @@
       ],
       "path": "src/main.ts",
       "provenance": "matching-path-in-fixed-baseline",
-      "sha256": "58869a15abcb9316d57d1268eb818dc77d30517af12bec5a29371f1604c30a50",
+      "sha256": "8463a7ee88cfa45cd973f72c7c0f52f03af0992e9381c5199174bc682905f370",
       "status": "diverged",
       "unresolved": [
         {
@@ -1768,14 +1768,15 @@
         "src/modules/rules/index.ts",
         "src/types/item.ts",
         "src/utils/init.ts",
-        "src/utils/logger.ts"
+        "src/utils/logger.ts",
+        "src/utils/widePlayer.ts"
       ],
       "modules": [
         "runtime"
       ],
       "path": "src/modules/index.ts",
       "provenance": "matching-path-in-fixed-baseline",
-      "sha256": "167a8e0f2f08ceaefd523a50adba91ea2e3dacccfda8d68635508f022e01d004",
+      "sha256": "1a07ab57923b6d7a3c63eb70782b48e415a8bd5cfb7903f2c70ad529ea8d73fb",
       "status": "diverged",
       "unresolved": [
         {
@@ -2145,8 +2146,8 @@
       ],
       "path": "src/modules/rules/bangumi/groups/playerLayout.ts",
       "provenance": "matching-path-in-fixed-baseline",
-      "sha256": "1b3a415d7081feb2c58fec505a408e868edb2d757d2b463e1efbf3cebe1cf336",
-      "status": "unchanged",
+      "sha256": "81f183fba35c796071b53246efcf2808de57bbfbc48d2e48cbb08577e25a747f",
+      "status": "diverged",
       "unresolved": [
         {
           "from": "src/modules/rules/bangumi/groups/playerLayout.ts",
@@ -2691,7 +2692,7 @@
       ],
       "path": "src/modules/rules/common/groups/basic.ts",
       "provenance": "matching-path-in-fixed-baseline",
-      "sha256": "1ac7e6c109f354296efc812211006d0b6a3356c7eaedc4d459f9c23570b515e2",
+      "sha256": "6defc026590f411f9c9730ff296daf375afcb0a29803d8670bc9204e32a8d611",
       "status": "diverged",
       "unresolved": [],
       "upstream": {
@@ -5094,8 +5095,8 @@
       ],
       "path": "src/modules/rules/video/groups/basic.ts",
       "provenance": "matching-path-in-fixed-baseline",
-      "sha256": "2b6a47922d30d6128200637a0afd523e8b2188d04031b757fe1583e02db7a1ec",
-      "status": "unchanged",
+      "sha256": "931b38b1ee8db215500988541127e8df1b19a9661bebc659831a3e56096d492c",
+      "status": "diverged",
       "unresolved": [
         {
           "from": "src/modules/rules/video/groups/basic.ts",
@@ -5436,8 +5437,8 @@
       ],
       "path": "src/modules/rules/video/groups/playerLayout.ts",
       "provenance": "matching-path-in-fixed-baseline",
-      "sha256": "0ce286de85e8af92425003353da2c5b8e2cce0af717461351942ab852a070f3b",
-      "status": "unchanged",
+      "sha256": "23d2e04821ab55d1fccb50e5a27a215a704b11837e97a2459119e79ade737b4a",
+      "status": "diverged",
       "unresolved": [
         {
           "from": "src/modules/rules/video/groups/playerLayout.ts",
@@ -5871,7 +5872,7 @@
       ],
       "path": "src/modules/shortcut/actions.ts",
       "provenance": "own-confirmed",
-      "sha256": "47a382409944bc23dcaf3a9217b50a13e59e7ad4cbe3f170dcfa45748cf395cc",
+      "sha256": "7aa22c806fbdfbe5949180b395aba4dc38b72c83dd5bbdab7c10929207d0019e",
       "status": "no-baseline",
       "unresolved": [],
       "upstream": null
@@ -6580,7 +6581,7 @@
       ],
       "path": "src/views/RulePanelView.vue",
       "provenance": "matching-path-in-fixed-baseline",
-      "sha256": "d8061f60447ae1f13baeb1dc3b2d4f64935cb98bcb5a068b9cc704cb55aa61a6",
+      "sha256": "e765078c3c58d84ff0633f1142ccfc4230cdd95d5924e0aa5af7d72e6f0b9542",
       "status": "diverged",
       "unresolved": [],
       "upstream": {
@@ -6713,7 +6714,7 @@
       "modules": [],
       "path": "src/vite-env.d.ts",
       "provenance": "matching-path-in-fixed-baseline",
-      "sha256": "f24324005d404a1be2588c9df3c89d0a233ec4df6d86cc915f96fb83e8682b82",
+      "sha256": "405fe0bc67e85782064aae4bdb650cfe4c20adcf6529885e818f168fbaaea997",
       "status": "diverged",
       "unresolved": [],
       "upstream": {
@@ -7447,7 +7448,7 @@
       ],
       "occurrences": [
         {
-          "line": 22,
+          "line": 25,
           "path": "src/views/RulePanelView.vue",
           "relation": "literal-reference"
         }
@@ -7462,7 +7463,7 @@
       ],
       "occurrences": [
         {
-          "line": 19,
+          "line": 22,
           "path": "src/views/RulePanelView.vue",
           "relation": "literal-reference"
         }
@@ -7477,7 +7478,7 @@
       ],
       "occurrences": [
         {
-          "line": 16,
+          "line": 19,
           "path": "src/views/RulePanelView.vue",
           "relation": "literal-reference"
         }
@@ -7501,7 +7502,7 @@
       ],
       "occurrences": [
         {
-          "line": 32,
+          "line": 35,
           "path": "src/views/RulePanelView.vue",
           "relation": "literal-reference"
         }
@@ -7516,7 +7517,7 @@
       ],
       "occurrences": [
         {
-          "line": 26,
+          "line": 29,
           "path": "src/views/RulePanelView.vue",
           "relation": "literal-reference"
         }

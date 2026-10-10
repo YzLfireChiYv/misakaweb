@@ -93,7 +93,7 @@ export const videoBasicItems: Item[] = [
                         }
                         // 匹配av号, BV号, 分P号
                         const avbv = matchAvidBvid(location.href)
-                        let domain = GM_getValue('video-page-simple-share-domain')
+                        let domain = __PACK_LINKS__ ? GM_getValue('video-page-simple-share-domain') : undefined
                         if (!domain || domain === 'disable') {
                             domain = 'www.bilibili.com/video'
                         }

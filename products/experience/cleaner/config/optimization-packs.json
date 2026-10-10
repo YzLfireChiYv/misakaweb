@@ -1,7 +1,7 @@
 {
   "schema_version": 1,
   "catalog_version": "2026-10-11.1",
-  "scope": "Public optimization grouping and future build input. Grouping is implemented; exclusion builds are not yet implemented.",
+  "scope": "Public optimization grouping and build input. Nine complete exclusion-built profiles are available; touch is not implemented.",
   "counts": {
     "existing_optimization_keys": 73,
     "existing_groups": 6,
@@ -335,12 +335,13 @@
     "source_of_truth": "single shared source tree",
     "artifacts": "multiple complete userscripts generated from pack profiles",
     "runtime_download_platform": false,
+    "profile_registry": "config/build-profiles.json",
     "planned_profiles": [
       {
         "id": "pure",
         "label": "净化与过滤",
         "packs": [],
-        "available": false
+        "available": true
       },
       {
         "id": "desktop-toolkit",
@@ -353,7 +354,7 @@
           "reading-navigation",
           "link-tools"
         ],
-        "available": false
+        "available": true
       },
       {
         "id": "tablet",
@@ -372,7 +373,7 @@
           "reading-navigation",
           "link-tools"
         ],
-        "available": false
+        "available": true
       }
     ],
     "variant_rules": "Whole-pack additions/removals with dependency closure; do not claim a pack excluded merely because its settings are hidden. Stable URL per profile; one installed variant at a time."

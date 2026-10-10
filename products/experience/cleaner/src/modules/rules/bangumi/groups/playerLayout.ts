@@ -23,7 +23,7 @@ const isMiniScreen = (): boolean => {
 }
 
 // 网页全屏或全屏时阻止滚动音量调节
-for (const eventName of ['mousewheel', 'DOMMouseScroll', 'wheel']) {
+if (__PACK_PLAYBACK__) for (const eventName of ['mousewheel', 'DOMMouseScroll', 'wheel']) {
     useEventListener(
         window,
         eventName,

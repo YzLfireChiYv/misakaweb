@@ -180,7 +180,7 @@ export const commonBasicItems: Item[] = [
         type: 'switch',
         id: 'common-unify-font',
         name: '统一全站字体',
-        defaultEnable: true,
+        defaultEnable: false,
         attrName: ((): string | undefined => {
             if (isPageLive()) {
                 return 'common-unify-font-live'

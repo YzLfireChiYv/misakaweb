@@ -26,13 +26,13 @@ export const useQuickActions = (): Readonly<Ref<QuickAction[]>> => {
 
     // Read the current page on each menu opening, including SPA navigation.
     return toRef(() => [
-        {
+        ...(__PACK_APPEARANCE__ ? [{
             text: isDarkMode.value ? '日间模式' : '夜间模式',
             defaultHidden: true,
             isValid: true,
             actionKey: 'side-dark-mode',
             run: () => toggleDarkMode(),
-        },
+        }] : []),
         {
             text: '动态过滤',
             defaultHidden: true,

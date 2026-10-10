@@ -108,7 +108,7 @@ const menu = () => {
         })
     }
 
-    GM_registerMenuCommand(withMenuId('menu-dark-mode', '⚡ 夜间模式开关'), () => {
+    if (__PACK_APPEARANCE__) GM_registerMenuCommand(withMenuId('menu-dark-mode', '⚡ 夜间模式开关'), () => {
         toggleDarkMode()
     })
     GM_registerMenuCommand(withMenuId('menu-side-btn', '⚙ 快捷开关设置'), () => {

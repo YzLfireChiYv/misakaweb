@@ -29,7 +29,8 @@ describe('optimization group build inputs', () => {
         const touch = catalog.packs.find(pack => pack.id === 'touch-controls')!
         expect(touch.status).toBe('planned-not-implemented')
         expect(touch.setting_keys).toHaveLength(0)
-        expect(catalog.distribution.planned_profiles.every(profile => !profile.available)).toBe(true)
+        expect(catalog.distribution.planned_profiles.filter(profile => profile.available).map(profile=>profile.id)).toEqual(['pure','desktop-toolkit','without-text-appearance'])
+        expect(catalog.distribution.planned_profiles.find(profile=>profile.id==='tablet')?.available).toBe(false)
         expect(catalog.external_sources[0].commit).toHaveLength(40)
     })
 })

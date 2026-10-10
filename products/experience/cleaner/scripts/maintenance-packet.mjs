@@ -45,6 +45,10 @@ const SUPPORTING_FILES = [
     'LICENSE',
     'config/release.json',
     'config/optimization-packs.json',
+    'config/build-profiles.json',
+    'scripts/pack-build.mjs',
+    'scripts/build-variants.mjs',
+    'PACKS.md',
     'maintenance/registry.json',
     'maintenance/README.md',
 ]

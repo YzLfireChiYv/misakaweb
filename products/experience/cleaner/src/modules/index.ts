@@ -6,6 +6,8 @@ import { useMagicKeys } from '@vueuse/core'
 import { articleFilters, commentFilters, dynamicFilters, loadFilterStyle, videoFilters } from './filters'
 import { installRuleWatch } from './filters/ruleSync'
 import { loadRuleStyle, rules } from './rules'
+// Cleaning's "hide right sidebar outside wide mode" requires this passive tracker.
+import '@/utils/widePlayer'
 
 const loadSwitchItem = (item: ISwitchItem) => {
     const enable = GM_getValue(item.id, item.defaultEnable)
