@@ -204,6 +204,7 @@ export async function buildIndex({ root = PRODUCT_ROOT, collectOccurrences } = {
             modules,
             path: item.rel,
             provenance,
+            ...(registered?.local_notes?.length ? { localNotes: registered.local_notes } : {}),
             sha256: sha,
             status,
             unresolved: deps.unresolved,

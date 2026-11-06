@@ -356,6 +356,27 @@ const renderContext = ({
         lines.push(`- ${row.id} \`${row.key}\``)
     }
     lines.push('')
+    if (selectedSettings.length) {
+        const filesByPath = fileByPath(indexSubset)
+        lines.push('## 功能定位与来源')
+        lines.push('')
+        lines.push('同一配置可能用于多个页面。以下是声明、字面引用、存储绑定或同名样式线索，不是完整执行链或依赖独立性的证明；上游链接指向文件基线，不沿用本地行号。')
+        lines.push('')
+        for (const setting of selectedSettings) {
+            lines.push(`### ${setting.id} ${setting.names?.join(' / ') || setting.key}`)
+            lines.push('')
+            lines.push(`- 配置键：\`${setting.key}\``)
+            for (const occurrence of setting.occurrences) {
+                const file = filesByPath.get(occurrence.path)
+                const location = occurrence.path + (occurrence.line ? `:${occurrence.line}` : '')
+                const relation = occurrence.relation ?? 'declaration-or-key-reference'
+                lines.push(`- 本地：\`${location}\`（${relation}）`)
+                if (file?.upstream?.url) lines.push(`  - 对应上游文件：${file.upstream.url}`)
+                else lines.push(`  - 来源：${file?.provenance ?? 'unverified'}`)
+            }
+            lines.push('')
+        }
+    }
     lines.push('## 上游基线')
     lines.push('')
     for (const source of indexSubset.sources ?? []) {
@@ -475,6 +496,7 @@ const renderContext = ({
                 lines.push(`- upstream ${rec.upstream.url}`)
                 lines.push(`- ${rec.upstream.caution}`)
             }
+            for (const note of rec.localNotes ?? []) lines.push(`- 本地改动与跟版注意：${note}`)
         }
         lines.push('')
         lines.push(languageFence(rel, texts.get(rel) ?? ''))

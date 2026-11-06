@@ -518,7 +518,11 @@
         "source": "cleaner",
         "path": "src/components/items/SwitchComp.vue",
         "normalized_sha256": "07d1265fc1d7bb3df89fe68f3188a7786543363cb835d48ceba6aa38e7af2c2d"
-      }
+      },
+      "local_notes": [
+        "沿用上游属性切换与enableFn/disableFn行为；本地只在此增加反馈编号并将GM访问改经src/storage/configStorage.ts。",
+        "跟版保留原配置键和值，测试编号不参与存储键或规则判定。"
+      ]
     },
     {
       "file": "src/components/items/WebdavComp.vue",
@@ -665,6 +669,18 @@
         "path": "src/main.ts",
         "normalized_sha256": "5516e156c9eb44ee0e8bc824b5f5d88f42c1f878098b9b747e85c58e6ca983d9"
       }
+    },
+    {
+      "file": "src/modules/configuration/runtime.ts",
+      "modules": [
+        "settings-ui"
+      ],
+      "provenance": "own-confirmed",
+      "upstream": null,
+      "local_notes": [
+        "MisakaWeb自有备份/恢复运行接线；导入经ruleSync抑制旧同步，先保存一份含凭据的本机恢复快照再应用计划。",
+        "恢复快照不列入普通导出/同步注册；当前调用成功不保证后台保存已完成，关键写入确认仍待实现。"
+      ]
     },
     {
       "file": "src/modules/filters/core/core.ts",
@@ -1060,7 +1076,11 @@
         "source": "cleaner",
         "path": "src/modules/index.ts",
         "normalized_sha256": "3b03f70be607c46d3a55c7b5308bfa718174d16c7d8f7a6001c4969c8d9b4ee7"
-      }
+      },
+      "local_notes": [
+        "保留本地SPA路由补载与startedRules/startedFilters去重；它只补尚未启动的页面模块，不等同于完整卸载重建。",
+        "GM读取经过src/storage/configStorage.ts；规则同步监听与被动widePlayer跟踪是本地接入，净化分包仍可能依赖后者。"
+      ]
     },
     {
       "file": "src/modules/maintenance/diagnostics.ts",
@@ -1508,7 +1528,11 @@
         "source": "cleaner",
         "path": "src/modules/rules/common/groups/basic.ts",
         "normalized_sha256": "cd016ac2d595bf22e758ccf260fafeb35086eff2b27ace6da6cd88f098dc4e79"
-      }
+      },
+      "local_notes": [
+        "本地将url-cleaner与common-unify-font默认设为false；上游跟版时保留这些产品默认，显式保存值仍按原键读取。",
+        "地址栏自动净化不默认开启；用户确定优先分享链接净化，不能因上游增加参数而顺带开启地址栏净化。"
+      ]
     },
     {
       "file": "src/modules/rules/common/groups/font.scss",
@@ -3047,6 +3071,18 @@
       }
     },
     {
+      "file": "src/modules/settings/sections.ts",
+      "modules": [
+        "settings-ui"
+      ],
+      "provenance": "own-confirmed",
+      "upstream": null,
+      "local_notes": [
+        "MisakaWeb自有栏目适配，按构建分类重排原Item引用，不复制默认值、回调或保存配置。",
+        "分类来源为config/optimization-packs.json与构建注入；只改分栏时不改上游页面规则及配置键。"
+      ]
+    },
+    {
       "file": "src/modules/shortcut/actions.ts",
       "modules": [
         "shortcut"
@@ -3068,7 +3104,11 @@
         "shortcut"
       ],
       "provenance": "own-confirmed",
-      "upstream": null
+      "upstream": null,
+      "local_notes": [
+        "MisakaWeb自有快捷入口适配；独立body宿主跟随搜索图标定位，保留原生搜索节点顺序，不能插入站点框架管理的搜索子树。",
+        "搜索包装层预留空间与定位/监听均需可恢复；上游顶栏选择器变化时联查本文件及src/modules/shortcut/anchor.ts。"
+      ]
     },
     {
       "file": "src/modules/shortcut/preference.ts",
@@ -3077,6 +3117,34 @@
       ],
       "provenance": "own-confirmed",
       "upstream": null
+    },
+    {
+      "file": "src/modules/touch/gesture-math.ts",
+      "modules": [
+        "touch-gestures"
+      ],
+      "provenance": "derived-from-fixed-baseline",
+      "upstream": {
+        "source": "evolved",
+        "path": "registry/lib/components/touch/player-gestures/swiper.ts",
+        "normalized_sha256": "0a70e20626ddc978ffcea2f359511b480f9c32d5c03870363278a1ca5c8fb895"
+      },
+      "local_notes": [
+        "由固定Evolved swiper.ts派生方向与三段进度灵敏度；本地增加对称距离阈值与纯函数边界，并非原文件副本。",
+        "替换边界和许可见community/evolved-player-gestures.json及src/modules/touch/LICENCE.md；控制器/DOM提示/设置由本项目负责，不引入Evolved整套运行时。"
+      ]
+    },
+    {
+      "file": "src/storage/configStorage.ts",
+      "modules": [
+        "settings-ui"
+      ],
+      "provenance": "own-confirmed",
+      "upstream": null,
+      "local_notes": [
+        "MisakaWeb自有GM与设备存储入口；跟版保留调用经此入口，不能重新散回页面模块直接访问GM。",
+        "当前沿用同步GM包装，未等待扩展后台持久化确认；不能把该入口视为已完成可靠写入或WebDAV并发同步。"
+      ]
     },
     {
       "file": "src/stores/view.ts",
@@ -3344,7 +3412,11 @@
         "source": "cleaner",
         "path": "src/views/RulePanelView.vue",
         "normalized_sha256": "f528c9b3588868fec94bf3f94c7f4886ae9784b038ce62ac25fae88f5bf421aa"
-      }
+      },
+      "local_notes": [
+        "本地界面按src/modules/settings/sections.ts重排原Item引用，附搜索、成品版本、备份恢复与结构诊断入口。",
+        "逐项设置保持原页面/功能栏目；配置集中指数据层，不在此恢复全局配置编辑器或工程取舍按钮。"
+      ]
     },
     {
       "file": "src/views/ShortcutSettingsPanelView.vue",

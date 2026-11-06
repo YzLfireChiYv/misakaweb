@@ -90,6 +90,7 @@ const makeFixture = () => {
                     file: 'src/alpha/keep.ts',
                     modules: ['alpha'],
                     provenance: 'matching-path-in-fixed-baseline',
+                    local_notes: ['Keep the product storage boundary when following upstream.'],
                     upstream: {
                         source: 'cleaner',
                         path: 'src/alpha/keep.ts',
@@ -191,6 +192,10 @@ describe('maintenance index', () => {
             '15d9bced793487a8c4b0f9e1f7f67c7ccf6f3da9/src/alpha/keep.ts',
         )
         expect(byPath['src/alpha/keep.ts'].upstream.pathMatch).toBe(true)
+        expect(byPath['src/alpha/keep.ts'].localNotes).toEqual([
+            'Keep the product storage boundary when following upstream.',
+        ])
+        expect(byPath['src/alpha/fresh.ts']).not.toHaveProperty('localNotes')
 
         const mod = byPath['src/alpha/mod.ts']
         expect(mod.imports).toEqual(
@@ -317,6 +322,13 @@ describe('maintenance packet', () => {
             index,
         })
         expect(settingPacket.files).toContain('src/alpha/keep.ts')
+        const settingContext = fs.readFileSync(settingPacket.paths.context, 'utf8')
+        expect(settingContext).toContain('## 功能定位与来源')
+        expect(settingContext).toContain('`src/alpha/keep.ts:2`')
+        expect(settingContext).toContain(
+            '对应上游文件：https://github.com/festoney8/bilibili-cleaner/blob/15d9bced793487a8c4b0f9e1f7f67c7ccf6f3da9/src/alpha/keep.ts',
+        )
+        expect(settingContext).toContain('本地改动与跟版注意：Keep the product storage boundary')
 
         const fileOut = path.join(root, 'node_modules', '.tmp', 'maintenance-packets', 'file-style')
         const filePacket = await buildPacket({
