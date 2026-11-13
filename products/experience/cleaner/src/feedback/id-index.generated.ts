@@ -580,5 +580,7 @@ export const actionsByKey: Record<string, string> = {
     "config-restore-backup": "B39",
     "config-save-setting": "B40",
     "panel-close-configuration": "B41",
-    "side-configuration": "B42"
+    "side-configuration": "B42",
+    "config-paste-import": "B43",
+    "config-preview-paste": "B44"
 }

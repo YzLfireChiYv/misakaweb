@@ -9,7 +9,7 @@
     "counts": {
         "settings": 529,
         "menus": 9,
-        "actions": 42
+        "actions": 44
     },
     "settings": [
         {
@@ -10325,6 +10325,24 @@
             "id": "B42",
             "key": "side-configuration",
             "name": "打开配置备份与恢复",
+            "pages": [
+                "*"
+            ],
+            "panel": "configuration"
+        },
+        {
+            "id": "B43",
+            "key": "config-paste-import",
+            "name": "粘贴配置",
+            "pages": [
+                "*"
+            ],
+            "panel": "configuration"
+        },
+        {
+            "id": "B44",
+            "key": "config-preview-paste",
+            "name": "预览粘贴内容",
             "pages": [
                 "*"
             ],

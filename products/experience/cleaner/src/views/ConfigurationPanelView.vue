@@ -9,12 +9,11 @@
         close-action="panel-close-configuration"
         :center-on-open="true"
         :open-token="store.openToken"
-        @close="store.hide"
+        @close="closePanel"
     >
         <div v-if="store.isShow" class="flex flex-col gap-3 p-1 text-sm text-black" @keydown.stop>
             <p class="rounded-lg bg-blue-50 p-3 leading-6">
-                下载配置备份，或从文件恢复。备份可以带到另一台设备，导入前会先显示变动。
-                日常设置仍在各页面、各功能栏目中调整。
+                下载配置备份，或通过文件和粘贴导入。应用前会先显示变动。
             </p>
             <p v-if="message" role="status" class="rounded-md bg-gray-100 p-3 leading-6">{{ message }}</p>
             <button
@@ -53,6 +52,14 @@
                     </button>
                     <button
                         type="button"
+                        class="rounded-md border border-gray-300 px-3 py-2"
+                        :aria-expanded="showPaste"
+                        @click="togglePaste"
+                    >
+                        <FeedbackBadge :code="actionLabel('config-paste-import')" />粘贴配置
+                    </button>
+                    <button
+                        type="button"
                         :disabled="!hasPrevious"
                         class="rounded-md border border-gray-300 px-3 py-2 disabled:opacity-40"
                         @click="previewPrevious"
@@ -68,8 +75,29 @@
                     />
                 </div>
                 <p class="mt-2 text-[13px] text-gray-600">
-                    支持 MisakaWeb 配置备份和从脚本猫 ZIP 解出的单脚本 .storage.json。
+                    支持 MisakaWeb 备份和脚本猫单脚本 .storage.json 的 JSON 内容。
                 </p>
+                <div v-if="showPaste" class="mt-3 flex flex-col gap-2">
+                    <label for="misakaweb-config-text" class="font-medium">配置 JSON</label>
+                    <textarea
+                        id="misakaweb-config-text"
+                        ref="pasteInput"
+                        v-model="pasteText"
+                        rows="5"
+                        spellcheck="false"
+                        autocomplete="off"
+                        class="w-full rounded-md border border-gray-300 px-3 py-2 font-mono text-xs"
+                        @input="clearPreview"
+                    />
+                    <button
+                        type="button"
+                        :disabled="!pasteText.trim()"
+                        class="self-start rounded-md border border-gray-300 px-3 py-2 disabled:opacity-40"
+                        @click="previewText(pasteText, '粘贴的配置')"
+                    >
+                        <FeedbackBadge :code="actionLabel('config-preview-paste')" />预览粘贴内容
+                    </button>
+                </div>
                 <div v-if="incoming" class="mt-3 rounded-md bg-gray-50 p-3">
                     <p class="font-bold">
                         {{ incomingName }} · 来自 {{ incoming.scriptVersion }} / {{ incoming.profile }}
@@ -79,10 +107,10 @@
                             v-model="restoreMode"
                             type="checkbox"
                             @change="rebuildPreview"
-                        />完整恢复：让文件中明确未保存的设置重新继承默认值</label
+                        />完整恢复：让备份中明确未保存的设置重新继承默认值</label
                     >
                     <p class="text-[13px] leading-5 text-gray-600">
-                        默认只合并文件中的已保存值。文件未包含的设置和未勾选导出的设备、连接信息都保持原样。
+                        默认合并备份中的已保存值。备份未包含的设置保持原样。
                     </p>
                     <template v-if="preview">
                         <p class="my-2">
@@ -90,7 +118,7 @@
                                 preview.ignored.length
                             }}
                             项不在当前版本中，将跳过。
-                            <span v-if="legacySkipped">脚本猫文件中另有 {{ legacySkipped }} 项未纳入，含设备、连接或旧键。</span>
+                            <span v-if="legacySkipped">另跳过脚本猫备份中的 {{ legacySkipped }} 项，含设备、连接或旧键。</span>
                         </p>
                         <p v-for="notice in preview.notices" :key="notice" class="mb-1 text-amber-700">{{ notice }}</p>
                         <details v-if="preview.writes.length || preview.ignored.length" class="my-2">
@@ -120,19 +148,20 @@
 </template>
 
 <script setup lang="ts">
-import { ref, watch } from 'vue'
+import { nextTick, ref, watch } from 'vue'
 import PanelComp from '@/components/PanelComp.vue'
 import FeedbackBadge from '@/feedback/Badge.vue'
 import { actionLabel } from '@/feedback'
 import { useConfigurationPanelStore } from '@/stores/view'
 import { getConfigurationDefinitions } from '@/modules/configuration/registry'
 import {
+    MAX_CONFIGURATION_BYTES,
     planConfigurationImport,
     type ConfigDefinition,
     type ConfigImportPlan,
     type ConfigurationBackup,
 } from '@/modules/configuration/backup'
-import { parseConfigurationImportFile } from '@/modules/configuration/scriptcat'
+import { parseConfigurationImportText } from '@/modules/configuration/scriptcat'
 import {
     commitConfigurationPlan,
     configurationAccess,
@@ -154,6 +183,10 @@ const incomingName = ref('')
 const preview = ref<ConfigImportPlan | null>(null)
 const restoreMode = ref(false)
 const legacySkipped = ref(0)
+const showPaste = ref(false)
+const pasteText = ref('')
+const pasteInput = ref<HTMLTextAreaElement | null>(null)
+let fileReadId = 0
 const errorMessage = (error: unknown) => (error instanceof Error ? error.message : String(error))
 watch(
     () => store.openToken,
@@ -191,39 +224,63 @@ const rebuildPreview = () => {
         message.value = errorMessage(error)
     }
 }
-const chooseFile = async (event: Event) => {
-    const input = event.target as HTMLInputElement
-    const file = input.files?.[0]
-    input.value = ''
-    if (!file) return
+const clearPreview = () => {
+    ++fileReadId
     incoming.value = null
     preview.value = null
     legacySkipped.value = 0
+    message.value = ''
+}
+const clearPaste = () => {
+    showPaste.value = false
+    pasteText.value = ''
+}
+const togglePaste = async () => {
+    clearPreview()
+    if (showPaste.value) {
+        clearPaste()
+    } else {
+        showPaste.value = true
+        await nextTick()
+        pasteInput.value?.focus()
+    }
+}
+const previewText = (text: string, name: string) => {
+    clearPreview()
     try {
-        if (file.size > 4_000_000) throw new Error('配置文件超过 4 MB，未读取')
-        let raw: unknown
-        try {
-            raw = JSON.parse(await file.text())
-        } catch {
-            throw new Error('配置文件不是有效的 JSON')
-        }
-        const parsed = parseConfigurationImportFile(raw, definitions.value)
+        const parsed = parseConfigurationImportText(text, definitions.value)
         incoming.value = parsed.backup
         legacySkipped.value = parsed.skipped
-        incomingName.value = file.name
+        incomingName.value = name
         restoreMode.value = false
-        message.value = ''
         rebuildPreview()
     } catch (error) {
         message.value = errorMessage(error)
     }
 }
+const chooseFile = async (event: Event) => {
+    const input = event.target as HTMLInputElement
+    const file = input.files?.[0]
+    input.value = ''
+    if (!file) return
+    clearPaste()
+    clearPreview()
+    const readId = fileReadId
+    try {
+        if (file.size > MAX_CONFIGURATION_BYTES) throw new Error('配置文件超过 4 MB，未读取')
+        const text = await file.text()
+        if (readId === fileReadId) previewText(text, file.name)
+    } catch (error) {
+        if (readId === fileReadId) message.value = errorMessage(error)
+    }
+}
 const previewPrevious = () => {
+    clearPaste()
+    clearPreview()
     try {
         const previous = readPreImportBackup()
         if (!previous) throw new Error('当前设备没有上次保存前的备份')
         incoming.value = previous
-        legacySkipped.value = 0
         incomingName.value = '上次保存前的本机备份'
         restoreMode.value = true
         rebuildPreview()
@@ -232,11 +289,16 @@ const previewPrevious = () => {
     }
 }
 const applied = (count: number, notices: string[] = []) => {
+    clearPreview()
+    clearPaste()
     message.value = `已保存 ${count} 项。刷新页面后完整应用。${notices.join(' ')}`
     needsRefresh.value = count > 0 || needsRefresh.value
     hasPrevious.value = true
-    preview.value = null
-    incoming.value = null
+}
+const closePanel = () => {
+    clearPreview()
+    clearPaste()
+    store.hide()
 }
 const applyPreview = () => {
     if (!preview.value) return

@@ -1923,7 +1923,7 @@
       "kind": "actions",
       "locations": [
         {
-          "line": 113,
+          "line": 141,
           "path": "src/views/ConfigurationPanelView.vue",
           "relation": "literal-reference"
         }
@@ -1966,7 +1966,7 @@
       "kind": "actions",
       "locations": [
         {
-          "line": 52,
+          "line": 51,
           "path": "src/views/ConfigurationPanelView.vue",
           "relation": "literal-reference"
         }
@@ -2009,7 +2009,7 @@
       "kind": "actions",
       "locations": [
         {
-          "line": 45,
+          "line": 44,
           "path": "src/views/ConfigurationPanelView.vue",
           "relation": "literal-reference"
         }
@@ -2052,7 +2052,7 @@
       "kind": "actions",
       "locations": [
         {
-          "line": 26,
+          "line": 25,
           "path": "src/views/ConfigurationPanelView.vue",
           "relation": "literal-reference"
         }
@@ -2095,7 +2095,7 @@
       "kind": "actions",
       "locations": [
         {
-          "line": 60,
+          "line": 67,
           "path": "src/views/ConfigurationPanelView.vue",
           "relation": "literal-reference"
         }
@@ -2254,6 +2254,92 @@
         ],
         "purpose": [
           "support"
+        ],
+        "role": [
+          "support"
+        ]
+      }
+    },
+    {
+      "featureIds": [],
+      "featureMappingStatus": "not-reviewed",
+      "id": "B43",
+      "key": "config-paste-import",
+      "kind": "actions",
+      "locations": [
+        {
+          "line": 59,
+          "path": "src/views/ConfigurationPanelView.vue",
+          "relation": "literal-reference"
+        }
+      ],
+      "name": "粘贴配置",
+      "pages": [
+        "*"
+      ],
+      "panel": "configuration",
+      "retired": false,
+      "tags": {
+        "implementation": [
+          "located"
+        ],
+        "object": [
+          "configuration"
+        ],
+        "origin": [
+          "unknown"
+        ],
+        "page": [
+          "all"
+        ],
+        "product": [
+          "pending"
+        ],
+        "purpose": [
+          "data"
+        ],
+        "role": [
+          "support"
+        ]
+      }
+    },
+    {
+      "featureIds": [],
+      "featureMappingStatus": "not-reviewed",
+      "id": "B44",
+      "key": "config-preview-paste",
+      "kind": "actions",
+      "locations": [
+        {
+          "line": 98,
+          "path": "src/views/ConfigurationPanelView.vue",
+          "relation": "literal-reference"
+        }
+      ],
+      "name": "预览粘贴内容",
+      "pages": [
+        "*"
+      ],
+      "panel": "configuration",
+      "retired": false,
+      "tags": {
+        "implementation": [
+          "located"
+        ],
+        "object": [
+          "configuration"
+        ],
+        "origin": [
+          "unknown"
+        ],
+        "page": [
+          "all"
+        ],
+        "product": [
+          "pending"
+        ],
+        "purpose": [
+          "data"
         ],
         "role": [
           "support"
@@ -85057,7 +85143,7 @@
         "label": "应用导入",
         "refs": [
           {
-            "line": 113,
+            "line": 141,
             "path": "src/views/ConfigurationPanelView.vue",
             "relation": "literal-reference"
           }
@@ -85076,7 +85162,7 @@
         "label": "选择配置文件",
         "refs": [
           {
-            "line": 52,
+            "line": 51,
             "path": "src/views/ConfigurationPanelView.vue",
             "relation": "literal-reference"
           }
@@ -85095,7 +85181,7 @@
         "label": "下载配置备份",
         "refs": [
           {
-            "line": 45,
+            "line": 44,
             "path": "src/views/ConfigurationPanelView.vue",
             "relation": "literal-reference"
           }
@@ -85114,7 +85200,7 @@
         "label": "刷新应用配置",
         "refs": [
           {
-            "line": 26,
+            "line": 25,
             "path": "src/views/ConfigurationPanelView.vue",
             "relation": "literal-reference"
           }
@@ -85133,7 +85219,7 @@
         "label": "恢复导入前备份",
         "refs": [
           {
-            "line": 60,
+            "line": 67,
             "path": "src/views/ConfigurationPanelView.vue",
             "relation": "literal-reference"
           }
@@ -85189,6 +85275,44 @@
           {
             "line": 31,
             "path": "src/views/RulePanelView.vue",
+            "relation": "literal-reference"
+          }
+        ],
+        "status": "traced"
+      },
+      {
+        "common": [
+          "storage"
+        ],
+        "featureIds": [
+          "F-MISAKA-BACKUP"
+        ],
+        "id": "B43",
+        "key": "config-paste-import",
+        "label": "粘贴配置",
+        "refs": [
+          {
+            "line": 59,
+            "path": "src/views/ConfigurationPanelView.vue",
+            "relation": "literal-reference"
+          }
+        ],
+        "status": "traced"
+      },
+      {
+        "common": [
+          "storage"
+        ],
+        "featureIds": [
+          "F-MISAKA-BACKUP"
+        ],
+        "id": "B44",
+        "key": "config-preview-paste",
+        "label": "预览粘贴内容",
+        "refs": [
+          {
+            "line": 98,
+            "path": "src/views/ConfigurationPanelView.vue",
             "relation": "literal-reference"
           }
         ],
@@ -129425,7 +129549,7 @@
       }
     ],
     "counts": {
-      "actions": 51,
+      "actions": 53,
       "controls": 529,
       "declarations": 713,
       "features": 111,
@@ -160515,7 +160639,9 @@
           "B38",
           "B39",
           "B41",
-          "B42"
+          "B42",
+          "B43",
+          "B44"
         ],
         "baselineIds": [],
         "chainIds": [],
@@ -170761,7 +170887,9 @@
             "B37",
             "B38",
             "B39",
-            "B41"
+            "B41",
+            "B43",
+            "B44"
           ],
           "features": [
             "F-MISAKA-BACKUP"
@@ -211520,7 +211648,7 @@
       "conflictReviewStatus": "not-reviewed",
       "controlIds": [],
       "dependencyReviewStatus": "not-reviewed",
-      "description": "按作用域导出；预览导入、校验、保存导入前快照并支持恢复。",
+      "description": "按作用域导出，支持文件及粘贴导入。应用前预览并保存恢复快照。",
       "evidence": "本地实现",
       "groupingStatus": "current-product-group",
       "id": "F-MISAKA-BACKUP",
@@ -216124,7 +216252,7 @@
     },
     {
       "path": "catalog/project-coverage.json",
-      "sha256": "ee2ae3b067abaef5eedbc2051080898f9e0be91a96c581f182b1743204cb8036"
+      "sha256": "8ec9db30776b1428c4a6ec7890e95fb4c877458b81227d003848a66ab57fa75a"
     },
     {
       "path": "catalog/tags.json",
@@ -216216,7 +216344,7 @@
     },
     {
       "path": "src/feedback/control-map.json",
-      "sha256": "82388f41d2823880b8e2ba5a7213327001d6490780fe464807ba919ee23581e0"
+      "sha256": "ac4a04fa005b048e9063d9963bb80f2b8e48dcee2993636d7372aeb8c2beb02b"
     },
     {
       "path": "src/feedback/enabled.ts",
@@ -216224,7 +216352,7 @@
     },
     {
       "path": "src/feedback/fixed-controls.json",
-      "sha256": "a6131fd3d2e272fc602920b50dd6288fe3d6c8218b7ab39998855adbdca49d4d"
+      "sha256": "1ff4af58f45c089807fc1cfce517199b896b6ddecab8240af6c8e7240e5867ad"
     },
     {
       "path": "src/feedback/id-index.empty.ts",
@@ -216232,7 +216360,7 @@
     },
     {
       "path": "src/feedback/id-index.generated.ts",
-      "sha256": "032adab30a7a2037341071ac9d3f32ff8b64c8617137c3466c56bd5f99f298dc"
+      "sha256": "e1d20076655a607022350c38410bb72fda4c1cea45fb5fa477f68313a4b2e5e6"
     },
     {
       "path": "src/feedback/index.ts",
@@ -216260,7 +216388,7 @@
     },
     {
       "path": "src/modules/configuration/backup.ts",
-      "sha256": "91ae05ca7e9a4b743665c811ca79234e3371a669b3b633543da9c612631d0461"
+      "sha256": "ed87fe61873aa7eff0639b58542bf9c1971ab4abe69195fdb7397e92f9016459"
     },
     {
       "path": "src/modules/configuration/effective.ts",
@@ -216276,7 +216404,7 @@
     },
     {
       "path": "src/modules/configuration/scriptcat.ts",
-      "sha256": "17ef9ca22bcdc2e07acbfa5e7203a71e7f3417bab33662b79cb40cafa3a0b9de"
+      "sha256": "b164c38b2746d43ebcc88ea92aa9267b7e0709f8380097185248ff92bfd49225"
     },
     {
       "path": "src/modules/filters/core/core.ts",
@@ -217204,7 +217332,7 @@
     },
     {
       "path": "src/views/ConfigurationPanelView.vue",
-      "sha256": "fecdeea9c7c41d9b3587dd00b35d395def569172bb480a646cb81e43185f0e55"
+      "sha256": "4ab5be256b9d913456b79e2489acd7871ab71255d0878bb6d9e436f229963ed1"
     },
     {
       "path": "src/views/ContextMenuView.vue",

@@ -431,6 +431,18 @@
             "panel": "configuration"
         },
         {
+            "key": "config-paste-import",
+            "name": "粘贴配置",
+            "pages": ["*"],
+            "panel": "configuration"
+        },
+        {
+            "key": "config-preview-paste",
+            "name": "预览粘贴内容",
+            "pages": ["*"],
+            "panel": "configuration"
+        },
+        {
             "key": "config-apply-import",
             "name": "应用导入",
             "pages": [

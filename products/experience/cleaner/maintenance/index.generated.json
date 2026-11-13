@@ -1,7 +1,7 @@
 {
   "counts": {
-    "actions": 42,
-    "controls": 580,
+    "actions": 44,
+    "controls": 582,
     "diverged": 58,
     "files": 271,
     "menus": 9,
@@ -481,7 +481,7 @@
       ],
       "path": "src/feedback/control-map.json",
       "provenance": "own-confirmed",
-      "sha256": "82388f41d2823880b8e2ba5a7213327001d6490780fe464807ba919ee23581e0",
+      "sha256": "ac4a04fa005b048e9063d9963bb80f2b8e48dcee2993636d7372aeb8c2beb02b",
       "status": "no-baseline",
       "unresolved": [],
       "upstream": null
@@ -507,7 +507,7 @@
       ],
       "path": "src/feedback/fixed-controls.json",
       "provenance": "own-confirmed",
-      "sha256": "a6131fd3d2e272fc602920b50dd6288fe3d6c8218b7ab39998855adbdca49d4d",
+      "sha256": "1ff4af58f45c089807fc1cfce517199b896b6ddecab8240af6c8e7240e5867ad",
       "status": "no-baseline",
       "unresolved": [],
       "upstream": null
@@ -533,7 +533,7 @@
       ],
       "path": "src/feedback/id-index.generated.ts",
       "provenance": "own-confirmed",
-      "sha256": "032adab30a7a2037341071ac9d3f32ff8b64c8617137c3466c56bd5f99f298dc",
+      "sha256": "e1d20076655a607022350c38410bb72fda4c1cea45fb5fa477f68313a4b2e5e6",
       "status": "no-baseline",
       "unresolved": [],
       "upstream": null
@@ -697,7 +697,7 @@
       ],
       "path": "src/modules/configuration/backup.ts",
       "provenance": "unverified",
-      "sha256": "91ae05ca7e9a4b743665c811ca79234e3371a669b3b633543da9c612631d0461",
+      "sha256": "ed87fe61873aa7eff0639b58542bf9c1971ab4abe69195fdb7397e92f9016459",
       "status": "no-baseline",
       "unresolved": [],
       "upstream": null
@@ -774,7 +774,7 @@
       ],
       "path": "src/modules/configuration/scriptcat.ts",
       "provenance": "unverified",
-      "sha256": "17ef9ca22bcdc2e07acbfa5e7203a71e7f3417bab33662b79cb40cafa3a0b9de",
+      "sha256": "b164c38b2746d43ebcc88ea92aa9267b7e0709f8380097185248ff92bfd49225",
       "status": "no-baseline",
       "unresolved": [],
       "upstream": null
@@ -6573,7 +6573,7 @@
       ],
       "path": "src/views/ConfigurationPanelView.vue",
       "provenance": "unverified",
-      "sha256": "fecdeea9c7c41d9b3587dd00b35d395def569172bb480a646cb81e43185f0e55",
+      "sha256": "4ab5be256b9d913456b79e2489acd7871ab71255d0878bb6d9e436f229963ed1",
       "status": "no-baseline",
       "unresolved": [],
       "upstream": null
@@ -7651,7 +7651,7 @@
       ],
       "occurrences": [
         {
-          "line": 113,
+          "line": 141,
           "path": "src/views/ConfigurationPanelView.vue",
           "relation": "literal-reference"
         }
@@ -7666,7 +7666,7 @@
       ],
       "occurrences": [
         {
-          "line": 52,
+          "line": 51,
           "path": "src/views/ConfigurationPanelView.vue",
           "relation": "literal-reference"
         }
@@ -7681,7 +7681,7 @@
       ],
       "occurrences": [
         {
-          "line": 45,
+          "line": 44,
           "path": "src/views/ConfigurationPanelView.vue",
           "relation": "literal-reference"
         }
@@ -7696,7 +7696,7 @@
       ],
       "occurrences": [
         {
-          "line": 26,
+          "line": 25,
           "path": "src/views/ConfigurationPanelView.vue",
           "relation": "literal-reference"
         }
@@ -7711,7 +7711,7 @@
       ],
       "occurrences": [
         {
-          "line": 60,
+          "line": 67,
           "path": "src/views/ConfigurationPanelView.vue",
           "relation": "literal-reference"
         }
@@ -7757,6 +7757,36 @@
         {
           "line": 31,
           "path": "src/views/RulePanelView.vue",
+          "relation": "literal-reference"
+        }
+      ]
+    },
+    {
+      "id": "B43",
+      "key": "config-paste-import",
+      "kind": "action",
+      "names": [
+        "粘贴配置"
+      ],
+      "occurrences": [
+        {
+          "line": 59,
+          "path": "src/views/ConfigurationPanelView.vue",
+          "relation": "literal-reference"
+        }
+      ]
+    },
+    {
+      "id": "B44",
+      "key": "config-preview-paste",
+      "kind": "action",
+      "names": [
+        "预览粘贴内容"
+      ],
+      "occurrences": [
+        {
+          "line": 98,
+          "path": "src/views/ConfigurationPanelView.vue",
           "relation": "literal-reference"
         }
       ]

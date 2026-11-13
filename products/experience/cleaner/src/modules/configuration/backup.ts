@@ -51,7 +51,7 @@ export type ConfigImportPlan = {
     mode: 'merge' | 'restore'
 }
 const SCOPES: ConfigScope[] = ['settings', 'rules', 'device', 'secrets']
-const MAX_TEXT = 4_000_000
+export const MAX_CONFIGURATION_BYTES = 4_000_000
 const record = (value: unknown): value is Record<string, unknown> =>
     value !== null && typeof value === 'object' && !Array.isArray(value)
 const ownKeys = (object: Record<string, unknown>, keys: string[]) =>
@@ -151,7 +151,7 @@ export const createConfigurationBackup = (
         definitions: selected,
         entries,
     }
-    if (new TextEncoder().encode(JSON.stringify(backup)).length > MAX_TEXT)
+    if (new TextEncoder().encode(JSON.stringify(backup)).length > MAX_CONFIGURATION_BYTES)
         throw new Error('配置备份超过 4 MB，请精简规则后再导出')
     return backup
 }
@@ -160,7 +160,7 @@ export const createConfigurationBackup = (
 export const parseConfigurationBackup = (input: unknown): ConfigurationBackup => {
     let raw: unknown = input
     if (typeof input === 'string') {
-        if (input.length > MAX_TEXT || new TextEncoder().encode(input).length > MAX_TEXT)
+        if (input.length > MAX_CONFIGURATION_BYTES || new TextEncoder().encode(input).length > MAX_CONFIGURATION_BYTES)
             throw new Error('配置文件超过 4 MB，未读取')
         try {
             raw = JSON.parse(input)

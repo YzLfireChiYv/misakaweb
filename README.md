@@ -6,17 +6,17 @@
 
 当前收拢为三个方向，只安装其中一个；沿用原 MisakaWeb 的名称、命名空间与设置键，更新后刷新网页。
 
-- [全量体验版 0.1.5.2](https://raw.githubusercontent.com/YzLfireChiYv/misakaweb/main/products/experience/misakaweb-feedback-test.user.js)：推荐用于当前试用，保留反馈编号。包含完整净化、过滤、全部优化及触摸原型。
+- [全量体验版 0.1.5.3](https://raw.githubusercontent.com/YzLfireChiYv/misakaweb/main/products/experience/misakaweb-feedback-test.user.js)：推荐用于当前试用，保留反馈编号。包含完整净化、过滤、全部优化及触摸原型。
 - [净化轻量版](https://raw.githubusercontent.com/YzLfireChiYv/misakaweb/main/products/experience/variants/misakaweb-pure.user.js)：保留完整净化、过滤与配置管理，排除可选优化。
 - [桌面实用版](https://raw.githubusercontent.com/YzLfireChiYv/misakaweb/main/products/experience/variants/misakaweb-desktop-toolkit.user.js)：在净化、过滤、配置管理基础上加入布局、播放控制、阅读导航和链接工具；字体与触摸留在全量体验版。
 
-三份均已更新为 0.1.5.2。快捷入口沿用网页提供的官方主题配色。后续按需构建，日常自动发布默认只更新全量体验版。此前实验文件保留在仓库供追溯。
+三份均已更新为 0.1.5.3。快捷入口沿用网页提供的官方主题配色。后续按需构建，日常自动发布默认只更新全量体验版。此前实验文件保留在仓库供追溯。
 
 ## 使用
 
 “页面净化”按原功能组拆分净化和具体优化栏目；搜索可匹配名称、栏目和反馈编号。各类过滤仍有独立入口。编号版与无编号版共用界面，功能保留不表示全部默认开启。
 
-日常设置仍在各页面、各功能栏目中操作。M09“配置备份与恢复”仅提供下载、预览导入与恢复，不汇集所有设置供编辑。默认导出功能设置、过滤规则和当前设备偏好；WebDAV连接和密码需单独勾选。导入前保存一份本机恢复备份，导入后的完整应用需要刷新。其它版本不支持的条目会提示跳过，未包含项不被清除。
+日常设置仍在各页面、各功能栏目中操作。M09“配置备份与恢复”可下载备份，也可选择文件或粘贴配置 JSON。导入前先预览，应用后刷新页面。默认导出功能设置、过滤规则和当前设备偏好，WebDAV 连接和密码需单独勾选。应用导入时会保存一份本机恢复备份，其它版本不支持的条目会提示跳过。
 
 “集中管理”指数据层：配置读写统一经过同一存储入口，并按设置、规则、设备、连接信息区分；注册、校验、版本和导入导出由数据接口管理，不改变设置界面的分类组织。缓存和运行状态不混入配置备份。这为后续完整配置WebDAV同步准备入口，当前尚未实现变更日志、删除传播和多设备并发合并协议。导入时关闭旧规则自动同步，请检查连接和数据后从原过滤设置中手动启用。
 

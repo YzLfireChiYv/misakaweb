@@ -7,9 +7,14 @@ import ListComp from '../src/components/items/ListComp.vue'
 import EditorComp from '../src/components/items/EditorComp.vue'
 import EditorDialog from '../src/components/EditorDialog.vue'
 import WebdavComp from '../src/components/items/WebdavComp.vue'
+import ConfigurationPanelView from '../src/views/ConfigurationPanelView.vue'
+import { createPinia } from 'pinia'
+import { useConfigurationPanelStore } from '@/stores/view'
 import { settingsByKey } from '../src/feedback/id-index.generated'
 import { __gmReset, __gmStore } from './gm-mock'
 import { readSettingValue } from '@/modules/configuration/effective'
+
+vi.mock('$', async (importOriginal) => ({ ...await importOriginal<object>(), unsafeWindow: window }))
 
 const mounts: App[] = []
 
@@ -28,9 +33,55 @@ afterEach(() => {
     }
     document.body.innerHTML = ''
     __gmReset()
+    vi.restoreAllMocks()
 })
 
 describe('feedback labels on rendered controls', () => {
+    it('previews pasted configuration before applying and invalidates preview after edits', async () => {
+        vi.spyOn(window, 'localStorage', 'get').mockReturnValue({ getItem: () => null } as unknown as Storage)
+        const host = document.createElement('div')
+        document.body.appendChild(host)
+        const pinia = createPinia()
+        const app = createApp(ConfigurationPanelView)
+        app.use(pinia).mount(host)
+        mounts.push(app)
+        useConfigurationPanelStore(pinia).show()
+        await nextTick()
+        const button = (label: string) => [...host.querySelectorAll('button')]
+            .find((element) => element.textContent?.includes(label))
+        button('粘贴配置')!.click()
+        await nextTick()
+        const input = host.querySelector('textarea')!
+        const key = 'global-title-keyword-filter-value'
+        const rules = ['普通规则', '/关键词.+示例/']
+        const update = async (value: string) => {
+            input.value = value
+            input.dispatchEvent(new Event('input'))
+            await nextTick()
+        }
+        await update(JSON.stringify({ ts: 1, data: { [key]: 'o' + JSON.stringify(rules) } }))
+        button('预览粘贴内容')!.click()
+        await nextTick()
+        expect(button('应用这些变动')).toBeDefined()
+        expect(__gmStore.has(key)).toBe(false)
+
+        await update('{')
+        expect(button('应用这些变动')).toBeUndefined()
+        button('预览粘贴内容')!.click()
+        await nextTick()
+        expect(host.textContent).toContain('不是有效的 JSON')
+        expect(__gmStore.has(key)).toBe(false)
+
+        await update(JSON.stringify({ ts: 1, data: { [key]: 'o' + JSON.stringify(rules) } }))
+        button('预览粘贴内容')!.click()
+        await nextTick()
+        button('应用这些变动')!.click()
+        await nextTick()
+        expect(host.querySelector('[role="status"]')?.textContent).toContain('已保存 1 项')
+        expect(__gmStore.get(key)).toEqual(rules)
+        expect(host.querySelector('textarea')).toBeNull()
+    })
+
     it('shows the confirmed sharing default and respects a saved false without writing on mount', () => {
         const key = 'video-page-simple-share'
         const props = { type: 'switch', id: key, name: '净化分享功能' }

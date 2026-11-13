@@ -2,7 +2,7 @@
   "retiredUpstreamFiles": ["src/modules/rules/common/groups/theme.ts", "src/modules/rules/common/groups/theme.scss", "src/composables/gmValue.ts"],
   "schemaVersion": 1,
   "localFeatureGroups": [
-    {"id":"F-MISAKA-BACKUP","label":"配置备份、导入与恢复","description":"按作用域导出；预览导入、校验、保存导入前快照并支持恢复。","actionKeys":["menu-configuration","side-configuration","config-apply-import","config-choose-import","config-export","config-refresh-page","config-restore-backup","panel-close-configuration"],"paths":["src/modules/configuration/","src/views/ConfigurationPanelView.vue","src/storage/"],"missing":"关键写入仍无脚本管理器持久化确认。"},
+    {"id":"F-MISAKA-BACKUP","label":"配置备份、导入与恢复","description":"按作用域导出，支持文件及粘贴导入。应用前预览并保存恢复快照。","actionKeys":["menu-configuration","side-configuration","config-apply-import","config-choose-import","config-paste-import","config-preview-paste","config-export","config-refresh-page","config-restore-backup","panel-close-configuration"],"paths":["src/modules/configuration/","src/views/ConfigurationPanelView.vue","src/storage/"],"missing":"关键写入仍无脚本管理器持久化确认。"},
     {"id":"F-MISAKA-MAINTENANCE","label":"只读页面结构诊断","description":"主动点击后采集页面结构并生成维护材料；不自动读取用户规则。","actionKeys":["maintenance-export-diagnostic"],"paths":["src/modules/maintenance/"],"missing":"结构样本不证明网页实际行为。"}
   ],
   "historicalActionKeys": ["review-category-cleaning","review-category-optimization","review-category-support","review-change-category","review-export","review-scope-all","review-scope-page","review-toggle-remove","review-pack-filter","config-save-setting"],

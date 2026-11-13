@@ -1,10 +1,10 @@
 {
     "schemaVersion": 1,
-    "version": "0.1.5.2",
+    "version": "0.1.5.3",
     "channel": "development",
     "artifact": "products/experience/misakaweb-feedback-test.user.js",
     "updateURL": "https://raw.githubusercontent.com/YzLfireChiYv/misakaweb/main/products/experience/misakaweb-feedback-test.user.js",
     "downloadURL": "https://raw.githubusercontent.com/YzLfireChiYv/misakaweb/main/products/experience/misakaweb-feedback-test.user.js",
-    "sha256": "9d71bfb244cf1680058f8d0d2cc558cc1cdf8ff504ebb7af636829f4302da2da",
-    "bytes": 995532
+    "sha256": "67672323fd48b79d478a4ae1982eda74bc2d3cdfcac06ca211a5b3f67050ffff",
+    "bytes": 998579
 }

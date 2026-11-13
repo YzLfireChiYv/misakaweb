@@ -1,10 +1,24 @@
 import {
+    MAX_CONFIGURATION_BYTES,
     parseConfigurationBackup,
     validateConfigValue,
     type ConfigDefinition,
     type ConfigEntry,
     type ConfigurationBackup,
 } from './backup'
+
+export const parseConfigurationImportText = (text: string, definitions: ConfigDefinition[]) => {
+    if (text.length > MAX_CONFIGURATION_BYTES || new TextEncoder().encode(text).byteLength > MAX_CONFIGURATION_BYTES) {
+        throw new Error('配置内容超过 4 MB，未读取')
+    }
+    let raw: unknown
+    try {
+        raw = JSON.parse(text.replace(/^\uFEFF/, ''))
+    } catch {
+        throw new Error('配置内容不是有效的 JSON')
+    }
+    return parseConfigurationImportFile(raw, definitions)
+}
 
 const isRecord = (value: unknown): value is Record<string, unknown> =>
     value !== null && typeof value === 'object' && !Array.isArray(value)
