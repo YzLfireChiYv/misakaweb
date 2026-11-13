@@ -1,4 +1,4 @@
-import { ISubFilter, SelectorFn } from '@/types/filter'
+import type { ISubFilter, SelectorResult } from '@/types/filter'
 
 export class BooleanFilter implements ISubFilter {
     isEnable = false
@@ -11,13 +11,7 @@ export class BooleanFilter implements ISubFilter {
         this.isEnable = false
     }
 
-    check(el: HTMLElement, selectorFn: SelectorFn): Promise<void> {
-        return new Promise<void>((resolve, reject) => {
-            if (this.isEnable && selectorFn(el) === true) {
-                reject()
-                return
-            }
-            resolve()
-        })
+    matches(value: SelectorResult): boolean {
+        return this.isEnable && value === true
     }
 }

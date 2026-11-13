@@ -57,7 +57,8 @@
 
 <script setup lang="ts">
 import { IListItem } from '@/types/item'
-import { GM_getValue, GM_setValue } from '@/storage/configStorage'
+import { GM_setValue } from '@/storage/configStorage'
+import { readItemValue } from '@/modules/configuration/effective'
 import { Listbox, ListboxButton, ListboxOption, ListboxOptions } from '@headlessui/vue'
 import { CheckIcon, ChevronUpDownIcon } from '@heroicons/vue/20/solid'
 import { ref, watch } from 'vue'
@@ -68,7 +69,7 @@ import DescriptionComp from './DescriptionComp.vue'
 const item = defineProps<IListItem>()
 const feedbackCode = settingLabel(item.id)
 const options = item.options
-const currValue = GM_getValue(item.id, item.defaultValue)
+const currValue = readItemValue(item)
 const currOption = options.find((v) => v.value === currValue)
 const selectedOption = ref(currOption ?? options[0])
 

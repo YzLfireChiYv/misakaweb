@@ -1,8 +1,8 @@
-import { ISubFilter, SelectorFn } from '@/types/filter'
+import type { ISubFilter, SelectorResult } from '@/types/filter'
 
 export class NumberMaxFilter implements ISubFilter {
     isEnable = false
-    private threshold = 0
+    private threshold?: number
 
     enable(): void {
         this.isEnable = true
@@ -16,16 +16,11 @@ export class NumberMaxFilter implements ISubFilter {
         this.threshold = value
     }
 
-    check(el: HTMLElement, selectorFn: SelectorFn): Promise<void> {
-        return new Promise<void>((resolve, reject) => {
-            if (this.isEnable) {
-                const value = selectorFn(el)
-                if (typeof value === 'number' && value > this.threshold) {
-                    reject()
-                    return
-                }
-            }
-            resolve()
-        })
+    clearParam() {
+        this.threshold = undefined
+    }
+
+    matches(value: SelectorResult): boolean {
+        return this.isEnable && this.threshold !== undefined && typeof value === 'number' && value > this.threshold
     }
 }

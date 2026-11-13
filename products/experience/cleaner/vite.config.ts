@@ -8,6 +8,7 @@ import tailwindcss from '@tailwindcss/vite'
 import tailwindShadowDOM from 'vite-plugin-tailwind-shadowdom'
 import remToPx from '@thedutchcoder/postcss-rem-to-px'
 import { profileFor, packSourcePlugin, cssPruningPlugin, classificationFor } from './scripts/pack-build.mjs'
+import { productDefaults } from './scripts/product-defaults.mjs'
 
 const release = JSON.parse(fs.readFileSync(new URL('./config/release.json', import.meta.url), 'utf8'))
 
@@ -37,12 +38,12 @@ export default defineConfig(({ mode }) => {
     return {
         define: {
             __SCRIPT_VERSION__: JSON.stringify(channel.version),
-            __PACK_APPEARANCE__: JSON.stringify(!profile || profile.packs.includes('appearance')),
             __PACK_PLAYBACK__: JSON.stringify(!profile || profile.packs.includes('playback')),
             __PACK_LINKS__: JSON.stringify(!profile || profile.packs.includes('link-tools')),
             __BUILD_PROFILE__: JSON.stringify(profile?.id ?? (isFeedback ? 'development' : 'legacy')),
             __BUILD_LABEL__: JSON.stringify(profile?.label ?? '全量体验版'),
             __SETTING_SECTIONS__: JSON.stringify(classificationFor(profile)),
+            __PRODUCT_DEFAULTS__: JSON.stringify(productDefaults),
         },
         plugins: [
             ...(profile ? [packSourcePlugin(profile)] : []),
@@ -102,6 +103,9 @@ export default defineConfig(({ mode }) => {
         ],
         resolve: {
             alias: {
+                ...(profile && !profile.packs.includes('touch-controls')
+                    ? { '@/modules/touch': fileURLToPath(new URL('./src/modules/touch/empty.ts', import.meta.url)) }
+                    : {}),
                 '@': fileURLToPath(new URL('./src', import.meta.url)),
                 '@feedback-index': feedbackIndex,
                 '@review-catalog': fileURLToPath(new URL(isFeedback ? './src/feedback/review-catalog.generated.ts' : './src/feedback/review-catalog.empty.ts', import.meta.url)),

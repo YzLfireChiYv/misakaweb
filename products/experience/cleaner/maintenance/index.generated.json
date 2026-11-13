@@ -2,12 +2,12 @@
   "counts": {
     "actions": 42,
     "controls": 580,
-    "diverged": 47,
-    "files": 268,
+    "diverged": 58,
+    "files": 271,
     "menus": 9,
-    "noBaseline": 38,
+    "noBaseline": 44,
     "settings": 529,
-    "unchanged": 183,
+    "unchanged": 169,
     "unresolved": 14
   },
   "external": [
@@ -21,10 +21,6 @@
     },
     {
       "name": "@vueuse/core",
-      "version": "^14.4.0"
-    },
-    {
-      "name": "@vueuse/integrations",
       "version": "^14.4.0"
     },
     {
@@ -129,6 +125,7 @@
         "src/components/items/DescriptionComp.vue",
         "src/feedback/Badge.vue",
         "src/feedback/index.ts",
+        "src/modules/configuration/effective.ts",
         "src/storage/configStorage.ts",
         "src/types/item.ts",
         "src/utils/logger.ts",
@@ -139,7 +136,7 @@
       ],
       "path": "src/components/EditorDialog.vue",
       "provenance": "matching-path-in-fixed-baseline",
-      "sha256": "9f89488631959aae19220125c6b2e1c76187b8f474b1d7721d8d29485f77a109",
+      "sha256": "1c71dd569e91b3080d4002ac1ad563e63ce025a7e19a16c6b9e1415960c66d4a",
       "status": "diverged",
       "unresolved": [],
       "upstream": {
@@ -221,6 +218,7 @@
         "src/components/items/DescriptionComp.vue",
         "src/feedback/Badge.vue",
         "src/feedback/index.ts",
+        "src/modules/configuration/effective.ts",
         "src/storage/configStorage.ts",
         "src/types/item.ts"
       ],
@@ -229,7 +227,7 @@
       ],
       "path": "src/components/items/ListComp.vue",
       "provenance": "matching-path-in-fixed-baseline",
-      "sha256": "f9439b990be5ca9105e47e588d18cae58719d476e56768442f4a59321eb46474",
+      "sha256": "14e420d5f2877a97e4414dd4334920626a0a1126d8ab0e3602457a2782d40736",
       "status": "diverged",
       "unresolved": [],
       "upstream": {
@@ -258,6 +256,7 @@
         "src/components/items/DescriptionComp.vue",
         "src/feedback/Badge.vue",
         "src/feedback/index.ts",
+        "src/modules/configuration/effective.ts",
         "src/storage/configStorage.ts",
         "src/types/item.ts",
         "src/utils/logger.ts"
@@ -267,7 +266,7 @@
       ],
       "path": "src/components/items/NumberComp.vue",
       "provenance": "matching-path-in-fixed-baseline",
-      "sha256": "875c59727a2282f3cad72121f09a3d3a8b5472683f753118842b6f70cde1f93b",
+      "sha256": "03bee1e49d50148a851e64e9cb95e76c4331c845aeb5971b1512dae5652ff99b",
       "status": "diverged",
       "unresolved": [],
       "upstream": {
@@ -296,6 +295,7 @@
         "src/components/items/DescriptionComp.vue",
         "src/feedback/Badge.vue",
         "src/feedback/index.ts",
+        "src/modules/configuration/effective.ts",
         "src/storage/configStorage.ts",
         "src/types/item.ts",
         "src/utils/logger.ts"
@@ -305,7 +305,7 @@
       ],
       "path": "src/components/items/StringComp.vue",
       "provenance": "matching-path-in-fixed-baseline",
-      "sha256": "31c52f09c64a4e2bedf4754e7d731bff825b81f4b6a0b21d35070dff36113748",
+      "sha256": "708355a406fa7ae1e2850ffb5b20de9c398308a5506bdb4aaf182d1b76756182",
       "status": "diverged",
       "unresolved": [],
       "upstream": {
@@ -334,6 +334,7 @@
         "src/components/items/DescriptionComp.vue",
         "src/feedback/Badge.vue",
         "src/feedback/index.ts",
+        "src/modules/configuration/effective.ts",
         "src/storage/configStorage.ts",
         "src/types/item.ts",
         "src/utils/logger.ts"
@@ -347,7 +348,7 @@
       ],
       "path": "src/components/items/SwitchComp.vue",
       "provenance": "matching-path-in-fixed-baseline",
-      "sha256": "5ed5582d951c48316c697bcd14820920d8999cbb5bbcbd374a90054ff4677a12",
+      "sha256": "ec39d11e2c716bf942e330b0cca4179aa4cf8ce6edaae9e6fb64d04aefa6cd01",
       "status": "diverged",
       "unresolved": [],
       "upstream": {
@@ -425,39 +426,6 @@
       }
     },
     {
-      "external": [
-        {
-          "name": "@vueuse/core",
-          "version": "^14.4.0"
-        },
-        {
-          "name": "vue",
-          "version": "^3.5.42"
-        }
-      ],
-      "imports": [
-        "src/storage/configStorage.ts"
-      ],
-      "modules": [
-        "utilities"
-      ],
-      "path": "src/composables/gmValue.ts",
-      "provenance": "matching-path-in-fixed-baseline",
-      "sha256": "87cb6777e4a534b477caa7e2acaea15a97e33290de7f12a74d6f1b0c79ab05b5",
-      "status": "diverged",
-      "unresolved": [],
-      "upstream": {
-        "caution": "Path match is a correspondence clue, not proof of authorship or semantic equivalence. Normalized hashes detect textual divergence; changed does not automatically mean a deliberate local patch.",
-        "commit": "15d9bced793487a8c4b0f9e1f7f67c7ccf6f3da9",
-        "normalizedSha256": "8752d0f1a5eaf50d964c30443811ac2f1a2ed4c4e4f2c443ebfc32a82f8479b6",
-        "path": "src/composables/gmValue.ts",
-        "pathMatch": true,
-        "repository": "https://github.com/festoney8/bilibili-cleaner",
-        "source": "cleaner",
-        "url": "https://github.com/festoney8/bilibili-cleaner/blob/15d9bced793487a8c4b0f9e1f7f67c7ccf6f3da9/src/composables/gmValue.ts"
-      }
-    },
-    {
       "external": [],
       "imports": [
         "src/storage/configStorage.ts"
@@ -500,7 +468,7 @@
       ],
       "path": "src/feedback/context-actions.ts",
       "provenance": "own-confirmed",
-      "sha256": "780af40b4293fc2c30a95bf0b303d314444028a8de804742518c85ceb104a516",
+      "sha256": "05201c1af32b3dc3133536bb8ab62ae16f5076af895938f1e252fc78e9914816",
       "status": "no-baseline",
       "unresolved": [],
       "upstream": null
@@ -513,7 +481,7 @@
       ],
       "path": "src/feedback/control-map.json",
       "provenance": "own-confirmed",
-      "sha256": "28fd41bef682f7f807ed7bcbea5e853c9a440db54c422111ed8829d2312be092",
+      "sha256": "82388f41d2823880b8e2ba5a7213327001d6490780fe464807ba919ee23581e0",
       "status": "no-baseline",
       "unresolved": [],
       "upstream": null
@@ -539,7 +507,7 @@
       ],
       "path": "src/feedback/fixed-controls.json",
       "provenance": "own-confirmed",
-      "sha256": "591e302ab9adbb27e5be6d89ccd0c30574d02443baef87a8d3386952bfd665fb",
+      "sha256": "a6131fd3d2e272fc602920b50dd6288fe3d6c8218b7ab39998855adbdca49d4d",
       "status": "no-baseline",
       "unresolved": [],
       "upstream": null
@@ -565,7 +533,7 @@
       ],
       "path": "src/feedback/id-index.generated.ts",
       "provenance": "own-confirmed",
-      "sha256": "71fa5c86b12be4d814c7fd2214d41375096e6246b7bbf64d96d9f9a406dfbac0",
+      "sha256": "032adab30a7a2037341071ac9d3f32ff8b64c8617137c3466c56bd5f99f298dc",
       "status": "no-baseline",
       "unresolved": [],
       "upstream": null
@@ -634,7 +602,7 @@
       ],
       "path": "src/feedback/review-catalog.generated.ts",
       "provenance": "own-confirmed",
-      "sha256": "31294c2662c099c4194799fb8d19ffc5b0b06a8d5c8c22998b29831be07f4d9f",
+      "sha256": "03416979b2d655921540972609d3d5588d7ae57239610653db6b4a3054a032c6",
       "status": "no-baseline",
       "unresolved": [],
       "upstream": null
@@ -689,7 +657,6 @@
         "src/App.vue",
         "src/feedback/index.ts",
         "src/modules/index.ts",
-        "src/modules/rules/common/groups/theme.ts",
         "src/stores/view.ts",
         "src/style.css",
         "src/utils/init.ts",
@@ -702,7 +669,7 @@
       ],
       "path": "src/main.ts",
       "provenance": "matching-path-in-fixed-baseline",
-      "sha256": "1fe00334855d4b964466e56b8951a5d250a2ef001b02f8a39b29a56915bb9a85",
+      "sha256": "59414093ac1dd8d4bf02dd9532bd8f27717041b0465b0613eae935cbcffd60a9",
       "status": "diverged",
       "unresolved": [
         {
@@ -738,7 +705,27 @@
     {
       "external": [],
       "imports": [
+        "src/storage/configStorage.ts",
+        "src/types/item.ts"
+      ],
+      "localNotes": [
+        "启动和面板共用生效值。已保存值优先，缺键采用已确认产品默认或当前声明；备份和同步仍读取原始存储。"
+      ],
+      "modules": [
+        "settings-ui"
+      ],
+      "path": "src/modules/configuration/effective.ts",
+      "provenance": "own-confirmed",
+      "sha256": "38d3aee3cf7399f86dd17feab88a8b77c6d8fae067b436f368490a3c743dbe83",
+      "status": "no-baseline",
+      "unresolved": [],
+      "upstream": null
+    },
+    {
+      "external": [],
+      "imports": [
         "src/modules/configuration/backup.ts",
+        "src/modules/configuration/effective.ts",
         "src/modules/filters/index.ts",
         "src/modules/filters/rulePack.ts",
         "src/modules/rules/index.ts",
@@ -750,7 +737,7 @@
       ],
       "path": "src/modules/configuration/registry.ts",
       "provenance": "unverified",
-      "sha256": "e5ababb52642ad725ecbedcaf85862e9c8a884bdf721d8666cc868d2f3f0a3e5",
+      "sha256": "8a2d0c42e219fe29ba9600aff060c37853bcb7c7d6a4d9c47b6cf5e902cdd1a8",
       "status": "no-baseline",
       "unresolved": [],
       "upstream": null
@@ -778,28 +765,42 @@
       "upstream": null
     },
     {
+      "external": [],
+      "imports": [
+        "src/modules/configuration/backup.ts"
+      ],
+      "modules": [
+        "settings-ui"
+      ],
+      "path": "src/modules/configuration/scriptcat.ts",
+      "provenance": "unverified",
+      "sha256": "17ef9ca22bcdc2e07acbfa5e7203a71e7f3417bab33662b79cb40cafa3a0b9de",
+      "status": "no-baseline",
+      "unresolved": [],
+      "upstream": null
+    },
+    {
       "external": [
         {
           "name": "@vueuse/core",
           "version": "^14.4.0"
-        },
-        {
-          "name": "p-limit",
-          "version": "^7.3.2"
         }
       ],
       "imports": [
-        "src/config.ts",
+        "src/modules/filters/core/paint.ts",
+        "src/modules/filters/decision/compatibility.ts",
         "src/types/filter.ts",
-        "src/utils/logger.ts",
-        "src/utils/tool.ts"
+        "src/utils/logger.ts"
+      ],
+      "localNotes": [
+        "本地拆分字段提取、策略与绘制；各页独立节流。保留统计失败重试和强制名单优先级。"
       ],
       "modules": [
         "filter-core"
       ],
       "path": "src/modules/filters/core/core.ts",
       "provenance": "matching-path-in-fixed-baseline",
-      "sha256": "bd97d50124b4c3f23ae6ee6d3258369d40e4f016be0ed333902f187c932be075",
+      "sha256": "ac626047b64f93474d37b4fdabe8f64af7d4e30bcceb7a35b94956b618ffa7d4",
       "status": "diverged",
       "unresolved": [],
       "upstream": {
@@ -816,6 +817,26 @@
     {
       "external": [],
       "imports": [
+        "src/config.ts",
+        "src/modules/filters/decision/compatibility.ts",
+        "src/utils/tool.ts"
+      ],
+      "localNotes": [
+        "保护过期扫描与复用节点，恢复脚本接管前的行内 display。"
+      ],
+      "modules": [
+        "filter-core"
+      ],
+      "path": "src/modules/filters/core/paint.ts",
+      "provenance": "own-confirmed",
+      "sha256": "ef14df05cb33584e4522b3aed0c2a007e92e171fa2c72d6e867842b505042d32",
+      "status": "no-baseline",
+      "unresolved": [],
+      "upstream": null
+    },
+    {
+      "external": [],
+      "imports": [
         "src/types/filter.ts"
       ],
       "modules": [
@@ -823,8 +844,8 @@
       ],
       "path": "src/modules/filters/core/subFilters/booleanFilter.ts",
       "provenance": "matching-path-in-fixed-baseline",
-      "sha256": "4e1df512ea3c8510d3d3e2b65855bda9a25b28adaae827c0b3855e0524693134",
-      "status": "unchanged",
+      "sha256": "6f825db69d5b48a887318b11387dbe16ae9e7ce4a05b8fa2a3d6840ba3b3b279",
+      "status": "diverged",
       "unresolved": [],
       "upstream": {
         "caution": "Path match is a correspondence clue, not proof of authorship or semantic equivalence. Normalized hashes detect textual divergence; changed does not automatically mean a deliberate local patch.",
@@ -849,8 +870,8 @@
       ],
       "path": "src/modules/filters/core/subFilters/keywordFilter.ts",
       "provenance": "matching-path-in-fixed-baseline",
-      "sha256": "b303b75748007d44a8aae2710b2bd32a021a170f7ca0062f4afbe2282183b767",
-      "status": "unchanged",
+      "sha256": "bee19c3b92607122dc3f6277f8311a5d020d5e159470128d970b7d8fcc187f01",
+      "status": "diverged",
       "unresolved": [],
       "upstream": {
         "caution": "Path match is a correspondence clue, not proof of authorship or semantic equivalence. Normalized hashes detect textual divergence; changed does not automatically mean a deliberate local patch.",
@@ -873,8 +894,8 @@
       ],
       "path": "src/modules/filters/core/subFilters/numberMaxFilter.ts",
       "provenance": "matching-path-in-fixed-baseline",
-      "sha256": "6bfef27413593e0ee3e82dcd20405f4c0a18b8a3bc6e0f783586e8aca31819fd",
-      "status": "unchanged",
+      "sha256": "35867829022b0b5dca4cf5903202d14583c855e92a46862b8af38d0be08ec6fd",
+      "status": "diverged",
       "unresolved": [],
       "upstream": {
         "caution": "Path match is a correspondence clue, not proof of authorship or semantic equivalence. Normalized hashes detect textual divergence; changed does not automatically mean a deliberate local patch.",
@@ -897,8 +918,8 @@
       ],
       "path": "src/modules/filters/core/subFilters/numberMinFilter.ts",
       "provenance": "matching-path-in-fixed-baseline",
-      "sha256": "eed6ff47d8b52bc23da95444493df817fb55a49a04e5634562e9c9f8d4a886ae",
-      "status": "unchanged",
+      "sha256": "883e3a612aa1dd80ccfe46b362318818398249bf6f0edbd5a512988fb951aaaa",
+      "status": "diverged",
       "unresolved": [],
       "upstream": {
         "caution": "Path match is a correspondence clue, not proof of authorship or semantic equivalence. Normalized hashes detect textual divergence; changed does not automatically mean a deliberate local patch.",
@@ -921,8 +942,8 @@
       ],
       "path": "src/modules/filters/core/subFilters/stringFilter.ts",
       "provenance": "matching-path-in-fixed-baseline",
-      "sha256": "d75fba3b76b4dedf8167405e1df1dba417dceb358d36960d3d48c50332bb70f4",
-      "status": "unchanged",
+      "sha256": "561b8a6f754dad032aefa5445d11ca17730d367a1e56583e57fc159d86b0995b",
+      "status": "diverged",
       "unresolved": [],
       "upstream": {
         "caution": "Path match is a correspondence clue, not proof of authorship or semantic equivalence. Normalized hashes detect textual divergence; changed does not automatically mean a deliberate local patch.",
@@ -934,6 +955,26 @@
         "source": "cleaner",
         "url": "https://github.com/festoney8/bilibili-cleaner/blob/15d9bced793487a8c4b0f9e1f7f67c7ccf6f3da9/src/modules/filters/core/subFilters/stringFilter.ts"
       }
+    },
+    {
+      "external": [],
+      "imports": [
+        "src/modules/filters/variety/video/statRate.ts",
+        "src/modules/filters/variety/video/viewStat.ts",
+        "src/types/filter.ts"
+      ],
+      "localNotes": [
+        "值级判断沿用固定上游匹配语义，本地独立实现优先级、统计比较和二选一结果。"
+      ],
+      "modules": [
+        "filter-core"
+      ],
+      "path": "src/modules/filters/decision/compatibility.ts",
+      "provenance": "own-confirmed",
+      "sha256": "e8e40c6d1201e803dc9e32dd9c82bd7f767549f760d09e819e17e85f3a3564e0",
+      "status": "no-baseline",
+      "unresolved": [],
+      "upstream": null
     },
     {
       "external": [],
@@ -1013,6 +1054,17 @@
     },
     {
       "external": [],
+      "imports": [],
+      "modules": [],
+      "path": "src/modules/filters/thresholds.ts",
+      "provenance": "unverified",
+      "sha256": "cd6c902b9c640d9ebe454755b9960d25036dfc9f9ee96b5ec9a718fe44b3be95",
+      "status": "no-baseline",
+      "unresolved": [],
+      "upstream": null
+    },
+    {
+      "external": [],
       "imports": [
         "src/modules/filters/variety/article/pages/searchArticle.ts"
       ],
@@ -1040,6 +1092,7 @@
       "imports": [
         "src/config.ts",
         "src/modules/filters/core/core.ts",
+        "src/modules/filters/core/paint.ts",
         "src/modules/filters/variety/article/subFilters/black.ts",
         "src/modules/filters/variety/article/subFilters/white.ts",
         "src/storage/configStorage.ts",
@@ -1053,7 +1106,7 @@
       ],
       "path": "src/modules/filters/variety/article/pages/searchArticle.ts",
       "provenance": "matching-path-in-fixed-baseline",
-      "sha256": "21134696d0fdf27900620bfa6cb65058bd364ba62d072ce42386368663c65485",
+      "sha256": "e0e6a1fdcdcc8e8b46e46c115155747c6339a98b499d9075a82a3413f3e42ab6",
       "status": "diverged",
       "unresolved": [],
       "upstream": {
@@ -1148,7 +1201,10 @@
       ],
       "imports": [
         "src/config.ts",
+        "src/modules/configuration/effective.ts",
         "src/modules/filters/core/core.ts",
+        "src/modules/filters/core/paint.ts",
+        "src/modules/filters/thresholds.ts",
         "src/modules/filters/variety/comment/extra/bots.ts",
         "src/modules/filters/variety/comment/subFilters/black.ts",
         "src/modules/filters/variety/comment/subFilters/white.ts",
@@ -1165,7 +1221,7 @@
       ],
       "path": "src/modules/filters/variety/comment/pages/common.ts",
       "provenance": "matching-path-in-fixed-baseline",
-      "sha256": "b0f5bec2cddc1e2c7434b513dc70dd0bdf69a909748661add84c7a9fb4804121",
+      "sha256": "bda41f8a6d152f462b7e591050db871b07025f8aa404b27e1d759606f23f2a93",
       "status": "diverged",
       "unresolved": [],
       "upstream": {
@@ -1234,7 +1290,10 @@
       "external": [],
       "imports": [
         "src/config.ts",
+        "src/modules/configuration/effective.ts",
         "src/modules/filters/core/core.ts",
+        "src/modules/filters/core/paint.ts",
+        "src/modules/filters/thresholds.ts",
         "src/modules/filters/variety/dynamic/subFilters/black.ts",
         "src/modules/filters/variety/dynamic/subFilters/white.ts",
         "src/storage/configStorage.ts",
@@ -1249,7 +1308,7 @@
       ],
       "path": "src/modules/filters/variety/dynamic/pages/dynamic.ts",
       "provenance": "matching-path-in-fixed-baseline",
-      "sha256": "54dbf708aab8c9b2b2ebdd3c417a5899a0f045e7a284a55bec10dd55bcee8ba2",
+      "sha256": "221ed3cb71bd9b4ca5e741969b96854295e5c57c38fcd340e3403b54b14ecba8",
       "status": "diverged",
       "unresolved": [],
       "upstream": {
@@ -1279,7 +1338,7 @@
       ],
       "path": "src/modules/filters/variety/dynamic/pages/header.ts",
       "provenance": "matching-path-in-fixed-baseline",
-      "sha256": "cacdcd1352490e36c16c2dbcd9c078e75869b04238a54282ef57ee334282e091",
+      "sha256": "c45017bcd571e584ce85682f57f756141b6b7c4c539e5e53b27bb84b321c0e2b",
       "status": "diverged",
       "unresolved": [],
       "upstream": {
@@ -1297,7 +1356,10 @@
       "external": [],
       "imports": [
         "src/config.ts",
+        "src/modules/configuration/effective.ts",
         "src/modules/filters/core/core.ts",
+        "src/modules/filters/core/paint.ts",
+        "src/modules/filters/thresholds.ts",
         "src/modules/filters/variety/dynamic/subFilters/black.ts",
         "src/modules/filters/variety/dynamic/subFilters/white.ts",
         "src/storage/configStorage.ts",
@@ -1311,7 +1373,7 @@
       ],
       "path": "src/modules/filters/variety/dynamic/pages/space.ts",
       "provenance": "matching-path-in-fixed-baseline",
-      "sha256": "d1ef7a4d315d885b130ee2286bd5c8f15e6dcc7535cb8e058371cbb092074cc6",
+      "sha256": "b776fb4388f805764db5ec1f8e90ff309950caf4e74cac96dffd2ae824e5c475",
       "status": "diverged",
       "unresolved": [],
       "upstream": {
@@ -1380,7 +1442,10 @@
       "external": [],
       "imports": [
         "src/config.ts",
+        "src/modules/configuration/effective.ts",
         "src/modules/filters/core/core.ts",
+        "src/modules/filters/core/paint.ts",
+        "src/modules/filters/thresholds.ts",
         "src/modules/filters/variety/video/statGate.ts",
         "src/modules/filters/variety/video/subFilters/black.ts",
         "src/modules/filters/variety/video/subFilters/white.ts",
@@ -1396,7 +1461,7 @@
       ],
       "path": "src/modules/filters/variety/video/pages/channel.ts",
       "provenance": "matching-path-in-fixed-baseline",
-      "sha256": "9baa9c5c2de757966f483aff8fb977ed231866588693bcf96e5f30bb54f405ac",
+      "sha256": "8cd2d847da4c702840a043bfd42f92a00903559cea80f64a0b1ee36b5d66be88",
       "status": "diverged",
       "unresolved": [],
       "upstream": {
@@ -1414,7 +1479,10 @@
       "external": [],
       "imports": [
         "src/config.ts",
+        "src/modules/configuration/effective.ts",
         "src/modules/filters/core/core.ts",
+        "src/modules/filters/core/paint.ts",
+        "src/modules/filters/thresholds.ts",
         "src/modules/filters/variety/video/statGate.ts",
         "src/modules/filters/variety/video/subFilters/black.ts",
         "src/modules/filters/variety/video/subFilters/white.ts",
@@ -1430,7 +1498,7 @@
       ],
       "path": "src/modules/filters/variety/video/pages/homepage.ts",
       "provenance": "matching-path-in-fixed-baseline",
-      "sha256": "25561f9c1bbf11cf87ceb61a88f94c450e06ab2ccd2e60b1b330556ca1d3d887",
+      "sha256": "e5766c70b4586b7d89dfc7c19801666b99d6af18ad3fde5b58b924de8d46e0ee",
       "status": "diverged",
       "unresolved": [],
       "upstream": {
@@ -1448,7 +1516,10 @@
       "external": [],
       "imports": [
         "src/config.ts",
+        "src/modules/configuration/effective.ts",
         "src/modules/filters/core/core.ts",
+        "src/modules/filters/core/paint.ts",
+        "src/modules/filters/thresholds.ts",
         "src/modules/filters/variety/video/statGate.ts",
         "src/modules/filters/variety/video/subFilters/black.ts",
         "src/modules/filters/variety/video/subFilters/white.ts",
@@ -1459,12 +1530,15 @@
         "src/utils/pageType.ts",
         "src/utils/tool.ts"
       ],
+      "localNotes": [
+        "热门旧质量指标在点赞数为0时视为未知；不得以无效投币/点赞比判定隐藏。"
+      ],
       "modules": [
         "video-filter"
       ],
       "path": "src/modules/filters/variety/video/pages/popular.ts",
       "provenance": "matching-path-in-fixed-baseline",
-      "sha256": "8cc4193453966101e2d3b7b827136557885322358b05f4b3a72f0d512989431a",
+      "sha256": "1862af57e691fe1cf8ed8cc2eee77c677ce48775ddeebeb28f3a05ad09c610a7",
       "status": "diverged",
       "unresolved": [],
       "upstream": {
@@ -1482,7 +1556,10 @@
       "external": [],
       "imports": [
         "src/config.ts",
+        "src/modules/configuration/effective.ts",
         "src/modules/filters/core/core.ts",
+        "src/modules/filters/core/paint.ts",
+        "src/modules/filters/thresholds.ts",
         "src/modules/filters/variety/video/statGate.ts",
         "src/modules/filters/variety/video/subFilters/black.ts",
         "src/modules/filters/variety/video/subFilters/white.ts",
@@ -1499,7 +1576,7 @@
       ],
       "path": "src/modules/filters/variety/video/pages/search.ts",
       "provenance": "matching-path-in-fixed-baseline",
-      "sha256": "3d3948cac11cce0e9396fb5684cf9f121d07a614a63b1c35e6db205f1adf7f6c",
+      "sha256": "5ceca0f94819e449548d4691bfdd877656983e9a4fd167df35a75400f556c09c",
       "status": "diverged",
       "unresolved": [
         {
@@ -1523,7 +1600,10 @@
       "external": [],
       "imports": [
         "src/config.ts",
+        "src/modules/configuration/effective.ts",
         "src/modules/filters/core/core.ts",
+        "src/modules/filters/core/paint.ts",
+        "src/modules/filters/thresholds.ts",
         "src/modules/filters/variety/video/statGate.ts",
         "src/modules/filters/variety/video/subFilters/black.ts",
         "src/modules/filters/variety/video/subFilters/white.ts",
@@ -1539,7 +1619,7 @@
       ],
       "path": "src/modules/filters/variety/video/pages/space.ts",
       "provenance": "matching-path-in-fixed-baseline",
-      "sha256": "0c70b42dadcc68b4e17f0fda4914b42bb56eefceec9213ed85b4a2e0f6165060",
+      "sha256": "0b884500741d6b3a3a26cf4561345baee5916631a2979e0c265a3bfa29de6f84",
       "status": "diverged",
       "unresolved": [],
       "upstream": {
@@ -1557,7 +1637,10 @@
       "external": [],
       "imports": [
         "src/config.ts",
+        "src/modules/configuration/effective.ts",
         "src/modules/filters/core/core.ts",
+        "src/modules/filters/core/paint.ts",
+        "src/modules/filters/thresholds.ts",
         "src/modules/filters/variety/video/statGate.ts",
         "src/modules/filters/variety/video/subFilters/black.ts",
         "src/modules/filters/variety/video/subFilters/white.ts",
@@ -1568,12 +1651,15 @@
         "src/utils/pageType.ts",
         "src/utils/tool.ts"
       ],
+      "localNotes": [
+        "相关视频缓存使用本轮命中下标，不能读取异步绘制前的DOM隐藏属性；复用标题/封面BV提取。延迟推荐容器按 classList 判断。"
+      ],
       "modules": [
         "video-filter"
       ],
       "path": "src/modules/filters/variety/video/pages/video.ts",
       "provenance": "matching-path-in-fixed-baseline",
-      "sha256": "bcff6b0a5415d17dc10b19ba60759779e2bbd0e7241cb7ddcccd61659b2aff3c",
+      "sha256": "f4fc15c32458025f3b48ed649ced9f9ad3e002b1b27357e4c08360209451e636",
       "status": "diverged",
       "unresolved": [
         {
@@ -1601,10 +1687,10 @@
         }
       ],
       "imports": [
-        "src/modules/filters/core/core.ts",
+        "src/modules/configuration/effective.ts",
+        "src/modules/filters/decision/compatibility.ts",
         "src/modules/filters/variety/video/statRate.ts",
         "src/modules/filters/variety/video/viewStat.ts",
-        "src/storage/configStorage.ts",
         "src/types/collection.ts",
         "src/types/filter.ts"
       ],
@@ -1613,7 +1699,7 @@
       ],
       "path": "src/modules/filters/variety/video/statGate.ts",
       "provenance": "no-matching-path-in-fixed-baseline; authorship-unverified",
-      "sha256": "3ea9a1cf64cd4fc3deb78791b707b2449419d28e0556217fec66db10aa09cd77",
+      "sha256": "70d080d7dc12266daf797d95534bc972aa9dfe2bfcc56f8c2c141be918756707",
       "status": "no-baseline",
       "unresolved": [],
       "upstream": null
@@ -1645,8 +1731,8 @@
       ],
       "path": "src/modules/filters/variety/video/subFilters/black.ts",
       "provenance": "matching-path-in-fixed-baseline",
-      "sha256": "74a789cab0b0bd21b6a515c535753f0524d8b868714896c82766dc3e746c1618",
-      "status": "unchanged",
+      "sha256": "be06794177ad63b407b58032220f8b668a93f14c10d1456e3a63e9b070afad6d",
+      "status": "diverged",
       "unresolved": [],
       "upstream": {
         "caution": "Path match is a correspondence clue, not proof of authorship or semantic equivalence. Normalized hashes detect textual divergence; changed does not automatically mean a deliberate local patch.",
@@ -1728,10 +1814,10 @@
         }
       ],
       "imports": [
+        "src/modules/configuration/effective.ts",
         "src/modules/filters/index.ts",
         "src/modules/filters/ruleSync.ts",
         "src/modules/rules/index.ts",
-        "src/storage/configStorage.ts",
         "src/types/item.ts",
         "src/utils/init.ts",
         "src/utils/logger.ts",
@@ -1746,7 +1832,7 @@
       ],
       "path": "src/modules/index.ts",
       "provenance": "matching-path-in-fixed-baseline",
-      "sha256": "654a470aa8e2ade9e8f042cc50791a0e3c2aaf77090ed29dca3efa73813c01ce",
+      "sha256": "a4b30f20c3f5b3704a0530c4c6d57a5d7267d33e790735521019607a7c4fc602",
       "status": "diverged",
       "unresolved": [],
       "upstream": {
@@ -2885,83 +2971,21 @@
     },
     {
       "external": [],
-      "imports": [],
-      "modules": [
-        "rules-common"
-      ],
-      "path": "src/modules/rules/common/groups/theme.scss",
-      "provenance": "matching-path-in-fixed-baseline",
-      "sha256": "4c0b57e6679a5183a201e8a4dd1d23839e303daebaecce595c74a26a3d9dfcda",
-      "status": "unchanged",
-      "unresolved": [],
-      "upstream": {
-        "caution": "Path match is a correspondence clue, not proof of authorship or semantic equivalence. Normalized hashes detect textual divergence; changed does not automatically mean a deliberate local patch.",
-        "commit": "15d9bced793487a8c4b0f9e1f7f67c7ccf6f3da9",
-        "normalizedSha256": "4c0b57e6679a5183a201e8a4dd1d23839e303daebaecce595c74a26a3d9dfcda",
-        "path": "src/modules/rules/common/groups/theme.scss",
-        "pathMatch": true,
-        "repository": "https://github.com/festoney8/bilibili-cleaner",
-        "source": "cleaner",
-        "url": "https://github.com/festoney8/bilibili-cleaner/blob/15d9bced793487a8c4b0f9e1f7f67c7ccf6f3da9/src/modules/rules/common/groups/theme.scss"
-      }
-    },
-    {
-      "external": [
-        {
-          "name": "@vueuse/core",
-          "version": "^14.4.0"
-        },
-        {
-          "name": "@vueuse/integrations",
-          "version": "^14.4.0"
-        },
-        {
-          "name": "vue",
-          "version": "^3.5.42"
-        }
-      ],
-      "imports": [
-        "src/composables/gmValue.ts",
-        "src/types/item.ts",
-        "src/utils/pageType.ts"
-      ],
-      "modules": [
-        "rules-common"
-      ],
-      "path": "src/modules/rules/common/groups/theme.ts",
-      "provenance": "matching-path-in-fixed-baseline",
-      "sha256": "2e56877e7142e535365bd67b0b91cb2a4c2ca7ed104727a9329da06b48d8a230",
-      "status": "unchanged",
-      "unresolved": [],
-      "upstream": {
-        "caution": "Path match is a correspondence clue, not proof of authorship or semantic equivalence. Normalized hashes detect textual divergence; changed does not automatically mean a deliberate local patch.",
-        "commit": "15d9bced793487a8c4b0f9e1f7f67c7ccf6f3da9",
-        "normalizedSha256": "2e56877e7142e535365bd67b0b91cb2a4c2ca7ed104727a9329da06b48d8a230",
-        "path": "src/modules/rules/common/groups/theme.ts",
-        "pathMatch": true,
-        "repository": "https://github.com/festoney8/bilibili-cleaner",
-        "source": "cleaner",
-        "url": "https://github.com/festoney8/bilibili-cleaner/blob/15d9bced793487a8c4b0f9e1f7f67c7ccf6f3da9/src/modules/rules/common/groups/theme.ts"
-      }
-    },
-    {
-      "external": [],
       "imports": [
         "src/modules/rules/common/groups/basic.scss",
         "src/modules/rules/common/groups/font.scss",
         "src/modules/rules/common/groups/headerCenter.scss",
         "src/modules/rules/common/groups/headerLeft.scss",
         "src/modules/rules/common/groups/headerRight.scss",
-        "src/modules/rules/common/groups/headerWidth.scss",
-        "src/modules/rules/common/groups/theme.scss"
+        "src/modules/rules/common/groups/headerWidth.scss"
       ],
       "modules": [
         "rules-common"
       ],
       "path": "src/modules/rules/common/index.scss",
       "provenance": "matching-path-in-fixed-baseline",
-      "sha256": "34635b958f5809848a9b8c7aa250c066d5faaff831eaf6b592c62914b8856def",
-      "status": "unchanged",
+      "sha256": "eb5ad7aedfd59946b310d45b890c6f9a18b1656d50a5b9640467f3020b7ab07a",
+      "status": "diverged",
       "unresolved": [],
       "upstream": {
         "caution": "Path match is a correspondence clue, not proof of authorship or semantic equivalence. Normalized hashes detect textual divergence; changed does not automatically mean a deliberate local patch.",
@@ -2982,7 +3006,6 @@
         "src/modules/rules/common/groups/headerLeft.ts",
         "src/modules/rules/common/groups/headerRight.ts",
         "src/modules/rules/common/groups/headerWidth.ts",
-        "src/modules/rules/common/groups/theme.ts",
         "src/types/collection.ts"
       ],
       "modules": [
@@ -2990,8 +3013,8 @@
       ],
       "path": "src/modules/rules/common/index.ts",
       "provenance": "matching-path-in-fixed-baseline",
-      "sha256": "b82521b60324f0a6806dc06e5f9f1d6266eefeb68f8f14beeba42f93859c0755",
-      "status": "unchanged",
+      "sha256": "7a81881757e1dc751be6aaf2f1a2fd9c476457eadf1cbd69b6044da60c875844",
+      "status": "diverged",
       "unresolved": [],
       "upstream": {
         "caution": "Path match is a correspondence clue, not proof of authorship or semantic equivalence. Normalized hashes detect textual divergence; changed does not automatically mean a deliberate local patch.",
@@ -3848,8 +3871,8 @@
       ],
       "path": "src/modules/rules/homepage/groups/rcmd.ts",
       "provenance": "matching-path-in-fixed-baseline",
-      "sha256": "d8d53842c2c31178dfc696aa0112439e11fe9a246a80e84326c421d5db9168a6",
-      "status": "unchanged",
+      "sha256": "6b7e00761d7d60b44bb14a943e6685d16abcc1df87828962ef1adc017a554cd0",
+      "status": "diverged",
       "unresolved": [],
       "upstream": {
         "caution": "Path match is a correspondence clue, not proof of authorship or semantic equivalence. Normalized hashes detect textual divergence; changed does not automatically mean a deliberate local patch.",
@@ -5849,7 +5872,6 @@
         }
       ],
       "imports": [
-        "src/modules/rules/common/groups/theme.ts",
         "src/stores/view.ts"
       ],
       "modules": [
@@ -5857,7 +5879,7 @@
       ],
       "path": "src/modules/shortcut/actions.ts",
       "provenance": "own-confirmed",
-      "sha256": "9ce4c979632a4d734e4754c5c71ad94f6cfa63957c46baff1528e0e84c5dc74b",
+      "sha256": "6b3d0833205497c57572ccc2db32ad46f99cab04c3c6079f59739071fd7160f5",
       "status": "no-baseline",
       "unresolved": [],
       "upstream": null
@@ -5896,7 +5918,7 @@
       ],
       "path": "src/modules/shortcut/host.ts",
       "provenance": "own-confirmed",
-      "sha256": "81a32671394401e0513b211b486713ff18a4d151cd0b821b1313febd2c3cf47f",
+      "sha256": "a05c8e931a24c30775cb8214881fb2612381821da84e74ecba4263e9d0834808",
       "status": "no-baseline",
       "unresolved": [],
       "upstream": null
@@ -5909,6 +5931,7 @@
         }
       ],
       "imports": [
+        "src/modules/configuration/effective.ts",
         "src/storage/configStorage.ts"
       ],
       "modules": [
@@ -5916,7 +5939,7 @@
       ],
       "path": "src/modules/shortcut/preference.ts",
       "provenance": "own-confirmed",
-      "sha256": "55894c6ba6ae2a8c08ffc6a288dcb15064b0c09a7f666a90bb9133d9759a3e33",
+      "sha256": "a5089444607dfe1bf95f37c3d11d430ce124def4c54d69e2081ef03a80c9dbad",
       "status": "no-baseline",
       "unresolved": [],
       "upstream": null
@@ -5932,6 +5955,21 @@
       "path": "src/modules/touch/controller.ts",
       "provenance": "unverified",
       "sha256": "a0cc765a6e05ed3fa88b1add3201382801f39fadc10e6b9291a9f40c7633605d",
+      "status": "no-baseline",
+      "unresolved": [],
+      "upstream": null
+    },
+    {
+      "external": [],
+      "imports": [
+        "src/types/item.ts"
+      ],
+      "modules": [
+        "touch-gestures"
+      ],
+      "path": "src/modules/touch/empty.ts",
+      "provenance": "unverified",
+      "sha256": "7a41960562bd4f5ac7437f19754d0c8aad2edc1c092ab21bb67f008e28637794",
       "status": "no-baseline",
       "unresolved": [],
       "upstream": null
@@ -6047,8 +6085,8 @@
       "modules": [],
       "path": "src/style.css",
       "provenance": "matching-path-in-fixed-baseline",
-      "sha256": "b31360aeaad468ea17b4459830ba1c74f7df2e4892cbb3282feb4de22d1bf3c3",
-      "status": "unchanged",
+      "sha256": "62a8952d4836b75977f66fa8b12aa97171276bf1454c8c90a25426e85c653417",
+      "status": "diverged",
       "unresolved": [],
       "upstream": {
         "caution": "Path match is a correspondence clue, not proof of authorship or semantic equivalence. Normalized hashes detect textual divergence; changed does not automatically mean a deliberate local patch.",
@@ -6099,8 +6137,8 @@
       ],
       "path": "src/types/filter.ts",
       "provenance": "matching-path-in-fixed-baseline",
-      "sha256": "4a67428ca67d1a994f45a0a7af4ff5e2c80dcbec066176fe532e62166457e493",
-      "status": "unchanged",
+      "sha256": "742ea12da8f186def273ef49253c5f2f42256042a20c361659bc6a32e75e040d",
+      "status": "diverged",
       "unresolved": [],
       "upstream": {
         "caution": "Path match is a correspondence clue, not proof of authorship or semantic equivalence. Normalized hashes detect textual divergence; changed does not automatically mean a deliberate local patch.",
@@ -6143,7 +6181,7 @@
       ],
       "path": "src/types/item.ts",
       "provenance": "matching-path-in-fixed-baseline",
-      "sha256": "738ccb4b05c37fb32f55535162e2c502552c1cde36cbcfb07171a1c7f23ba169",
+      "sha256": "70b786411a5c278519b5eb38ccc4f242805238b3469dc8f7ad004603a3b26172",
       "status": "diverged",
       "unresolved": [],
       "upstream": {
@@ -6168,8 +6206,8 @@
       ],
       "path": "src/utils/fetch.ts",
       "provenance": "matching-path-in-fixed-baseline",
-      "sha256": "c1185131be6aee030423303e29d4648d94ffa5cafb02f2147dcd8efa1c11e5f3",
-      "status": "unchanged",
+      "sha256": "b3f07a42c09037ecb2e7df91831d9a7a2b7fa95308cacf7e0dad53afbbe7774e",
+      "status": "diverged",
       "unresolved": [
         {
           "from": "src/utils/fetch.ts",
@@ -6527,6 +6565,7 @@
         "src/modules/configuration/backup.ts",
         "src/modules/configuration/registry.ts",
         "src/modules/configuration/runtime.ts",
+        "src/modules/configuration/scriptcat.ts",
         "src/stores/view.ts"
       ],
       "modules": [
@@ -6534,7 +6573,7 @@
       ],
       "path": "src/views/ConfigurationPanelView.vue",
       "provenance": "unverified",
-      "sha256": "f60a9e9a01926daf55abd34eb5e343a260e6e1a7fea18803716ff7de90caa52a",
+      "sha256": "fecdeea9c7c41d9b3587dd00b35d395def569172bb480a646cb81e43185f0e55",
       "status": "no-baseline",
       "unresolved": [],
       "upstream": null
@@ -6730,7 +6769,6 @@
       "imports": [
         "src/feedback/Badge.vue",
         "src/feedback/index.ts",
-        "src/modules/rules/common/groups/theme.ts",
         "src/modules/shortcut/actions.ts",
         "src/modules/shortcut/preference.ts",
         "src/storage/configStorage.ts",
@@ -6743,7 +6781,7 @@
       ],
       "path": "src/views/SideBtnView.vue",
       "provenance": "matching-path-in-fixed-baseline",
-      "sha256": "b4c36d5609c7cea30e3ab649c3e687904f05fb8e7a59e30c4fc36d1bae09c375",
+      "sha256": "57a0a5b780ff517c4e443c43f4565d9c5b227ab62b3a47cd7c53fb8c5a3c8e72",
       "status": "diverged",
       "unresolved": [],
       "upstream": {
@@ -6809,7 +6847,7 @@
       "modules": [],
       "path": "src/vite-env.d.ts",
       "provenance": "matching-path-in-fixed-baseline",
-      "sha256": "858a18e74528ebecaadea20dbf0bf7a9a0c529b95072980987dffabacd117cef",
+      "sha256": "372981c248071bca7c0910a633856649f37b4ea3da0188c351cd3c5804e9a783",
       "status": "diverged",
       "unresolved": [],
       "upstream": {
@@ -6903,6 +6941,7 @@
       "liveVerification": "Required on affected page with actual complete script; passing unit/build alone is insufficient.",
       "paths": [
         "src/modules/filters/core/",
+        "src/modules/filters/decision/",
         "src/modules/filters/index.ts"
       ],
       "recommendedChecks": [
@@ -7387,7 +7426,7 @@
       ],
       "occurrences": [
         {
-          "line": 49,
+          "line": 41,
           "path": "src/modules/shortcut/actions.ts",
           "relation": "literal-reference"
         }
@@ -7400,13 +7439,7 @@
       "names": [
         "快捷按钮 夜间/日间模式"
       ],
-      "occurrences": [
-        {
-          "line": 35,
-          "path": "src/modules/shortcut/actions.ts",
-          "relation": "literal-reference"
-        }
-      ]
+      "occurrences": []
     },
     {
       "id": "B18",
@@ -7417,7 +7450,7 @@
       ],
       "occurrences": [
         {
-          "line": 42,
+          "line": 34,
           "path": "src/modules/shortcut/actions.ts",
           "relation": "literal-reference"
         }
@@ -7432,7 +7465,7 @@
       ],
       "occurrences": [
         {
-          "line": 77,
+          "line": 69,
           "path": "src/modules/shortcut/actions.ts",
           "relation": "literal-reference"
         }
@@ -7447,7 +7480,7 @@
       ],
       "occurrences": [
         {
-          "line": 56,
+          "line": 48,
           "path": "src/modules/shortcut/actions.ts",
           "relation": "literal-reference"
         }
@@ -7492,7 +7525,7 @@
       ],
       "occurrences": [
         {
-          "line": 63,
+          "line": 55,
           "path": "src/modules/shortcut/actions.ts",
           "relation": "literal-reference"
         }
@@ -7618,7 +7651,7 @@
       ],
       "occurrences": [
         {
-          "line": 109,
+          "line": 113,
           "path": "src/views/ConfigurationPanelView.vue",
           "relation": "literal-reference"
         }
@@ -7717,7 +7750,7 @@
       ],
       "occurrences": [
         {
-          "line": 70,
+          "line": 62,
           "path": "src/modules/shortcut/actions.ts",
           "relation": "literal-reference"
         },
@@ -7737,12 +7770,12 @@
       ],
       "occurrences": [
         {
-          "line": 105,
+          "line": 104,
           "path": "src/main.ts",
           "relation": "literal-reference"
         },
         {
-          "line": 109,
+          "line": 108,
           "path": "src/main.ts",
           "relation": "literal-reference"
         }
@@ -7757,12 +7790,12 @@
       ],
       "occurrences": [
         {
-          "line": 86,
+          "line": 85,
           "path": "src/main.ts",
           "relation": "literal-reference"
         },
         {
-          "line": 90,
+          "line": 89,
           "path": "src/main.ts",
           "relation": "literal-reference"
         }
@@ -7775,13 +7808,7 @@
       "names": [
         "夜间模式开关"
       ],
-      "occurrences": [
-        {
-          "line": 114,
-          "path": "src/main.ts",
-          "relation": "literal-reference"
-        }
-      ]
+      "occurrences": []
     },
     {
       "id": "M04",
@@ -7792,12 +7819,12 @@
       ],
       "occurrences": [
         {
-          "line": 95,
+          "line": 94,
           "path": "src/main.ts",
           "relation": "literal-reference"
         },
         {
-          "line": 99,
+          "line": 98,
           "path": "src/main.ts",
           "relation": "literal-reference"
         }
@@ -7812,7 +7839,7 @@
       ],
       "occurrences": [
         {
-          "line": 120,
+          "line": 116,
           "path": "src/main.ts",
           "relation": "literal-reference"
         }
@@ -7827,7 +7854,7 @@
       ],
       "occurrences": [
         {
-          "line": 71,
+          "line": 70,
           "path": "src/main.ts",
           "relation": "literal-reference"
         }
@@ -7842,7 +7869,7 @@
       ],
       "occurrences": [
         {
-          "line": 117,
+          "line": 113,
           "path": "src/main.ts",
           "relation": "literal-reference"
         }
@@ -7857,12 +7884,12 @@
       ],
       "occurrences": [
         {
-          "line": 76,
+          "line": 75,
           "path": "src/main.ts",
           "relation": "literal-reference"
         },
         {
-          "line": 80,
+          "line": 79,
           "path": "src/main.ts",
           "relation": "literal-reference"
         }
@@ -7877,7 +7904,7 @@
       ],
       "occurrences": [
         {
-          "line": 74,
+          "line": 73,
           "path": "src/main.ts",
           "relation": "literal-reference"
         }
@@ -8435,7 +8462,7 @@
           "relation": "literal-reference"
         },
         {
-          "line": 83,
+          "line": 84,
           "path": "src/modules/configuration/registry.ts",
           "relation": "literal-reference"
         },
@@ -8708,7 +8735,7 @@
       "occurrences": [
         {
           "group": "BV号过滤",
-          "line": 35,
+          "line": 40,
           "panel": "video-filter",
           "path": "src/modules/filters/variety/video/pages/channel.ts"
         }
@@ -8725,7 +8752,7 @@
       "occurrences": [
         {
           "group": "时长过滤",
-          "line": 23,
+          "line": 28,
           "panel": "video-filter",
           "path": "src/modules/filters/variety/video/pages/channel.ts"
         }
@@ -8921,7 +8948,7 @@
       "occurrences": [
         {
           "group": "发布日期过滤",
-          "line": 39,
+          "line": 44,
           "panel": "video-filter",
           "path": "src/modules/filters/variety/video/pages/channel.ts"
         }
@@ -8938,7 +8965,7 @@
       "occurrences": [
         {
           "group": "标题关键词过滤",
-          "line": 43,
+          "line": 48,
           "panel": "video-filter",
           "path": "src/modules/filters/variety/video/pages/channel.ts"
         }
@@ -8955,7 +8982,7 @@
       "occurrences": [
         {
           "group": "白名单 免过滤",
-          "line": 53,
+          "line": 58,
           "panel": "video-filter",
           "path": "src/modules/filters/variety/video/pages/channel.ts"
         }
@@ -8972,7 +8999,7 @@
       "occurrences": [
         {
           "group": "UP主过滤",
-          "line": 27,
+          "line": 32,
           "panel": "video-filter",
           "path": "src/modules/filters/variety/video/pages/channel.ts"
         }
@@ -8989,7 +9016,7 @@
       "occurrences": [
         {
           "group": "UP主过滤",
-          "line": 31,
+          "line": 36,
           "panel": "video-filter",
           "path": "src/modules/filters/variety/video/pages/channel.ts"
         }
@@ -9006,7 +9033,7 @@
       "occurrences": [
         {
           "group": "白名单 免过滤",
-          "line": 49,
+          "line": 54,
           "panel": "video-filter",
           "path": "src/modules/filters/variety/video/pages/channel.ts"
         }
@@ -9846,22 +9873,6 @@
       ],
       "occurrences": [
         {
-          "line": null,
-          "path": "src/modules/rules/common/groups/theme.scss",
-          "relation": "companion-style-by-filename"
-        },
-        {
-          "line": 9,
-          "path": "src/modules/rules/common/groups/theme.ts",
-          "relation": "literal-reference"
-        },
-        {
-          "group": "全站通用 - 夜间模式",
-          "line": 150,
-          "panel": "rule",
-          "path": "src/modules/rules/common/groups/theme.ts"
-        },
-        {
           "line": 55,
           "path": "src/utils/storage.ts",
           "relation": "literal-reference"
@@ -9978,12 +9989,12 @@
       "occurrences": [
         {
           "group": "动态内容过滤",
-          "line": 34,
+          "line": 39,
           "panel": "dynamic-filter",
           "path": "src/modules/filters/variety/dynamic/pages/dynamic.ts"
         },
         {
-          "line": 20,
+          "line": 22,
           "path": "src/modules/filters/variety/dynamic/pages/header.ts",
           "relation": "literal-reference"
         }
@@ -10000,12 +10011,12 @@
       "occurrences": [
         {
           "group": "白名单 免过滤",
-          "line": 52,
+          "line": 57,
           "panel": "dynamic-filter",
           "path": "src/modules/filters/variety/dynamic/pages/dynamic.ts"
         },
         {
-          "line": 30,
+          "line": 32,
           "path": "src/modules/filters/variety/dynamic/pages/header.ts",
           "relation": "literal-reference"
         }
@@ -10022,7 +10033,7 @@
       "occurrences": [
         {
           "group": "动态内视频时长过滤",
-          "line": 26,
+          "line": 31,
           "panel": "dynamic-filter",
           "path": "src/modules/filters/variety/dynamic/pages/dynamic.ts"
         }
@@ -10039,7 +10050,7 @@
       "occurrences": [
         {
           "group": "按类型过滤",
-          "line": 39,
+          "line": 44,
           "panel": "dynamic-filter",
           "path": "src/modules/filters/variety/dynamic/pages/dynamic.ts"
         }
@@ -10056,7 +10067,7 @@
       "occurrences": [
         {
           "group": "按类型过滤",
-          "line": 43,
+          "line": 48,
           "panel": "dynamic-filter",
           "path": "src/modules/filters/variety/dynamic/pages/dynamic.ts"
         }
@@ -10073,12 +10084,12 @@
       "occurrences": [
         {
           "group": "动态内视频标题过滤",
-          "line": 30,
+          "line": 35,
           "panel": "dynamic-filter",
           "path": "src/modules/filters/variety/dynamic/pages/dynamic.ts"
         },
         {
-          "line": 16,
+          "line": 18,
           "path": "src/modules/filters/variety/dynamic/pages/header.ts",
           "relation": "literal-reference"
         }
@@ -10095,12 +10106,12 @@
       "occurrences": [
         {
           "group": "动态发布人过滤",
-          "line": 22,
+          "line": 27,
           "panel": "dynamic-filter",
           "path": "src/modules/filters/variety/dynamic/pages/dynamic.ts"
         },
         {
-          "line": 12,
+          "line": 14,
           "path": "src/modules/filters/variety/dynamic/pages/header.ts",
           "relation": "literal-reference"
         }
@@ -10117,12 +10128,12 @@
       "occurrences": [
         {
           "group": "动态发布人过滤",
-          "line": 23,
+          "line": 28,
           "panel": "dynamic-filter",
           "path": "src/modules/filters/variety/dynamic/pages/dynamic.ts"
         },
         {
-          "line": 13,
+          "line": 15,
           "path": "src/modules/filters/variety/dynamic/pages/header.ts",
           "relation": "literal-reference"
         }
@@ -10139,12 +10150,12 @@
       "occurrences": [
         {
           "group": "白名单 免过滤",
-          "line": 48,
+          "line": 53,
           "panel": "dynamic-filter",
           "path": "src/modules/filters/variety/dynamic/pages/dynamic.ts"
         },
         {
-          "line": 26,
+          "line": 28,
           "path": "src/modules/filters/variety/dynamic/pages/header.ts",
           "relation": "literal-reference"
         }
@@ -10456,7 +10467,7 @@
         },
         {
           "group": "专栏作者过滤",
-          "line": 15,
+          "line": 18,
           "panel": "article-filter",
           "path": "src/modules/filters/variety/article/pages/searchArticle.ts"
         }
@@ -10478,7 +10489,7 @@
         },
         {
           "group": "专栏作者过滤",
-          "line": 19,
+          "line": 22,
           "panel": "article-filter",
           "path": "src/modules/filters/variety/article/pages/searchArticle.ts"
         }
@@ -10500,7 +10511,7 @@
         },
         {
           "group": "白名单 免过滤",
-          "line": 29,
+          "line": 32,
           "panel": "article-filter",
           "path": "src/modules/filters/variety/article/pages/searchArticle.ts"
         }
@@ -10522,7 +10533,7 @@
         },
         {
           "group": "专栏标题关键词过滤",
-          "line": 23,
+          "line": 26,
           "panel": "article-filter",
           "path": "src/modules/filters/variety/article/pages/searchArticle.ts"
         }
@@ -10544,7 +10555,7 @@
         },
         {
           "group": "白名单 免过滤",
-          "line": 33,
+          "line": 36,
           "panel": "article-filter",
           "path": "src/modules/filters/variety/article/pages/searchArticle.ts"
         }
@@ -10566,37 +10577,37 @@
         },
         {
           "group": "BV号过滤",
-          "line": 36,
+          "line": 41,
           "panel": "video-filter",
           "path": "src/modules/filters/variety/video/pages/channel.ts"
         },
         {
           "group": "BV号过滤",
-          "line": 41,
+          "line": 46,
           "panel": "video-filter",
           "path": "src/modules/filters/variety/video/pages/homepage.ts"
         },
         {
           "group": "BV号过滤",
-          "line": 37,
+          "line": 42,
           "panel": "video-filter",
           "path": "src/modules/filters/variety/video/pages/popular.ts"
         },
         {
           "group": "BV号过滤",
-          "line": 38,
+          "line": 44,
           "panel": "video-filter",
           "path": "src/modules/filters/variety/video/pages/search.ts"
         },
         {
           "group": "BV号过滤",
-          "line": 21,
+          "line": 26,
           "panel": "video-filter",
           "path": "src/modules/filters/variety/video/pages/space.ts"
         },
         {
           "group": "BV号过滤",
-          "line": 36,
+          "line": 41,
           "panel": "video-filter",
           "path": "src/modules/filters/variety/video/pages/video.ts"
         }
@@ -10618,7 +10629,7 @@
         },
         {
           "group": "评论内容过滤",
-          "line": 55,
+          "line": 61,
           "panel": "comment-filter",
           "path": "src/modules/filters/variety/comment/pages/common.ts"
         }
@@ -10640,7 +10651,7 @@
         },
         {
           "group": "等级过滤",
-          "line": 59,
+          "line": 65,
           "panel": "comment-filter",
           "path": "src/modules/filters/variety/comment/pages/common.ts"
         }
@@ -10662,7 +10673,7 @@
         },
         {
           "group": "评论用户过滤",
-          "line": 47,
+          "line": 53,
           "panel": "comment-filter",
           "path": "src/modules/filters/variety/comment/pages/common.ts"
         }
@@ -10684,7 +10695,7 @@
         },
         {
           "group": "评论用户过滤",
-          "line": 51,
+          "line": 57,
           "panel": "comment-filter",
           "path": "src/modules/filters/variety/comment/pages/common.ts"
         }
@@ -10706,18 +10717,18 @@
         },
         {
           "group": "动态内容过滤",
-          "line": 35,
+          "line": 40,
           "panel": "dynamic-filter",
           "path": "src/modules/filters/variety/dynamic/pages/dynamic.ts"
         },
         {
-          "line": 21,
+          "line": 23,
           "path": "src/modules/filters/variety/dynamic/pages/header.ts",
           "relation": "literal-reference"
         },
         {
           "group": "动态内容过滤",
-          "line": 29,
+          "line": 34,
           "panel": "dynamic-filter",
           "path": "src/modules/filters/variety/dynamic/pages/space.ts"
         }
@@ -10739,18 +10750,18 @@
         },
         {
           "group": "白名单 免过滤",
-          "line": 53,
+          "line": 58,
           "panel": "dynamic-filter",
           "path": "src/modules/filters/variety/dynamic/pages/dynamic.ts"
         },
         {
-          "line": 31,
+          "line": 33,
           "path": "src/modules/filters/variety/dynamic/pages/header.ts",
           "relation": "literal-reference"
         },
         {
           "group": "白名单 免过滤",
-          "line": 47,
+          "line": 52,
           "panel": "dynamic-filter",
           "path": "src/modules/filters/variety/dynamic/pages/space.ts"
         }
@@ -10772,49 +10783,49 @@
         },
         {
           "group": "动态内视频时长过滤",
-          "line": 27,
+          "line": 32,
           "panel": "dynamic-filter",
           "path": "src/modules/filters/variety/dynamic/pages/dynamic.ts"
         },
         {
           "group": "动态内视频时长过滤",
-          "line": 21,
+          "line": 26,
           "panel": "dynamic-filter",
           "path": "src/modules/filters/variety/dynamic/pages/space.ts"
         },
         {
           "group": "时长过滤",
-          "line": 24,
+          "line": 29,
           "panel": "video-filter",
           "path": "src/modules/filters/variety/video/pages/channel.ts"
         },
         {
           "group": "时长过滤",
-          "line": 25,
+          "line": 30,
           "panel": "video-filter",
           "path": "src/modules/filters/variety/video/pages/homepage.ts"
         },
         {
           "group": "时长过滤",
-          "line": 25,
+          "line": 30,
           "panel": "video-filter",
           "path": "src/modules/filters/variety/video/pages/popular.ts"
         },
         {
           "group": "时长过滤",
-          "line": 26,
+          "line": 32,
           "panel": "video-filter",
           "path": "src/modules/filters/variety/video/pages/search.ts"
         },
         {
           "group": "时长过滤",
-          "line": 17,
+          "line": 22,
           "panel": "video-filter",
           "path": "src/modules/filters/variety/video/pages/space.ts"
         },
         {
           "group": "时长过滤",
-          "line": 24,
+          "line": 29,
           "panel": "video-filter",
           "path": "src/modules/filters/variety/video/pages/video.ts"
         }
@@ -10836,13 +10847,13 @@
         },
         {
           "group": "发布日期过滤",
-          "line": 40,
+          "line": 45,
           "panel": "video-filter",
           "path": "src/modules/filters/variety/video/pages/channel.ts"
         },
         {
           "group": "发布日期过滤",
-          "line": 45,
+          "line": 50,
           "panel": "video-filter",
           "path": "src/modules/filters/variety/video/pages/homepage.ts"
         }
@@ -10864,7 +10875,7 @@
         },
         {
           "group": "视频质量过滤",
-          "line": 45,
+          "line": 50,
           "panel": "video-filter",
           "path": "src/modules/filters/variety/video/pages/popular.ts"
         }
@@ -10887,54 +10898,54 @@
         },
         {
           "group": "动态内视频标题过滤",
-          "line": 31,
+          "line": 36,
           "panel": "dynamic-filter",
           "path": "src/modules/filters/variety/dynamic/pages/dynamic.ts"
         },
         {
-          "line": 17,
+          "line": 19,
           "path": "src/modules/filters/variety/dynamic/pages/header.ts",
           "relation": "literal-reference"
         },
         {
           "group": "动态内视频标题过滤",
-          "line": 25,
+          "line": 30,
           "panel": "dynamic-filter",
           "path": "src/modules/filters/variety/dynamic/pages/space.ts"
         },
         {
           "group": "标题关键词过滤",
-          "line": 44,
+          "line": 49,
           "panel": "video-filter",
           "path": "src/modules/filters/variety/video/pages/channel.ts"
         },
         {
           "group": "标题关键词过滤",
-          "line": 49,
+          "line": 54,
           "panel": "video-filter",
           "path": "src/modules/filters/variety/video/pages/homepage.ts"
         },
         {
           "group": "标题关键词过滤",
-          "line": 41,
+          "line": 46,
           "panel": "video-filter",
           "path": "src/modules/filters/variety/video/pages/popular.ts"
         },
         {
           "group": "标题关键词过滤",
-          "line": 42,
+          "line": 48,
           "panel": "video-filter",
           "path": "src/modules/filters/variety/video/pages/search.ts"
         },
         {
           "group": "标题关键词过滤",
-          "line": 25,
+          "line": 30,
           "panel": "video-filter",
           "path": "src/modules/filters/variety/video/pages/space.ts"
         },
         {
           "group": "标题关键词过滤",
-          "line": 40,
+          "line": 45,
           "panel": "video-filter",
           "path": "src/modules/filters/variety/video/pages/video.ts"
         }
@@ -10956,54 +10967,54 @@
         },
         {
           "group": "白名单 免过滤",
-          "line": 49,
+          "line": 54,
           "panel": "dynamic-filter",
           "path": "src/modules/filters/variety/dynamic/pages/dynamic.ts"
         },
         {
-          "line": 27,
+          "line": 29,
           "path": "src/modules/filters/variety/dynamic/pages/header.ts",
           "relation": "literal-reference"
         },
         {
           "group": "白名单 免过滤",
-          "line": 43,
+          "line": 48,
           "panel": "dynamic-filter",
           "path": "src/modules/filters/variety/dynamic/pages/space.ts"
         },
         {
           "group": "白名单 免过滤",
-          "line": 54,
+          "line": 59,
           "panel": "video-filter",
           "path": "src/modules/filters/variety/video/pages/channel.ts"
         },
         {
           "group": "白名单 免过滤",
-          "line": 59,
+          "line": 64,
           "panel": "video-filter",
           "path": "src/modules/filters/variety/video/pages/homepage.ts"
         },
         {
           "group": "白名单 免过滤",
-          "line": 58,
+          "line": 63,
           "panel": "video-filter",
           "path": "src/modules/filters/variety/video/pages/popular.ts"
         },
         {
           "group": "白名单 免过滤",
-          "line": 56,
+          "line": 62,
           "panel": "video-filter",
           "path": "src/modules/filters/variety/video/pages/search.ts"
         },
         {
           "group": "白名单 免过滤",
-          "line": 31,
+          "line": 36,
           "panel": "video-filter",
           "path": "src/modules/filters/variety/video/pages/space.ts"
         },
         {
           "group": "白名单 免过滤",
-          "line": 53,
+          "line": 58,
           "panel": "video-filter",
           "path": "src/modules/filters/variety/video/pages/video.ts"
         }
@@ -11025,31 +11036,31 @@
         },
         {
           "group": "UP主过滤",
-          "line": 28,
+          "line": 33,
           "panel": "video-filter",
           "path": "src/modules/filters/variety/video/pages/channel.ts"
         },
         {
           "group": "UP主过滤",
-          "line": 33,
+          "line": 38,
           "panel": "video-filter",
           "path": "src/modules/filters/variety/video/pages/homepage.ts"
         },
         {
           "group": "UP主过滤",
-          "line": 29,
+          "line": 34,
           "panel": "video-filter",
           "path": "src/modules/filters/variety/video/pages/popular.ts"
         },
         {
           "group": "UP主过滤",
-          "line": 30,
+          "line": 36,
           "panel": "video-filter",
           "path": "src/modules/filters/variety/video/pages/search.ts"
         },
         {
           "group": "UP主过滤",
-          "line": 28,
+          "line": 33,
           "panel": "video-filter",
           "path": "src/modules/filters/variety/video/pages/video.ts"
         }
@@ -11071,31 +11082,31 @@
         },
         {
           "group": "UP主过滤",
-          "line": 32,
+          "line": 37,
           "panel": "video-filter",
           "path": "src/modules/filters/variety/video/pages/channel.ts"
         },
         {
           "group": "UP主过滤",
-          "line": 37,
+          "line": 42,
           "panel": "video-filter",
           "path": "src/modules/filters/variety/video/pages/homepage.ts"
         },
         {
           "group": "UP主过滤",
-          "line": 33,
+          "line": 38,
           "panel": "video-filter",
           "path": "src/modules/filters/variety/video/pages/popular.ts"
         },
         {
           "group": "UP主过滤",
-          "line": 34,
+          "line": 40,
           "panel": "video-filter",
           "path": "src/modules/filters/variety/video/pages/search.ts"
         },
         {
           "group": "UP主过滤",
-          "line": 32,
+          "line": 37,
           "panel": "video-filter",
           "path": "src/modules/filters/variety/video/pages/video.ts"
         }
@@ -11117,31 +11128,31 @@
         },
         {
           "group": "白名单 免过滤",
-          "line": 50,
+          "line": 55,
           "panel": "video-filter",
           "path": "src/modules/filters/variety/video/pages/channel.ts"
         },
         {
           "group": "白名单 免过滤",
-          "line": 55,
+          "line": 60,
           "panel": "video-filter",
           "path": "src/modules/filters/variety/video/pages/homepage.ts"
         },
         {
           "group": "白名单 免过滤",
-          "line": 54,
+          "line": 59,
           "panel": "video-filter",
           "path": "src/modules/filters/variety/video/pages/popular.ts"
         },
         {
           "group": "白名单 免过滤",
-          "line": 52,
+          "line": 58,
           "panel": "video-filter",
           "path": "src/modules/filters/variety/video/pages/search.ts"
         },
         {
           "group": "白名单 免过滤",
-          "line": 49,
+          "line": 54,
           "panel": "video-filter",
           "path": "src/modules/filters/variety/video/pages/video.ts"
         }
@@ -11163,7 +11174,7 @@
         },
         {
           "group": "播放量过滤",
-          "line": 29,
+          "line": 34,
           "panel": "video-filter",
           "path": "src/modules/filters/variety/video/pages/homepage.ts"
         }
@@ -12315,7 +12326,7 @@
       "occurrences": [
         {
           "group": "BV号过滤",
-          "line": 40,
+          "line": 45,
           "panel": "video-filter",
           "path": "src/modules/filters/variety/video/pages/homepage.ts"
         }
@@ -12332,7 +12343,7 @@
       "occurrences": [
         {
           "group": "时长过滤",
-          "line": 24,
+          "line": 29,
           "panel": "video-filter",
           "path": "src/modules/filters/variety/video/pages/homepage.ts"
         }
@@ -12349,7 +12360,7 @@
       "occurrences": [
         {
           "group": "白名单 免过滤",
-          "line": 62,
+          "line": 67,
           "panel": "video-filter",
           "path": "src/modules/filters/variety/video/pages/homepage.ts"
         }
@@ -12371,7 +12382,7 @@
         },
         {
           "group": "视频列表",
-          "line": 51,
+          "line": 54,
           "panel": "rule",
           "path": "src/modules/rules/homepage/groups/rcmd.ts"
         }
@@ -12481,7 +12492,7 @@
         },
         {
           "group": "视频列表",
-          "line": 40,
+          "line": 43,
           "panel": "rule",
           "path": "src/modules/rules/homepage/groups/rcmd.ts"
         }
@@ -12503,7 +12514,7 @@
         },
         {
           "group": "视频列表",
-          "line": 34,
+          "line": 37,
           "panel": "rule",
           "path": "src/modules/rules/homepage/groups/rcmd.ts"
         }
@@ -12635,7 +12646,7 @@
         },
         {
           "group": "视频列表",
-          "line": 46,
+          "line": 49,
           "panel": "rule",
           "path": "src/modules/rules/homepage/groups/rcmd.ts"
         }
@@ -12657,7 +12668,7 @@
         },
         {
           "group": "视频列表",
-          "line": 57,
+          "line": 60,
           "panel": "rule",
           "path": "src/modules/rules/homepage/groups/rcmd.ts"
         }
@@ -12679,7 +12690,7 @@
         },
         {
           "group": "视频列表",
-          "line": 19,
+          "line": 22,
           "panel": "rule",
           "path": "src/modules/rules/homepage/groups/rcmd.ts"
         }
@@ -12723,7 +12734,7 @@
         },
         {
           "group": "视频列表",
-          "line": 86,
+          "line": 89,
           "panel": "rule",
           "path": "src/modules/rules/homepage/groups/rcmd.ts"
         }
@@ -12745,7 +12756,7 @@
         },
         {
           "group": "视频列表",
-          "line": 74,
+          "line": 77,
           "panel": "rule",
           "path": "src/modules/rules/homepage/groups/rcmd.ts"
         }
@@ -12767,7 +12778,7 @@
         },
         {
           "group": "视频列表",
-          "line": 79,
+          "line": 82,
           "panel": "rule",
           "path": "src/modules/rules/homepage/groups/rcmd.ts"
         }
@@ -12844,7 +12855,7 @@
         },
         {
           "group": "视频列表",
-          "line": 69,
+          "line": 72,
           "panel": "rule",
           "path": "src/modules/rules/homepage/groups/rcmd.ts"
         }
@@ -12932,7 +12943,7 @@
         },
         {
           "group": "视频列表",
-          "line": 24,
+          "line": 27,
           "panel": "rule",
           "path": "src/modules/rules/homepage/groups/rcmd.ts"
         }
@@ -12954,7 +12965,7 @@
         },
         {
           "group": "视频列表",
-          "line": 29,
+          "line": 32,
           "panel": "rule",
           "path": "src/modules/rules/homepage/groups/rcmd.ts"
         }
@@ -12998,7 +13009,7 @@
         },
         {
           "group": "视频列表",
-          "line": 7,
+          "line": 10,
           "panel": "rule",
           "path": "src/modules/rules/homepage/groups/rcmd.ts"
         }
@@ -13020,7 +13031,7 @@
         },
         {
           "group": "视频列表",
-          "line": 91,
+          "line": 94,
           "panel": "rule",
           "path": "src/modules/rules/homepage/groups/rcmd.ts"
         }
@@ -13111,7 +13122,7 @@
         },
         {
           "group": "视频列表",
-          "line": 12,
+          "line": 15,
           "panel": "rule",
           "path": "src/modules/rules/homepage/groups/rcmd.ts"
         }
@@ -13128,7 +13139,7 @@
       "occurrences": [
         {
           "group": "发布日期过滤",
-          "line": 44,
+          "line": 49,
           "panel": "video-filter",
           "path": "src/modules/filters/variety/video/pages/homepage.ts"
         }
@@ -13150,7 +13161,7 @@
         },
         {
           "group": "视频列表",
-          "line": 109,
+          "line": 116,
           "panel": "rule",
           "path": "src/modules/rules/homepage/groups/rcmd.ts"
         }
@@ -13205,7 +13216,7 @@
         },
         {
           "group": "视频列表",
-          "line": 63,
+          "line": 66,
           "panel": "rule",
           "path": "src/modules/rules/homepage/groups/rcmd.ts"
         }
@@ -13222,7 +13233,7 @@
       "occurrences": [
         {
           "group": "标题关键词过滤",
-          "line": 48,
+          "line": 53,
           "panel": "video-filter",
           "path": "src/modules/filters/variety/video/pages/homepage.ts"
         }
@@ -13239,7 +13250,7 @@
       "occurrences": [
         {
           "group": "白名单 免过滤",
-          "line": 58,
+          "line": 63,
           "panel": "video-filter",
           "path": "src/modules/filters/variety/video/pages/homepage.ts"
         }
@@ -13256,7 +13267,7 @@
       "occurrences": [
         {
           "group": "UP主过滤",
-          "line": 32,
+          "line": 37,
           "panel": "video-filter",
           "path": "src/modules/filters/variety/video/pages/homepage.ts"
         }
@@ -13273,7 +13284,7 @@
       "occurrences": [
         {
           "group": "UP主过滤",
-          "line": 36,
+          "line": 41,
           "panel": "video-filter",
           "path": "src/modules/filters/variety/video/pages/homepage.ts"
         }
@@ -13290,7 +13301,7 @@
       "occurrences": [
         {
           "group": "白名单 免过滤",
-          "line": 54,
+          "line": 59,
           "panel": "video-filter",
           "path": "src/modules/filters/variety/video/pages/homepage.ts"
         }
@@ -13307,7 +13318,7 @@
       "occurrences": [
         {
           "group": "播放量过滤",
-          "line": 28,
+          "line": 33,
           "panel": "video-filter",
           "path": "src/modules/filters/variety/video/pages/homepage.ts"
         }
@@ -15117,7 +15128,7 @@
       "occurrences": [
         {
           "group": "BV号过滤",
-          "line": 36,
+          "line": 41,
           "panel": "video-filter",
           "path": "src/modules/filters/variety/video/pages/popular.ts"
         }
@@ -15134,7 +15145,7 @@
       "occurrences": [
         {
           "group": "视频质量过滤",
-          "line": 48,
+          "line": 53,
           "panel": "video-filter",
           "path": "src/modules/filters/variety/video/pages/popular.ts"
         }
@@ -15151,7 +15162,7 @@
       "occurrences": [
         {
           "group": "时长过滤",
-          "line": 24,
+          "line": 29,
           "panel": "video-filter",
           "path": "src/modules/filters/variety/video/pages/popular.ts"
         }
@@ -15303,7 +15314,7 @@
       "occurrences": [
         {
           "group": "视频质量过滤",
-          "line": 44,
+          "line": 49,
           "panel": "video-filter",
           "path": "src/modules/filters/variety/video/pages/popular.ts"
         }
@@ -15320,7 +15331,7 @@
       "occurrences": [
         {
           "group": "标题关键词过滤",
-          "line": 40,
+          "line": 45,
           "panel": "video-filter",
           "path": "src/modules/filters/variety/video/pages/popular.ts"
         }
@@ -15337,7 +15348,7 @@
       "occurrences": [
         {
           "group": "白名单 免过滤",
-          "line": 57,
+          "line": 62,
           "panel": "video-filter",
           "path": "src/modules/filters/variety/video/pages/popular.ts"
         }
@@ -15354,7 +15365,7 @@
       "occurrences": [
         {
           "group": "UP主过滤",
-          "line": 28,
+          "line": 33,
           "panel": "video-filter",
           "path": "src/modules/filters/variety/video/pages/popular.ts"
         }
@@ -15371,7 +15382,7 @@
       "occurrences": [
         {
           "group": "UP主过滤",
-          "line": 32,
+          "line": 37,
           "panel": "video-filter",
           "path": "src/modules/filters/variety/video/pages/popular.ts"
         }
@@ -15388,7 +15399,7 @@
       "occurrences": [
         {
           "group": "白名单 免过滤",
-          "line": 53,
+          "line": 58,
           "panel": "video-filter",
           "path": "src/modules/filters/variety/video/pages/popular.ts"
         }
@@ -15493,7 +15504,7 @@
       "occurrences": [
         {
           "group": "专栏作者过滤",
-          "line": 14,
+          "line": 17,
           "panel": "article-filter",
           "path": "src/modules/filters/variety/article/pages/searchArticle.ts"
         }
@@ -15510,7 +15521,7 @@
       "occurrences": [
         {
           "group": "专栏作者过滤",
-          "line": 18,
+          "line": 21,
           "panel": "article-filter",
           "path": "src/modules/filters/variety/article/pages/searchArticle.ts"
         }
@@ -15527,7 +15538,7 @@
       "occurrences": [
         {
           "group": "白名单 免过滤",
-          "line": 28,
+          "line": 31,
           "panel": "article-filter",
           "path": "src/modules/filters/variety/article/pages/searchArticle.ts"
         }
@@ -15544,7 +15555,7 @@
       "occurrences": [
         {
           "group": "专栏标题关键词过滤",
-          "line": 22,
+          "line": 25,
           "panel": "article-filter",
           "path": "src/modules/filters/variety/article/pages/searchArticle.ts"
         }
@@ -15561,7 +15572,7 @@
       "occurrences": [
         {
           "group": "白名单 免过滤",
-          "line": 32,
+          "line": 35,
           "panel": "article-filter",
           "path": "src/modules/filters/variety/article/pages/searchArticle.ts"
         }
@@ -15578,7 +15589,7 @@
       "occurrences": [
         {
           "group": "BV号过滤",
-          "line": 37,
+          "line": 43,
           "panel": "video-filter",
           "path": "src/modules/filters/variety/video/pages/search.ts"
         }
@@ -15595,7 +15606,7 @@
       "occurrences": [
         {
           "group": "时长过滤",
-          "line": 25,
+          "line": 31,
           "panel": "video-filter",
           "path": "src/modules/filters/variety/video/pages/search.ts"
         }
@@ -15612,7 +15623,7 @@
       "occurrences": [
         {
           "group": "搜索结果相关性过滤",
-          "line": 45,
+          "line": 51,
           "panel": "video-filter",
           "path": "src/modules/filters/variety/video/pages/search.ts"
         }
@@ -15634,7 +15645,7 @@
         },
         {
           "group": "搜索结果相关性过滤",
-          "line": 46,
+          "line": 52,
           "panel": "video-filter",
           "path": "src/modules/filters/variety/video/pages/search.ts"
         }
@@ -15651,7 +15662,7 @@
       "occurrences": [
         {
           "group": "标题关键词过滤",
-          "line": 41,
+          "line": 47,
           "panel": "video-filter",
           "path": "src/modules/filters/variety/video/pages/search.ts"
         }
@@ -15668,7 +15679,7 @@
       "occurrences": [
         {
           "group": "白名单 免过滤",
-          "line": 55,
+          "line": 61,
           "panel": "video-filter",
           "path": "src/modules/filters/variety/video/pages/search.ts"
         }
@@ -15685,7 +15696,7 @@
       "occurrences": [
         {
           "group": "UP主过滤",
-          "line": 29,
+          "line": 35,
           "panel": "video-filter",
           "path": "src/modules/filters/variety/video/pages/search.ts"
         }
@@ -15702,7 +15713,7 @@
       "occurrences": [
         {
           "group": "UP主过滤",
-          "line": 33,
+          "line": 39,
           "panel": "video-filter",
           "path": "src/modules/filters/variety/video/pages/search.ts"
         }
@@ -15719,7 +15730,7 @@
       "occurrences": [
         {
           "group": "白名单 免过滤",
-          "line": 51,
+          "line": 57,
           "panel": "video-filter",
           "path": "src/modules/filters/variety/video/pages/search.ts"
         }
@@ -15736,7 +15747,7 @@
       "occurrences": [
         {
           "group": "BV号过滤",
-          "line": 20,
+          "line": 25,
           "panel": "video-filter",
           "path": "src/modules/filters/variety/video/pages/space.ts"
         }
@@ -15753,7 +15764,7 @@
       "occurrences": [
         {
           "group": "时长过滤",
-          "line": 16,
+          "line": 21,
           "panel": "video-filter",
           "path": "src/modules/filters/variety/video/pages/space.ts"
         }
@@ -15770,7 +15781,7 @@
       "occurrences": [
         {
           "group": "动态内容过滤",
-          "line": 28,
+          "line": 33,
           "panel": "dynamic-filter",
           "path": "src/modules/filters/variety/dynamic/pages/space.ts"
         }
@@ -15787,7 +15798,7 @@
       "occurrences": [
         {
           "group": "白名单 免过滤",
-          "line": 46,
+          "line": 51,
           "panel": "dynamic-filter",
           "path": "src/modules/filters/variety/dynamic/pages/space.ts"
         }
@@ -15804,7 +15815,7 @@
       "occurrences": [
         {
           "group": "动态内视频时长过滤",
-          "line": 20,
+          "line": 25,
           "panel": "dynamic-filter",
           "path": "src/modules/filters/variety/dynamic/pages/space.ts"
         }
@@ -15821,7 +15832,7 @@
       "occurrences": [
         {
           "group": "动态内视频标题过滤",
-          "line": 24,
+          "line": 29,
           "panel": "dynamic-filter",
           "path": "src/modules/filters/variety/dynamic/pages/space.ts"
         }
@@ -15838,7 +15849,7 @@
       "occurrences": [
         {
           "group": "按类型过滤",
-          "line": 33,
+          "line": 38,
           "panel": "dynamic-filter",
           "path": "src/modules/filters/variety/dynamic/pages/space.ts"
         }
@@ -15855,7 +15866,7 @@
       "occurrences": [
         {
           "group": "白名单 免过滤",
-          "line": 42,
+          "line": 47,
           "panel": "dynamic-filter",
           "path": "src/modules/filters/variety/dynamic/pages/space.ts"
         }
@@ -15894,7 +15905,7 @@
       "occurrences": [
         {
           "group": "按类型过滤",
-          "line": 37,
+          "line": 42,
           "panel": "dynamic-filter",
           "path": "src/modules/filters/variety/dynamic/pages/space.ts"
         }
@@ -15911,7 +15922,7 @@
       "occurrences": [
         {
           "group": "标题关键词过滤",
-          "line": 24,
+          "line": 29,
           "panel": "video-filter",
           "path": "src/modules/filters/variety/video/pages/space.ts"
         }
@@ -15928,7 +15939,7 @@
       "occurrences": [
         {
           "group": "白名单 免过滤",
-          "line": 30,
+          "line": 35,
           "panel": "video-filter",
           "path": "src/modules/filters/variety/video/pages/space.ts"
         }
@@ -15967,7 +15978,7 @@
       "occurrences": [
         {
           "group": "BV号过滤",
-          "line": 35,
+          "line": 40,
           "panel": "video-filter",
           "path": "src/modules/filters/variety/video/pages/video.ts"
         }
@@ -15984,7 +15995,7 @@
       "occurrences": [
         {
           "group": "按类型过滤",
-          "line": 83,
+          "line": 89,
           "panel": "comment-filter",
           "path": "src/modules/filters/variety/comment/pages/common.ts"
         }
@@ -16001,7 +16012,7 @@
       "occurrences": [
         {
           "group": "按类型过滤",
-          "line": 65,
+          "line": 71,
           "panel": "comment-filter",
           "path": "src/modules/filters/variety/comment/pages/common.ts"
         }
@@ -16018,7 +16029,7 @@
       "occurrences": [
         {
           "group": "按类型过滤",
-          "line": 68,
+          "line": 74,
           "panel": "comment-filter",
           "path": "src/modules/filters/variety/comment/pages/common.ts"
         }
@@ -16035,7 +16046,7 @@
       "occurrences": [
         {
           "group": "按类型过滤",
-          "line": 71,
+          "line": 77,
           "panel": "comment-filter",
           "path": "src/modules/filters/variety/comment/pages/common.ts"
         }
@@ -16052,7 +16063,7 @@
       "occurrences": [
         {
           "group": "按类型过滤",
-          "line": 74,
+          "line": 80,
           "panel": "comment-filter",
           "path": "src/modules/filters/variety/comment/pages/common.ts"
         }
@@ -16069,7 +16080,7 @@
       "occurrences": [
         {
           "group": "按类型过滤",
-          "line": 77,
+          "line": 83,
           "panel": "comment-filter",
           "path": "src/modules/filters/variety/comment/pages/common.ts"
         }
@@ -16086,7 +16097,7 @@
       "occurrences": [
         {
           "group": "按类型过滤",
-          "line": 80,
+          "line": 86,
           "panel": "comment-filter",
           "path": "src/modules/filters/variety/comment/pages/common.ts"
         }
@@ -16103,7 +16114,7 @@
       "occurrences": [
         {
           "group": "链式过滤",
-          "line": 89,
+          "line": 95,
           "panel": "comment-filter",
           "path": "src/modules/filters/variety/comment/pages/common.ts"
         }
@@ -16120,7 +16131,7 @@
       "occurrences": [
         {
           "group": "链式过滤",
-          "line": 90,
+          "line": 96,
           "panel": "comment-filter",
           "path": "src/modules/filters/variety/comment/pages/common.ts"
         }
@@ -16137,7 +16148,7 @@
       "occurrences": [
         {
           "group": "评论内容过滤",
-          "line": 54,
+          "line": 60,
           "panel": "comment-filter",
           "path": "src/modules/filters/variety/comment/pages/common.ts"
         }
@@ -16154,7 +16165,7 @@
       "occurrences": [
         {
           "group": "按类型过滤",
-          "line": 86,
+          "line": 92,
           "panel": "comment-filter",
           "path": "src/modules/filters/variety/comment/pages/common.ts"
         }
@@ -16171,7 +16182,7 @@
       "occurrences": [
         {
           "group": "等级过滤",
-          "line": 58,
+          "line": 64,
           "panel": "comment-filter",
           "path": "src/modules/filters/variety/comment/pages/common.ts"
         }
@@ -16188,7 +16199,7 @@
       "occurrences": [
         {
           "group": "白名单 免过滤",
-          "line": 110,
+          "line": 116,
           "panel": "comment-filter",
           "path": "src/modules/filters/variety/comment/pages/common.ts"
         }
@@ -16205,7 +16216,7 @@
       "occurrences": [
         {
           "group": "按类型过滤",
-          "line": 62,
+          "line": 68,
           "panel": "comment-filter",
           "path": "src/modules/filters/variety/comment/pages/common.ts"
         }
@@ -16222,7 +16233,7 @@
       "occurrences": [
         {
           "group": "白名单 免过滤",
-          "line": 107,
+          "line": 113,
           "panel": "comment-filter",
           "path": "src/modules/filters/variety/comment/pages/common.ts"
         }
@@ -16239,7 +16250,7 @@
       "occurrences": [
         {
           "group": "白名单 免过滤",
-          "line": 104,
+          "line": 110,
           "panel": "comment-filter",
           "path": "src/modules/filters/variety/comment/pages/common.ts"
         }
@@ -16256,7 +16267,7 @@
       "occurrences": [
         {
           "group": "白名单 免过滤",
-          "line": 95,
+          "line": 101,
           "panel": "comment-filter",
           "path": "src/modules/filters/variety/comment/pages/common.ts"
         }
@@ -16273,7 +16284,7 @@
       "occurrences": [
         {
           "group": "白名单 免过滤",
-          "line": 98,
+          "line": 104,
           "panel": "comment-filter",
           "path": "src/modules/filters/variety/comment/pages/common.ts"
         }
@@ -16290,7 +16301,7 @@
       "occurrences": [
         {
           "group": "白名单 免过滤",
-          "line": 101,
+          "line": 107,
           "panel": "comment-filter",
           "path": "src/modules/filters/variety/comment/pages/common.ts"
         }
@@ -16307,7 +16318,7 @@
       "occurrences": [
         {
           "group": "评论用户过滤",
-          "line": 46,
+          "line": 52,
           "panel": "comment-filter",
           "path": "src/modules/filters/variety/comment/pages/common.ts"
         }
@@ -16324,7 +16335,7 @@
       "occurrences": [
         {
           "group": "评论用户过滤",
-          "line": 50,
+          "line": 56,
           "panel": "comment-filter",
           "path": "src/modules/filters/variety/comment/pages/common.ts"
         }
@@ -16341,7 +16352,7 @@
       "occurrences": [
         {
           "group": "时长过滤",
-          "line": 23,
+          "line": 28,
           "panel": "video-filter",
           "path": "src/modules/filters/variety/video/pages/video.ts"
         }
@@ -21208,7 +21219,7 @@
       "occurrences": [
         {
           "group": "其他过滤",
-          "line": 43,
+          "line": 48,
           "panel": "video-filter",
           "path": "src/modules/filters/variety/video/pages/video.ts"
         }
@@ -21225,7 +21236,7 @@
       "occurrences": [
         {
           "group": "标题关键词过滤",
-          "line": 39,
+          "line": 44,
           "panel": "video-filter",
           "path": "src/modules/filters/variety/video/pages/video.ts"
         }
@@ -21242,7 +21253,7 @@
       "occurrences": [
         {
           "group": "白名单 免过滤",
-          "line": 52,
+          "line": 57,
           "panel": "video-filter",
           "path": "src/modules/filters/variety/video/pages/video.ts"
         }
@@ -21259,7 +21270,7 @@
       "occurrences": [
         {
           "group": "UP主过滤",
-          "line": 27,
+          "line": 32,
           "panel": "video-filter",
           "path": "src/modules/filters/variety/video/pages/video.ts"
         }
@@ -21276,7 +21287,7 @@
       "occurrences": [
         {
           "group": "UP主过滤",
-          "line": 31,
+          "line": 36,
           "panel": "video-filter",
           "path": "src/modules/filters/variety/video/pages/video.ts"
         }
@@ -21293,7 +21304,7 @@
       "occurrences": [
         {
           "group": "白名单 免过滤",
-          "line": 48,
+          "line": 53,
           "panel": "video-filter",
           "path": "src/modules/filters/variety/video/pages/video.ts"
         }
@@ -21428,7 +21439,7 @@
       ],
       "occurrences": [
         {
-          "line": 17,
+          "line": 18,
           "path": "src/modules/shortcut/preference.ts",
           "relation": "storage-binding"
         },
@@ -21449,7 +21460,7 @@
       ],
       "occurrences": [
         {
-          "line": 17,
+          "line": 18,
           "path": "src/modules/shortcut/preference.ts",
           "relation": "storage-binding"
         },

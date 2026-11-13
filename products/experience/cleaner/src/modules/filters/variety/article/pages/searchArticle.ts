@@ -1,12 +1,15 @@
-import { coreCheck } from '@/modules/filters/core/core'
+import { restoreFiltered } from '@/modules/filters/core/paint'
+import { createFilterCheck } from '@/modules/filters/core/core'
 import config from '@/config'
 import { Group } from '@/types/collection'
 import { ContextMenuTargetHandler, FilterContextMenu, IMainFilter, SelectorResult, SubFilterPair } from '@/types/filter'
 import { logger } from '@/utils/logger'
 import { GM_getValue, GM_setValue } from '@/storage/configStorage'
-import { orderedUniq, showEle, waitForEle } from '@/utils/tool'
+import { orderedUniq, waitForEle } from '@/utils/tool'
 import { ArticleAuthorFilter, ArticleAuthorKeywordFilter, ArticleTitleKeywordFilter } from '../subFilters/black'
 import { ArticleAuthorWhiteFilter, ArticleTitleKeywordWhiteFilter } from '../subFilters/white'
+
+const coreCheck = createFilterCheck()
 
 const GM_KEYS = {
     black: {
@@ -93,7 +96,7 @@ class ArticleFilterSearch implements IMainFilter {
             return
         }
         if (revertAll) {
-            cards.forEach((c) => showEle(c, 'sign'))
+            cards.forEach((c) => restoreFiltered(c, 'sign'))
             return
         }
 
@@ -118,7 +121,9 @@ class ArticleFilterSearch implements IMainFilter {
         this.articleTitleKeywordWhiteFilter.isEnable &&
             whitePairs.push([this.articleTitleKeywordWhiteFilter, selectorFns.title])
 
-        const blackIdxSet = await coreCheck(cards, true, 'sign', blackPairs, whitePairs)
+        const blackIdxSet = await coreCheck(cards, true, 'sign', blackPairs, whitePairs, [], false, {
+            identify: (element) => element.querySelector('.i_card_title a')?.getAttribute('href'),
+        })
         const time = (performance.now() - timer).toFixed(1)
         logger.debug(`ArticleFilterSearch hide ${blackIdxSet.size} in ${cards.length} cards, time=${time}`)
     }
@@ -365,7 +370,7 @@ export const articleFilterHandler: ContextMenuTargetHandler = (target: HTMLEleme
             }
         }
         if (spaceUrl && (mainFilter.articleAuthorFilter.isEnable || mainFilter.articleAuthorWhiteFilter.isEnable)) {
-            menus.push({
+            if (__PACK_LINKS__) menus.push({
                 name: `复制主页链接`,
                 fn: () => navigator.clipboard.writeText(`https://${spaceUrl}`),
             })

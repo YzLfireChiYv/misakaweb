@@ -1,12 +1,15 @@
-import { coreCheck } from '@/modules/filters/core/core'
-import { statGateEnabled, statGateExtra, statGateGroup } from '../statGate'
+import { restoreFiltered } from '@/modules/filters/core/paint'
+import { readSettingValue } from '@/modules/configuration/effective'
+import { FILTER_THRESHOLD_DEFAULTS } from '@/modules/filters/thresholds'
+import { createFilterCheck } from '@/modules/filters/core/core'
+import { statGateEnabled, videoStatOptions, statGateGroup } from '../statGate'
 import config from '@/config'
 import { Group } from '@/types/collection'
 import { ContextMenuTargetHandler, FilterContextMenu, IMainFilter, SelectorResult, SubFilterPair } from '@/types/filter'
 import { logger } from '@/utils/logger'
 import { isPagePopular } from '@/utils/pageType'
 import { GM_getValue, GM_setValue } from '@/storage/configStorage'
-import { calcQuality, matchBvid, orderedUniq, showEle, waitForEle } from '@/utils/tool'
+import { calcQuality, matchBvid, orderedUniq, waitForEle } from '@/utils/tool'
 import {
     VideoBvidFilter,
     VideoDimensionFilter,
@@ -17,6 +20,8 @@ import {
     VideoUploaderKeywordFilter,
 } from '../subFilters/black'
 import { VideoTitleWhiteFilter, VideoUploaderWhiteFilter } from '../subFilters/white'
+
+const coreCheck = createFilterCheck()
 
 const GM_KEYS = {
     black: {
@@ -89,7 +94,7 @@ const selectorFns = {
     },
     quality: (video: HTMLElement): SelectorResult => {
         const stat = getVideoData(video)?.stat
-        if (stat && typeof stat.coin === 'number' && typeof stat.like === 'number') {
+        if (stat && typeof stat.coin === 'number' && typeof stat.like === 'number' && stat.like > 0) {
             return calcQuality(stat.coin / stat.like)
         }
         return undefined
@@ -122,11 +127,13 @@ class VideoFilterPopular implements IMainFilter {
     init() {
         // 黑名单
         this.videoBvidFilter.setParam(GM_getValue(GM_KEYS.black.bvid.valueKey, []))
-        this.videoDurationFilter.setParam(GM_getValue(GM_KEYS.black.duration.valueKey, 0))
+        this.videoDurationFilter.setParam(
+            readSettingValue(GM_KEYS.black.duration.valueKey, FILTER_THRESHOLD_DEFAULTS.duration),
+        )
         this.videoTitleFilter.setParam(GM_getValue(GM_KEYS.black.title.valueKey, []))
         this.videoUploaderFilter.setParam(GM_getValue(GM_KEYS.black.uploader.valueKey, []))
         this.videoUploaderKeywordFilter.setParam(GM_getValue(GM_KEYS.black.uploaderKeyword.valueKey, []))
-        this.videoQualityFilter.setParam(GM_getValue(GM_KEYS.black.quality.valueKey, 0))
+        this.videoQualityFilter.setParam(readSettingValue(GM_KEYS.black.quality.valueKey, FILTER_THRESHOLD_DEFAULTS.quality))
         // 白名单
         this.videoUploaderWhiteFilter.setParam(GM_getValue(GM_KEYS.white.uploader.valueKey, []))
         this.videoTitleWhiteFilter.setParam(GM_getValue(GM_KEYS.white.title.valueKey, []))
@@ -158,7 +165,7 @@ class VideoFilterPopular implements IMainFilter {
             return
         }
         if (revertAll) {
-            videos.forEach((v) => showEle(v, 'sign'))
+            videos.forEach((v) => restoreFiltered(v, 'sign'))
             return
         }
 
@@ -203,7 +210,7 @@ class VideoFilterPopular implements IMainFilter {
             whitePairs,
             forceBlackPairs,
             false,
-            statGateExtra(videos, selectorFns.bvid),
+            videoStatOptions(selectorFns.bvid),
         )
         const time = (performance.now() - timer).toFixed(1)
         logger.debug(
@@ -278,8 +285,9 @@ export const videoFilterPopularGroups: Group[] = [
                 minValue: 0,
                 maxValue: 300,
                 step: 1,
-                defaultValue: 60,
+                defaultValue: FILTER_THRESHOLD_DEFAULTS.duration,
                 disableValue: 0,
+                applyDisabledValue: true,
                 addonText: '秒',
                 fn: (value: number) => {
                     mainFilter.videoDurationFilter.setParam(value)
@@ -391,8 +399,9 @@ export const videoFilterPopularGroups: Group[] = [
                 minValue: 0,
                 maxValue: 80,
                 step: 0.1,
-                defaultValue: 25,
+                defaultValue: FILTER_THRESHOLD_DEFAULTS.quality,
                 disableValue: 0,
+                applyDisabledValue: true,
                 addonText: '%',
                 fn: (value: number) => {
                     mainFilter.videoQualityFilter.setParam(value)
@@ -601,7 +610,7 @@ export const videoFilterPopularHandler: ContextMenuTargetHandler = (target: HTML
                         }
                     },
                 })
-                menus.push({
+                if (__PACK_LINKS__) menus.push({
                     name: '复制视频链接',
                     fn: () => navigator.clipboard.writeText(`https://www.bilibili.com/video/${bvid}`).catch(() => {}),
                 })

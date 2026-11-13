@@ -1,5 +1,6 @@
 import { getCurrentScope, onScopeDispose, ref, type Ref } from 'vue'
 import { GM_addValueChangeListener, GM_getValue, GM_removeValueChangeListener, GM_setValue } from '@/storage/configStorage'
+import { settingDefault } from '@/modules/configuration/effective'
 
 /**
  * Device-local UI preference for the page quick entry.
@@ -37,12 +38,14 @@ const isLocation = (value: unknown): value is ShortcutLocation => value === 'hea
 
 /** Pure. Invalid or partial values become in-memory defaults. Does not write. */
 export const normalizeShortcutPreference = (raw: unknown): ShortcutPreference => {
+    const { enabled, location } = SHORTCUT_PREFERENCE_DEFAULT
+    const inheritedLocation = settingDefault<ShortcutLocation>(SHORTCUT_PREFERENCE_KEY, location, 'location')
     if (!isRecord(raw)) {
-        return { ...SHORTCUT_PREFERENCE_DEFAULT }
+        return { enabled, location: inheritedLocation }
     }
     return {
-        enabled: typeof raw.enabled === 'boolean' ? raw.enabled : SHORTCUT_PREFERENCE_DEFAULT.enabled,
-        location: isLocation(raw.location) ? raw.location : SHORTCUT_PREFERENCE_DEFAULT.location,
+        enabled: typeof raw.enabled === 'boolean' ? raw.enabled : enabled,
+        location: isLocation(raw.location) ? raw.location : inheritedLocation,
     }
 }
 

@@ -1,7 +1,7 @@
 import { IListItem, INumberItem, IStringItem, ISwitchItem } from '@/types/item'
 import { waitForHead } from '@/utils/init'
 import { logger } from '@/utils/logger'
-import { GM_getValue } from '@/storage/configStorage'
+import { readItemValue } from '@/modules/configuration/effective'
 import { useMagicKeys } from '@vueuse/core'
 import { articleFilters, commentFilters, dynamicFilters, loadFilterStyle, videoFilters } from './filters'
 import { installRuleWatch } from './filters/ruleSync'
@@ -10,7 +10,7 @@ import { loadRuleStyle, rules } from './rules'
 import '@/utils/widePlayer'
 
 const loadSwitchItem = (item: ISwitchItem) => {
-    const enable = GM_getValue(item.id, item.defaultEnable)
+    const enable = readItemValue(item)
     if (enable) {
         if (!item.noStyle) {
             document.documentElement.setAttribute(item.attrName ?? item.id, '')
@@ -28,17 +28,18 @@ const loadSwitchItem = (item: ISwitchItem) => {
 }
 
 const loadNumberItem = (item: INumberItem) => {
-    const value = GM_getValue(item.id, item.defaultValue)
-    if (value !== item.disableValue) {
-        if (!item.noStyle) {
-            document.documentElement.setAttribute(item.attrName ?? item.id, '')
-        }
+    const value = readItemValue(item)
+    const disabled = value === item.disableValue
+    if (!disabled && !item.noStyle) {
+        document.documentElement.setAttribute(item.attrName ?? item.id, '')
+    }
+    if (!disabled || item.applyDisabledValue) {
         item.fn(value)?.catch(() => {})
     }
 }
 
 const loadStringItem = (item: IStringItem) => {
-    const value = GM_getValue(item.id, item.defaultValue)
+    const value = readItemValue(item)
     if (value !== item.disableValue) {
         if (!item.noStyle) {
             document.documentElement.setAttribute(item.attrName ?? item.id, '')
@@ -48,7 +49,7 @@ const loadStringItem = (item: IStringItem) => {
 }
 
 const loadListItem = (item: IListItem) => {
-    const value = GM_getValue(item.id, item.defaultValue)
+    const value = readItemValue(item)
     for (const option of item.options) {
         if (option.value === value && option.fn) {
             option.fn()?.catch(() => {})

@@ -1,4 +1,7 @@
-import { coreCheck } from '@/modules/filters/core/core'
+import { beginFilterPaint, restoreFiltered } from '@/modules/filters/core/paint'
+import { readSettingValue } from '@/modules/configuration/effective'
+import { FILTER_THRESHOLD_DEFAULTS } from '@/modules/filters/thresholds'
+import { createFilterCheck } from '@/modules/filters/core/core'
 import config from '@/config'
 import emojiRegex from 'emoji-regex-xs'
 import { Group } from '@/types/collection'
@@ -14,7 +17,7 @@ import {
 } from '@/utils/pageType'
 import ShadowInstance from '@/utils/shadow'
 import { GM_getValue, GM_setValue } from '@/storage/configStorage'
-import { orderedUniq, showEle } from '@/utils/tool'
+import { orderedUniq } from '@/utils/tool'
 import { bots, botsSet } from '../extra/bots'
 import {
     CommentAdFilter,
@@ -39,6 +42,9 @@ import {
     CommentIsPinFilter,
     CommentIsUpFilter,
 } from '../subFilters/white'
+
+const checkRootComments = createFilterCheck()
+const coreCheck = createFilterCheck()
 
 const GM_KEYS = {
     black: {
@@ -127,6 +133,7 @@ const commentRpidLevelMap = new Map<string, number>()
 
 const selectorFns = {
     root: {
+        rpid: (comment: HTMLElement): SelectorResult => (comment as any).__data?.rpid_str,
         username: (comment: HTMLElement): SelectorResult => {
             return (comment as any).__data?.member?.uname?.trim()
         },
@@ -250,7 +257,7 @@ const selectorFns = {
         },
         callBot: (comment: HTMLElement): SelectorResult => {
             const members = (comment as any).__data?.content?.members
-            if (members.length) {
+            if (Array.isArray(members) && members.length) {
                 return members.some((v: { uname: string }) => botsSet.has(v.uname))
             }
             return false
@@ -402,9 +409,9 @@ class CommentFilterCommon implements IMainFilter {
         this.commentUsernameFilter.setParam(GM_getValue(GM_KEYS.black.username.valueKey, []))
         this.commentUsernameKeywordFilter.setParam(GM_getValue(GM_KEYS.black.usernameKeyword.valueKey, []))
         this.commentContentFilter.setParam(GM_getValue(GM_KEYS.black.content.valueKey, []))
-        this.commentLevelFilter.setParam(GM_getValue(GM_KEYS.black.level.valueKey, 0))
-        const chainLevel = GM_getValue(GM_KEYS.black.chain.valueKey, 1)
-        this.commentChainLevel = typeof chainLevel === 'number' ? Math.min(10, Math.max(0, chainLevel)) : 1
+        this.commentLevelFilter.setParam(readSettingValue(GM_KEYS.black.level.valueKey, 0))
+        const chainLevel = readSettingValue(GM_KEYS.black.chain.valueKey, FILTER_THRESHOLD_DEFAULTS.chain)
+        this.commentChainLevel = Math.min(10, Math.max(0, chainLevel))
         this.commentBotFilter.setParam(bots)
         this.commentAdFilter.setParam([`/(bili2233\\.cn|b23\\.tv)\\/(mall-|cm-)|领券|gaoneng\\.bilibili\\.com/`])
     }
@@ -473,7 +480,7 @@ class CommentFilterCommon implements IMainFilter {
         }
 
         if (isRootWhite || revertAll) {
-            rootComments.forEach((el) => showEle(el, 'style'))
+            rootComments.forEach((el) => restoreFiltered(el, 'style'))
             return
         }
 
@@ -506,7 +513,7 @@ class CommentFilterCommon implements IMainFilter {
         this.commentAdFilter.isEnable && forceBlackPairs.push([this.commentAdFilter, selectorFns.root.content])
         this.commentBotFilter.isEnable && forceBlackPairs.push([this.commentBotFilter, selectorFns.root.username])
 
-        const rootBlackIdxSet = await coreCheck(
+        const rootBlackIdxSet = await checkRootComments(
             rootComments,
             true,
             'style',
@@ -514,6 +521,7 @@ class CommentFilterCommon implements IMainFilter {
             whitePairs,
             forceBlackPairs,
             true,
+            { identify: selectorFns.root.rpid },
         )
         const time = (performance.now() - timer).toFixed(1)
         logger.debug(
@@ -587,7 +595,7 @@ class CommentFilterCommon implements IMainFilter {
         }
 
         if (isSubWhite || revertAll) {
-            subComments.forEach((el) => showEle(el, 'style'))
+            subComments.forEach((el) => restoreFiltered(el, 'style'))
             return
         }
 
@@ -618,6 +626,7 @@ class CommentFilterCommon implements IMainFilter {
         const forceBlackPairs: SubFilterPair[] = []
         this.commentAdFilter.isEnable && forceBlackPairs.push([this.commentAdFilter, selectorFns.sub.content])
 
+        const drawing = beginFilterPaint(subComments, 'style', selectorFns.sub.rpid)
         const subBlackIdxSet = await coreCheck(
             subComments,
             false,
@@ -626,6 +635,7 @@ class CommentFilterCommon implements IMainFilter {
             whitePairs,
             forceBlackPairs,
             true,
+            { deferPaint: true },
         )
 
         // 更新rpid map，开始多轮链式过滤检查
@@ -645,13 +655,16 @@ class CommentFilterCommon implements IMainFilter {
                     whitePairs,
                     forceBlackPairs,
                     true,
+                    { deferPaint: true },
                 )
                 updateCommentRpidLevelMap(subComments, chainBlackIdxSet, false)
             }
         }
+        const hidden = new Set([...subBlackIdxSet, ...chainBlackIdxSet])
+        drawing.paint(hidden, new Set(), false)
         const time = (performance.now() - timer).toFixed(1)
         logger.debug(
-            `CommentFilterCommon hide ${new Set([...subBlackIdxSet, ...chainBlackIdxSet]).size} in ${subComments.length} sub comments, mode=${mode}, time=${time}`,
+            `CommentFilterCommon hide ${hidden.size} in ${subComments.length} sub comments, mode=${mode}, time=${time}`,
         )
     }
 
@@ -960,6 +973,7 @@ export const commentFilterCommonGroups: Group[] = [
                 step: 1,
                 defaultValue: 0,
                 disableValue: 0,
+                applyDisabledValue: true,
                 fn: (value: number) => {
                     mainFilter.commentLevelFilter.setParam(value)
                     mainFilter.check('full')
@@ -993,8 +1007,9 @@ export const commentFilterCommonGroups: Group[] = [
                 minValue: 0,
                 maxValue: 10,
                 step: 1,
-                defaultValue: 1,
+                defaultValue: FILTER_THRESHOLD_DEFAULTS.chain,
                 disableValue: 0,
+                applyDisabledValue: true,
                 fn: (value: number) => {
                     mainFilter.commentChainLevel = Math.min(10, Math.max(0, value))
                     commentRpidLevelMap.clear()

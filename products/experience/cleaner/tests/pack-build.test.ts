@@ -8,7 +8,7 @@ describe('complete pack variants', () => {
         expect(profiles).toHaveLength(2)
         expect(() => profileFor('tablet')).toThrow()
         const excluded = excludedKeys(profileFor('pure'))
-        expect(excluded.size).toBe(77)
+        expect(excluded.size).toBe(76)
         for (const key of ['homepage-increase-rcmd-load-size','homepage-rcmd-video-preload','video-page-simple-share','live-page-disable-hotkey-g-follow']) expect(excluded.has(key)).toBe(false)
     })
     it('removes optional objects before their initializer can touch the page', () => {
@@ -18,11 +18,9 @@ describe('complete pack variants', () => {
         expect(pure).toContain('CORE_BODY')
         expect(pruneSource(code,'/modules/rules/common.ts',{id:'development',packs:['text-style']})).toContain('UNWANTED_INIT')
     })
-    it('removes link actions without removing adjacent filter actions', () => {
-        const code=`menus.push({name:'复制视频链接',fn:()=>alert('COPY_BODY')});menus.push({name:'屏蔽视频',fn:()=>alert('BLOCK_BODY')});`
-        const pure=pruneSource(code,'/modules/filters/page.ts',profileFor('pure'))
-        expect(pure).not.toContain('COPY_BODY')
-        expect(pure).toContain('BLOCK_BODY')
+    it('detects an excluded link action or a retired theme in an emitted bundle', () => {
+        expect(() => auditBundle('复制视频链接', '', profileFor('pure'))).toThrow('excluded context action')
+        expect(() => auditBundle('theme_style', '', profileFor('desktop-toolkit'))).toThrow('retired theme')
     })
     it('preserves cleaning selectors, including negative optional guards and internal commas', () => {
         const excluded=excludedKeys(profileFor('pure'))

@@ -1,11 +1,14 @@
-import { coreCheck } from '@/modules/filters/core/core'
+import { restoreFiltered } from '@/modules/filters/core/paint'
+import { readSettingValue } from '@/modules/configuration/effective'
+import { FILTER_THRESHOLD_DEFAULTS } from '@/modules/filters/thresholds'
+import { createFilterCheck } from '@/modules/filters/core/core'
 import config from '@/config'
 import { Group } from '@/types/collection'
 import { ContextMenuTargetHandler, FilterContextMenu, IMainFilter, SelectorResult, SubFilterPair } from '@/types/filter'
 import { logger } from '@/utils/logger'
 import { isPageDynamic } from '@/utils/pageType'
 import { GM_getValue, GM_setValue } from '@/storage/configStorage'
-import { convertTimeToSec, orderedUniq, showEle, waitForEle } from '@/utils/tool'
+import { convertTimeToSec, orderedUniq, waitForEle } from '@/utils/tool'
 import {
     DynContentFilter,
     DynDurationFilter,
@@ -15,6 +18,8 @@ import {
     DynVideoTitleFilter,
 } from '../subFilters/black'
 import { DynContentWhiteFilter, DynVideoTitleWhiteFilter } from '../subFilters/white'
+
+const coreCheck = createFilterCheck()
 
 const GM_KEYS = {
     black: {
@@ -112,7 +117,9 @@ class DynamicFilterDynamic implements IMainFilter {
     init() {
         // 黑名单
         this.dynUploaderFilter.setParam(GM_getValue(GM_KEYS.black.uploader.valueKey, []))
-        this.dynDurationFilter.setParam(GM_getValue(GM_KEYS.black.duration.valueKey, 0))
+        this.dynDurationFilter.setParam(
+            readSettingValue(GM_KEYS.black.duration.valueKey, FILTER_THRESHOLD_DEFAULTS.duration),
+        )
         this.dynVideoTitleFilter.setParam(GM_getValue(GM_KEYS.black.title.valueKey, []))
         this.dynContentFilter.setParam(GM_getValue(GM_KEYS.black.content.valueKey, []))
         // 白名单
@@ -150,7 +157,7 @@ class DynamicFilterDynamic implements IMainFilter {
             return
         }
         if (revertAll) {
-            dyns.forEach((v) => showEle(v, 'sign'))
+            dyns.forEach((v) => restoreFiltered(v, 'sign'))
             return
         }
 
@@ -187,7 +194,9 @@ class DynamicFilterDynamic implements IMainFilter {
         this.dynContentWhiteFilter.isEnable && whitePairs.push([this.dynContentWhiteFilter, selectorFns.content])
 
         // 检测
-        const blackIdxSet = await coreCheck(filteredDyns, true, 'sign', blackPairs, whitePairs)
+        const blackIdxSet = await coreCheck(filteredDyns, true, 'sign', blackPairs, whitePairs, [], false, {
+            identify: (element) => element.querySelector('a[href*="/opus/"], a[href*="t.bilibili.com/"]')?.getAttribute('href'),
+        })
         const time = (performance.now() - timer).toFixed(1)
         logger.debug(
             `DynamicFilterDynamic hide ${blackIdxSet.size} in ${filteredDyns.length} dyns, mode=${mode}, time=${time}`,
@@ -293,8 +302,9 @@ export const dynamicFilterDynamicGroups: Group[] = [
                 minValue: 0,
                 maxValue: 300,
                 step: 1,
-                defaultValue: 60,
+                defaultValue: FILTER_THRESHOLD_DEFAULTS.duration,
                 disableValue: 0,
+                applyDisabledValue: true,
                 addonText: '秒',
                 fn: (value: number) => {
                     mainFilter.dynDurationFilter.setParam(value)

@@ -1,0 +1,143 @@
+{
+  "schemaVersion": 1,
+  "chains": [
+    {
+      "id":"comment-filter", "label":"评论过滤", "objectLabel":"评论",
+      "registry":"commentFilters",
+      "originReview":"对照净化大师 15d9bce：评论页面文件仅改存储导入；评论子过滤器和内置名单一致。Shadow 工具另有本地改动：去掉首屏页面限制，并加防重复挂接。",
+      "shared": [
+        {
+          "id":"comment-shadow", "stage":"locate", "label":"评论组件收集与观察", "status":"implemented",
+          "detail":"Shadow 工具包装 attachShadow，按宿主标签收集 shadowRoot。评论入口初始化规则、开启自身免过滤规则并安装观察器；入口本身不主动全量扫描。评论区六类路由共用这一适配。",
+          "refs":[["src/utils/shadow.ts","private hook()"],["src/utils/shadow.ts","addShadowObserver(tag:"],["src/modules/filters/variety/comment/pages/common.ts","export const commentFilterCommonEntry ="]]
+        },
+        {
+          "id":"comment-renderer-data", "stage":"fields", "label":"评论组件已有数据", "status":"implemented",
+          "detail":"两级均读取宿主 __data、__upMid、__user，不主动请求评论或用户资料。没有将组件内数据整理成独立的、可跨页面使用的评论对象接口。",
+          "inputs":[{"method":"site-state","path":"宿主 __data / __upMid / __user","fields":["member.uname","member.avatar","member.vip.vipStatus","member.level_info.current_level","content.message","content.members","content.jump_url","mid","作者 mid","当前用户名"],"unavailable":["未主动拉取未渲染的评论"]}],
+          "refs":[["src/modules/filters/variety/comment/pages/common.ts","const selectorFns ="]]
+        }
+      ],
+      "strategy": {
+        "id":"current-comment-rules", "label":"现行评论规则", "status":"current-coupled",
+        "detail":"用户名、正文、等级、默认头像、机器人、@与表情等作为当前判断条件。机器人名单是内置昵称，不是网络识别；带货使用内置关键词/正则。保留全部一级/二级分别在进入规则前短路。自身或提及自身规则在入口默认启用，是普通豁免，不能覆盖强制屏蔽。二级链式过滤基于已隐藏回复的 rpid 多轮传播，完整扫描清理层级图。",
+        "refs":[["src/modules/filters/variety/comment/pages/common.ts","const GM_KEYS ="],["src/modules/filters/variety/comment/pages/common.ts","this.commentAdFilter.setParam("],["src/modules/filters/variety/comment/pages/common.ts","const updateCommentRpidLevelMap ="],["src/modules/filters/variety/comment/pages/common.ts","const chainBlackPairs ="],["src/modules/filters/variety/comment/subFilters/black.ts","export class CommentUsernameFilter"],["src/modules/filters/variety/comment/subFilters/white.ts","export class CommentIsUpFilter"],["src/modules/filters/variety/comment/extra/bots.ts","export const botsSet ="]]
+      },
+      "referenceSources": [
+        {"id":"evolved-comment-object","repository":"https://github.com/the1812/Bilibili-Evolved","commit":"fa06dcec095dbccaba82f50ae2318c8d61c26671","path":"src/components/utils/comment-apis.ts","line":6,"status":"reference-only","detail":"评论区/评论项回调的社区候选；不是远程评论 API，未接入当前过滤。"},
+        {"id":"evolved-comment-v3","repository":"https://github.com/the1812/Bilibili-Evolved","commit":"fa06dcec095dbccaba82f50ae2318c8d61c26671","path":"src/components/utils/comment/areas/v3.ts","line":16,"status":"reference-only","detail":"V3 页面适配示例，从评论宿主读取 __data；仅作未来对象化参考。"}
+      ],
+      "pages": [
+        {
+          "id":"root", "label":"一级评论／主题串", "routes":["video","bangumi","playlist","dynamic","space","festival"],
+          "entry":"commentFilterCommonEntry", "file":"src/modules/filters/variety/comment/pages/common.ts", "method":"checkRoot", "fieldGroup":"root",
+          "shared":["comment-shadow","comment-renderer-data","hide-style"],
+          "locate":"观察 BILI-COMMENTS 的子树变化，从 shadowStore 中的 BILI-COMMENT-THREAD-RENDERER 取宿主；增量时排除已检查标记。",
+          "locateRefs":["async checkRoot(","shadowStore.has('BILI-COMMENT-THREAD-RENDERER')","'BILI-COMMENTS',"],
+          "fields":"正文去掉 @ 片段；提及名单来自 content.members，是否有回复来自 rcount；置顶与笔记来自 reply_control。链接和自身豁免取组件内信息。",
+          "fieldDetails":{"rpid":"__data.rpid_str，绘制前核对评论身份","username":"member.uname","content":"content.message，去掉 @ 片段","noface":"member.avatar 与 vip.vipStatus","callBot":"content.members 对照内置昵称","callUser":"content.members 是否非空","callUserNoReply":"rcount 为0且有提及","callUserOnly":"移除 @ 后正文为空","callUserOnlyNoReply":"rcount 为0且移除 @ 后正文为空","level":"member.level_info.current_level","emojiOnly":"去掉 @ 与表情后是否为空","isUp":"mid 与 __upMid","isPin":"reply_control.is_up_top","isNote":"reply_control.is_note_v2","isLink":"content.jump_url，搜索链接除外","isMe":"__user.uname 对照评论人或正文 @"},
+          "decide":"一级免过滤或无阻拦规则时直接恢复；带货和机器人发布为强制规则。一级另有置顶、笔记豁免。",
+          "decideRefs":["if (isRootWhite || revertAll)","const rootBlackIdxSet = await checkRootComments("],
+          "specialKeys":["video-comment-root-whitelist-status"],
+          "layout":"隐藏主题串宿主，回复区域随其退出布局；启用一级免过滤或关闭阻拦条件时恢复此前行内 display。当前不改计数、分页或补足主题串。",
+          "layoutRefs":["rootComments.forEach((el) => restoreFiltered(el, 'style'))"],
+          "missing":["未加载评论的主动获取、过滤后补足评论数量、评论区专用重排"]
+        },
+        {
+          "id":"reply", "label":"二级回复", "routes":["video","bangumi","playlist","dynamic","space","festival"],
+          "entry":"commentFilterCommonEntry", "file":"src/modules/filters/variety/comment/pages/common.ts", "method":"checkSub", "fieldGroup":"sub",
+          "shared":["comment-shadow","comment-renderer-data","hide-style"],
+          "locate":"观察 BILI-COMMENT-REPLIES-RENDERER 子树，从 BILI-COMMENT-REPLY-RENDERER 取宿主；观察回调全量检查回复。",
+          "locateRefs":["async checkSub(","shadowStore.has('BILI-COMMENT-REPLY-RENDERER')","'BILI-COMMENT-REPLIES-RENDERER',"],
+          "fields":"从已渲染回复读取字段；正文去掉“回复 @”前缀及其他 @ 片段。rpid_str 与 parent_str 表达回复关系，供当前链式策略。",
+          "fieldDetails":{"rpid":"__data.rpid_str","parent":"__data.parent_str","isReplyToFiltered":"parent_str 查询现行策略的隐藏回复图，不是原始字段","username":"member.uname","content":"content.message，去掉回复前缀和 @ 片段","noface":"member.avatar 与 vip.vipStatus","callBot":"content.members 对照内置昵称","callUser":"正文移除回复前缀后匹配 @","callUserNoReply":"实现与 callUser 相同，未读回复数量","callUserOnly":"移除回复前缀和 @ 后正文为空","callUserOnlyNoReply":"实现与 callUserOnly 相同，未读回复数量","level":"member.level_info.current_level","emojiOnly":"去掉回复前缀、@ 与表情后是否为空","isUp":"mid 与 __upMid","isLink":"content.jump_url，搜索链接除外","isMe":"__user.uname 对照评论人或去掉回复前缀后的 @"},
+          "decide":"二级免过滤或无阻拦条件时恢复；机器人发布在二级为普通规则，带货仍为强制。链式策略只用于二级；按配置深度多轮沿父回复关系传播。",
+          "decideRefs":["if (isSubWhite || revertAll)","const subBlackIdxSet = await coreCheck(","const chainBlackPairs ="],
+          "specialKeys":["video-comment-sub-whitelist-status"],
+          "layout":"二级回复保持原有不写已检查标记的行为。完成普通与链式判断后一次绘制，依赖站点评论容器排布。",
+          "layoutRefs":["subComments.forEach((el) => restoreFiltered(el, 'style'))"],
+          "missing":["未展开回复的主动获取、补足剩余回复、独立链式结果与绘制分离"]
+        }
+      ],
+      "auditNotes":[
+        {"status":"pending","label":"二级提及数据缺失","detail":"二级 callBot 直接读 members.length；缺失会抛错，不能等同于确认命中。一级有可选链。另有两个“无回复”变体在二级与普通变体相同。仅登记，未修改。"},
+        {"status":"pending","label":"评论宿主与恢复边界","detail":"Shadow 收集无按连接状态清理；行内 display 原值未保留。是否导致当前页面可见异常需要实测。"}
+      ]
+    },
+    {
+      "id":"dynamic-filter", "label":"动态过滤", "objectLabel":"动态",
+      "registry":"dynamicFilters",
+      "originReview":"对照净化大师 15d9bce：动态、空间、顶栏三个页面文件仅改存储导入，动态子过滤器一致。",
+      "shared": [
+        {"id":"dynamic-list-rendered","stage":"locate","label":"动态列表渲染门槛","status":"implemented","detail":"动态页与空间动态共用做法：先找 .bili-dyn-list__item，增量时跳过已检查项，筛选前要求已有正文或头部节点。顶栏不走这套门槛。","refs":[["src/modules/filters/variety/dynamic/pages/dynamic.ts","const filteredDyns ="],["src/modules/filters/variety/dynamic/pages/space.ts","const filteredDyns ="]]},
+        {"id":"dynamic-list-text","stage":"fields","label":"动态正文片段与类型标记","status":"implemented","detail":"动态页与空间动态从 DOM 拼接标题、富文本与摘要片段，排除 @ 片段；标题和时长来自内嵌视频卡。类型判断读 .bili-dyn-time 的文字，无主动 API。","refs":[["src/modules/filters/variety/dynamic/pages/dynamic.ts","const selectorFns ="],["src/modules/filters/variety/dynamic/pages/space.ts","const selectorFns ="],["src/utils/tool.ts","export const convertTimeToSec ="]]}
+      ],
+      "strategy":{"id":"current-dynamic-rules","label":"现行动态条件与名单","status":"current-coupled","detail":"发布人精确匹配、视频时长、标题/正文关键词、动态视频/直播回放类型按场景选择。标题/正文白名单可救回普通命中，未传强制名单。标题、正文、时长数据键可跨页面或与其他过滤链共享，启用开关并非全部共享。顶栏只在入口读取动态页的五组开关和参数，未独立注册控件，也未监听其后变化。","refs":[["src/modules/filters/variety/dynamic/pages/dynamic.ts","const GM_KEYS ="],["src/modules/filters/variety/dynamic/pages/space.ts","const GM_KEYS ="],["src/modules/filters/variety/dynamic/pages/header.ts","export const dynamicFilterHeaderEntry ="],["src/modules/filters/variety/dynamic/subFilters/black.ts","export class DynUploaderFilter"],["src/modules/filters/variety/dynamic/subFilters/white.ts","export class DynVideoTitleWhiteFilter"]]},
+      "pages":[
+        {
+          "id":"dynamic", "label":"动态页", "routes":["dynamic"],"entry":"dynamicFilterDynamicEntry","file":"src/modules/filters/variety/dynamic/pages/dynamic.ts","method":"check",
+          "shared":["dynamic-list-rendered","dynamic-list-text","hide-sign"],
+          "locate":"等待 .bili-dyn-home--member，初次全量，监听子树后增量。列表是否存在 .bili-dyn-list-tabs 影响发布人提取。",
+          "locateRefs":["'.bili-dyn-home--member',","let selector = `.bili-dyn-list__item`","isAllDyn = !!this.target.querySelector"],
+          "fields":"读 DOM。发布人仅在判为全部动态时取头部文字；时长支持封面时间和备用时长类名。",
+          "fieldDetails":{"uploader":"全部动态条件下读取 .bili-dyn-title__text","duration":"视频封面时长或 .bili-dyn-card-video__duration","title":"嵌入视频标题","content":"正文、标题、摘要片段拼接","dynVideo":"时间栏含动态视频","playback":"时间栏含直播回放"},
+          "decide":"发布人、时长、标题、正文、动态视频及直播回放过滤；标题和正文白名单。右键发布人可把昵称写入动态黑名单并重查。",
+          "decideRefs":["const blackIdxSet = await coreCheck(","export const dynamicFilterDynamicHandler:"],
+          "layout":"隐藏整项动态；无阻拦条件时恢复。布局和新内容加载仍由站点控制。",
+          "layoutRefs":["dyns.forEach((v) => restoreFiltered(v, 'sign'))"],
+          "missing":["动态详情主动取数、过滤后补洞或按数量补载"]
+        },
+        {
+          "id":"space", "label":"个人空间动态", "routes":["space"],"entry":"dynamicFilterSpaceEntry","file":"src/modules/filters/variety/dynamic/pages/space.ts","method":"check",
+          "shared":["dynamic-list-rendered","dynamic-list-text","hide-sign"],
+          "locate":"等待 #app；实际检查只在空间 /数字/dynamic 路径。首次全量，子树变化后增量。",
+          "locateRefs":["waitForEle(document, '#app'","let selector = `.bili-dyn-list__item`",".test(location.href))"],
+          "fields":"与动态页共用正文提取方式；时长只读封面上的 duration-time，不取发布人。",
+          "fieldDetails":{"duration":"封面 duration-time","title":"嵌入视频标题","content":"正文、标题、摘要片段拼接","dynVideo":"时间栏含动态视频","playback":"时间栏含直播回放"},
+          "decide":"空间专用开关控制时长、标题、正文和类型规则，共用相关参数与名单；没有发布人规则。",
+          "decideRefs":["const blackIdxSet = await coreCheck("],
+          "layout":"隐藏或恢复动态列表项，自然排布；不改个人空间的分页或列表数量。",
+          "layoutRefs":["dyns.forEach((v) => restoreFiltered(v, 'sign'))"],
+          "missing":["发布人字段与规则、动态详情主动取数、过滤后补洞或补载"]
+        },
+        {
+          "id":"header", "label":"顶栏动态弹窗", "routes":[],"entry":"dynamicFilterHeaderEntry","file":"src/modules/filters/variety/dynamic/pages/header.ts","method":"check",
+          "shared":["hide-style"],
+          "locate":"非直播页注册。每秒轮询 .right-entry，计数超限即停；找到后全量扫描 #biliHeaderDynScrollCon .dynamic-all > a，子树变化后仍全量。",
+          "locateRefs":["const id = setInterval(","let selector = `#biliHeaderDynScrollCon"],
+          "fields":"从弹窗 DOM 读昵称和标题。content 实际取带 .article-tag 的标题并去掉“专栏”文字，不能等同于完整动态正文。",
+          "fieldDetails":{"uploader":".user-name","title":"不含专栏标签的 .all-in-one-article-title","content":"带专栏标签的标题去掉“专栏”，无全文"},
+          "decide":"借用动态页发布人、标题、正文规则和标题/正文白名单的键；入口读取保存值决定启用，不使用动态页 Item 默认值，也没有独立开关或热更新入口。",
+          "decideRefs":["export const dynamicFilterHeaderEntry =","const blackIdxSet = await coreCheck("],
+          "sharedSettings":true,
+          "layout":"对弹窗的条目链接用行内 display 隐藏或恢复；未更新红点、条目计数，也不补载。",
+          "layoutRefs":["coreCheck(dyns, true, 'style'"],
+          "missing":["顶栏独立设置、完整正文和主动取数、按可见数量补载"]
+        }
+      ],
+      "auditNotes":[{"status":"pending","label":"入口和现场覆盖","detail":"顶栏没有运行中的规则刷新；各列表选择器、动态页容器的类名匹配及自然收拢仍待实测。本轮只记录。"}]
+    },
+    {
+      "id":"article-filter", "label":"专栏过滤", "objectLabel":"专栏结果",
+      "registry":"articleFilters",
+      "originReview":"对照净化大师 15d9bce：专栏搜索文件仅改存储导入；入口重导出和专栏子过滤器一致。",
+      "strategy":{"id":"current-article-rules","label":"现行专栏作者与标题规则","status":"current-coupled","detail":"作者精确匹配、作者昵称关键词、标题关键词为普通规则；作者和标题白名单豁免，没有强制规则。右键作者按当前启用状态写入精确名单并重查。","refs":[["src/modules/filters/variety/article/pages/searchArticle.ts","const GM_KEYS ="],["src/modules/filters/variety/article/pages/searchArticle.ts","export const articleFilterHandler:"],["src/modules/filters/variety/article/subFilters/black.ts","export class ArticleAuthorFilter"],["src/modules/filters/variety/article/subFilters/white.ts","export class ArticleAuthorWhiteFilter"]]},
+      "pages":[
+        {
+          "id":"search", "label":"搜索页专栏结果", "routes":["search"],"entry":"articleFilterEntry","file":"src/modules/filters/variety/article/pages/searchArticle.ts","method":"checkFilter",
+          "shared":["hide-sign"],
+          "locate":"等待 div.search-content，在其中找 div.media-list 并扫描其直接子元素；子树变化后重新扫描。不扫描全站，也未注册专栏正文页。",
+          "locateRefs":["export const articleFilterEntry =","waitForEle(document, 'div.search-content'","const mediaList = this.target.querySelector","const cards = Array.from(mediaList.children)"],
+          "fields":"作者读结果卡片文字，标题只读链接的 title 属性。右键另读作者链接作主页复制，不参与卡片判断。",
+          "fieldDetails":{"author":".atc-author .lh_xs 的文字","title":".i_card_title a 的 title 属性，没有正文或标题文本回退"},
+          "decide":"按当前作者及标题规则决定保留；源码没有专栏全文判断或独立评分。",
+          "decideRefs":["const blackIdxSet = await coreCheck("],
+          "layout":"命中卡片加隐藏属性，无启用规则时移除属性；保留项由站点自然排布。结果总量和分页不变。",
+          "layoutRefs":["cards.forEach((c) => restoreFiltered(c, 'sign'))"],
+          "missing":["专栏正文页过滤、正文/标签/互动数据与主动取数、过滤后补洞或跨页补载"]
+        }
+      ],
+      "auditNotes":[{"status":"pending","label":"当前识别边界","detail":"直接处理 media-list 子元素，未再按卡片类型筛选；标题属性缺失时没有回退。是否触发页面遗漏需实测。"}]
+    }
+  ]
+}

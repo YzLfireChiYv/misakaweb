@@ -15,6 +15,7 @@
         "test:search": "node tests/live-search-playwright.mjs",
         "maintenance:index": "node scripts/maintenance-index.mjs",
         "maintenance:packet": "node scripts/maintenance-packet.mjs",
+        "catalog": "node scripts/config-catalog.mjs",
         "prepare": "husky"
     },
     "dependencies": {

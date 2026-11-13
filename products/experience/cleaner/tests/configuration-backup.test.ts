@@ -8,6 +8,7 @@ import {
     type ConfigDefinition,
     type ConfigValue,
 } from '../src/modules/configuration/backup'
+import { parseConfigurationImportFile } from '../src/modules/configuration/scriptcat'
 
 const definitions: ConfigDefinition[] = [
     {
@@ -96,6 +97,36 @@ const memory = (initial: Record<string, ConfigValue> = {}) => {
 const options = { scriptVersion: '0.1.5', profile: 'development', now: '2026-10-11T12:00:00Z' }
 
 describe('registered configuration backups', () => {
+    it('previews ScriptCat storage while preserving regexes, explicit false and zero', () => {
+        const local = memory({ 'clean-a': true, 'rule-min': 5, 'biliweb-sync-password': 'current' })
+        const rules = ['普通词', '/关键词.+测试/iu', '/(特定|示例)/', '']
+        const { backup, skipped } = parseConfigurationImportFile({
+            ts: 1,
+            data: {
+                'clean-a': 'bfalse',
+                'rule-list': 'o' + JSON.stringify(rules),
+                'rule-min': 'n0',
+                'biliweb-sync-password': 'slegacy',
+                'biliweb-sync-enabled': 'btrue',
+                'unregistered': 'sother',
+            },
+        }, definitions)
+        expect(skipped).toBe(3)
+        const plan = planConfigurationImport(backup, definitions, local.access)
+        expect(local.writes).toEqual([])
+        expect(applyConfigurationPlan(plan, local.access)).toBe(3)
+        expect(local.values.get('clean-a')).toBe(false)
+        expect(local.values.get('rule-min')).toBe(0)
+        expect(local.values.get('rule-list')).toEqual(rules)
+        expect(local.values.get('biliweb-sync-password')).toBe('current')
+        expect(local.values.has('biliweb-sync-enabled')).toBe(false)
+    })
+
+    it('rejects malformed registered ScriptCat values before writing anything', () => {
+        expect(() => parseConfigurationImportFile({ ts: 1, data: { 'rule-list': 'o{"not":"list"}' } }, definitions))
+            .toThrow('标题规则')
+    })
+
     it('permits explicit local sync-switch enable only for a single-setting plan', () => {
         const syncDefinition = definitions.filter((v) => v.key === 'biliweb-sync-enabled')
         const source = memory({ 'biliweb-sync-enabled': true })

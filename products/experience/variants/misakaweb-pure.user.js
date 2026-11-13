@@ -1,7 +1,7 @@
 // ==UserScript==
 // @name         MisakaWeb
 // @namespace    https://github.com/YzLfireChiYv/misakaweb
-// @version      0.1.5.1
+// @version      0.1.5.2
 // @author       festoney8, MisakaWeb
 // @description  MisakaWeb · 净化轻量版。包含完整净化与过滤；只安装一种版本。
 // @license      MIT
@@ -2099,10 +2099,6 @@
 		if (hideMode === "sign") ele.removeAttribute(config_default.filterHideSign);
 		else ele.style.removeProperty("display");
 	};
-	var isEleHide = (ele, hideMode) => {
-		if (hideMode === "sign") return ele.hasAttribute(config_default.filterHideSign);
-		return ele.style.display === "none";
-	};
 	var waitForEle = async (watchEle, selector, isTargetNode) => {
 		if (!selector) return null;
 		let ele = watchEle.querySelector(selector);
@@ -2217,6 +2213,31 @@
 		const finalScore = titleWeight * titleScore + tagsWeight * tagsScore + authorWeight * authorScore + descriptionWeight * descriptionScore;
 		return Math.max(0, Math.min(1, finalScore));
 	};
+	var matchesValue = (value, fallback) => {
+		if (Array.isArray(fallback)) return Array.isArray(value) && value.every((entry) => typeof entry === "string");
+		if (typeof fallback === "number") return typeof value === "number" && Number.isFinite(value);
+		return typeof value === typeof fallback;
+	};
+	var settingDefault = (key, fallback, field) => {
+		const value = {
+			"url-cleaner": false,
+			"common-unify-font": false,
+			"border-radius": false,
+			"video-page-hide-video-info-argue": false,
+			"biliweb-shortcut-entry.location": "header",
+			"hide-dynamic-page-bili-dyn-dispute": true,
+			"video-page-simple-share": true
+		}[field ? `${key}.${field}` : key];
+		return matchesValue(value, fallback) ? value : fallback;
+	};
+	var readSettingValue = (key, fallback) => {
+		const saved = GM_getValue$1(key);
+		return matchesValue(saved, fallback) ? saved : settingDefault(key, fallback);
+	};
+	var declaredItemDefault = (item) => item.type === "switch" ? !!item.defaultEnable : item.defaultValue;
+	function readItemValue(item) {
+		return readSettingValue(item.id, declaredItemDefault(item));
+	}
 	function tryOnScopeDispose(fn, failSilently) {
 		if ((0, vue.getCurrentScope)()) {
 			(0, vue.onScopeDispose)(fn, failSilently);
@@ -3388,34 +3409,41 @@
 			const currentItem = (0, vue.ref)(null);
 			const editorCode = (0, vue.computed)(() => currentItem.value ? settingLabel(currentItem.value.id) : "");
 			let stopWatch = null;
+			let savedText = "";
+			let editorSession = 0;
 			const openEditor = (item) => {
+				stopWatch?.();
+				const session = ++editorSession;
 				currentItem.value = item;
-				const val = GM_getValue$1(item.id, []).join("\n");
-				editorData.value = val ? val + "\n" : val;
+				const val = readSettingValue(item.id, []).join("\n");
+				savedText = val ? val + "\n" : val;
+				editorData.value = savedText;
 				stopWatch = watchDebounced(editorData, (value) => {
-					if (!currentItem.value) return;
-					try {
-						const data = orderedUniq(value.split("\n").filter((v) => v.trim() !== ""));
-						GM_setValue$1(currentItem.value.id, data);
-						currentItem.value.saveFn();
-					} catch (err) {
-						logger.error(`EditorDialog ${currentItem.value.id} saveData error`, err);
-					}
+					if (session === editorSession) saveEditor(item, value);
 				}, { debounce: 1e3 });
 				isEditorShow.value = true;
 			};
-			const closeEditor = () => {
-				if (currentItem.value) try {
-					const data = orderedUniq(editorData.value.split("\n").filter((v) => v.trim() !== ""));
-					GM_setValue$1(currentItem.value.id, data);
-					currentItem.value.saveFn();
+			const saveEditor = (item, value) => {
+				if (value === savedText) return;
+				try {
+					const data = orderedUniq(value.split("\n").filter((v) => v.trim() !== ""));
+					GM_setValue$1(item.id, data);
+					savedText = value;
+					item.saveFn();
 				} catch (err) {
-					logger.error(`EditorDialog ${currentItem.value.id} closeEditor error`, err);
+					logger.error(`EditorDialog ${item.id} saveData error`, err);
 				}
+			};
+			const closeEditor = () => {
+				++editorSession;
+				stopWatch?.();
+				stopWatch = null;
+				if (currentItem.value) saveEditor(currentItem.value, editorData.value);
 				isEditorShow.value = false;
 			};
 			(0, vue.onUnmounted)(() => {
-				if (stopWatch) stopWatch();
+				++editorSession;
+				stopWatch?.();
 			});
 			__expose({ openEditor });
 			return (_ctx, _cache) => {
@@ -3507,7 +3535,7 @@
 			const item = __props;
 			const feedbackCode = settingLabel(item.id);
 			const options = item.options;
-			const currValue = GM_getValue$1(item.id, item.defaultValue);
+			const currValue = readItemValue(item);
 			const currOption = options.find((v) => v.value === currValue);
 			const selectedOption = (0, vue.ref)(currOption ?? options[0]);
 			(0, vue.watch)(selectedOption, (newSelected) => {
@@ -3580,6 +3608,7 @@
 			decimals: {},
 			defaultValue: {},
 			disableValue: {},
+			applyDisabledValue: { type: Boolean },
 			addonText: {},
 			noStyle: { type: Boolean },
 			attrName: {},
@@ -3588,27 +3617,23 @@
 		setup(__props) {
 			const item = __props;
 			const feedbackCode = settingLabel(item.id);
-			const currValue = (0, vue.ref)(GM_getValue$1(item.id, item.defaultValue));
-			watchThrottled(currValue, (newValue, oldValue) => {
+			const currValue = (0, vue.ref)(readItemValue(item));
+			let appliedValue = currValue.value;
+			watchThrottled(currValue, (newValue) => {
 				try {
-					if (newValue > item.maxValue) currValue.value = item.maxValue;
-					if (newValue < item.minValue) currValue.value = item.minValue;
-					if (item.decimals != null) {
-						const numeric = typeof currValue.value === "number" ? currValue.value : Number(currValue.value);
-						if (Number.isFinite(numeric)) {
-							const rounded = Number(numeric.toFixed(item.decimals));
-							if (rounded !== currValue.value) currValue.value = rounded;
-						}
+					if (typeof newValue !== "number" || !Number.isFinite(newValue)) return;
+					let value = newValue;
+					if (value !== item.disableValue) {
+						value = Math.max(item.minValue, Math.min(item.maxValue, value));
+						if (item.decimals != null) value = Number(value.toFixed(item.decimals));
 					}
-					if (oldValue === item.disableValue) {
-						if (!item.noStyle) document.documentElement.setAttribute(item.attrName ?? item.id, "");
-					}
-					if (newValue === item.disableValue) {
-						if (!item.noStyle) document.documentElement.removeAttribute(item.attrName ?? item.id);
-					} else if (currValue.value !== oldValue) item.fn(currValue.value)?.catch((err) => {
-						throw err;
-					});
-					GM_setValue$1(item.id, currValue.value);
+					if (value !== newValue) currValue.value = value;
+					if (value === appliedValue) return;
+					GM_setValue$1(item.id, value);
+					appliedValue = value;
+					const disabled = value === item.disableValue;
+					if (!item.noStyle) document.documentElement.toggleAttribute(item.attrName ?? item.id, !disabled);
+					if (!disabled || item.applyDisabledValue) item.fn(value)?.catch((err) => logger.error(`NumberComp ${item.id} error`, err));
 				} catch (err) {
 					logger.error(`NumberComp ${item.id} error`, err);
 				}
@@ -3654,7 +3679,7 @@
 		setup(__props) {
 			const item = __props;
 			const feedbackCode = settingLabel(item.id);
-			const currValue = (0, vue.ref)(GM_getValue$1(item.id, item.defaultValue));
+			const currValue = (0, vue.ref)(readItemValue(item));
 			watchThrottled(currValue, (newValue, oldValue) => {
 				try {
 					if (oldValue === item.disableValue) {
@@ -3705,19 +3730,18 @@
 		setup(__props) {
 			const item = __props;
 			const feedbackCode = settingLabel(item.id);
-			const enabled = (0, vue.ref)(GM_getValue$1(item.id, item.defaultEnable));
+			const enabled = (0, vue.ref)(readItemValue(item));
 			(0, vue.watch)(enabled, () => {
 				try {
+					GM_setValue$1(item.id, enabled.value);
 					if (enabled.value) {
 						if (!item.noStyle) document.documentElement.setAttribute(item.attrName ?? item.id, "");
 						if (item.enableFn) item.enableFn()?.catch(() => {});
-						GM_setValue$1(item.id, true);
 					} else {
 						if (!item.noStyle) document.documentElement.removeAttribute(item.attrName ?? item.id);
 						if (item.disableFn) item.disableFn()?.catch((err) => {
 							throw err;
 						});
-						GM_setValue$1(item.id, false);
 					}
 				} catch (err) {
 					logger.error(`SwitchComp ${item.id} error`, err);
@@ -3892,182 +3916,162 @@
 	var isPageSpace = () => currPage() === "space";
 	var isPageWatchlater = () => currPage() === "watchlater";
 	var isPageMessage = () => currPage() === "message";
-	var Node$1 = class {
-		value;
-		next;
-		constructor(value) {
-			this.value = value;
+	var inlineDisplay = new WeakMap();
+	var revisions = new WeakMap();
+	var filterPaint = (element, mode, verdict) => {
+		if (mode === "sign") {
+			if (verdict === "discard") hideEle(element, mode);
+			else showEle(element, mode);
+			return;
+		}
+		const previous = inlineDisplay.get(element);
+		if (verdict === "discard") {
+			if (!previous) inlineDisplay.set(element, {
+				value: element.style.getPropertyValue("display"),
+				priority: element.style.getPropertyPriority("display")
+			});
+			hideEle(element, mode);
+		} else if (previous) {
+			inlineDisplay.delete(element);
+			if (element.style.display === "none" && element.style.getPropertyPriority("display") === "important") element.style.setProperty("display", previous.value, previous.priority);
 		}
 	};
-	var Queue = class {
-		#head;
-		#tail;
-		#size;
-		constructor() {
-			this.clear();
-		}
-		enqueue(value) {
-			const node = new Node$1(value);
-			if (this.#head) {
-				this.#tail.next = node;
-				this.#tail = node;
-			} else {
-				this.#head = node;
-				this.#tail = node;
-			}
-			this.#size++;
-		}
-		dequeue() {
-			const current = this.#head;
-			if (!current) return;
-			this.#head = this.#head.next;
-			this.#size--;
-			if (!this.#head) this.#tail = void 0;
-			return current.value;
-		}
-		peek() {
-			if (!this.#head) return;
-			return this.#head.value;
-		}
-		clear() {
-			this.#head = void 0;
-			this.#tail = void 0;
-			this.#size = 0;
-		}
-		get size() {
-			return this.#size;
-		}
-		*[Symbol.iterator]() {
-			let current = this.#head;
-			while (current) {
-				yield current.value;
-				current = current.next;
-			}
-		}
-		*drain() {
-			while (this.#head) yield this.dequeue();
-		}
+	var restoreFiltered = (element, mode) => {
+		revisions.delete(element);
+		filterPaint(element, mode, "keep");
 	};
-	function pLimit(concurrency) {
-		let rejectOnClear = false;
-		if (typeof concurrency === "object") ({concurrency, rejectOnClear = false} = concurrency);
-		validateConcurrency(concurrency);
-		if (typeof rejectOnClear !== "boolean") throw new TypeError("Expected `rejectOnClear` to be a boolean");
-		const queue = new Queue();
-		let activeCount = 0;
-		const resumeNext = () => {
-			if (activeCount < concurrency && queue.size > 0) {
-				activeCount++;
-				queue.dequeue().run();
-			}
-		};
-		const next = () => {
-			activeCount--;
-			resumeNext();
-		};
-		const run = async (function_, resolve, arguments_) => {
-			const result = (async () => function_(...arguments_))();
-			resolve(result);
-			try {
-				await result;
-			} catch {}
-			next();
-		};
-		const enqueue = (function_, resolve, reject, arguments_) => {
-			const queueItem = { reject };
-			new Promise((internalResolve) => {
-				queueItem.run = internalResolve;
-				queue.enqueue(queueItem);
-			}).then(run.bind(void 0, function_, resolve, arguments_));
-			if (activeCount < concurrency) resumeNext();
-		};
-		const generator = (function_, ...arguments_) => new Promise((resolve, reject) => {
-			enqueue(function_, resolve, reject, arguments_);
+	var beginFilterPaint = (elements, mode, identify) => {
+		const revision = {};
+		const page = location.href;
+		const cards = elements.map((element) => {
+			revisions.set(element, revision);
+			return {
+				element,
+				identity: identify?.(element)
+			};
 		});
-		Object.defineProperties(generator, {
-			activeCount: { get: () => activeCount },
-			pendingCount: { get: () => queue.size },
-			clearQueue: { value() {
-				if (!rejectOnClear) {
-					queue.clear();
+		const isCurrent = (index) => {
+			const { element, identity } = cards[index];
+			return revisions.get(element) === revision && element.isConnected && page === location.href && (!identify || identify(element) === identity);
+		};
+		const paint = (hidden, skipped, markVisited) => {
+			requestAnimationFrame(() => {
+				cards.forEach(({ element }, index) => {
+					if (!isCurrent(index)) return;
+					filterPaint(element, mode, hidden.has(index) ? "discard" : "keep");
+					if (markVisited) element.toggleAttribute(config_default.filterVisitSign, !skipped.has(index));
+				});
+			});
+		};
+		return {
+			isCurrent,
+			paint
+		};
+	};
+	var FILTER_THRESHOLD_DEFAULTS = {
+		duration: 60,
+		pubdate: 60,
+		quality: 25,
+		relativity: 15,
+		chain: 1
+	};
+	var ratePercent = (part, whole) => {
+		if (!(whole > 0) || !Number.isFinite(part) || !Number.isFinite(whole)) return null;
+		return Number((part / whole * 100).toFixed(1));
+	};
+	var round1 = (value) => {
+		if (!Number.isFinite(value)) return 0;
+		return Number(value.toFixed(1));
+	};
+	var anyMatch = (checks) => checks.some(({ value, matches }) => matches(value));
+	var compatibilityDecision = ({ black, white, force }) => {
+		if (anyMatch(force)) return {
+			verdict: "discard",
+			exemptFromStatistics: false
+		};
+		if (!anyMatch(black)) return {
+			verdict: "keep",
+			exemptFromStatistics: false
+		};
+		if (anyMatch(white)) return {
+			verdict: "keep",
+			exemptFromStatistics: true
+		};
+		return {
+			verdict: "discard",
+			exemptFromStatistics: false
+		};
+	};
+	var statisticsDecision = (stat, limits) => {
+		const below = (value, limit) => value !== null && limit !== void 0 && value < limit;
+		return below(stat.view, limits.views) || below(stat.like, limits.likes) || below(stat.favorite, limits.favorites) || limits.likeRate !== void 0 && below(ratePercent(stat.like, stat.view), limits.likeRate) || limits.favoriteRate !== void 0 && below(ratePercent(stat.favorite, stat.view), limits.favoriteRate) ? "discard" : "keep";
+	};
+	var fieldInputs = (element, groups) => {
+		const fields = new Map();
+		const [black, white, force] = groups.map((pairs) => pairs.map(([rule, select]) => {
+			if (!fields.has(select)) try {
+				fields.set(select, select(element));
+			} catch (err) {
+				logger.debug("filter field unavailable", err);
+				fields.set(select, void 0);
+			}
+			return {
+				value: fields.get(select),
+				matches: (value) => rule.matches(value)
+			};
+		}));
+		return {
+			black,
+			white,
+			force
+		};
+	};
+	var rawCheck = async (elements, markVisited, black, white, force, options, drawing) => {
+		const isCurrent = (index) => drawing?.isCurrent(index) ?? true;
+		const hidden = new Set();
+		const retry = new Set();
+		const pending = [];
+		const groups = [
+			black,
+			white,
+			force
+		];
+		elements.forEach((element, index) => {
+			if (!isCurrent(index)) return;
+			try {
+				const inputs = fieldInputs(element, groups);
+				if (options.decide) {
+					if (options.decide(inputs) === "discard") hidden.add(index);
 					return;
 				}
-				const abortError = AbortSignal.abort().reason;
-				while (queue.size > 0) queue.dequeue().reject(abortError);
-			} },
-			concurrency: {
-				get: () => concurrency,
-				set(newConcurrency) {
-					validateConcurrency(newConcurrency);
-					concurrency = newConcurrency;
-					queueMicrotask(() => {
-						while (activeCount < concurrency && queue.size > 0) resumeNext();
-					});
+				const { verdict, exemptFromStatistics } = compatibilityDecision(inputs);
+				if (verdict === "discard") hidden.add(index);
+				else if (!exemptFromStatistics) {
+					const complete = options.complete?.(element, () => isCurrent(index));
+					if (complete) pending.push(complete.then((outcome) => {
+						if (outcome === "discard") hidden.add(index);
+						if (outcome === void 0) retry.add(index);
+					}).catch((err) => {
+						logger.error("filter data unavailable", err);
+						retry.add(index);
+					}));
 				}
-			},
-			map: { async value(iterable, function_) {
-				const promises = Array.from(iterable, (value, index) => generator(function_, value, index));
-				return Promise.all(promises);
-			} }
-		});
-		return generator;
-	}
-	function validateConcurrency(concurrency) {
-		if (!((Number.isInteger(concurrency) || concurrency === Number.POSITIVE_INFINITY) && concurrency > 0)) throw new TypeError("Expected `concurrency` to be a number from 1 and up");
-	}
-	var limit$1 = pLimit(10);
-	var rawCheck = async (elements, enableFilterVisitSign = true, hideMode, blackPairs, whitePairs, forceBlackPairs, extra) => {
-		const toHideIdx = new Set();
-		const whiteExemptIdx = new Set();
-		const tasks = elements.map((el, idx) => limit$1(async () => {
-			const blackTasks = [];
-			blackPairs.forEach((pair) => {
-				blackTasks.push(pair[0].check(el, pair[1]));
-			});
-			const forceBlackTasks = [];
-			forceBlackPairs?.forEach((pair) => {
-				forceBlackTasks.push(pair[0].check(el, pair[1]));
-			});
-			await Promise.all(blackTasks).catch(async () => {
-				const whiteTasks = [];
-				whitePairs?.forEach((pair) => {
-					whiteTasks.push(pair[0].check(el, pair[1]));
-				});
-				let savedByWhite = false;
-				await Promise.all(whiteTasks).then(() => {
-					toHideIdx.add(idx);
-				}).catch(() => {
-					savedByWhite = true;
-				});
-				if (savedByWhite) whiteExemptIdx.add(idx);
-			});
-			await Promise.all(forceBlackTasks).catch(() => {
-				toHideIdx.add(idx);
-				whiteExemptIdx.delete(idx);
-			});
-		}));
-		try {
-			await Promise.all(tasks).catch(() => {});
-			if (extra?.beforePaint) try {
-				await extra.beforePaint(toHideIdx, whiteExemptIdx);
 			} catch (err) {
-				logger.error("coreCheck beforePaint", err);
+				logger.error("filter decision failed", err);
+				retry.add(index);
 			}
-		} finally {
-			const skipVisitIdx = extra?.skipVisitIdx;
-			requestAnimationFrame(() => {
-				for (let i = 0; i < elements.length; i++) {
-					toHideIdx.has(i) ? hideEle(elements[i], hideMode) : showEle(elements[i], hideMode);
-					if (enableFilterVisitSign && !skipVisitIdx?.has(i)) elements[i].setAttribute(config_default.filterVisitSign, "");
-				}
-			});
-		}
-		return toHideIdx;
+		});
+		if (pending.length) await Promise.all(pending);
+		for (const index of hidden) if (!isCurrent(index)) hidden.delete(index);
+		drawing?.paint(hidden, retry, markVisited);
+		return hidden;
 	};
-	var throttledCheck = useThrottleFn(rawCheck, 100, true);
-	var coreCheck = async (elements, enableFilterVisitSign = true, hideMode, blackPairs, whitePairs, forceBlackPairs, noThrottle, extra) => {
-		if (noThrottle) return rawCheck(elements, enableFilterVisitSign, hideMode, blackPairs, whitePairs, forceBlackPairs, extra);
-		return await throttledCheck(elements, enableFilterVisitSign, hideMode, blackPairs, whitePairs, forceBlackPairs, extra) ?? new Set();
+	var createFilterCheck = () => {
+		const throttledCheck = useThrottleFn(rawCheck, 100, true, true);
+		return async (elements, markVisited, mode, black, white = [], force = [], noThrottle = false, options = {}) => {
+			const drawing = options.deferPaint ? void 0 : beginFilterPaint(elements, mode, options.identify);
+			return await (noThrottle ? rawCheck : throttledCheck)(elements, markVisited, black, white, force, options, drawing) ?? new Set();
+		};
 	};
 	var r = String.raw;
 	var e = r`\p{Emoji}(?:\p{EMod}|[\u{E0020}-\u{E007E}]+\u{E007F}|\uFE0F?\u20E3?)`;
@@ -4203,14 +4207,8 @@
 		disable() {
 			this.isEnable = false;
 		}
-		check(el, selectorFn) {
-			return new Promise((resolve, reject) => {
-				if (this.isEnable && selectorFn(el) === true) {
-					reject();
-					return;
-				}
-				resolve();
-			});
+		matches(value) {
+			return this.isEnable && value === true;
 		}
 	};
 	var KeywordFilter = class {
@@ -4255,20 +4253,10 @@
 			this.keywordSet = new Set(value.map((v) => v.trim()).filter((v) => v));
 			this.buildRegExp();
 		}
-		check(el, selectorFn) {
-			return new Promise((resolve, reject) => {
-				if (this.isEnable) {
-					let value = selectorFn(el);
-					if (typeof value === "string") {
-						value = toHalfWidth(value).trim();
-						for (const regex of this.mergedRegExp) if (regex.test(value)) {
-							reject();
-							return;
-						}
-					}
-				}
-				resolve();
-			});
+		matches(value) {
+			if (!this.isEnable || typeof value !== "string") return false;
+			const normalized = toHalfWidth(value).trim();
+			return this.mergedRegExp.some((regex) => regex.test(normalized));
 		}
 	};
 	var NumberMinFilter = class {
@@ -4283,17 +4271,8 @@
 		setParam(value) {
 			this.threshold = value;
 		}
-		check(el, selectorFn) {
-			return new Promise((resolve, reject) => {
-				if (this.isEnable) {
-					const value = selectorFn(el);
-					if (typeof value === "number" && value < this.threshold) {
-						reject();
-						return;
-					}
-				}
-				resolve();
-			});
+		matches(value) {
+			return this.isEnable && typeof value === "number" && value < this.threshold;
 		}
 	};
 	var StringFilter = class {
@@ -4312,17 +4291,8 @@
 		setParam(value) {
 			this.strSet = new Set(value.map((v) => v.trim()).filter((v) => v));
 		}
-		check(el, selectorFn) {
-			return new Promise((resolve, reject) => {
-				if (this.isEnable) {
-					const value = selectorFn(el);
-					if (typeof value === "string" && this.strSet.has(value.trim())) {
-						reject();
-						return;
-					}
-				}
-				resolve();
-			});
+		matches(value) {
+			return this.isEnable && typeof value === "string" && this.strSet.has(value.trim());
 		}
 	};
 	var CommentUsernameFilter = class extends StringFilter {};
@@ -4344,6 +4314,8 @@
 	var CommentIsNoteFilter = class extends BooleanFilter {};
 	var CommentIsLinkFilter = class extends BooleanFilter {};
 	var CommentIsMeFilter = class extends BooleanFilter {};
+	var checkRootComments = createFilterCheck();
+	var coreCheck$10 = createFilterCheck();
 	var GM_KEYS$10 = {
 		black: {
 			username: {
@@ -4389,6 +4361,7 @@
 	var commentRpidLevelMap = new Map();
 	var selectorFns$10 = {
 		root: {
+			rpid: (comment) => comment.__data?.rpid_str,
 			username: (comment) => {
 				return comment.__data?.member?.uname?.trim();
 			},
@@ -4470,7 +4443,7 @@
 			},
 			callBot: (comment) => {
 				const members = comment.__data?.content?.members;
-				if (members.length) return members.some((v) => botsSet.has(v.uname));
+				if (Array.isArray(members) && members.length) return members.some((v) => botsSet.has(v.uname));
 				return false;
 			},
 			callUser: (comment) => {
@@ -4558,9 +4531,9 @@
 			this.commentUsernameFilter.setParam(GM_getValue$1(GM_KEYS$10.black.username.valueKey, []));
 			this.commentUsernameKeywordFilter.setParam(GM_getValue$1(GM_KEYS$10.black.usernameKeyword.valueKey, []));
 			this.commentContentFilter.setParam(GM_getValue$1(GM_KEYS$10.black.content.valueKey, []));
-			this.commentLevelFilter.setParam(GM_getValue$1(GM_KEYS$10.black.level.valueKey, 0));
-			const chainLevel = GM_getValue$1(GM_KEYS$10.black.chain.valueKey, 1);
-			this.commentChainLevel = typeof chainLevel === "number" ? Math.min(10, Math.max(0, chainLevel)) : 1;
+			this.commentLevelFilter.setParam(readSettingValue(GM_KEYS$10.black.level.valueKey, 0));
+			const chainLevel = readSettingValue(GM_KEYS$10.black.chain.valueKey, FILTER_THRESHOLD_DEFAULTS.chain);
+			this.commentChainLevel = Math.min(10, Math.max(0, chainLevel));
 			this.commentBotFilter.setParam(bots);
 			this.commentAdFilter.setParam([`/(bili2233\\.cn|b23\\.tv)\\/(mall-|cm-)|领券|gaoneng\\.bilibili\\.com/`]);
 		}
@@ -4594,7 +4567,7 @@
 				].join("\n"));
 			});
 			if (isRootWhite || revertAll) {
-				rootComments.forEach((el) => showEle(el, "style"));
+				rootComments.forEach((el) => restoreFiltered(el, "style"));
 				return;
 			}
 			const blackPairs = [];
@@ -4618,7 +4591,7 @@
 			const forceBlackPairs = [];
 			this.commentAdFilter.isEnable && forceBlackPairs.push([this.commentAdFilter, selectorFns$10.root.content]);
 			this.commentBotFilter.isEnable && forceBlackPairs.push([this.commentBotFilter, selectorFns$10.root.username]);
-			const rootBlackIdxSet = await coreCheck(rootComments, true, "style", blackPairs, whitePairs, forceBlackPairs, true);
+			const rootBlackIdxSet = await checkRootComments(rootComments, true, "style", blackPairs, whitePairs, forceBlackPairs, true, { identify: selectorFns$10.root.rpid });
 			const time = (performance.now() - timer).toFixed(1);
 			logger.debug(`CommentFilterCommon hide ${rootBlackIdxSet.size} in ${rootComments.length} root comments, mode=${mode}, time=${time}`);
 		}
@@ -4651,7 +4624,7 @@
 				].join("\n"));
 			});
 			if (isSubWhite || revertAll) {
-				subComments.forEach((el) => showEle(el, "style"));
+				subComments.forEach((el) => restoreFiltered(el, "style"));
 				return;
 			}
 			const blackPairs = [];
@@ -4673,16 +4646,19 @@
 			this.commentIsMeFilter.isEnable && whitePairs.push([this.commentIsMeFilter, selectorFns$10.sub.isMe]);
 			const forceBlackPairs = [];
 			this.commentAdFilter.isEnable && forceBlackPairs.push([this.commentAdFilter, selectorFns$10.sub.content]);
-			const subBlackIdxSet = await coreCheck(subComments, false, "style", blackPairs, whitePairs, forceBlackPairs, true);
+			const drawing = beginFilterPaint(subComments, "style", selectorFns$10.sub.rpid);
+			const subBlackIdxSet = await coreCheck$10(subComments, false, "style", blackPairs, whitePairs, forceBlackPairs, true, { deferPaint: true });
 			updateCommentRpidLevelMap(subComments, subBlackIdxSet, true);
 			let chainBlackIdxSet = new Set();
 			if (this.commentChainFilter.isEnable && this.commentChainLevel > 0) for (let round = 1; round <= this.commentChainLevel; round++) {
 				const chainBlackPairs = [...blackPairs, [this.commentChainFilter, selectorFns$10.sub.isReplyToFiltered]];
-				chainBlackIdxSet = await coreCheck(subComments, false, "style", chainBlackPairs, whitePairs, forceBlackPairs, true);
+				chainBlackIdxSet = await coreCheck$10(subComments, false, "style", chainBlackPairs, whitePairs, forceBlackPairs, true, { deferPaint: true });
 				updateCommentRpidLevelMap(subComments, chainBlackIdxSet, false);
 			}
+			const hidden = new Set([...subBlackIdxSet, ...chainBlackIdxSet]);
+			drawing.paint(hidden, new Set(), false);
 			const time = (performance.now() - timer).toFixed(1);
-			logger.debug(`CommentFilterCommon hide ${new Set([...subBlackIdxSet, ...chainBlackIdxSet]).size} in ${subComments.length} sub comments, mode=${mode}, time=${time}`);
+			logger.debug(`CommentFilterCommon hide ${hidden.size} in ${subComments.length} sub comments, mode=${mode}, time=${time}`);
 		}
 		check(mode) {
 			this.checkRoot(mode).catch((err) => {
@@ -4963,6 +4939,7 @@
 				step: 1,
 				defaultValue: 0,
 				disableValue: 0,
+				applyDisabledValue: true,
 				fn: (value) => {
 					mainFilter$10.commentLevelFilter.setParam(value);
 					mainFilter$10.check("full");
@@ -4997,8 +4974,9 @@
 				minValue: 0,
 				maxValue: 10,
 				step: 1,
-				defaultValue: 1,
+				defaultValue: FILTER_THRESHOLD_DEFAULTS.chain,
 				disableValue: 0,
+				applyDisabledValue: true,
 				fn: (value) => {
 					mainFilter$10.commentChainLevel = Math.min(10, Math.max(0, value));
 					commentRpidLevelMap.clear();
@@ -5126,6 +5104,7 @@
 	var DynPlaybackFilter = class extends BooleanFilter {};
 	var DynVideoTitleWhiteFilter = class extends KeywordFilter {};
 	var DynContentWhiteFilter = class extends KeywordFilter {};
+	var coreCheck$9 = createFilterCheck();
 	var GM_KEYS$9 = {
 		black: {
 			uploader: {
@@ -5197,7 +5176,7 @@
 		dynContentWhiteFilter = new DynContentWhiteFilter();
 		init() {
 			this.dynUploaderFilter.setParam(GM_getValue$1(GM_KEYS$9.black.uploader.valueKey, []));
-			this.dynDurationFilter.setParam(GM_getValue$1(GM_KEYS$9.black.duration.valueKey, 0));
+			this.dynDurationFilter.setParam(readSettingValue(GM_KEYS$9.black.duration.valueKey, FILTER_THRESHOLD_DEFAULTS.duration));
 			this.dynVideoTitleFilter.setParam(GM_getValue$1(GM_KEYS$9.black.title.valueKey, []));
 			this.dynContentFilter.setParam(GM_getValue$1(GM_KEYS$9.black.content.valueKey, []));
 			this.dynVideoTitleWhiteFilter.setParam(GM_getValue$1(GM_KEYS$9.white.title.valueKey, []));
@@ -5214,7 +5193,7 @@
 			const dyns = Array.from(this.target.querySelectorAll(selector));
 			if (!dyns.length) return;
 			if (revertAll) {
-				dyns.forEach((v) => showEle(v, "sign"));
+				dyns.forEach((v) => restoreFiltered(v, "sign"));
 				return;
 			}
 			if (config_default.isDebugMode) dyns.forEach((v) => {
@@ -5239,7 +5218,7 @@
 			const whitePairs = [];
 			this.dynVideoTitleWhiteFilter.isEnable && whitePairs.push([this.dynVideoTitleWhiteFilter, selectorFns$9.title]);
 			this.dynContentWhiteFilter.isEnable && whitePairs.push([this.dynContentWhiteFilter, selectorFns$9.content]);
-			const blackIdxSet = await coreCheck(filteredDyns, true, "sign", blackPairs, whitePairs);
+			const blackIdxSet = await coreCheck$9(filteredDyns, true, "sign", blackPairs, whitePairs, [], false, { identify: (element) => element.querySelector("a[href*=\"/opus/\"], a[href*=\"t.bilibili.com/\"]")?.getAttribute("href") });
 			const time = (performance.now() - timer).toFixed(1);
 			logger.debug(`DynamicFilterDynamic hide ${blackIdxSet.size} in ${filteredDyns.length} dyns, mode=${mode}, time=${time}`);
 		}
@@ -5325,8 +5304,9 @@
 				minValue: 0,
 				maxValue: 300,
 				step: 1,
-				defaultValue: 60,
+				defaultValue: FILTER_THRESHOLD_DEFAULTS.duration,
 				disableValue: 0,
+				applyDisabledValue: true,
 				addonText: "秒",
 				fn: (value) => {
 					mainFilter$9.dynDurationFilter.setParam(value);
@@ -5514,6 +5494,7 @@
 		}
 		return menus;
 	};
+	var coreCheck$8 = createFilterCheck();
 	var GM_KEYS$8 = {
 		black: {
 			uploader: {
@@ -5587,7 +5568,7 @@
 			const whitePairs = [];
 			this.dynVideoTitleWhiteFilter.isEnable && whitePairs.push([this.dynVideoTitleWhiteFilter, selectorFns$8.title]);
 			this.dynContentWhiteFilter.isEnable && whitePairs.push([this.dynContentWhiteFilter, selectorFns$8.content]);
-			const blackIdxSet = await coreCheck(dyns, true, "style", blackPairs, whitePairs);
+			const blackIdxSet = await coreCheck$8(dyns, true, "style", blackPairs, whitePairs, [], false, { identify: (element) => element.getAttribute("href") });
 			const time = (performance.now() - timer).toFixed(1);
 			logger.debug(`DynamicFilterHeader hide ${blackIdxSet.size} in ${dyns.length} dyns, mode=${mode}, time=${time}`);
 		}
@@ -5626,6 +5607,7 @@
 		if (GM_getValue$1(GM_KEYS$8.white.title.statusKey)) mainFilter$8.dynVideoTitleWhiteFilter.enable();
 		if (GM_getValue$1(GM_KEYS$8.white.content.statusKey)) mainFilter$8.dynContentWhiteFilter.enable();
 	};
+	var coreCheck$7 = createFilterCheck();
 	var GM_KEYS$7 = {
 		black: {
 			duration: {
@@ -5686,7 +5668,7 @@
 		dynVideoTitleWhiteFilter = new DynVideoTitleWhiteFilter();
 		dynContentWhiteFilter = new DynContentWhiteFilter();
 		init() {
-			this.dynDurationFilter.setParam(GM_getValue$1(GM_KEYS$7.black.duration.valueKey, 0));
+			this.dynDurationFilter.setParam(readSettingValue(GM_KEYS$7.black.duration.valueKey, FILTER_THRESHOLD_DEFAULTS.duration));
 			this.dynVideoTitleFilter.setParam(GM_getValue$1(GM_KEYS$7.black.title.valueKey, []));
 			this.dynContentFilter.setParam(GM_getValue$1(GM_KEYS$7.black.content.valueKey, []));
 			this.dynVideoTitleWhiteFilter.setParam(GM_getValue$1(GM_KEYS$7.white.title.valueKey, []));
@@ -5703,7 +5685,7 @@
 			const dyns = Array.from(this.target.querySelectorAll(selector));
 			if (!dyns.length) return;
 			if (revertAll) {
-				dyns.forEach((v) => showEle(v, "sign"));
+				dyns.forEach((v) => restoreFiltered(v, "sign"));
 				return;
 			}
 			const filteredDyns = dyns.filter((dyn) => !!dyn.querySelector(".bili-dyn-item__body, .bili-dyn-item__header"));
@@ -5726,7 +5708,7 @@
 			const whitePairs = [];
 			this.dynVideoTitleWhiteFilter.isEnable && whitePairs.push([this.dynVideoTitleWhiteFilter, selectorFns$7.title]);
 			this.dynContentWhiteFilter.isEnable && whitePairs.push([this.dynContentWhiteFilter, selectorFns$7.content]);
-			const blackIdxSet = await coreCheck(filteredDyns, true, "sign", blackPairs, whitePairs);
+			const blackIdxSet = await coreCheck$7(filteredDyns, true, "sign", blackPairs, whitePairs, [], false, { identify: (element) => element.querySelector("a[href*=\"/opus/\"], a[href*=\"t.bilibili.com/\"]")?.getAttribute("href") });
 			const time = (performance.now() - timer).toFixed(1);
 			logger.debug(`DynamicFilterSpace hide ${blackIdxSet.size} in ${filteredDyns.length} dyns, mode=${mode}, time=${time}`);
 		}
@@ -5784,8 +5766,9 @@
 				minValue: 0,
 				maxValue: 300,
 				step: 1,
-				defaultValue: 60,
+				defaultValue: FILTER_THRESHOLD_DEFAULTS.duration,
 				disableValue: 0,
+				applyDisabledValue: true,
 				addonText: "秒",
 				fn: (value) => {
 					mainFilter$7.dynDurationFilter.setParam(value);
@@ -5951,14 +5934,129 @@
 			]
 		}
 	];
-	var ratePercent = (part, whole) => {
-		if (!(whole > 0) || !Number.isFinite(part) || !Number.isFinite(whole)) return null;
-		return Number((part / whole * 100).toFixed(1));
+	var Node$1 = class {
+		value;
+		next;
+		constructor(value) {
+			this.value = value;
+		}
 	};
-	var round1 = (value) => {
-		if (!Number.isFinite(value)) return 0;
-		return Number(value.toFixed(1));
+	var Queue = class {
+		#head;
+		#tail;
+		#size;
+		constructor() {
+			this.clear();
+		}
+		enqueue(value) {
+			const node = new Node$1(value);
+			if (this.#head) {
+				this.#tail.next = node;
+				this.#tail = node;
+			} else {
+				this.#head = node;
+				this.#tail = node;
+			}
+			this.#size++;
+		}
+		dequeue() {
+			const current = this.#head;
+			if (!current) return;
+			this.#head = this.#head.next;
+			this.#size--;
+			if (!this.#head) this.#tail = void 0;
+			return current.value;
+		}
+		peek() {
+			if (!this.#head) return;
+			return this.#head.value;
+		}
+		clear() {
+			this.#head = void 0;
+			this.#tail = void 0;
+			this.#size = 0;
+		}
+		get size() {
+			return this.#size;
+		}
+		*[Symbol.iterator]() {
+			let current = this.#head;
+			while (current) {
+				yield current.value;
+				current = current.next;
+			}
+		}
+		*drain() {
+			while (this.#head) yield this.dequeue();
+		}
 	};
+	function pLimit(concurrency) {
+		let rejectOnClear = false;
+		if (typeof concurrency === "object") ({concurrency, rejectOnClear = false} = concurrency);
+		validateConcurrency(concurrency);
+		if (typeof rejectOnClear !== "boolean") throw new TypeError("Expected `rejectOnClear` to be a boolean");
+		const queue = new Queue();
+		let activeCount = 0;
+		const resumeNext = () => {
+			if (activeCount < concurrency && queue.size > 0) {
+				activeCount++;
+				queue.dequeue().run();
+			}
+		};
+		const next = () => {
+			activeCount--;
+			resumeNext();
+		};
+		const run = async (function_, resolve, arguments_) => {
+			const result = (async () => function_(...arguments_))();
+			resolve(result);
+			try {
+				await result;
+			} catch {}
+			next();
+		};
+		const enqueue = (function_, resolve, reject, arguments_) => {
+			const queueItem = { reject };
+			new Promise((internalResolve) => {
+				queueItem.run = internalResolve;
+				queue.enqueue(queueItem);
+			}).then(run.bind(void 0, function_, resolve, arguments_));
+			if (activeCount < concurrency) resumeNext();
+		};
+		const generator = (function_, ...arguments_) => new Promise((resolve, reject) => {
+			enqueue(function_, resolve, reject, arguments_);
+		});
+		Object.defineProperties(generator, {
+			activeCount: { get: () => activeCount },
+			pendingCount: { get: () => queue.size },
+			clearQueue: { value() {
+				if (!rejectOnClear) {
+					queue.clear();
+					return;
+				}
+				const abortError = AbortSignal.abort().reason;
+				while (queue.size > 0) queue.dequeue().reject(abortError);
+			} },
+			concurrency: {
+				get: () => concurrency,
+				set(newConcurrency) {
+					validateConcurrency(newConcurrency);
+					concurrency = newConcurrency;
+					queueMicrotask(() => {
+						while (activeCount < concurrency && queue.size > 0) resumeNext();
+					});
+				}
+			},
+			map: { async value(iterable, function_) {
+				const promises = Array.from(iterable, (value, index) => generator(function_, value, index));
+				return Promise.all(promises);
+			} }
+		});
+		return generator;
+	}
+	function validateConcurrency(concurrency) {
+		if (!((Number.isInteger(concurrency) || concurrency === Number.POSITIVE_INFINITY) && concurrency > 0)) throw new TypeError("Expected `concurrency` to be a number from 1 and up");
+	}
 	var SHIFT = [
 		7,
 		12,
@@ -6264,54 +6362,50 @@
 		favRateValue: "biliweb-stat-fav-rate-min"
 	};
 	var limit = pLimit(4);
-	var readNumber = (key) => {
-		const value = GM_getValue$1(key, 0);
-		return typeof value === "number" && Number.isFinite(value) ? value : 0;
+	var readLimit = (statusKey, value) => value > 0 && readSettingValue(statusKey, false);
+	var readStatGate = () => {
+		const viewMin = readSettingValue(STAT_KEYS.viewValue, 0);
+		const likeMin = readSettingValue(STAT_KEYS.likeValue, 0);
+		const favMin = readSettingValue(STAT_KEYS.favValue, 0);
+		const likeRateMin = round1(readSettingValue(STAT_KEYS.likeRateValue, 0));
+		const favRateMin = round1(readSettingValue(STAT_KEYS.favRateValue, 0));
+		return {
+			viewOn: readLimit(STAT_KEYS.viewStatus, viewMin),
+			likeOn: readLimit(STAT_KEYS.likeStatus, likeMin),
+			favOn: readLimit(STAT_KEYS.favStatus, favMin),
+			likeRateOn: readLimit(STAT_KEYS.likeRateStatus, likeRateMin),
+			favRateOn: readLimit(STAT_KEYS.favRateStatus, favRateMin),
+			viewMin,
+			likeMin,
+			favMin,
+			likeRateMin,
+			favRateMin
+		};
 	};
-	var readStatGate = () => ({
-		viewOn: Boolean(GM_getValue$1(STAT_KEYS.viewStatus, false)),
-		likeOn: Boolean(GM_getValue$1(STAT_KEYS.likeStatus, false)),
-		favOn: Boolean(GM_getValue$1(STAT_KEYS.favStatus, false)),
-		likeRateOn: Boolean(GM_getValue$1(STAT_KEYS.likeRateStatus, false)),
-		favRateOn: Boolean(GM_getValue$1(STAT_KEYS.favRateStatus, false)),
-		viewMin: readNumber(STAT_KEYS.viewValue),
-		likeMin: readNumber(STAT_KEYS.likeValue),
-		favMin: readNumber(STAT_KEYS.favValue),
-		likeRateMin: round1(readNumber(STAT_KEYS.likeRateValue)),
-		favRateMin: round1(readNumber(STAT_KEYS.favRateValue))
-	});
 	var gateActive = (gate) => gate.viewOn || gate.likeOn || gate.favOn || gate.likeRateOn || gate.favRateOn;
 	var statGateEnabled = () => gateActive(readStatGate());
 	var bvidOf = (value) => typeof value === "string" && /^BV[0-9A-Za-z]+$/.test(value) ? value : "";
-	var applyStatGate = async (videos, hideIdx, exemptIdx, readBvid, skipVisitIdx) => {
+	var videoStatOptions = (identify) => {
 		const gate = readStatGate();
-		if (!gateActive(gate)) return;
-		const jobs = [];
-		for (let index = 0; index < videos.length; index++) {
-			if (hideIdx.has(index) || exemptIdx.has(index)) continue;
-			const bvid = bvidOf(readBvid(videos[index]));
-			if (!bvid) continue;
-			jobs.push({
-				index,
-				bvid
-			});
-		}
-		await Promise.all(jobs.map((job) => limit(async () => {
-			const stat = await fetchVideoStat(job.bvid);
-			if (!stat) {
-				skipVisitIdx.add(job.index);
-				return;
-			}
-			const likeRate = ratePercent(stat.like, stat.view);
-			const favRate = ratePercent(stat.favorite, stat.view);
-			if (gate.viewOn && stat.view < gate.viewMin || gate.likeOn && stat.like < gate.likeMin || gate.favOn && stat.favorite < gate.favMin || gate.likeRateOn && likeRate != null && likeRate < gate.likeRateMin || gate.favRateOn && favRate != null && favRate < gate.favRateMin) hideIdx.add(job.index);
-		})));
-	};
-	var statGateExtra = (videos, readBvid) => {
-		const skipVisitIdx = new Set();
+		if (!gateActive(gate)) return { identify };
+		const limits = {
+			views: gate.viewOn ? gate.viewMin : void 0,
+			likes: gate.likeOn ? gate.likeMin : void 0,
+			favorites: gate.favOn ? gate.favMin : void 0,
+			likeRate: gate.likeRateOn ? gate.likeRateMin : void 0,
+			favoriteRate: gate.favRateOn ? gate.favRateMin : void 0
+		};
 		return {
-			skipVisitIdx,
-			beforePaint: (hideIdx, exemptIdx) => applyStatGate(videos, hideIdx, exemptIdx, readBvid, skipVisitIdx)
+			identify,
+			complete: (element, isCurrent) => {
+				const bvid = bvidOf(identify(element));
+				if (!bvid) return;
+				return limit(async () => {
+					if (!isCurrent()) return;
+					const stat = await fetchVideoStat(bvid);
+					return stat ? statisticsDecision(stat, limits) : void 0;
+				});
+			}
 		};
 	};
 	var numberItem = (id, name, recheck, options) => ({
@@ -6326,6 +6420,7 @@
 		decimals: options?.decimals,
 		defaultValue: 0,
 		disableValue: -1,
+		applyDisabledValue: true,
 		addonText: options?.addon ?? "次",
 		fn: (value) => {
 			if (!Number.isFinite(value)) return;
@@ -6369,7 +6464,7 @@
 	});
 	var NumberMaxFilter = class {
 		isEnable = false;
-		threshold = 0;
+		threshold;
 		enable() {
 			this.isEnable = true;
 		}
@@ -6379,17 +6474,11 @@
 		setParam(value) {
 			this.threshold = value;
 		}
-		check(el, selectorFn) {
-			return new Promise((resolve, reject) => {
-				if (this.isEnable) {
-					const value = selectorFn(el);
-					if (typeof value === "number" && value > this.threshold) {
-						reject();
-						return;
-					}
-				}
-				resolve();
-			});
+		clearParam() {
+			this.threshold = void 0;
+		}
+		matches(value) {
+			return this.isEnable && this.threshold !== void 0 && typeof value === "number" && value > this.threshold;
 		}
 	};
 	var VideoBvidFilter = class extends StringFilter {};
@@ -6397,7 +6486,12 @@
 	var VideoDurationFilter = class extends NumberMinFilter {};
 	var VideoQualityFilter = class extends NumberMinFilter {};
 	var VideoTitleFilter = class extends KeywordFilter {};
-	var VideoPubdateFilter = class extends NumberMaxFilter {};
+	var VideoPubdateFilter = class extends NumberMaxFilter {
+		setParam(value) {
+			if (value === 0) this.clearParam();
+			else super.setParam(value);
+		}
+	};
 	var VideoUploaderFilter = class extends StringFilter {};
 	var VideoUploaderKeywordFilter = class extends KeywordFilter {};
 	var VideoViewsFilter = class extends NumberMinFilter {};
@@ -6405,6 +6499,7 @@
 	var VideoUploaderWhiteFilter = class extends StringFilter {};
 	var VideoTitleWhiteFilter = class extends KeywordFilter {};
 	var VideoIsFollowWhiteFilter = class extends BooleanFilter {};
+	var coreCheck$6 = createFilterCheck();
 	var GM_KEYS$6 = {
 		black: {
 			duration: {
@@ -6479,9 +6574,9 @@
 		videoTitleWhiteFilter = new VideoTitleWhiteFilter();
 		init() {
 			this.videoBvidFilter.setParam(GM_getValue$1(GM_KEYS$6.black.bvid.valueKey, []));
-			this.videoDurationFilter.setParam(GM_getValue$1(GM_KEYS$6.black.duration.valueKey, 0));
+			this.videoDurationFilter.setParam(readSettingValue(GM_KEYS$6.black.duration.valueKey, FILTER_THRESHOLD_DEFAULTS.duration));
 			this.videoTitleFilter.setParam(GM_getValue$1(GM_KEYS$6.black.title.valueKey, []));
-			this.videoPubdateFilter.setParam(GM_getValue$1(GM_KEYS$6.black.pubdate.valueKey, 0));
+			this.videoPubdateFilter.setParam(readSettingValue(GM_KEYS$6.black.pubdate.valueKey, FILTER_THRESHOLD_DEFAULTS.pubdate));
 			this.videoUploaderFilter.setParam(GM_getValue$1(GM_KEYS$6.black.uploader.valueKey, []));
 			this.videoUploaderKeywordFilter.setParam(GM_getValue$1(GM_KEYS$6.black.uploaderKeyword.valueKey, []));
 			this.videoUploaderWhiteFilter.setParam(GM_getValue$1(GM_KEYS$6.white.uploader.valueKey, []));
@@ -6497,7 +6592,7 @@
 			const videos = Array.from(this.target.querySelectorAll(selector));
 			if (!videos.length) return;
 			if (revertAll) {
-				videos.forEach((v) => showEle(v, "sign"));
+				videos.forEach((v) => restoreFiltered(v, "sign"));
 				return;
 			}
 			if (config_default.isDebugMode) videos.forEach((v) => {
@@ -6521,7 +6616,7 @@
 			this.videoTitleWhiteFilter.isEnable && whitePairs.push([this.videoTitleWhiteFilter, selectorFns$6.title]);
 			const forceBlackPairs = [];
 			this.videoBvidFilter.isEnable && forceBlackPairs.push([this.videoBvidFilter, selectorFns$6.bvid]);
-			const blackIdxSet = await coreCheck(videos, true, "sign", blackPairs, whitePairs, forceBlackPairs, false, statGateExtra(videos, selectorFns$6.bvid));
+			const blackIdxSet = await coreCheck$6(videos, true, "sign", blackPairs, whitePairs, forceBlackPairs, false, videoStatOptions(selectorFns$6.bvid));
 			const time = (performance.now() - timer).toFixed(1);
 			logger.debug(`VideoFilterChannel hide ${blackIdxSet.size} in ${videos.length} videos, mode=${mode}, time=${time}`);
 		}
@@ -6581,8 +6676,9 @@
 				minValue: 0,
 				step: 1,
 				maxValue: 300,
-				defaultValue: 60,
+				defaultValue: FILTER_THRESHOLD_DEFAULTS.duration,
 				disableValue: 0,
+				applyDisabledValue: true,
 				addonText: "秒",
 				fn: (value) => {
 					mainFilter$6.videoDurationFilter.setParam(value);
@@ -6734,8 +6830,9 @@
 				minValue: 0,
 				maxValue: 500,
 				step: 1,
-				defaultValue: 60,
+				defaultValue: FILTER_THRESHOLD_DEFAULTS.pubdate,
 				disableValue: 0,
+				applyDisabledValue: true,
 				addonText: "天",
 				fn: (value) => {
 					mainFilter$6.videoPubdateFilter.setParam(value);
@@ -6865,6 +6962,7 @@
 		}
 		return menus;
 	};
+	var coreCheck$5 = createFilterCheck();
 	var GM_KEYS$5 = {
 		black: {
 			duration: {
@@ -6952,10 +7050,10 @@
 		videoIsFollowWhiteFilter = new VideoIsFollowWhiteFilter();
 		init() {
 			this.videoBvidFilter.setParam(GM_getValue$1(GM_KEYS$5.black.bvid.valueKey, []));
-			this.videoDurationFilter.setParam(GM_getValue$1(GM_KEYS$5.black.duration.valueKey, 0));
-			this.videoViewsFilter.setParam(GM_getValue$1(GM_KEYS$5.black.views.valueKey, 0));
+			this.videoDurationFilter.setParam(readSettingValue(GM_KEYS$5.black.duration.valueKey, FILTER_THRESHOLD_DEFAULTS.duration));
+			this.videoViewsFilter.setParam(readSettingValue(GM_KEYS$5.black.views.valueKey, 0));
 			this.videoTitleFilter.setParam(GM_getValue$1(GM_KEYS$5.black.title.valueKey, []));
-			this.videoPubdateFilter.setParam(GM_getValue$1(GM_KEYS$5.black.pubdate.valueKey, 0));
+			this.videoPubdateFilter.setParam(readSettingValue(GM_KEYS$5.black.pubdate.valueKey, FILTER_THRESHOLD_DEFAULTS.pubdate));
 			this.videoUploaderFilter.setParam(GM_getValue$1(GM_KEYS$5.black.uploader.valueKey, []));
 			this.videoUploaderKeywordFilter.setParam(GM_getValue$1(GM_KEYS$5.black.uploaderKeyword.valueKey, []));
 			this.videoUploaderWhiteFilter.setParam(GM_getValue$1(GM_KEYS$5.white.uploader.valueKey, []));
@@ -6971,7 +7069,7 @@
 			const videos = Array.from(this.target.querySelectorAll(selector));
 			if (!videos.length) return;
 			if (revertAll) {
-				videos.forEach((v) => showEle(v, "sign"));
+				videos.forEach((v) => restoreFiltered(v, "sign"));
 				return;
 			}
 			if (config_default.isDebugMode) videos.forEach((v) => {
@@ -6999,7 +7097,7 @@
 			this.videoIsFollowWhiteFilter.isEnable && whitePairs.push([this.videoIsFollowWhiteFilter, selectorFns$5.isFollow]);
 			const forceBlackPairs = [];
 			this.videoBvidFilter.isEnable && forceBlackPairs.push([this.videoBvidFilter, selectorFns$5.bvid]);
-			const blackIdxSet = await coreCheck(videos, true, "sign", blackPairs, whitePairs, forceBlackPairs, false, statGateExtra(videos, selectorFns$5.bvid));
+			const blackIdxSet = await coreCheck$5(videos, true, "sign", blackPairs, whitePairs, forceBlackPairs, false, videoStatOptions(selectorFns$5.bvid));
 			const time = (performance.now() - timer).toFixed(1);
 			logger.debug(`VideoFilterHomepage hide ${blackIdxSet.size} in ${videos.length} videos, mode=${mode}, time=${time}`);
 		}
@@ -7061,8 +7159,9 @@
 				minValue: 0,
 				maxValue: 300,
 				step: 1,
-				defaultValue: 60,
+				defaultValue: FILTER_THRESHOLD_DEFAULTS.duration,
 				disableValue: 0,
+				applyDisabledValue: true,
 				addonText: "秒",
 				fn: (value) => {
 					mainFilter$5.videoDurationFilter.setParam(value);
@@ -7214,8 +7313,9 @@
 				minValue: 0,
 				maxValue: 500,
 				step: 1,
-				defaultValue: 60,
+				defaultValue: FILTER_THRESHOLD_DEFAULTS.pubdate,
 				disableValue: 0,
+				applyDisabledValue: true,
 				addonText: "天",
 				fn: (value) => {
 					mainFilter$5.videoPubdateFilter.setParam(value);
@@ -7250,6 +7350,7 @@
 				step: 1,
 				defaultValue: 0,
 				disableValue: 0,
+				applyDisabledValue: true,
 				addonText: "次",
 				fn: (value) => {
 					mainFilter$5.videoViewsFilter.setParam(value);
@@ -7394,6 +7495,7 @@
 		}
 		return menus;
 	};
+	var coreCheck$4 = createFilterCheck();
 	var GM_KEYS$4 = {
 		black: {
 			duration: {
@@ -7455,7 +7557,7 @@
 		},
 		quality: (video) => {
 			const stat = getVideoData(video)?.stat;
-			if (stat && typeof stat.coin === "number" && typeof stat.like === "number") return calcQuality(stat.coin / stat.like);
+			if (stat && typeof stat.coin === "number" && typeof stat.like === "number" && stat.like > 0) return calcQuality(stat.coin / stat.like);
 		},
 		dimension: (video) => {
 			const dimension = getVideoData(video)?.dimension;
@@ -7475,11 +7577,11 @@
 		videoTitleWhiteFilter = new VideoTitleWhiteFilter();
 		init() {
 			this.videoBvidFilter.setParam(GM_getValue$1(GM_KEYS$4.black.bvid.valueKey, []));
-			this.videoDurationFilter.setParam(GM_getValue$1(GM_KEYS$4.black.duration.valueKey, 0));
+			this.videoDurationFilter.setParam(readSettingValue(GM_KEYS$4.black.duration.valueKey, FILTER_THRESHOLD_DEFAULTS.duration));
 			this.videoTitleFilter.setParam(GM_getValue$1(GM_KEYS$4.black.title.valueKey, []));
 			this.videoUploaderFilter.setParam(GM_getValue$1(GM_KEYS$4.black.uploader.valueKey, []));
 			this.videoUploaderKeywordFilter.setParam(GM_getValue$1(GM_KEYS$4.black.uploaderKeyword.valueKey, []));
-			this.videoQualityFilter.setParam(GM_getValue$1(GM_KEYS$4.black.quality.valueKey, 0));
+			this.videoQualityFilter.setParam(readSettingValue(GM_KEYS$4.black.quality.valueKey, FILTER_THRESHOLD_DEFAULTS.quality));
 			this.videoUploaderWhiteFilter.setParam(GM_getValue$1(GM_KEYS$4.white.uploader.valueKey, []));
 			this.videoTitleWhiteFilter.setParam(GM_getValue$1(GM_KEYS$4.white.title.valueKey, []));
 		}
@@ -7491,7 +7593,7 @@
 			const videos = Array.from(this.target.querySelectorAll(`.card-list .video-card, .video-list .video-card, .rank-list:not(.pgc-list) .rank-item`));
 			if (!videos.length) return;
 			if (revertAll) {
-				videos.forEach((v) => showEle(v, "sign"));
+				videos.forEach((v) => restoreFiltered(v, "sign"));
 				return;
 			}
 			if (config_default.isDebugMode) videos.forEach((v) => {
@@ -7516,7 +7618,7 @@
 			this.videoTitleWhiteFilter.isEnable && whitePairs.push([this.videoTitleWhiteFilter, selectorFns$4.title]);
 			const forceBlackPairs = [];
 			this.videoBvidFilter.isEnable && forceBlackPairs.push([this.videoBvidFilter, selectorFns$4.bvid]);
-			const blackIdxSet = await coreCheck(videos, true, "sign", blackPairs, whitePairs, forceBlackPairs, false, statGateExtra(videos, selectorFns$4.bvid));
+			const blackIdxSet = await coreCheck$4(videos, true, "sign", blackPairs, whitePairs, forceBlackPairs, false, videoStatOptions(selectorFns$4.bvid));
 			const time = (performance.now() - timer).toFixed(1);
 			logger.debug(`VideoFilterPopular hide ${blackIdxSet.size} in ${videos.length} videos, mode=${mode}, time=${time}`);
 		}
@@ -7571,8 +7673,9 @@
 				minValue: 0,
 				maxValue: 300,
 				step: 1,
-				defaultValue: 60,
+				defaultValue: FILTER_THRESHOLD_DEFAULTS.duration,
 				disableValue: 0,
+				applyDisabledValue: true,
 				addonText: "秒",
 				fn: (value) => {
 					mainFilter$4.videoDurationFilter.setParam(value);
@@ -7681,8 +7784,9 @@
 					minValue: 0,
 					maxValue: 80,
 					step: .1,
-					defaultValue: 25,
+					defaultValue: FILTER_THRESHOLD_DEFAULTS.quality,
 					disableValue: 0,
+					applyDisabledValue: true,
 					addonText: "%",
 					fn: (value) => {
 						mainFilter$4.videoQualityFilter.setParam(value);
@@ -7871,39 +7975,54 @@
 		}
 		return menus;
 	};
-	var fetchHook = class FetchHook {
-		static instance;
+	var FetchHook = class {
+		installed;
 		preFnArr = [];
 		postFnArr = [];
-		constructor() {
+		ensureInstalled() {
+			if (this.installed) return;
 			try {
-				this.hook();
+				this.installed = this.hook();
 			} catch (err) {
 				logger.error("hook fetch error", err);
 			}
 		}
-		static getInstance() {
-			if (!FetchHook.instance) FetchHook.instance = new FetchHook();
-			return FetchHook.instance;
+		restoreIfIdle() {
+			if (this.preFnArr.length || this.postFnArr.length || !this.installed) return;
+			const { original, wrapped } = this.installed;
+			if (_unsafeWindow.fetch !== wrapped) return;
+			_unsafeWindow.fetch = original;
+			this.installed = void 0;
 		}
 		addPreFn(fn) {
+			this.ensureInstalled();
 			this.preFnArr.push(fn);
+			return () => {
+				this.preFnArr = this.preFnArr.filter((entry) => entry !== fn);
+				this.restoreIfIdle();
+			};
 		}
 		addPostFn(fn) {
+			this.ensureInstalled();
 			this.postFnArr.push(fn);
+			return () => {
+				this.postFnArr = this.postFnArr.filter((entry) => entry !== fn);
+				this.restoreIfIdle();
+			};
 		}
 		hook() {
 			const origFetch = _unsafeWindow.fetch;
-			_unsafeWindow.fetch = async (input, init) => {
+			const wrapped = async (input, init) => {
 				try {
 					this.preFnArr.forEach((fn) => {
 						input = fn(input, init);
 					});
 				} catch {
-					return origFetch(input, init);
+					return origFetch.call(_unsafeWindow, input, init);
 				}
-				let resp = await origFetch(input, init);
-				const origResp = resp.clone();
+				let resp = await origFetch.call(_unsafeWindow, input, init);
+				if (this.postFnArr.length === 0) return resp;
+				const origResp = resp;
 				try {
 					for (const fn of this.postFnArr) {
 						const ans = await fn(input, init, resp);
@@ -7915,8 +8034,16 @@
 				}
 				return resp;
 			};
+			_unsafeWindow.fetch = wrapped;
+			return {
+				original: origFetch,
+				wrapped
+			};
 		}
-	}.getInstance();
+	};
+	var fetchHook = new FetchHook();
+	var checkSearchUser = createFilterCheck();
+	var coreCheck$3 = createFilterCheck();
 	var GM_KEYS$3 = {
 		black: {
 			duration: {
@@ -7967,18 +8094,17 @@
 	};
 	var relativityMap = new Map();
 	var relativityHookEnabled = false;
-	var relativityHookRegistered = false;
+	var unregisterRelativityHook;
 	var registerRelativityFetchHook = () => {
-		if (relativityHookRegistered) return;
-		relativityHookRegistered = true;
-		fetchHook.addPostFn(async (input, init, resp) => {
+		if (unregisterRelativityHook) return;
+		const unregister = fetchHook.addPostFn(async (input, init, resp) => {
 			if (!relativityHookEnabled) return;
 			try {
 				const url = typeof input === "string" ? input : input instanceof URL ? input.href : input.url;
 				if ((init?.method ?? "GET").toUpperCase() !== "GET" || !url.includes("api.bilibili.com") || !url.includes("/search/type")) return;
 				if (new URL(url, location.origin).searchParams.get("search_type") !== "video") return;
 				const result = (await resp?.clone().json())?.data?.result;
-				if (!Array.isArray(result)) return;
+				if (unregisterRelativityHook !== unregister || !relativityHookEnabled || !Array.isArray(result)) return;
 				result.forEach((item) => {
 					const relativityItem = toRelativityItem(item);
 					if (relativityItem) relativityMap.set(item.bvid, relativityItem);
@@ -7988,6 +8114,7 @@
 				logger.error("VideoFilterSearch relativity fetch hook error", err);
 			}
 		});
+		unregisterRelativityHook = unregister;
 	};
 	var getFirstPageVideoItem = (bvid) => {
 		const result = _unsafeWindow.__pinia?.searchResponse?.searchAllResponse?.result;
@@ -8049,11 +8176,11 @@
 		videoTitleWhiteFilter = new VideoTitleWhiteFilter();
 		init() {
 			this.videoBvidFilter.setParam(GM_getValue$1(GM_KEYS$3.black.bvid.valueKey, []));
-			this.videoDurationFilter.setParam(GM_getValue$1(GM_KEYS$3.black.duration.valueKey, 0));
+			this.videoDurationFilter.setParam(readSettingValue(GM_KEYS$3.black.duration.valueKey, FILTER_THRESHOLD_DEFAULTS.duration));
 			this.videoTitleFilter.setParam(GM_getValue$1(GM_KEYS$3.black.title.valueKey, []));
 			this.videoUploaderFilter.setParam(GM_getValue$1(GM_KEYS$3.black.uploader.valueKey, []));
 			this.videoUploaderKeywordFilter.setParam(GM_getValue$1(GM_KEYS$3.black.uploaderKeyword.valueKey, []));
-			this.videoRelativityFilter.setParam(GM_getValue$1(GM_KEYS$3.black.relativity.valueKey, 15));
+			this.videoRelativityFilter.setParam(readSettingValue(GM_KEYS$3.black.relativity.valueKey, FILTER_THRESHOLD_DEFAULTS.relativity));
 			this.videoUploaderWhiteFilter.setParam(GM_getValue$1(GM_KEYS$3.white.uploader.valueKey, []));
 			this.videoTitleWhiteFilter.setParam(GM_getValue$1(GM_KEYS$3.white.title.valueKey, []));
 		}
@@ -8067,7 +8194,7 @@
 			const videos = [...this.target.querySelectorAll(selector), ...document.querySelectorAll(cardSelector)];
 			if (!videos.length) return;
 			if (revertAll) {
-				videos.forEach((v) => showEle(v, "sign"));
+				videos.forEach((v) => restoreFiltered(v, "sign"));
 				return;
 			}
 			if (config_default.isDebugMode) videos.forEach((v) => {
@@ -8091,7 +8218,7 @@
 			this.videoTitleWhiteFilter.isEnable && whitePairs.push([this.videoTitleWhiteFilter, selectorFns$3.title]);
 			const forceBlackPairs = [];
 			this.videoBvidFilter.isEnable && forceBlackPairs.push([this.videoBvidFilter, selectorFns$3.bvid]);
-			const blackIdxSet = await coreCheck(videos, true, "sign", blackPairs, whitePairs, forceBlackPairs, false, statGateExtra(videos, selectorFns$3.bvid));
+			const blackIdxSet = await coreCheck$3(videos, true, "sign", blackPairs, whitePairs, forceBlackPairs, false, videoStatOptions(selectorFns$3.bvid));
 			const time = (performance.now() - timer).toFixed(1);
 			logger.debug(`VideoFilterSearch hide ${blackIdxSet.size} in ${videos.length} videos, mode=${mode}, time=${time}`);
 		}
@@ -8103,7 +8230,7 @@
 			const userName = userList.querySelector("a.user-name")?.textContent?.trim();
 			if (!userName) return;
 			if (!this.videoUploaderFilter.isEnable && !this.videoUploaderKeywordFilter.isEnable && !this.videoUploaderWhiteFilter.isEnable) {
-				showEle(userList, "sign");
+				restoreFiltered(userList, "sign");
 				return;
 			}
 			if (config_default.isDebugMode) logger.debug([`VideoFilterSearchUserCard`, `uploader: ${userName}`].join("\n"));
@@ -8112,7 +8239,7 @@
 			this.videoUploaderKeywordFilter.isEnable && blackPairs.push([this.videoUploaderKeywordFilter, selectorFns$3.uploaderCard]);
 			const whitePairs = [];
 			this.videoUploaderWhiteFilter.isEnable && whitePairs.push([this.videoUploaderWhiteFilter, selectorFns$3.uploaderCard]);
-			const blackIdxSet = await coreCheck([userList], true, "sign", blackPairs, whitePairs);
+			const blackIdxSet = await checkSearchUser([userList], true, "sign", blackPairs, whitePairs, [], false, { identify: selectorFns$3.uploaderCard });
 			const time = (performance.now() - timer).toFixed(1);
 			logger.debug(`VideoFilterSearchUserCard hide ${blackIdxSet.size} in user-list, mode=${mode}, time=${time}`);
 		}
@@ -8169,6 +8296,8 @@
 				},
 				disableFn: () => {
 					relativityHookEnabled = false;
+					unregisterRelativityHook?.();
+					unregisterRelativityHook = void 0;
 					relativityMap.clear();
 					mainFilter$3.videoRelativityFilter.disable();
 					mainFilter$3.checkFull();
@@ -8182,8 +8311,9 @@
 				minValue: 0,
 				maxValue: 100,
 				step: 1,
-				defaultValue: 15,
+				defaultValue: FILTER_THRESHOLD_DEFAULTS.relativity,
 				disableValue: -1,
+				applyDisabledValue: true,
 				addonText: "%",
 				fn: (value) => {
 					mainFilter$3.videoRelativityFilter.setParam(value);
@@ -8214,8 +8344,9 @@
 				minValue: 0,
 				maxValue: 300,
 				step: 1,
-				defaultValue: 60,
+				defaultValue: FILTER_THRESHOLD_DEFAULTS.duration,
 				disableValue: 0,
+				applyDisabledValue: true,
 				addonText: "秒",
 				fn: (value) => {
 					mainFilter$3.videoDurationFilter.setParam(value);
@@ -8501,6 +8632,7 @@
 		}
 		return menus;
 	};
+	var coreCheck$2 = createFilterCheck();
 	var GM_KEYS$2 = {
 		black: {
 			duration: {
@@ -8542,7 +8674,7 @@
 		videoTitleWhiteFilter = new VideoTitleWhiteFilter();
 		init() {
 			this.videoBvidFilter.setParam(GM_getValue$1(GM_KEYS$2.black.bvid.valueKey, []));
-			this.videoDurationFilter.setParam(GM_getValue$1(GM_KEYS$2.black.duration.valueKey, 0));
+			this.videoDurationFilter.setParam(readSettingValue(GM_KEYS$2.black.duration.valueKey, FILTER_THRESHOLD_DEFAULTS.duration));
 			this.videoTitleFilter.setParam(GM_getValue$1(GM_KEYS$2.black.title.valueKey, []));
 			this.videoTitleWhiteFilter.setParam(GM_getValue$1(GM_KEYS$2.white.title.valueKey, []));
 		}
@@ -8560,7 +8692,7 @@
 			const videos = Array.from(this.target.querySelectorAll(selector));
 			if (!videos.length) return;
 			if (revertAll) {
-				videos.forEach((v) => showEle(v, "sign"));
+				videos.forEach((v) => restoreFiltered(v, "sign"));
 				return;
 			}
 			if (config_default.isDebugMode) videos.forEach((v) => {
@@ -8578,7 +8710,7 @@
 			this.videoTitleWhiteFilter.isEnable && whitePairs.push([this.videoTitleWhiteFilter, selectorFns$2.title]);
 			const forceBlackPairs = [];
 			this.videoBvidFilter.isEnable && forceBlackPairs.push([this.videoBvidFilter, selectorFns$2.bvid]);
-			const blackIdxSet = await coreCheck(videos, true, "sign", blackPairs, whitePairs, forceBlackPairs, false, statGateExtra(videos, selectorFns$2.bvid));
+			const blackIdxSet = await coreCheck$2(videos, true, "sign", blackPairs, whitePairs, forceBlackPairs, false, videoStatOptions(selectorFns$2.bvid));
 			const time = (performance.now() - timer).toFixed(1);
 			logger.debug(`VideoFilterSpace hide ${blackIdxSet.size} in ${videos.length} videos, mode=${mode}, time=${time}`);
 		}
@@ -8633,8 +8765,9 @@
 				minValue: 0,
 				maxValue: 300,
 				step: 1,
-				defaultValue: 60,
+				defaultValue: FILTER_THRESHOLD_DEFAULTS.duration,
 				disableValue: 0,
+				applyDisabledValue: true,
 				addonText: "秒",
 				fn: (value) => {
 					mainFilter$2.videoDurationFilter.setParam(value);
@@ -8759,6 +8892,7 @@
 		}
 		return menus;
 	};
+	var coreCheck$1 = createFilterCheck();
 	var GM_KEYS$1 = {
 		black: {
 			duration: {
@@ -8822,7 +8956,7 @@
 		videoTitleWhiteFilter = new VideoTitleWhiteFilter();
 		init() {
 			this.videoBvidFilter.setParam(GM_getValue$1(GM_KEYS$1.black.bvid.valueKey, []));
-			this.videoDurationFilter.setParam(GM_getValue$1(GM_KEYS$1.black.duration.valueKey, 0));
+			this.videoDurationFilter.setParam(readSettingValue(GM_KEYS$1.black.duration.valueKey, FILTER_THRESHOLD_DEFAULTS.duration));
 			this.videoTitleFilter.setParam(GM_getValue$1(GM_KEYS$1.black.title.valueKey, []));
 			this.videoUploaderFilter.setParam(GM_getValue$1(GM_KEYS$1.black.uploader.valueKey, []));
 			this.videoUploaderKeywordFilter.setParam(GM_getValue$1(GM_KEYS$1.black.uploaderKeyword.valueKey, []));
@@ -8838,7 +8972,7 @@
             .rec-list :is(.video-page-card-small, .video-page-operator-card-small), .recommend-video-card`));
 			if (!videos.length) return;
 			if (revertAll) {
-				videos.forEach((v) => showEle(v, "sign"));
+				videos.forEach((v) => restoreFiltered(v, "sign"));
 				return;
 			}
 			if (config_default.isDebugMode) videos.forEach((v) => {
@@ -8860,15 +8994,12 @@
 			this.videoTitleWhiteFilter.isEnable && whitePairs.push([this.videoTitleWhiteFilter, selectorFns$1.title]);
 			const forceBlackPairs = [];
 			this.videoBvidFilter.isEnable && forceBlackPairs.push([this.videoBvidFilter, selectorFns$1.bvid]);
-			const blackIdxSet = await coreCheck(videos, true, "sign", blackPairs, whitePairs, forceBlackPairs, false, statGateExtra(videos, selectorFns$1.bvid));
+			const blackIdxSet = await coreCheck$1(videos, true, "sign", blackPairs, whitePairs, forceBlackPairs, false, videoStatOptions(selectorFns$1.bvid));
 			if (enableRelatedCheck && blackIdxSet.size) {
 				const blackBvids = new Set();
-				for (const video of videos) if (isEleHide(video, "sign")) {
-					const url = video.querySelector(".info > a")?.getAttribute("href");
-					if (url) {
-						const bvid = matchBvid(url);
-						bvid && blackBvids.add(bvid);
-					}
+				for (const index of blackIdxSet) {
+					const bvid = selectorFns$1.bvid(videos[index]);
+					if (typeof bvid === "string" && bvid) blackBvids.add(bvid);
 				}
 				const rel = _unsafeWindow.__INITIAL_STATE__?.related;
 				if (rel?.length && blackBvids.size) _unsafeWindow.__INITIAL_STATE__.related = rel.filter((v) => !(v.bvid && blackBvids.has(v.bvid)));
@@ -8883,7 +9014,7 @@
 		}
 		observe() {
 			waitForEle(document, "#reco_list, .recommend-list-v1, .recommend-list-container", (node) => {
-				return node.id === "reco_list" || ["recommend-list-v1", "recommend-list-container"].includes(node.className);
+				return node.id === "reco_list" || node.classList.contains("recommend-list-v1") || node.classList.contains("recommend-list-container");
 			}).then((ele) => {
 				if (!ele) return;
 				logger.debug("VideoFilterVideo target appear");
@@ -8927,8 +9058,9 @@
 				minValue: 0,
 				maxValue: 300,
 				step: 1,
-				defaultValue: 60,
+				defaultValue: FILTER_THRESHOLD_DEFAULTS.duration,
 				disableValue: 0,
+				applyDisabledValue: true,
 				addonText: "秒",
 				fn: (value) => {
 					mainFilter$1.videoDurationFilter.setParam(value);
@@ -9205,6 +9337,7 @@
 	var ArticleTitleKeywordFilter = class extends KeywordFilter {};
 	var ArticleAuthorWhiteFilter = class extends StringFilter {};
 	var ArticleTitleKeywordWhiteFilter = class extends KeywordFilter {};
+	var coreCheck = createFilterCheck();
 	var GM_KEYS = {
 		black: {
 			author: {
@@ -9268,7 +9401,7 @@
 			const cards = Array.from(mediaList.children);
 			if (!cards.length) return;
 			if (revertAll) {
-				cards.forEach((c) => showEle(c, "sign"));
+				cards.forEach((c) => restoreFiltered(c, "sign"));
 				return;
 			}
 			if (config_default.isDebugMode) cards.forEach((c) => {
@@ -9285,7 +9418,7 @@
 			const whitePairs = [];
 			this.articleAuthorWhiteFilter.isEnable && whitePairs.push([this.articleAuthorWhiteFilter, selectorFns.author]);
 			this.articleTitleKeywordWhiteFilter.isEnable && whitePairs.push([this.articleTitleKeywordWhiteFilter, selectorFns.title]);
-			const blackIdxSet = await coreCheck(cards, true, "sign", blackPairs, whitePairs);
+			const blackIdxSet = await coreCheck(cards, true, "sign", blackPairs, whitePairs, [], false, { identify: (element) => element.querySelector(".i_card_title a")?.getAttribute("href") });
 			const time = (performance.now() - timer).toFixed(1);
 			logger.debug(`ArticleFilterSearch hide ${blackIdxSet.size} in ${cards.length} cards, time=${time}`);
 		}
@@ -11278,8 +11411,6 @@
 			}
 		]
 	}];
-	var isDarkMode = (0, vue.ref)(false);
-	var commonThemeItems = [];
 	var URLHandlerInstance = class URLHandler {
 		static instance;
 		origReplaceState = _unsafeWindow.history.replaceState;
@@ -11467,11 +11598,6 @@
 			name: "全站通用 - 基本功能",
 			fold: true,
 			items: commonBasicItems
-		},
-		{
-			name: "全站通用 - 夜间模式",
-			fold: true,
-			items: commonThemeItems
 		},
 		{
 			name: "全站通用 - 顶栏 左侧",
@@ -12168,49 +12294,53 @@
 			items: []
 		}
 	];
+	var homepageBasicItems = [
+		{
+			type: "switch",
+			id: "homepage-hide-banner",
+			name: "隐藏 横幅banner",
+			description: ["同步生效：首页、分区页、热门页"]
+		},
+		{
+			type: "switch",
+			id: "homepage-hide-recommend-swipe",
+			name: "隐藏 大图活动轮播",
+			defaultEnable: true
+		},
+		{
+			type: "switch",
+			id: "homepage-hide-subarea",
+			name: "隐藏 分区栏"
+		},
+		{
+			type: "switch",
+			id: "homepage-hide-sticky-header",
+			name: "隐藏 滚动页面时 顶部吸附顶栏"
+		},
+		{
+			type: "switch",
+			id: "homepage-hide-sticky-subarea",
+			name: "隐藏 滚动页面时 顶部吸附分区栏",
+			defaultEnable: true
+		},
+		{
+			type: "switch",
+			id: "homepage-hide-adblock-tips",
+			name: "隐藏 顶部adblock提示",
+			defaultEnable: true
+		}
+	];
+	var homepageLayoutItems = [];
+	var stopIncreaseLoad;
+	var stopPreload;
 	var homepageGroups = [
 		{
 			name: "基本功能",
-			items: [
-				{
-					type: "switch",
-					id: "homepage-hide-banner",
-					name: "隐藏 横幅banner",
-					description: ["同步生效：首页、分区页、热门页"]
-				},
-				{
-					type: "switch",
-					id: "homepage-hide-recommend-swipe",
-					name: "隐藏 大图活动轮播",
-					defaultEnable: true
-				},
-				{
-					type: "switch",
-					id: "homepage-hide-subarea",
-					name: "隐藏 分区栏"
-				},
-				{
-					type: "switch",
-					id: "homepage-hide-sticky-header",
-					name: "隐藏 滚动页面时 顶部吸附顶栏"
-				},
-				{
-					type: "switch",
-					id: "homepage-hide-sticky-subarea",
-					name: "隐藏 滚动页面时 顶部吸附分区栏",
-					defaultEnable: true
-				},
-				{
-					type: "switch",
-					id: "homepage-hide-adblock-tips",
-					name: "隐藏 顶部adblock提示",
-					defaultEnable: true
-				}
-			]
+			items: homepageBasicItems
 		},
 		{
 			name: "页面布局",
-			items: []
+			items: homepageLayoutItems
 		},
 		{
 			name: "视频列表",
@@ -12292,10 +12422,14 @@
 					id: "homepage-increase-rcmd-load-size",
 					name: "增大 视频载入 视频数量",
 					enableFn: () => {
-						fetchHook.addPreFn((input, init) => {
+						stopIncreaseLoad ??= fetchHook.addPreFn((input, init) => {
 							if (typeof input === "string" && input.includes("api.bilibili.com") && input.includes("feed/rcmd") && init?.method?.toUpperCase() === "GET") input = input.replace("&ps=12&", "&ps=24&");
 							return input;
 						});
+					},
+					disableFn: () => {
+						stopIncreaseLoad?.();
+						stopIncreaseLoad = void 0;
 					}
 				},
 				{
@@ -12308,6 +12442,8 @@
 						"若影响视频载入或造成卡顿，请关闭本功能"
 					],
 					enableFn: async () => {
+						if (stopPreload) return;
+						let removeScroll;
 						let cnt = 0;
 						const id = setInterval(() => {
 							const anchor = document.querySelector(".load-more-anchor");
@@ -12315,7 +12451,7 @@
 								clearInterval(id);
 								let lastScrollTop = 0;
 								let isPreload = false;
-								window.addEventListener("scroll", function() {
+								const onScroll = () => {
 									const scrollTop = window.scrollY || document.documentElement.scrollTop;
 									if (scrollTop > lastScrollTop) {
 										if (innerHeight - anchor.getBoundingClientRect().top > -innerHeight * .75 && !isPreload) {
@@ -12330,10 +12466,26 @@
 										isPreload = false;
 									}
 									lastScrollTop = scrollTop;
-								});
+								};
+								window.addEventListener("scroll", onScroll);
+								removeScroll = () => {
+									window.removeEventListener("scroll", onScroll);
+									anchor.classList.remove("preload");
+								};
 							}
-							if (++cnt > 80) clearInterval(id);
+							if (++cnt > 80) {
+								clearInterval(id);
+								if (!removeScroll) stopPreload = void 0;
+							}
 						}, 250);
+						stopPreload = () => {
+							clearInterval(id);
+							removeScroll?.();
+						};
+					},
+					disableFn: () => {
+						stopPreload?.();
+						stopPreload = void 0;
 					},
 					enableFnRunAt: "document-end"
 				}
@@ -14117,7 +14269,7 @@
 		return validateEvidence({
 			format: "misakaweb-structural-diagnostic",
 			schemaVersion: 1,
-			scriptVersion: "0.1.5.1",
+			scriptVersion: "0.1.5.2",
 			capturedAt: new Date().toISOString(),
 			pageType: pageType(),
 			site: location.hostname,
@@ -14156,7 +14308,7 @@
 			const configurationStore = useConfigurationPanelStore();
 			const buildProfile = "pure";
 			const buildLabel = "净化轻量版";
-			const scriptVersion = "0.1.5.1";
+			const scriptVersion = "0.1.5.2";
 			const editorDialogRef = (0, vue.ref)(null);
 			const query = (0, vue.ref)("");
 			const diagnosticError = (0, vue.ref)("");
@@ -14597,13 +14749,18 @@
 		enabled: true,
 		location: "header"
 	};
-	var isRecord = (value) => Boolean(value) && typeof value === "object" && !Array.isArray(value);
+	var isRecord$1 = (value) => Boolean(value) && typeof value === "object" && !Array.isArray(value);
 	var isLocation = (value) => value === "header" || value === "floating";
 	var normalizeShortcutPreference = (raw) => {
-		if (!isRecord(raw)) return { ...SHORTCUT_PREFERENCE_DEFAULT };
+		const { enabled, location } = SHORTCUT_PREFERENCE_DEFAULT;
+		const inheritedLocation = settingDefault(SHORTCUT_PREFERENCE_KEY, location, "location");
+		if (!isRecord$1(raw)) return {
+			enabled,
+			location: inheritedLocation
+		};
 		return {
-			enabled: typeof raw.enabled === "boolean" ? raw.enabled : SHORTCUT_PREFERENCE_DEFAULT.enabled,
-			location: isLocation(raw.location) ? raw.location : SHORTCUT_PREFERENCE_DEFAULT.location
+			enabled: typeof raw.enabled === "boolean" ? raw.enabled : enabled,
+			location: isLocation(raw.location) ? raw.location : inheritedLocation
 		};
 	};
 	var readShortcutPreference = () => {
@@ -15054,7 +15211,7 @@
 				});
 				return;
 			}
-			const defaultValue = item.type === "switch" ? Boolean(item.defaultEnable) : item.type === "editor" ? [] : item.defaultValue;
+			const defaultValue = item.type === "editor" ? [] : settingDefault(item.id, declaredItemDefault(item));
 			const definition = {
 				key: item.id,
 				name: item.name,
@@ -15116,7 +15273,10 @@
 			groups: ["当前设备 / 快捷开关"],
 			defaults: [{
 				context: "当前设备",
-				value: SHORTCUT_PREFERENCE_DEFAULT
+				value: {
+					enabled: SHORTCUT_PREFERENCE_DEFAULT.enabled,
+					location: settingDefault(SHORTCUT_PREFERENCE_KEY, SHORTCUT_PREFERENCE_DEFAULT.location, "location")
+				}
 			}],
 			availableProfiles: [profile]
 		});
@@ -15355,6 +15515,65 @@
 		}
 		return plan.writes.length;
 	};
+	var isRecord = (value) => value !== null && typeof value === "object" && !Array.isArray(value);
+	var decodeValue = (encoded) => {
+		if (typeof encoded !== "string") return void 0;
+		const payload = encoded.slice(1);
+		switch (encoded[0]) {
+			case "s": return payload;
+			case "b":
+				if (payload === "true") return true;
+				if (payload === "false") return false;
+				return;
+			case "n": return payload.trim() ? Number(payload) : void 0;
+			case "o": try {
+				return JSON.parse(payload);
+			} catch {
+				return;
+			}
+			default: return;
+		}
+	};
+	var parseConfigurationImportFile = (raw, definitions) => {
+		if (!isRecord(raw) || !isRecord(raw.data) || typeof raw.ts !== "number" || !Object.keys(raw).every((key) => key === "data" || key === "ts")) return {
+			backup: parseConfigurationBackup(raw),
+			skipped: 0
+		};
+		const registry = new Map(definitions.filter((item) => item.storage === "gm" && (item.scope === "settings" || item.scope === "rules")).map((item) => [item.key, item]));
+		const entries = [];
+		let skipped = 0;
+		for (const [key, encoded] of Object.entries(raw.data)) {
+			const definition = registry.get(key);
+			if (!definition) {
+				skipped++;
+				continue;
+			}
+			const value = decodeValue(encoded);
+			if (!validateConfigValue(definition, value)) throw new Error(`脚本猫备份中的「${definition.name}」值不合法，未修改本机数据`);
+			entries.push({
+				key,
+				storage: "gm",
+				scope: definition.scope,
+				state: "saved",
+				value
+			});
+		}
+		if (!entries.length) throw new Error("脚本猫存储文件没有本版本可导入的设置或规则");
+		return {
+			backup: parseConfigurationBackup({
+				format: "misakaweb-config-backup",
+				schemaVersion: 1,
+				product: "MisakaWeb",
+				scriptVersion: "旧存储",
+				profile: "脚本猫",
+				exportedAt: new Date().toISOString(),
+				scopes: ["settings", "rules"],
+				definitions: [],
+				entries
+			}),
+			skipped
+		};
+	};
 	var LAST_BACKUP_KEY = "misakaweb-config-preimport-backup";
 	var configurationAccess = {
 		read: (storage, key) => {
@@ -15377,7 +15596,7 @@
 		}
 	};
 	var makeConfigurationBackup = (includeDevice = true, includeSecrets = false) => createConfigurationBackup(getConfigurationDefinitions(), configurationAccess, {
-		scriptVersion: "0.1.5.1",
+		scriptVersion: "0.1.5.2",
 		profile: "pure",
 		includeDevice,
 		includeSecrets
@@ -15428,12 +15647,13 @@
 	var _hoisted_9$1 = { class: "font-bold" };
 	var _hoisted_10$1 = { class: "my-2 flex items-center gap-2" };
 	var _hoisted_11 = { class: "my-2" };
-	var _hoisted_12 = {
+	var _hoisted_12 = { key: 0 };
+	var _hoisted_13 = {
 		key: 0,
 		class: "my-2"
 	};
-	var _hoisted_13 = { class: "mt-2 max-h-44 overflow-auto text-[13px] leading-6" };
-	var _hoisted_14 = ["disabled"];
+	var _hoisted_14 = { class: "mt-2 max-h-44 overflow-auto text-[13px] leading-6" };
+	var _hoisted_15 = ["disabled"];
 	var ConfigurationPanelView_default = (0, vue.defineComponent)({
 		__name: "ConfigurationPanelView",
 		setup(__props) {
@@ -15449,6 +15669,7 @@
 			const incomingName = (0, vue.ref)("");
 			const preview = (0, vue.ref)(null);
 			const restoreMode = (0, vue.ref)(false);
+			const legacySkipped = (0, vue.ref)(0);
 			const errorMessage = (error) => error instanceof Error ? error.message : String(error);
 			(0, vue.watch)(() => store.openToken, () => {
 				definitions.value = getConfigurationDefinitions();
@@ -15483,9 +15704,18 @@
 				if (!file) return;
 				incoming.value = null;
 				preview.value = null;
+				legacySkipped.value = 0;
 				try {
 					if (file.size > 4e6) throw new Error("配置文件超过 4 MB，未读取");
-					incoming.value = parseConfigurationBackup(await file.text());
+					let raw;
+					try {
+						raw = JSON.parse(await file.text());
+					} catch {
+						throw new Error("配置文件不是有效的 JSON");
+					}
+					const parsed = parseConfigurationImportFile(raw, definitions.value);
+					incoming.value = parsed.backup;
+					legacySkipped.value = parsed.skipped;
 					incomingName.value = file.name;
 					restoreMode.value = false;
 					message.value = "";
@@ -15499,6 +15729,7 @@
 					const previous = readPreImportBackup();
 					if (!previous) throw new Error("当前设备没有上次保存前的备份");
 					incoming.value = previous;
+					legacySkipped.value = 0;
 					incomingName.value = "上次保存前的本机备份";
 					restoreMode.value = true;
 					rebuildPreview();
@@ -15540,7 +15771,7 @@
 						class: "flex flex-col gap-3 p-1 text-sm text-black",
 						onKeydown: _cache[4] || (_cache[4] = (0, vue.withModifiers)(() => {}, ["stop"]))
 					}, [
-						_cache[17] || (_cache[17] = (0, vue.createElementVNode)("p", { class: "rounded-lg bg-blue-50 p-3 leading-6" }, " 下载配置备份，或从文件恢复。备份可以带到另一台设备，导入前会先显示变动。 日常设置仍在各页面、各功能栏目中调整。 ", -1)),
+						_cache[18] || (_cache[18] = (0, vue.createElementVNode)("p", { class: "rounded-lg bg-blue-50 p-3 leading-6" }, " 下载配置备份，或从文件恢复。备份可以带到另一台设备，导入前会先显示变动。 日常设置仍在各页面、各功能栏目中调整。 ", -1)),
 						message.value ? ((0, vue.openBlock)(), (0, vue.createElementBlock)("p", _hoisted_1$4, (0, vue.toDisplayString)(message.value), 1)) : (0, vue.createCommentVNode)("", true),
 						needsRefresh.value ? ((0, vue.openBlock)(), (0, vue.createElementBlock)("button", {
 							key: 1,
@@ -15586,6 +15817,7 @@
 									onChange: chooseFile
 								}, null, 544)
 							]),
+							_cache[17] || (_cache[17] = (0, vue.createElementVNode)("p", { class: "mt-2 text-[13px] text-gray-600" }, " 支持 MisakaWeb 配置备份和从脚本猫 ZIP 解出的单脚本 .storage.json。 ", -1)),
 							incoming.value ? ((0, vue.openBlock)(), (0, vue.createElementBlock)("div", _hoisted_8$1, [
 								(0, vue.createElementVNode)("p", _hoisted_9$1, (0, vue.toDisplayString)(incomingName.value) + " · 来自 " + (0, vue.toDisplayString)(incoming.value.scriptVersion) + " / " + (0, vue.toDisplayString)(incoming.value.profile), 1),
 								(0, vue.createElementVNode)("label", _hoisted_10$1, [(0, vue.withDirectives)((0, vue.createElementVNode)("input", {
@@ -15595,14 +15827,14 @@
 								}, null, 544), [[vue.vModelCheckbox, restoreMode.value]]), _cache[11] || (_cache[11] = (0, vue.createTextVNode)("完整恢复：让文件中明确未保存的设置重新继承默认值", -1))]),
 								_cache[14] || (_cache[14] = (0, vue.createElementVNode)("p", { class: "text-[13px] leading-5 text-gray-600" }, " 默认只合并文件中的已保存值。文件未包含的设置和未勾选导出的设备、连接信息都保持原样。 ", -1)),
 								preview.value ? ((0, vue.openBlock)(), (0, vue.createElementBlock)(vue.Fragment, { key: 0 }, [
-									(0, vue.createElementVNode)("p", _hoisted_11, " 将改变 " + (0, vue.toDisplayString)(preview.value.writes.length) + " 项；" + (0, vue.toDisplayString)(preview.value.unchanged) + " 项保持原样；" + (0, vue.toDisplayString)(preview.value.ignored.length) + " 项不在当前版本中，将跳过。 ", 1),
+									(0, vue.createElementVNode)("p", _hoisted_11, [(0, vue.createTextVNode)(" 将改变 " + (0, vue.toDisplayString)(preview.value.writes.length) + " 项；" + (0, vue.toDisplayString)(preview.value.unchanged) + " 项保持原样；" + (0, vue.toDisplayString)(preview.value.ignored.length) + " 项不在当前版本中，将跳过。 ", 1), legacySkipped.value ? ((0, vue.openBlock)(), (0, vue.createElementBlock)("span", _hoisted_12, "脚本猫文件中另有 " + (0, vue.toDisplayString)(legacySkipped.value) + " 项未纳入，含设备、连接或旧键。", 1)) : (0, vue.createCommentVNode)("", true)]),
 									((0, vue.openBlock)(true), (0, vue.createElementBlock)(vue.Fragment, null, (0, vue.renderList)(preview.value.notices, (notice) => {
 										return (0, vue.openBlock)(), (0, vue.createElementBlock)("p", {
 											key: notice,
 											class: "mb-1 text-amber-700"
 										}, (0, vue.toDisplayString)(notice), 1);
 									}), 128)),
-									preview.value.writes.length || preview.value.ignored.length ? ((0, vue.openBlock)(), (0, vue.createElementBlock)("details", _hoisted_12, [_cache[12] || (_cache[12] = (0, vue.createElementVNode)("summary", { class: "cursor-pointer" }, "查看涉及的设置", -1)), (0, vue.createElementVNode)("ul", _hoisted_13, [((0, vue.openBlock)(true), (0, vue.createElementBlock)(vue.Fragment, null, (0, vue.renderList)(preview.value.writes, (write) => {
+									preview.value.writes.length || preview.value.ignored.length ? ((0, vue.openBlock)(), (0, vue.createElementBlock)("details", _hoisted_13, [_cache[12] || (_cache[12] = (0, vue.createElementVNode)("summary", { class: "cursor-pointer" }, "查看涉及的设置", -1)), (0, vue.createElementVNode)("ul", _hoisted_14, [((0, vue.openBlock)(true), (0, vue.createElementBlock)(vue.Fragment, null, (0, vue.renderList)(preview.value.writes, (write) => {
 										return (0, vue.openBlock)(), (0, vue.createElementBlock)("li", { key: write.storage + write.key }, (0, vue.toDisplayString)(definitionName(write.key, write.storage)) + "：" + (0, vue.toDisplayString)(write.value === void 0 ? "回到默认值" : "更新已保存值"), 1);
 									}), 128)), ((0, vue.openBlock)(true), (0, vue.createElementBlock)(vue.Fragment, null, (0, vue.renderList)(preview.value.ignored, (key) => {
 										return (0, vue.openBlock)(), (0, vue.createElementBlock)("li", {
@@ -15615,7 +15847,7 @@
 										disabled: !preview.value.writes.length,
 										class: "rounded-md bg-[#00AEEC] px-3 py-2 text-white disabled:opacity-40",
 										onClick: applyPreview
-									}, [(0, vue.createVNode)(Badge_default, { code: (0, vue.unref)(actionLabel)("config-apply-import") }, null, 8, ["code"]), _cache[13] || (_cache[13] = (0, vue.createTextVNode)("应用这些变动 ", -1))], 8, _hoisted_14)
+									}, [(0, vue.createVNode)(Badge_default, { code: (0, vue.unref)(actionLabel)("config-apply-import") }, null, 8, ["code"]), _cache[13] || (_cache[13] = (0, vue.createTextVNode)("应用这些变动 ", -1))], 8, _hoisted_15)
 								], 64)) : (0, vue.createCommentVNode)("", true)
 							])) : (0, vue.createCommentVNode)("", true)
 						])
@@ -15692,7 +15924,6 @@
 		const dynamicStore = useDynamicFilterPanelStore();
 		const shortcutStore = useShortcutSettingsStore();
 		return (0, vue.toRef)(() => [
-			...[],
 			{
 				text: "动态过滤",
 				defaultHidden: true,
@@ -15827,10 +16058,10 @@
   height: 40px;
   margin: 0;
   padding: 0;
-  border: 1px solid #e5e7eb;
+  border: 1px solid var(--line_regular, #e5e7eb);
   border-radius: 8px;
-  background: #fff;
-  color: #111;
+  background: var(--bg1, #fff);
+  color: var(--text1, #18191c);
   cursor: pointer;
   display: flex;
   flex-direction: column;
@@ -15848,8 +16079,8 @@
   z-index: 2147483646;
   margin: 0;
   padding: 4px 0;
-  background: #fff;
-  color: #111;
+  background: var(--bg1, #fff);
+  color: var(--text1, #18191c);
   border-radius: 6px;
   box-shadow: 0 8px 24px rgb(0 0 0 / 20%);
   overflow: auto;
@@ -16498,7 +16729,7 @@
 			return (_ctx, _cache) => {
 				return floatingVisible.value ? ((0, vue.openBlock)(), (0, vue.createElementBlock)("div", {
 					key: 0,
-					class: (0, vue.normalizeClass)(["group fixed flex flex-col justify-end will-change-[right,bottom] select-none", [(0, vue.unref)(isDarkMode) ? "text-white/50 hover:text-white" : "text-black/50 hover:text-black", (0, vue.unref)(isPageBangumi)() || (0, vue.unref)(isPageVideo)() ? "z-100" : "z-2000"]]),
+					class: (0, vue.normalizeClass)(["group fixed flex flex-col justify-end will-change-[right,bottom] select-none", (0, vue.unref)(isPageBangumi)() || (0, vue.unref)(isPageVideo)() ? "z-100" : "z-2000"]),
 					ref_key: "target",
 					ref: target,
 					style: (0, vue.normalizeStyle)({
@@ -16507,7 +16738,7 @@
 					})
 				}, [((0, vue.openBlock)(true), (0, vue.createElementBlock)(vue.Fragment, null, (0, vue.renderList)(visibleButtons.value, (btn, index) => {
 					return (0, vue.openBlock)(), (0, vue.createElementBlock)("div", {
-						class: (0, vue.normalizeClass)(["relative mt-1 h-10 w-10 cursor-pointer items-center justify-center rounded-lg border transition-colors hover:border-none hover:bg-[#00AEEC] hover:text-white", [(0, vue.unref)(isDarkMode) ? "border-[#2f3134] bg-[#242628]" : "border-gray-200 bg-white", btn.defaultHidden && !isDragging.value ? "hidden group-hover:flex" : "flex"]]),
+						class: (0, vue.normalizeClass)(["misaka-shortcut-colors relative mt-1 h-10 w-10 cursor-pointer items-center justify-center rounded-lg border transition-colors hover:border-none hover:bg-[#00AEEC] hover:text-white", btn.defaultHidden && !isDragging.value ? "hidden group-hover:flex" : "flex"]),
 						key: index,
 						onClick: ($event) => onSideClick(btn.run)
 					}, [(0, vue.createVNode)(Badge_default, {
@@ -16625,7 +16856,7 @@
 		}
 	}).getInstance();
 	var loadSwitchItem = (item) => {
-		if (GM_getValue$1(item.id, item.defaultEnable)) {
+		if (readItemValue(item)) {
 			if (!item.noStyle) document.documentElement.setAttribute(item.attrName ?? item.id, "");
 			if (item.enableFn) {
 				if (item.enableFnRunAt === "document-end" && document.readyState === "loading") document.addEventListener("DOMContentLoaded", () => {
@@ -16636,21 +16867,20 @@
 		}
 	};
 	var loadNumberItem = (item) => {
-		const value = GM_getValue$1(item.id, item.defaultValue);
-		if (value !== item.disableValue) {
-			if (!item.noStyle) document.documentElement.setAttribute(item.attrName ?? item.id, "");
-			item.fn(value)?.catch(() => {});
-		}
+		const value = readItemValue(item);
+		const disabled = value === item.disableValue;
+		if (!disabled && !item.noStyle) document.documentElement.setAttribute(item.attrName ?? item.id, "");
+		if (!disabled || item.applyDisabledValue) item.fn(value)?.catch(() => {});
 	};
 	var loadStringItem = (item) => {
-		const value = GM_getValue$1(item.id, item.defaultValue);
+		const value = readItemValue(item);
 		if (value !== item.disableValue) {
 			if (!item.noStyle) document.documentElement.setAttribute(item.attrName ?? item.id, "");
 			item.fn(value)?.catch(() => {});
 		}
 	};
 	var loadListItem = (item) => {
-		const value = GM_getValue$1(item.id, item.defaultValue);
+		const value = readItemValue(item);
 		for (const option of item.options) if (option.value === value && option.fn) option.fn()?.catch(() => {});
 		if (value !== item.disableValue) document.documentElement.setAttribute(item.id, value);
 	};
@@ -16748,7 +16978,7 @@
 		watchRoute();
 		logger.info("loadFilters done");
 	};
-	var style_css_default = _style("/*! tailwindcss v4.3.3 | MIT License | https://tailwindcss.com */\n@layer properties{*,:before,:after,::backdrop{--tw-translate-x:0;--tw-translate-y:0;--tw-translate-z:0;--tw-rotate-x:initial;--tw-rotate-y:initial;--tw-rotate-z:initial;--tw-skew-x:initial;--tw-skew-y:initial;--tw-space-y-reverse:0;--tw-border-style:solid;--tw-leading:initial;--tw-font-weight:initial;--tw-shadow:0 0 #0000;--tw-shadow-color:initial;--tw-shadow-alpha:100%;--tw-inset-shadow:0 0 #0000;--tw-inset-shadow-color:initial;--tw-inset-shadow-alpha:100%;--tw-ring-color:initial;--tw-ring-shadow:0 0 #0000;--tw-inset-ring-color:initial;--tw-inset-ring-shadow:0 0 #0000;--tw-ring-inset:initial;--tw-ring-offset-width:0px;--tw-ring-offset-color:#fff;--tw-ring-offset-shadow:0 0 #0000;--tw-outline-style:solid;--tw-blur:initial;--tw-brightness:initial;--tw-contrast:initial;--tw-grayscale:initial;--tw-hue-rotate:initial;--tw-invert:initial;--tw-opacity:initial;--tw-saturate:initial;--tw-sepia:initial;--tw-drop-shadow:initial;--tw-drop-shadow-color:initial;--tw-drop-shadow-alpha:100%;--tw-drop-shadow-size:initial;--tw-duration:initial;--tw-ease:initial}}@layer theme{:host,:host{--font-sans:-apple-system, BlinkMacSystemFont, \"Segoe UI\", Roboto, \"Helvetica Neue\", \"Noto Sans\", Arial, sans-serif, \"Apple Color Emoji\", \"Segoe UI Emoji\", \"Segoe UI Symbol\", \"Noto Color Emoji\";--font-mono:ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, \"Liberation Mono\", \"Courier New\", monospace;--color-red-500:oklch(63.7% .237 25.331);--color-red-600:oklch(57.7% .245 27.325);--color-red-700:oklch(50.5% .213 27.518);--color-orange-900:oklch(40.8% .123 38.172);--color-amber-300:oklch(87.9% .169 91.605);--color-amber-700:oklch(55.5% .163 48.998);--color-green-700:oklch(52.7% .154 150.069);--color-blue-50:oklch(97% .014 254.604);--color-blue-100:oklch(93.2% .032 255.585);--color-blue-500:oklch(62.3% .214 259.815);--color-blue-900:oklch(37.9% .146 265.522);--color-indigo-500:oklch(58.5% .233 277.117);--color-purple-100:oklch(94.6% .033 307.174);--color-purple-500:oklch(62.7% .265 303.9);--color-purple-600:oklch(55.8% .288 302.321);--color-purple-900:oklch(38.1% .176 304.987);--color-gray-50:oklch(98.5% .002 247.839);--color-gray-100:oklch(96.7% .003 264.542);--color-gray-200:oklch(92.8% .006 264.531);--color-gray-300:oklch(87.2% .01 258.338);--color-gray-400:oklch(70.7% .022 261.325);--color-gray-500:oklch(55.1% .027 264.364);--color-gray-600:oklch(44.6% .03 256.802);--color-gray-700:oklch(37.3% .034 259.733);--color-gray-800:oklch(27.8% .033 256.848);--color-gray-900:oklch(21% .034 264.665);--color-black:#000;--color-white:#fff;--spacing:4px;--text-xs:12px;--text-xs--line-height:calc(1 / .75);--text-sm:14px;--text-sm--line-height:calc(1.25 / .875);--text-base:16px;--text-base--line-height:calc(1.5 / 1);--text-xl:20px;--text-xl--line-height:calc(1.75 / 1.25);--font-weight-normal:400;--font-weight-medium:500;--font-weight-bold:700;--font-weight-black:900;--radius-md:6px;--radius-lg:8px;--radius-xl:12px;--ease-in:cubic-bezier(.4, 0, 1, 1);--default-transition-duration:.15s;--default-transition-timing-function:cubic-bezier(.4, 0, .2, 1);--default-font-family:var(--font-sans);--default-mono-font-family:var(--font-mono)}}@layer base{*,:after,:before,::backdrop{box-sizing:border-box;border:0 solid;margin:0;padding:0}::file-selector-button{box-sizing:border-box;border:0 solid;margin:0;padding:0}html,:host{-webkit-text-size-adjust:100%;tab-size:4;line-height:1.5;font-family:var(--default-font-family,-apple-system, BlinkMacSystemFont, \"Segoe UI\", Roboto, \"Helvetica Neue\", \"Noto Sans\", Arial, sans-serif, \"Apple Color Emoji\", \"Segoe UI Emoji\", \"Segoe UI Symbol\", \"Noto Color Emoji\");font-feature-settings:var(--default-font-feature-settings,normal);font-variation-settings:var(--default-font-variation-settings,normal);-webkit-tap-highlight-color:transparent}hr{height:0;color:inherit;border-top-width:1px}abbr:where([title]){-webkit-text-decoration:underline dotted;text-decoration:underline dotted}h1,h2,h3,h4,h5,h6{font-size:inherit;font-weight:inherit}a{color:inherit;-webkit-text-decoration:inherit;-webkit-text-decoration:inherit;-webkit-text-decoration:inherit;-webkit-text-decoration:inherit;text-decoration:inherit}b,strong{font-weight:bolder}code,kbd,samp,pre{font-family:var(--default-mono-font-family,ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, \"Liberation Mono\", \"Courier New\", monospace);font-feature-settings:var(--default-mono-font-feature-settings,normal);font-variation-settings:var(--default-mono-font-variation-settings,normal);font-size:1em}small{font-size:80%}sub,sup{vertical-align:baseline;font-size:75%;line-height:0;position:relative}sub{bottom:-.25em}sup{top:-.5em}table{text-indent:0;border-color:inherit;border-collapse:collapse}:-moz-focusring:where(:not(iframe)){outline:auto}progress{vertical-align:baseline}summary{display:list-item}ol,ul,menu{list-style:none}img,svg,video,canvas,audio,iframe,embed,object{vertical-align:middle;display:block}img,video{max-width:100%;height:auto}button,input,select,optgroup,textarea{font:inherit;font-feature-settings:inherit;font-variation-settings:inherit;letter-spacing:inherit;color:inherit;opacity:1;background-color:#0000;border-radius:0}::file-selector-button{font:inherit;font-feature-settings:inherit;font-variation-settings:inherit;letter-spacing:inherit;color:inherit;opacity:1;background-color:#0000;border-radius:0}:where(select:is([multiple],[size])) optgroup{font-weight:bolder}:where(select:is([multiple],[size])) optgroup option{padding-inline-start:20px}::file-selector-button{margin-inline-end:4px}::placeholder{opacity:1}@supports (not ((-webkit-appearance:-apple-pay-button))) or (contain-intrinsic-size:1px){::placeholder{color:currentColor}@supports (color:color-mix(in lab, red, red)){::placeholder{color:color-mix(in oklab, currentcolor 50%, transparent)}}}textarea{resize:vertical}::-webkit-search-decoration{-webkit-appearance:none}::-webkit-date-and-time-value{min-height:1lh;text-align:inherit}::-webkit-datetime-edit{display:inline-flex}::-webkit-datetime-edit-fields-wrapper{padding:0}::-webkit-datetime-edit{padding-block:0}::-webkit-datetime-edit-year-field{padding-block:0}::-webkit-datetime-edit-month-field{padding-block:0}::-webkit-datetime-edit-day-field{padding-block:0}::-webkit-datetime-edit-hour-field{padding-block:0}::-webkit-datetime-edit-minute-field{padding-block:0}::-webkit-datetime-edit-second-field{padding-block:0}::-webkit-datetime-edit-millisecond-field{padding-block:0}::-webkit-datetime-edit-meridiem-field{padding-block:0}::-webkit-calendar-picker-indicator{line-height:1}:-moz-ui-invalid{box-shadow:none}button,input:where([type=button],[type=reset],[type=submit]){appearance:button}::file-selector-button{appearance:button}::-webkit-inner-spin-button{height:auto}::-webkit-outer-spin-button{height:auto}[hidden]:where(:not([hidden=until-found])){display:none!important}:host{font-family:PingFang SC,HarmonyOS_Regular,Helvetica Neue,Microsoft YaHei,sans-serif!important}input[type=number]::-webkit-inner-spin-button{appearance:none;margin:0}input[type=number]::-webkit-outer-spin-button{appearance:none;margin:0}input[type=number]{-moz-appearance:textfield}}@layer components;@layer utilities{.pointer-events-none{pointer-events:none}.collapse{visibility:collapse}.visible{visibility:visible}.absolute{position:absolute}.fixed{position:fixed}.relative{position:relative}.static{position:static}.sticky{position:sticky}.inset-y-0{inset-block:0}.-top-1{top:calc(var(--spacing) * -1)}.top-0{top:0}.top-1\\.5{top:calc(var(--spacing) * 1.5)}.right-0{right:0}.right-10{right:calc(var(--spacing) * 10)}.-left-1{left:calc(var(--spacing) * -1)}.left-0{left:0}.z-10{z-index:10}.z-100{z-index:100}.z-2000{z-index:2000}.z-100000{z-index:100000}.z-10000000{z-index:10000000}.container{width:100%}@media (width>=40rem){.container{max-width:640px}}@media (width>=48rem){.container{max-width:768px}}@media (width>=64rem){.container{max-width:1024px}}@media (width>=80rem){.container{max-width:1280px}}@media (width>=96rem){.container{max-width:1536px}}.m-0\\.5{margin:calc(var(--spacing) * .5)}.m-1{margin:var(--spacing)}.mx-2{margin-inline:calc(var(--spacing) * 2)}.mx-auto{margin-inline:auto}.my-1{margin-block:var(--spacing)}.my-2{margin-block:calc(var(--spacing) * 2)}.mt-1{margin-top:var(--spacing)}.mt-2{margin-top:calc(var(--spacing) * 2)}.mt-3{margin-top:calc(var(--spacing) * 3)}.mr-0\\.5{margin-right:calc(var(--spacing) * .5)}.mr-1{margin-right:var(--spacing)}.mr-2{margin-right:calc(var(--spacing) * 2)}.mr-4{margin-right:calc(var(--spacing) * 4)}.mb-0\\.5{margin-bottom:calc(var(--spacing) * .5)}.mb-1{margin-bottom:var(--spacing)}.mb-1\\.5{margin-bottom:calc(var(--spacing) * 1.5)}.mb-2{margin-bottom:calc(var(--spacing) * 2)}.mb-3{margin-bottom:calc(var(--spacing) * 3)}.ml-2{margin-left:calc(var(--spacing) * 2)}.ml-4{margin-left:calc(var(--spacing) * 4)}.ml-auto{margin-left:auto}.block{display:block}.contents{display:contents}.flex{display:flex}.grid{display:grid}.hidden{display:none}.inline{display:inline}.inline-block{display:inline-block}.inline-flex{display:inline-flex}.table{display:table}.size-8{width:calc(var(--spacing) * 8);height:calc(var(--spacing) * 8)}.h-4{height:calc(var(--spacing) * 4)}.h-5{height:calc(var(--spacing) * 5)}.h-6{height:calc(var(--spacing) * 6)}.h-10{height:calc(var(--spacing) * 10)}.h-fit{height:fit-content}.max-h-44{max-height:calc(var(--spacing) * 44)}.max-h-60{max-height:calc(var(--spacing) * 60)}.min-h-\\[calc\\(100\\%-2\\.5rem\\)\\]{min-height:calc(100% - 40px)}.w-1\\/5{width:20%}.w-2\\/5{width:40%}.w-4{width:calc(var(--spacing) * 4)}.w-5{width:calc(var(--spacing) * 5)}.w-6{width:calc(var(--spacing) * 6)}.w-10{width:calc(var(--spacing) * 10)}.w-11{width:calc(var(--spacing) * 11)}.w-full{width:100%}.min-w-0{min-width:0}.flex-1{flex:1}.shrink-0{flex-shrink:0}.translate-x-1{--tw-translate-x:var(--spacing);translate:var(--tw-translate-x) var(--tw-translate-y)}.translate-x-6{--tw-translate-x:calc(var(--spacing) * 6);translate:var(--tw-translate-x) var(--tw-translate-y)}.rotate-90{rotate:90deg}.rotate-180{rotate:180deg}.transform{transform:var(--tw-rotate-x,) var(--tw-rotate-y,) var(--tw-rotate-z,) var(--tw-skew-x,) var(--tw-skew-y,)}.cursor-default{cursor:default}.cursor-move{cursor:move}.cursor-pointer{cursor:pointer}.resize{resize:both}.resize-none{resize:none}.grid-cols-\\[4\\.5rem_minmax\\(0\\,1fr\\)\\]{grid-template-columns:72px minmax(0,1fr)}.grid-cols-\\[auto_minmax\\(0\\,1fr\\)\\]{grid-template-columns:auto minmax(0,1fr)}.flex-col{flex-direction:column}.flex-row{flex-direction:row}.flex-wrap{flex-wrap:wrap}.items-center{align-items:center}.justify-between{justify-content:space-between}.justify-center{justify-content:center}.justify-end{justify-content:flex-end}.gap-2{gap:calc(var(--spacing) * 2)}.gap-3{gap:calc(var(--spacing) * 3)}:where(.space-y-3>:not(:last-child)){--tw-space-y-reverse:0;margin-block-start:calc(calc(var(--spacing) * 3) * var(--tw-space-y-reverse));margin-block-end:calc(calc(var(--spacing) * 3) * calc(1 - var(--tw-space-y-reverse)))}.gap-x-3{column-gap:calc(var(--spacing) * 3)}.gap-y-2{row-gap:calc(var(--spacing) * 2)}.self-center{align-self:center}.truncate{text-overflow:ellipsis;white-space:nowrap;overflow:hidden}.overflow-auto{overflow:auto}.overflow-hidden{overflow:hidden}.overscroll-none{overscroll-behavior:none}.rounded{border-radius:4px}.rounded-full{border-radius:2147483647px}.rounded-lg{border-radius:var(--radius-lg)}.rounded-md{border-radius:var(--radius-md)}.rounded-xl{border-radius:var(--radius-xl)}.border{border-style:var(--tw-border-style);border-width:1px}.border-0{border-style:var(--tw-border-style);border-width:0}.border-2{border-style:var(--tw-border-style);border-width:2px}.border-t{border-top-style:var(--tw-border-style);border-top-width:1px}.border-\\[\\#2f3134\\]{border-color:#2f3134}.border-gray-200{border-color:var(--color-gray-200)}.border-gray-300{border-color:var(--color-gray-300)}.border-gray-400{border-color:var(--color-gray-400)}.border-red-600{border-color:var(--color-red-600)}.bg-\\[\\#00AEEC\\]{background-color:#00aeec}.bg-\\[\\#242628\\]{background-color:#242628}.bg-amber-300{background-color:var(--color-amber-300)}.bg-blue-50{background-color:var(--color-blue-50)}.bg-blue-100\\/60{background-color:#dbeafe99}@supports (color:color-mix(in lab, red, red)){.bg-blue-100\\/60{background-color:color-mix(in oklab, var(--color-blue-100) 60%, transparent)}}.bg-gray-50{background-color:var(--color-gray-50)}.bg-gray-100{background-color:var(--color-gray-100)}.bg-gray-200{background-color:var(--color-gray-200)}.bg-purple-100{background-color:var(--color-purple-100)}.bg-purple-100\\/60{background-color:#f3e8ff99}@supports (color:color-mix(in lab, red, red)){.bg-purple-100\\/60{background-color:color-mix(in oklab, var(--color-purple-100) 60%, transparent)}}.bg-transparent{background-color:#0000}.bg-white{background-color:var(--color-white)}.p-0{padding:0}.p-1{padding:var(--spacing)}.p-1\\.5{padding:calc(var(--spacing) * 1.5)}.p-2{padding:calc(var(--spacing) * 2)}.p-3{padding:calc(var(--spacing) * 3)}.px-0\\.5{padding-inline:calc(var(--spacing) * .5)}.px-1{padding-inline:var(--spacing)}.px-2{padding-inline:calc(var(--spacing) * 2)}.px-2\\.5{padding-inline:calc(var(--spacing) * 2.5)}.px-3{padding-inline:calc(var(--spacing) * 3)}.px-4{padding-inline:calc(var(--spacing) * 4)}.py-1{padding-block:var(--spacing)}.py-1\\.5{padding-block:calc(var(--spacing) * 1.5)}.py-2{padding-block:calc(var(--spacing) * 2)}.py-px{padding-block:1px}.pt-1{padding-top:var(--spacing)}.pt-2{padding-top:calc(var(--spacing) * 2)}.pr-2{padding-right:calc(var(--spacing) * 2)}.pr-4{padding-right:calc(var(--spacing) * 4)}.pl-1{padding-left:var(--spacing)}.pl-3{padding-left:calc(var(--spacing) * 3)}.pl-9{padding-left:calc(var(--spacing) * 9)}.pl-10{padding-left:calc(var(--spacing) * 10)}.text-center{text-align:center}.text-left{text-align:left}.text-right{text-align:right}.align-middle{vertical-align:middle}.font-mono{font-family:var(--font-mono)}.text-base{font-size:var(--text-base);line-height:var(--tw-leading,var(--text-base--line-height))}.text-sm{font-size:var(--text-sm);line-height:var(--tw-leading,var(--text-sm--line-height))}.text-xl{font-size:var(--text-xl);line-height:var(--tw-leading,var(--text-xl--line-height))}.text-xs{font-size:var(--text-xs);line-height:var(--tw-leading,var(--text-xs--line-height))}.text-\\[9px\\]{font-size:9px}.text-\\[11px\\]{font-size:11px}.text-\\[12px\\]{font-size:12px}.text-\\[13px\\]{font-size:13px}.text-\\[15px\\]{font-size:15px}.leading-4{--tw-leading:calc(var(--spacing) * 4);line-height:calc(var(--spacing) * 4)}.leading-5{--tw-leading:calc(var(--spacing) * 5);line-height:calc(var(--spacing) * 5)}.leading-6{--tw-leading:calc(var(--spacing) * 6);line-height:calc(var(--spacing) * 6)}.leading-\\[12px\\]{--tw-leading:12px;line-height:12px}.font-black{--tw-font-weight:var(--font-weight-black);font-weight:var(--font-weight-black)}.font-bold{--tw-font-weight:var(--font-weight-bold);font-weight:var(--font-weight-bold)}.font-medium{--tw-font-weight:var(--font-weight-medium);font-weight:var(--font-weight-medium)}.font-normal{--tw-font-weight:var(--font-weight-normal);font-weight:var(--font-weight-normal)}.whitespace-nowrap{white-space:nowrap}.text-amber-700{color:var(--color-amber-700)}.text-black{color:var(--color-black)}.text-black\\/50{color:#00000080}@supports (color:color-mix(in lab, red, red)){.text-black\\/50{color:color-mix(in oklab, var(--color-black) 50%, transparent)}}.text-blue-500{color:var(--color-blue-500)}.text-blue-900{color:var(--color-blue-900)}.text-gray-400{color:var(--color-gray-400)}.text-gray-500{color:var(--color-gray-500)}.text-gray-600{color:var(--color-gray-600)}.text-gray-700{color:var(--color-gray-700)}.text-gray-800{color:var(--color-gray-800)}.text-gray-900{color:var(--color-gray-900)}.text-green-700{color:var(--color-green-700)}.text-orange-900{color:var(--color-orange-900)}.text-purple-500{color:var(--color-purple-500)}.text-purple-600{color:var(--color-purple-600)}.text-purple-900{color:var(--color-purple-900)}.text-red-700{color:var(--color-red-700)}.text-white{color:var(--color-white)}.text-white\\/50{color:#ffffff80}@supports (color:color-mix(in lab, red, red)){.text-white\\/50{color:color-mix(in oklab, var(--color-white) 50%, transparent)}}.accent-\\[\\#00AEEC\\]{accent-color:#00aeec}.opacity-0{opacity:0}.opacity-100{opacity:1}.shadow{--tw-shadow:0 1px 3px 0 var(--tw-shadow-color,#0000001a), 0 1px 2px -1px var(--tw-shadow-color,#0000001a);box-shadow:var(--tw-inset-shadow), var(--tw-inset-ring-shadow), var(--tw-ring-offset-shadow), var(--tw-ring-shadow), var(--tw-shadow)}.shadow-lg{--tw-shadow:0 10px 15px -3px var(--tw-shadow-color,#0000001a), 0 4px 6px -4px var(--tw-shadow-color,#0000001a);box-shadow:var(--tw-inset-shadow), var(--tw-inset-ring-shadow), var(--tw-ring-offset-shadow), var(--tw-ring-shadow), var(--tw-shadow)}.ring-1{--tw-ring-shadow:var(--tw-ring-inset,) 0 0 0 calc(1px + var(--tw-ring-offset-width)) var(--tw-ring-color,currentcolor);box-shadow:var(--tw-inset-shadow), var(--tw-inset-ring-shadow), var(--tw-ring-offset-shadow), var(--tw-ring-shadow), var(--tw-shadow)}.shadow-black\\/20{--tw-shadow-color:#0003}@supports (color:color-mix(in lab, red, red)){.shadow-black\\/20{--tw-shadow-color:color-mix(in oklab, color-mix(in oklab, var(--color-black) 20%, transparent) var(--tw-shadow-alpha), transparent)}}.ring-black\\/5{--tw-ring-color:#0000000d}@supports (color:color-mix(in lab, red, red)){.ring-black\\/5{--tw-ring-color:color-mix(in oklab, var(--color-black) 5%, transparent)}}.outline-hidden{--tw-outline-style:none;outline-style:none}@media (forced-colors:active){.outline-hidden{outline-offset:2px;outline:2px solid #0000}}.outline{outline-style:var(--tw-outline-style);outline-width:1px}.filter{filter:var(--tw-blur,) var(--tw-brightness,) var(--tw-contrast,) var(--tw-grayscale,) var(--tw-hue-rotate,) var(--tw-invert,) var(--tw-saturate,) var(--tw-sepia,) var(--tw-drop-shadow,)}.transition{transition-property:color,background-color,border-color,outline-color,text-decoration-color,fill,stroke,--tw-gradient-from,--tw-gradient-via,--tw-gradient-to,opacity,box-shadow,transform,translate,scale,rotate,filter,-webkit-backdrop-filter,backdrop-filter,display,content-visibility,overlay,pointer-events;transition-timing-function:var(--tw-ease,var(--default-transition-timing-function));transition-duration:var(--tw-duration,var(--default-transition-duration))}.transition-colors{transition-property:color,background-color,border-color,outline-color,text-decoration-color,fill,stroke,--tw-gradient-from,--tw-gradient-via,--tw-gradient-to;transition-timing-function:var(--tw-ease,var(--default-transition-timing-function));transition-duration:var(--tw-duration,var(--default-transition-duration))}.transition-transform{transition-property:transform,translate,scale,rotate;transition-timing-function:var(--tw-ease,var(--default-transition-timing-function));transition-duration:var(--tw-duration,var(--default-transition-duration))}.duration-100{--tw-duration:.1s;transition-duration:.1s}.duration-200{--tw-duration:.2s;transition-duration:.2s}.ease-in{--tw-ease:var(--ease-in);transition-timing-function:var(--ease-in)}.will-change-\\[right\\,bottom\\]{will-change:right,bottom}.will-change-\\[top\\,left\\]{will-change:top,left}.select-none{-webkit-user-select:none;user-select:none}@media (hover:hover){.group-hover\\:flex:is(:where(.group):hover *){display:flex}}.invalid\\:border-2:invalid{border-style:var(--tw-border-style);border-width:2px}.invalid\\:border-red-500:invalid{border-color:var(--color-red-500)}@media (hover:hover){.hover\\:rounded-full:hover{border-radius:2147483647px}.hover\\:border-none:hover{--tw-border-style:none;border-style:none}.hover\\:bg-\\[\\#00AEEC\\]:hover,.hover\\:bg-\\[\\#00aeec\\]:hover{background-color:#00aeec}.hover\\:bg-blue-50\\/50:hover{background-color:#eff6ff80}@supports (color:color-mix(in lab, red, red)){.hover\\:bg-blue-50\\/50:hover{background-color:color-mix(in oklab, var(--color-blue-50) 50%, transparent)}}.hover\\:bg-blue-100:hover{background-color:var(--color-blue-100)}.hover\\:bg-purple-100:hover{background-color:var(--color-purple-100)}.hover\\:bg-white\\/40:hover{background-color:#fff6}@supports (color:color-mix(in lab, red, red)){.hover\\:bg-white\\/40:hover{background-color:color-mix(in oklab, var(--color-white) 40%, transparent)}}.hover\\:text-black:hover{color:var(--color-black)}.hover\\:text-white:hover{color:var(--color-white)}}.focus\\:border-gray-400:focus{border-color:var(--color-gray-400)}.focus\\:border-gray-500:focus{border-color:var(--color-gray-500)}.focus\\:outline-hidden:focus{--tw-outline-style:none;outline-style:none}@media (forced-colors:active){.focus\\:outline-hidden:focus{outline-offset:2px;outline:2px solid #0000}}.focus\\:invalid\\:border-red-500:focus:invalid{border-color:var(--color-red-500)}.focus-visible\\:border-indigo-500:focus-visible{border-color:var(--color-indigo-500)}.disabled\\:opacity-40:disabled{opacity:.4}.disabled\\:opacity-50:disabled{opacity:.5}@media (width>=40rem){.sm\\:text-sm{font-size:var(--text-sm);line-height:var(--tw-leading,var(--text-sm--line-height))}}}.no-scrollbar::-webkit-scrollbar{display:none}.no-scrollbar{-ms-overflow-style:none;scrollbar-width:none}@property --tw-translate-x{syntax:\"*\";inherits:false;initial-value:0}@property --tw-translate-y{syntax:\"*\";inherits:false;initial-value:0}@property --tw-translate-z{syntax:\"*\";inherits:false;initial-value:0}@property --tw-rotate-x{syntax:\"*\";inherits:false}@property --tw-rotate-y{syntax:\"*\";inherits:false}@property --tw-rotate-z{syntax:\"*\";inherits:false}@property --tw-skew-x{syntax:\"*\";inherits:false}@property --tw-skew-y{syntax:\"*\";inherits:false}@property --tw-space-y-reverse{syntax:\"*\";inherits:false;initial-value:0}@property --tw-border-style{syntax:\"*\";inherits:false;initial-value:solid}@property --tw-leading{syntax:\"*\";inherits:false}@property --tw-font-weight{syntax:\"*\";inherits:false}@property --tw-shadow{syntax:\"*\";inherits:false;initial-value:0 0 #0000}@property --tw-shadow-color{syntax:\"*\";inherits:false}@property --tw-shadow-alpha{syntax:\"<percentage>\";inherits:false;initial-value:100%}@property --tw-inset-shadow{syntax:\"*\";inherits:false;initial-value:0 0 #0000}@property --tw-inset-shadow-color{syntax:\"*\";inherits:false}@property --tw-inset-shadow-alpha{syntax:\"<percentage>\";inherits:false;initial-value:100%}@property --tw-ring-color{syntax:\"*\";inherits:false}@property --tw-ring-shadow{syntax:\"*\";inherits:false;initial-value:0 0 #0000}@property --tw-inset-ring-color{syntax:\"*\";inherits:false}@property --tw-inset-ring-shadow{syntax:\"*\";inherits:false;initial-value:0 0 #0000}@property --tw-ring-inset{syntax:\"*\";inherits:false}@property --tw-ring-offset-width{syntax:\"<length>\";inherits:false;initial-value:0}@property --tw-ring-offset-color{syntax:\"*\";inherits:false;initial-value:#fff}@property --tw-ring-offset-shadow{syntax:\"*\";inherits:false;initial-value:0 0 #0000}@property --tw-outline-style{syntax:\"*\";inherits:false;initial-value:solid}@property --tw-blur{syntax:\"*\";inherits:false}@property --tw-brightness{syntax:\"*\";inherits:false}@property --tw-contrast{syntax:\"*\";inherits:false}@property --tw-grayscale{syntax:\"*\";inherits:false}@property --tw-hue-rotate{syntax:\"*\";inherits:false}@property --tw-invert{syntax:\"*\";inherits:false}@property --tw-opacity{syntax:\"*\";inherits:false}@property --tw-saturate{syntax:\"*\";inherits:false}@property --tw-sepia{syntax:\"*\";inherits:false}@property --tw-drop-shadow{syntax:\"*\";inherits:false}@property --tw-drop-shadow-color{syntax:\"*\";inherits:false}@property --tw-drop-shadow-alpha{syntax:\"<percentage>\";inherits:false;initial-value:100%}@property --tw-drop-shadow-size{syntax:\"*\";inherits:false}@property --tw-duration{syntax:\"*\";inherits:false}@property --tw-ease{syntax:\"*\";inherits:false}");
+	var style_css_default = _style("/*! tailwindcss v4.3.3 | MIT License | https://tailwindcss.com */\n@layer properties{*,:before,:after,::backdrop{--tw-translate-x:0;--tw-translate-y:0;--tw-translate-z:0;--tw-rotate-x:initial;--tw-rotate-y:initial;--tw-rotate-z:initial;--tw-skew-x:initial;--tw-skew-y:initial;--tw-space-y-reverse:0;--tw-border-style:solid;--tw-leading:initial;--tw-font-weight:initial;--tw-shadow:0 0 #0000;--tw-shadow-color:initial;--tw-shadow-alpha:100%;--tw-inset-shadow:0 0 #0000;--tw-inset-shadow-color:initial;--tw-inset-shadow-alpha:100%;--tw-ring-color:initial;--tw-ring-shadow:0 0 #0000;--tw-inset-ring-color:initial;--tw-inset-ring-shadow:0 0 #0000;--tw-ring-inset:initial;--tw-ring-offset-width:0px;--tw-ring-offset-color:#fff;--tw-ring-offset-shadow:0 0 #0000;--tw-outline-style:solid;--tw-blur:initial;--tw-brightness:initial;--tw-contrast:initial;--tw-grayscale:initial;--tw-hue-rotate:initial;--tw-invert:initial;--tw-opacity:initial;--tw-saturate:initial;--tw-sepia:initial;--tw-drop-shadow:initial;--tw-drop-shadow-color:initial;--tw-drop-shadow-alpha:100%;--tw-drop-shadow-size:initial;--tw-duration:initial;--tw-ease:initial}}@layer theme{:host,:host{--font-sans:-apple-system, BlinkMacSystemFont, \"Segoe UI\", Roboto, \"Helvetica Neue\", \"Noto Sans\", Arial, sans-serif, \"Apple Color Emoji\", \"Segoe UI Emoji\", \"Segoe UI Symbol\", \"Noto Color Emoji\";--font-mono:ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, \"Liberation Mono\", \"Courier New\", monospace;--color-red-500:oklch(63.7% .237 25.331);--color-red-600:oklch(57.7% .245 27.325);--color-red-700:oklch(50.5% .213 27.518);--color-orange-900:oklch(40.8% .123 38.172);--color-amber-300:oklch(87.9% .169 91.605);--color-amber-700:oklch(55.5% .163 48.998);--color-green-700:oklch(52.7% .154 150.069);--color-blue-50:oklch(97% .014 254.604);--color-blue-100:oklch(93.2% .032 255.585);--color-blue-500:oklch(62.3% .214 259.815);--color-blue-900:oklch(37.9% .146 265.522);--color-indigo-500:oklch(58.5% .233 277.117);--color-purple-100:oklch(94.6% .033 307.174);--color-purple-500:oklch(62.7% .265 303.9);--color-purple-600:oklch(55.8% .288 302.321);--color-purple-900:oklch(38.1% .176 304.987);--color-gray-50:oklch(98.5% .002 247.839);--color-gray-100:oklch(96.7% .003 264.542);--color-gray-200:oklch(92.8% .006 264.531);--color-gray-300:oklch(87.2% .01 258.338);--color-gray-400:oklch(70.7% .022 261.325);--color-gray-500:oklch(55.1% .027 264.364);--color-gray-600:oklch(44.6% .03 256.802);--color-gray-700:oklch(37.3% .034 259.733);--color-gray-800:oklch(27.8% .033 256.848);--color-gray-900:oklch(21% .034 264.665);--color-black:#000;--color-white:#fff;--spacing:4px;--text-xs:12px;--text-xs--line-height:calc(1 / .75);--text-sm:14px;--text-sm--line-height:calc(1.25 / .875);--text-base:16px;--text-base--line-height:calc(1.5 / 1);--text-xl:20px;--text-xl--line-height:calc(1.75 / 1.25);--font-weight-normal:400;--font-weight-medium:500;--font-weight-bold:700;--font-weight-black:900;--radius-md:6px;--radius-lg:8px;--radius-xl:12px;--ease-in:cubic-bezier(.4, 0, 1, 1);--default-transition-duration:.15s;--default-transition-timing-function:cubic-bezier(.4, 0, .2, 1);--default-font-family:var(--font-sans);--default-mono-font-family:var(--font-mono)}}@layer base{*,:after,:before,::backdrop{box-sizing:border-box;border:0 solid;margin:0;padding:0}::file-selector-button{box-sizing:border-box;border:0 solid;margin:0;padding:0}html,:host{-webkit-text-size-adjust:100%;tab-size:4;line-height:1.5;font-family:var(--default-font-family,-apple-system, BlinkMacSystemFont, \"Segoe UI\", Roboto, \"Helvetica Neue\", \"Noto Sans\", Arial, sans-serif, \"Apple Color Emoji\", \"Segoe UI Emoji\", \"Segoe UI Symbol\", \"Noto Color Emoji\");font-feature-settings:var(--default-font-feature-settings,normal);font-variation-settings:var(--default-font-variation-settings,normal);-webkit-tap-highlight-color:transparent}hr{height:0;color:inherit;border-top-width:1px}abbr:where([title]){-webkit-text-decoration:underline dotted;text-decoration:underline dotted}h1,h2,h3,h4,h5,h6{font-size:inherit;font-weight:inherit}a{color:inherit;-webkit-text-decoration:inherit;-webkit-text-decoration:inherit;-webkit-text-decoration:inherit;-webkit-text-decoration:inherit;text-decoration:inherit}b,strong{font-weight:bolder}code,kbd,samp,pre{font-family:var(--default-mono-font-family,ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, \"Liberation Mono\", \"Courier New\", monospace);font-feature-settings:var(--default-mono-font-feature-settings,normal);font-variation-settings:var(--default-mono-font-variation-settings,normal);font-size:1em}small{font-size:80%}sub,sup{vertical-align:baseline;font-size:75%;line-height:0;position:relative}sub{bottom:-.25em}sup{top:-.5em}table{text-indent:0;border-color:inherit;border-collapse:collapse}:-moz-focusring:where(:not(iframe)){outline:auto}progress{vertical-align:baseline}summary{display:list-item}ol,ul,menu{list-style:none}img,svg,video,canvas,audio,iframe,embed,object{vertical-align:middle;display:block}img,video{max-width:100%;height:auto}button,input,select,optgroup,textarea{font:inherit;font-feature-settings:inherit;font-variation-settings:inherit;letter-spacing:inherit;color:inherit;opacity:1;background-color:#0000;border-radius:0}::file-selector-button{font:inherit;font-feature-settings:inherit;font-variation-settings:inherit;letter-spacing:inherit;color:inherit;opacity:1;background-color:#0000;border-radius:0}:where(select:is([multiple],[size])) optgroup{font-weight:bolder}:where(select:is([multiple],[size])) optgroup option{padding-inline-start:20px}::file-selector-button{margin-inline-end:4px}::placeholder{opacity:1}@supports (not ((-webkit-appearance:-apple-pay-button))) or (contain-intrinsic-size:1px){::placeholder{color:currentColor}@supports (color:color-mix(in lab, red, red)){::placeholder{color:color-mix(in oklab, currentcolor 50%, transparent)}}}textarea{resize:vertical}::-webkit-search-decoration{-webkit-appearance:none}::-webkit-date-and-time-value{min-height:1lh;text-align:inherit}::-webkit-datetime-edit{display:inline-flex}::-webkit-datetime-edit-fields-wrapper{padding:0}::-webkit-datetime-edit{padding-block:0}::-webkit-datetime-edit-year-field{padding-block:0}::-webkit-datetime-edit-month-field{padding-block:0}::-webkit-datetime-edit-day-field{padding-block:0}::-webkit-datetime-edit-hour-field{padding-block:0}::-webkit-datetime-edit-minute-field{padding-block:0}::-webkit-datetime-edit-second-field{padding-block:0}::-webkit-datetime-edit-millisecond-field{padding-block:0}::-webkit-datetime-edit-meridiem-field{padding-block:0}::-webkit-calendar-picker-indicator{line-height:1}:-moz-ui-invalid{box-shadow:none}button,input:where([type=button],[type=reset],[type=submit]){appearance:button}::file-selector-button{appearance:button}::-webkit-inner-spin-button{height:auto}::-webkit-outer-spin-button{height:auto}[hidden]:where(:not([hidden=until-found])){display:none!important}:host{font-family:PingFang SC,HarmonyOS_Regular,Helvetica Neue,Microsoft YaHei,sans-serif!important}input[type=number]::-webkit-inner-spin-button{appearance:none;margin:0}input[type=number]::-webkit-outer-spin-button{appearance:none;margin:0}input[type=number]{-moz-appearance:textfield}}@layer components{.misaka-shortcut-colors{background-color:var(--bg1,#fff);color:var(--text2,#61666d);border-color:var(--line_regular,#e5e7eb)}}@layer utilities{.pointer-events-none{pointer-events:none}.collapse{visibility:collapse}.visible{visibility:visible}.absolute{position:absolute}.fixed{position:fixed}.relative{position:relative}.static{position:static}.sticky{position:sticky}.inset-y-0{inset-block:0}.-top-1{top:calc(var(--spacing) * -1)}.top-0{top:0}.top-1\\.5{top:calc(var(--spacing) * 1.5)}.right-0{right:0}.right-10{right:calc(var(--spacing) * 10)}.-left-1{left:calc(var(--spacing) * -1)}.left-0{left:0}.z-10{z-index:10}.z-100{z-index:100}.z-2000{z-index:2000}.z-100000{z-index:100000}.z-10000000{z-index:10000000}.container{width:100%}@media (width>=40rem){.container{max-width:640px}}@media (width>=48rem){.container{max-width:768px}}@media (width>=64rem){.container{max-width:1024px}}@media (width>=80rem){.container{max-width:1280px}}@media (width>=96rem){.container{max-width:1536px}}.m-0\\.5{margin:calc(var(--spacing) * .5)}.m-1{margin:var(--spacing)}.mx-2{margin-inline:calc(var(--spacing) * 2)}.mx-auto{margin-inline:auto}.my-1{margin-block:var(--spacing)}.my-2{margin-block:calc(var(--spacing) * 2)}.mt-1{margin-top:var(--spacing)}.mt-2{margin-top:calc(var(--spacing) * 2)}.mt-3{margin-top:calc(var(--spacing) * 3)}.mr-0\\.5{margin-right:calc(var(--spacing) * .5)}.mr-1{margin-right:var(--spacing)}.mr-2{margin-right:calc(var(--spacing) * 2)}.mr-4{margin-right:calc(var(--spacing) * 4)}.mb-0\\.5{margin-bottom:calc(var(--spacing) * .5)}.mb-1{margin-bottom:var(--spacing)}.mb-1\\.5{margin-bottom:calc(var(--spacing) * 1.5)}.mb-2{margin-bottom:calc(var(--spacing) * 2)}.mb-3{margin-bottom:calc(var(--spacing) * 3)}.ml-2{margin-left:calc(var(--spacing) * 2)}.ml-4{margin-left:calc(var(--spacing) * 4)}.ml-auto{margin-left:auto}.block{display:block}.contents{display:contents}.flex{display:flex}.grid{display:grid}.hidden{display:none}.inline{display:inline}.inline-block{display:inline-block}.inline-flex{display:inline-flex}.table{display:table}.size-8{width:calc(var(--spacing) * 8);height:calc(var(--spacing) * 8)}.h-4{height:calc(var(--spacing) * 4)}.h-5{height:calc(var(--spacing) * 5)}.h-6{height:calc(var(--spacing) * 6)}.h-10{height:calc(var(--spacing) * 10)}.h-fit{height:fit-content}.max-h-44{max-height:calc(var(--spacing) * 44)}.max-h-60{max-height:calc(var(--spacing) * 60)}.min-h-\\[calc\\(100\\%-2\\.5rem\\)\\]{min-height:calc(100% - 40px)}.w-1\\/5{width:20%}.w-2\\/5{width:40%}.w-4{width:calc(var(--spacing) * 4)}.w-5{width:calc(var(--spacing) * 5)}.w-6{width:calc(var(--spacing) * 6)}.w-10{width:calc(var(--spacing) * 10)}.w-11{width:calc(var(--spacing) * 11)}.w-full{width:100%}.min-w-0{min-width:0}.flex-1{flex:1}.shrink-0{flex-shrink:0}.translate-x-1{--tw-translate-x:var(--spacing);translate:var(--tw-translate-x) var(--tw-translate-y)}.translate-x-6{--tw-translate-x:calc(var(--spacing) * 6);translate:var(--tw-translate-x) var(--tw-translate-y)}.rotate-90{rotate:90deg}.rotate-180{rotate:180deg}.transform{transform:var(--tw-rotate-x,) var(--tw-rotate-y,) var(--tw-rotate-z,) var(--tw-skew-x,) var(--tw-skew-y,)}.cursor-default{cursor:default}.cursor-move{cursor:move}.cursor-pointer{cursor:pointer}.resize{resize:both}.resize-none{resize:none}.grid-cols-\\[4\\.5rem_minmax\\(0\\,1fr\\)\\]{grid-template-columns:72px minmax(0,1fr)}.grid-cols-\\[auto_minmax\\(0\\,1fr\\)\\]{grid-template-columns:auto minmax(0,1fr)}.flex-col{flex-direction:column}.flex-row{flex-direction:row}.flex-wrap{flex-wrap:wrap}.items-center{align-items:center}.justify-between{justify-content:space-between}.justify-center{justify-content:center}.justify-end{justify-content:flex-end}.gap-2{gap:calc(var(--spacing) * 2)}.gap-3{gap:calc(var(--spacing) * 3)}:where(.space-y-3>:not(:last-child)){--tw-space-y-reverse:0;margin-block-start:calc(calc(var(--spacing) * 3) * var(--tw-space-y-reverse));margin-block-end:calc(calc(var(--spacing) * 3) * calc(1 - var(--tw-space-y-reverse)))}.gap-x-3{column-gap:calc(var(--spacing) * 3)}.gap-y-2{row-gap:calc(var(--spacing) * 2)}.self-center{align-self:center}.truncate{text-overflow:ellipsis;white-space:nowrap;overflow:hidden}.overflow-auto{overflow:auto}.overflow-hidden{overflow:hidden}.overscroll-none{overscroll-behavior:none}.rounded{border-radius:4px}.rounded-full{border-radius:2147483647px}.rounded-lg{border-radius:var(--radius-lg)}.rounded-md{border-radius:var(--radius-md)}.rounded-xl{border-radius:var(--radius-xl)}.border{border-style:var(--tw-border-style);border-width:1px}.border-0{border-style:var(--tw-border-style);border-width:0}.border-2{border-style:var(--tw-border-style);border-width:2px}.border-t{border-top-style:var(--tw-border-style);border-top-width:1px}.border-gray-200{border-color:var(--color-gray-200)}.border-gray-300{border-color:var(--color-gray-300)}.border-gray-400{border-color:var(--color-gray-400)}.border-red-600{border-color:var(--color-red-600)}.bg-\\[\\#00AEEC\\]{background-color:#00aeec}.bg-amber-300{background-color:var(--color-amber-300)}.bg-blue-50{background-color:var(--color-blue-50)}.bg-blue-100\\/60{background-color:#dbeafe99}@supports (color:color-mix(in lab, red, red)){.bg-blue-100\\/60{background-color:color-mix(in oklab, var(--color-blue-100) 60%, transparent)}}.bg-gray-50{background-color:var(--color-gray-50)}.bg-gray-100{background-color:var(--color-gray-100)}.bg-gray-200{background-color:var(--color-gray-200)}.bg-purple-100{background-color:var(--color-purple-100)}.bg-purple-100\\/60{background-color:#f3e8ff99}@supports (color:color-mix(in lab, red, red)){.bg-purple-100\\/60{background-color:color-mix(in oklab, var(--color-purple-100) 60%, transparent)}}.bg-transparent{background-color:#0000}.bg-white{background-color:var(--color-white)}.p-0{padding:0}.p-1{padding:var(--spacing)}.p-1\\.5{padding:calc(var(--spacing) * 1.5)}.p-2{padding:calc(var(--spacing) * 2)}.p-3{padding:calc(var(--spacing) * 3)}.px-0\\.5{padding-inline:calc(var(--spacing) * .5)}.px-1{padding-inline:var(--spacing)}.px-2{padding-inline:calc(var(--spacing) * 2)}.px-2\\.5{padding-inline:calc(var(--spacing) * 2.5)}.px-3{padding-inline:calc(var(--spacing) * 3)}.px-4{padding-inline:calc(var(--spacing) * 4)}.py-1{padding-block:var(--spacing)}.py-1\\.5{padding-block:calc(var(--spacing) * 1.5)}.py-2{padding-block:calc(var(--spacing) * 2)}.py-px{padding-block:1px}.pt-1{padding-top:var(--spacing)}.pt-2{padding-top:calc(var(--spacing) * 2)}.pr-2{padding-right:calc(var(--spacing) * 2)}.pr-4{padding-right:calc(var(--spacing) * 4)}.pl-1{padding-left:var(--spacing)}.pl-3{padding-left:calc(var(--spacing) * 3)}.pl-9{padding-left:calc(var(--spacing) * 9)}.pl-10{padding-left:calc(var(--spacing) * 10)}.text-center{text-align:center}.text-left{text-align:left}.text-right{text-align:right}.align-middle{vertical-align:middle}.font-mono{font-family:var(--font-mono)}.text-base{font-size:var(--text-base);line-height:var(--tw-leading,var(--text-base--line-height))}.text-sm{font-size:var(--text-sm);line-height:var(--tw-leading,var(--text-sm--line-height))}.text-xl{font-size:var(--text-xl);line-height:var(--tw-leading,var(--text-xl--line-height))}.text-xs{font-size:var(--text-xs);line-height:var(--tw-leading,var(--text-xs--line-height))}.text-\\[9px\\]{font-size:9px}.text-\\[11px\\]{font-size:11px}.text-\\[12px\\]{font-size:12px}.text-\\[13px\\]{font-size:13px}.text-\\[15px\\]{font-size:15px}.leading-4{--tw-leading:calc(var(--spacing) * 4);line-height:calc(var(--spacing) * 4)}.leading-5{--tw-leading:calc(var(--spacing) * 5);line-height:calc(var(--spacing) * 5)}.leading-6{--tw-leading:calc(var(--spacing) * 6);line-height:calc(var(--spacing) * 6)}.leading-\\[12px\\]{--tw-leading:12px;line-height:12px}.font-black{--tw-font-weight:var(--font-weight-black);font-weight:var(--font-weight-black)}.font-bold{--tw-font-weight:var(--font-weight-bold);font-weight:var(--font-weight-bold)}.font-medium{--tw-font-weight:var(--font-weight-medium);font-weight:var(--font-weight-medium)}.font-normal{--tw-font-weight:var(--font-weight-normal);font-weight:var(--font-weight-normal)}.whitespace-nowrap{white-space:nowrap}.text-amber-700{color:var(--color-amber-700)}.text-black{color:var(--color-black)}.text-blue-500{color:var(--color-blue-500)}.text-blue-900{color:var(--color-blue-900)}.text-gray-400{color:var(--color-gray-400)}.text-gray-500{color:var(--color-gray-500)}.text-gray-600{color:var(--color-gray-600)}.text-gray-700{color:var(--color-gray-700)}.text-gray-800{color:var(--color-gray-800)}.text-gray-900{color:var(--color-gray-900)}.text-green-700{color:var(--color-green-700)}.text-orange-900{color:var(--color-orange-900)}.text-purple-500{color:var(--color-purple-500)}.text-purple-600{color:var(--color-purple-600)}.text-purple-900{color:var(--color-purple-900)}.text-red-700{color:var(--color-red-700)}.text-white{color:var(--color-white)}.accent-\\[\\#00AEEC\\]{accent-color:#00aeec}.opacity-0{opacity:0}.opacity-100{opacity:1}.shadow{--tw-shadow:0 1px 3px 0 var(--tw-shadow-color,#0000001a), 0 1px 2px -1px var(--tw-shadow-color,#0000001a);box-shadow:var(--tw-inset-shadow), var(--tw-inset-ring-shadow), var(--tw-ring-offset-shadow), var(--tw-ring-shadow), var(--tw-shadow)}.shadow-lg{--tw-shadow:0 10px 15px -3px var(--tw-shadow-color,#0000001a), 0 4px 6px -4px var(--tw-shadow-color,#0000001a);box-shadow:var(--tw-inset-shadow), var(--tw-inset-ring-shadow), var(--tw-ring-offset-shadow), var(--tw-ring-shadow), var(--tw-shadow)}.ring-1{--tw-ring-shadow:var(--tw-ring-inset,) 0 0 0 calc(1px + var(--tw-ring-offset-width)) var(--tw-ring-color,currentcolor);box-shadow:var(--tw-inset-shadow), var(--tw-inset-ring-shadow), var(--tw-ring-offset-shadow), var(--tw-ring-shadow), var(--tw-shadow)}.shadow-black\\/20{--tw-shadow-color:#0003}@supports (color:color-mix(in lab, red, red)){.shadow-black\\/20{--tw-shadow-color:color-mix(in oklab, color-mix(in oklab, var(--color-black) 20%, transparent) var(--tw-shadow-alpha), transparent)}}.ring-black\\/5{--tw-ring-color:#0000000d}@supports (color:color-mix(in lab, red, red)){.ring-black\\/5{--tw-ring-color:color-mix(in oklab, var(--color-black) 5%, transparent)}}.outline-hidden{--tw-outline-style:none;outline-style:none}@media (forced-colors:active){.outline-hidden{outline-offset:2px;outline:2px solid #0000}}.outline{outline-style:var(--tw-outline-style);outline-width:1px}.filter{filter:var(--tw-blur,) var(--tw-brightness,) var(--tw-contrast,) var(--tw-grayscale,) var(--tw-hue-rotate,) var(--tw-invert,) var(--tw-saturate,) var(--tw-sepia,) var(--tw-drop-shadow,)}.filter\\!{filter:var(--tw-blur,) var(--tw-brightness,) var(--tw-contrast,) var(--tw-grayscale,) var(--tw-hue-rotate,) var(--tw-invert,) var(--tw-saturate,) var(--tw-sepia,) var(--tw-drop-shadow,)!important}.transition{transition-property:color,background-color,border-color,outline-color,text-decoration-color,fill,stroke,--tw-gradient-from,--tw-gradient-via,--tw-gradient-to,opacity,box-shadow,transform,translate,scale,rotate,filter,-webkit-backdrop-filter,backdrop-filter,display,content-visibility,overlay,pointer-events;transition-timing-function:var(--tw-ease,var(--default-transition-timing-function));transition-duration:var(--tw-duration,var(--default-transition-duration))}.transition-colors{transition-property:color,background-color,border-color,outline-color,text-decoration-color,fill,stroke,--tw-gradient-from,--tw-gradient-via,--tw-gradient-to;transition-timing-function:var(--tw-ease,var(--default-transition-timing-function));transition-duration:var(--tw-duration,var(--default-transition-duration))}.transition-transform{transition-property:transform,translate,scale,rotate;transition-timing-function:var(--tw-ease,var(--default-transition-timing-function));transition-duration:var(--tw-duration,var(--default-transition-duration))}.duration-100{--tw-duration:.1s;transition-duration:.1s}.duration-200{--tw-duration:.2s;transition-duration:.2s}.ease-in{--tw-ease:var(--ease-in);transition-timing-function:var(--ease-in)}.will-change-\\[right\\,bottom\\]{will-change:right,bottom}.will-change-\\[top\\,left\\]{will-change:top,left}.select-none{-webkit-user-select:none;user-select:none}@media (hover:hover){.group-hover\\:flex:is(:where(.group):hover *){display:flex}}.invalid\\:border-2:invalid{border-style:var(--tw-border-style);border-width:2px}.invalid\\:border-red-500:invalid{border-color:var(--color-red-500)}@media (hover:hover){.hover\\:rounded-full:hover{border-radius:2147483647px}.hover\\:border-none:hover{--tw-border-style:none;border-style:none}.hover\\:bg-\\[\\#00AEEC\\]:hover,.hover\\:bg-\\[\\#00aeec\\]:hover{background-color:#00aeec}.hover\\:bg-blue-50\\/50:hover{background-color:#eff6ff80}@supports (color:color-mix(in lab, red, red)){.hover\\:bg-blue-50\\/50:hover{background-color:color-mix(in oklab, var(--color-blue-50) 50%, transparent)}}.hover\\:bg-blue-100:hover{background-color:var(--color-blue-100)}.hover\\:bg-purple-100:hover{background-color:var(--color-purple-100)}.hover\\:bg-white\\/40:hover{background-color:#fff6}@supports (color:color-mix(in lab, red, red)){.hover\\:bg-white\\/40:hover{background-color:color-mix(in oklab, var(--color-white) 40%, transparent)}}.hover\\:text-white:hover{color:var(--color-white)}}.focus\\:border-gray-400:focus{border-color:var(--color-gray-400)}.focus\\:border-gray-500:focus{border-color:var(--color-gray-500)}.focus\\:outline-hidden:focus{--tw-outline-style:none;outline-style:none}@media (forced-colors:active){.focus\\:outline-hidden:focus{outline-offset:2px;outline:2px solid #0000}}.focus\\:invalid\\:border-red-500:focus:invalid{border-color:var(--color-red-500)}.focus-visible\\:border-indigo-500:focus-visible{border-color:var(--color-indigo-500)}.disabled\\:opacity-40:disabled{opacity:.4}.disabled\\:opacity-50:disabled{opacity:.5}@media (width>=40rem){.sm\\:text-sm{font-size:var(--text-sm);line-height:var(--tw-leading,var(--text-sm--line-height))}}}.no-scrollbar::-webkit-scrollbar{display:none}.no-scrollbar{-ms-overflow-style:none;scrollbar-width:none}@property --tw-translate-x{syntax:\"*\";inherits:false;initial-value:0}@property --tw-translate-y{syntax:\"*\";inherits:false;initial-value:0}@property --tw-translate-z{syntax:\"*\";inherits:false;initial-value:0}@property --tw-rotate-x{syntax:\"*\";inherits:false}@property --tw-rotate-y{syntax:\"*\";inherits:false}@property --tw-rotate-z{syntax:\"*\";inherits:false}@property --tw-skew-x{syntax:\"*\";inherits:false}@property --tw-skew-y{syntax:\"*\";inherits:false}@property --tw-space-y-reverse{syntax:\"*\";inherits:false;initial-value:0}@property --tw-border-style{syntax:\"*\";inherits:false;initial-value:solid}@property --tw-leading{syntax:\"*\";inherits:false}@property --tw-font-weight{syntax:\"*\";inherits:false}@property --tw-shadow{syntax:\"*\";inherits:false;initial-value:0 0 #0000}@property --tw-shadow-color{syntax:\"*\";inherits:false}@property --tw-shadow-alpha{syntax:\"<percentage>\";inherits:false;initial-value:100%}@property --tw-inset-shadow{syntax:\"*\";inherits:false;initial-value:0 0 #0000}@property --tw-inset-shadow-color{syntax:\"*\";inherits:false}@property --tw-inset-shadow-alpha{syntax:\"<percentage>\";inherits:false;initial-value:100%}@property --tw-ring-color{syntax:\"*\";inherits:false}@property --tw-ring-shadow{syntax:\"*\";inherits:false;initial-value:0 0 #0000}@property --tw-inset-ring-color{syntax:\"*\";inherits:false}@property --tw-inset-ring-shadow{syntax:\"*\";inherits:false;initial-value:0 0 #0000}@property --tw-ring-inset{syntax:\"*\";inherits:false}@property --tw-ring-offset-width{syntax:\"<length>\";inherits:false;initial-value:0}@property --tw-ring-offset-color{syntax:\"*\";inherits:false;initial-value:#fff}@property --tw-ring-offset-shadow{syntax:\"*\";inherits:false;initial-value:0 0 #0000}@property --tw-outline-style{syntax:\"*\";inherits:false;initial-value:solid}@property --tw-blur{syntax:\"*\";inherits:false}@property --tw-brightness{syntax:\"*\";inherits:false}@property --tw-contrast{syntax:\"*\";inherits:false}@property --tw-grayscale{syntax:\"*\";inherits:false}@property --tw-hue-rotate{syntax:\"*\";inherits:false}@property --tw-invert{syntax:\"*\";inherits:false}@property --tw-opacity{syntax:\"*\";inherits:false}@property --tw-saturate{syntax:\"*\";inherits:false}@property --tw-sepia{syntax:\"*\";inherits:false}@property --tw-drop-shadow{syntax:\"*\";inherits:false}@property --tw-drop-shadow-color{syntax:\"*\";inherits:false}@property --tw-drop-shadow-alpha{syntax:\"<percentage>\";inherits:false;initial-value:100%}@property --tw-drop-shadow-size{syntax:\"*\";inherits:false}@property --tw-duration{syntax:\"*\";inherits:false}@property --tw-ease{syntax:\"*\";inherits:false}");
 	var migrate = async () => {
 		if (GM_getValue$1("__MIGRATED__") === "4.4.0") return;
 		const prefix = "BILICLEANER_";

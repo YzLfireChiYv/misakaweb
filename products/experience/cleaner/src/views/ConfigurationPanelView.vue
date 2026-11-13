@@ -67,6 +67,9 @@
                         @change="chooseFile"
                     />
                 </div>
+                <p class="mt-2 text-[13px] text-gray-600">
+                    支持 MisakaWeb 配置备份和从脚本猫 ZIP 解出的单脚本 .storage.json。
+                </p>
                 <div v-if="incoming" class="mt-3 rounded-md bg-gray-50 p-3">
                     <p class="font-bold">
                         {{ incomingName }} · 来自 {{ incoming.scriptVersion }} / {{ incoming.profile }}
@@ -87,6 +90,7 @@
                                 preview.ignored.length
                             }}
                             项不在当前版本中，将跳过。
+                            <span v-if="legacySkipped">脚本猫文件中另有 {{ legacySkipped }} 项未纳入，含设备、连接或旧键。</span>
                         </p>
                         <p v-for="notice in preview.notices" :key="notice" class="mb-1 text-amber-700">{{ notice }}</p>
                         <details v-if="preview.writes.length || preview.ignored.length" class="my-2">
@@ -123,12 +127,12 @@ import { actionLabel } from '@/feedback'
 import { useConfigurationPanelStore } from '@/stores/view'
 import { getConfigurationDefinitions } from '@/modules/configuration/registry'
 import {
-    parseConfigurationBackup,
     planConfigurationImport,
     type ConfigDefinition,
     type ConfigImportPlan,
     type ConfigurationBackup,
 } from '@/modules/configuration/backup'
+import { parseConfigurationImportFile } from '@/modules/configuration/scriptcat'
 import {
     commitConfigurationPlan,
     configurationAccess,
@@ -149,6 +153,7 @@ const incoming = ref<ConfigurationBackup | null>(null)
 const incomingName = ref('')
 const preview = ref<ConfigImportPlan | null>(null)
 const restoreMode = ref(false)
+const legacySkipped = ref(0)
 const errorMessage = (error: unknown) => (error instanceof Error ? error.message : String(error))
 watch(
     () => store.openToken,
@@ -193,9 +198,18 @@ const chooseFile = async (event: Event) => {
     if (!file) return
     incoming.value = null
     preview.value = null
+    legacySkipped.value = 0
     try {
         if (file.size > 4_000_000) throw new Error('配置文件超过 4 MB，未读取')
-        incoming.value = parseConfigurationBackup(await file.text())
+        let raw: unknown
+        try {
+            raw = JSON.parse(await file.text())
+        } catch {
+            throw new Error('配置文件不是有效的 JSON')
+        }
+        const parsed = parseConfigurationImportFile(raw, definitions.value)
+        incoming.value = parsed.backup
+        legacySkipped.value = parsed.skipped
         incomingName.value = file.name
         restoreMode.value = false
         message.value = ''
@@ -209,6 +223,7 @@ const previewPrevious = () => {
         const previous = readPreImportBackup()
         if (!previous) throw new Error('当前设备没有上次保存前的备份')
         incoming.value = previous
+        legacySkipped.value = 0
         incomingName.value = '上次保存前的本机备份'
         restoreMode.value = true
         rebuildPreview()

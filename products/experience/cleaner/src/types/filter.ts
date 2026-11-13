@@ -24,7 +24,7 @@ export interface ISubFilter {
     setParam?(value: string[] | number): void
 
     // 检测元素
-    check(el: HTMLElement, selectorFn: SelectorFn): Promise<void>
+    matches(value: SelectorResult): boolean
 }
 
 // 主过滤器

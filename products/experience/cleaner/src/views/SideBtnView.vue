@@ -4,21 +4,13 @@
         v-if="floatingVisible"
         ref="target"
         :style="{ right: btnPos.right + 'px', bottom: btnPos.bottom + 'px' }"
-        :class="[
-            isDarkMode ? 'text-white/50 hover:text-white' : 'text-black/50 hover:text-black',
-            isPageBangumi() || isPageVideo() ? 'z-100' : 'z-2000',
-        ]"
+        :class="isPageBangumi() || isPageVideo() ? 'z-100' : 'z-2000'"
     >
         <div
-            class="relative mt-1 h-10 w-10 cursor-pointer items-center justify-center rounded-lg border transition-colors hover:border-none hover:bg-[#00AEEC] hover:text-white"
+            class="misaka-shortcut-colors relative mt-1 h-10 w-10 cursor-pointer items-center justify-center rounded-lg border transition-colors hover:border-none hover:bg-[#00AEEC] hover:text-white"
             v-for="(btn, index) in visibleButtons"
             :key="index"
-            :class="[
-                // 主题
-                isDarkMode ? 'border-[#2f3134] bg-[#242628]' : 'border-gray-200 bg-white',
-                // 显示
-                btn.defaultHidden && !isDragging ? 'hidden group-hover:flex' : 'flex',
-            ]"
+            :class="btn.defaultHidden && !isDragging ? 'hidden group-hover:flex' : 'flex'"
             @click="onSideClick(btn.run)"
         >
             <FeedbackBadge :code="actionLabel(btn.actionKey)" compact />
@@ -32,7 +24,6 @@
 
 <script setup lang="ts">
 import { deviceStorage } from '@/storage/configStorage'
-import { isDarkMode } from '@/modules/rules/common/groups/theme'
 import { useQuickActions } from '@/modules/shortcut/actions'
 import { useShortcutPreference } from '@/modules/shortcut/preference'
 import { isPageBangumi, isPageVideo } from '@/utils/pageType'

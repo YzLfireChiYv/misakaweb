@@ -25,7 +25,7 @@ describe('optimization group build inputs', () => {
     })
 
     it('keeps confirmed optional defaults and labels future gestures/profiles honestly', () => {
-        expect(catalog.packs.flatMap(pack => pack.confirmed_default_off_keys).sort()).toEqual(['border-radius', 'common-theme-dark', 'common-unify-font'])
+        expect(catalog.packs.flatMap(pack => pack.confirmed_default_off_keys).sort()).toEqual(['border-radius', 'common-unify-font'])
         const touch = catalog.packs.find(pack => pack.id === 'touch-controls')!
         expect(touch.status).toBe('prototype-integrated')
         expect(touch.setting_keys).toHaveLength(4)

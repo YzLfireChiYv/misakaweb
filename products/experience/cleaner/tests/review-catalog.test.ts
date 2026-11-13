@@ -4,10 +4,11 @@ import map from '../src/feedback/control-map.json'
 
 describe('review classification matches actual controls', () => {
     it('covers all rule settings with stable IDs and no stored values', () => {
-        const current = map.settings.filter((entry: { panels: string[] }) => entry.panels.includes('rule'))
+        const current = map.settings.filter((entry) => entry.panels.includes('rule') && !entry.retired)
         const byKey = new Map(reviewCatalog.map(entry => [entry.key, entry]))
         expect(byKey.size).toBe(reviewCatalog.length)
-        expect(current).toHaveLength(401)
+        expect(current).toHaveLength(400)
+        expect(map.settings.find(entry => entry.id === 'S083')).toMatchObject({ retired: true })
         for (const entry of current) {
             expect(byKey.get(entry.key)?.id).toBe(entry.id)
         }

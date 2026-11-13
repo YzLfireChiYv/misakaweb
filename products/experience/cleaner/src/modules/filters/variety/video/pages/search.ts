@@ -1,5 +1,8 @@
-import { coreCheck } from '@/modules/filters/core/core'
-import { statGateEnabled, statGateExtra, statGateGroup } from '../statGate'
+import { restoreFiltered } from '@/modules/filters/core/paint'
+import { readSettingValue } from '@/modules/configuration/effective'
+import { FILTER_THRESHOLD_DEFAULTS } from '@/modules/filters/thresholds'
+import { createFilterCheck } from '@/modules/filters/core/core'
+import { statGateEnabled, videoStatOptions, statGateGroup } from '../statGate'
 import config from '@/config'
 import { Group } from '@/types/collection'
 import { ContextMenuTargetHandler, FilterContextMenu, IMainFilter, SelectorResult, SubFilterPair } from '@/types/filter'
@@ -8,7 +11,7 @@ import { logger } from '@/utils/logger'
 import { isPageSearch } from '@/utils/pageType'
 import { unsafeWindow } from '$'
 import { GM_getValue, GM_setValue } from '@/storage/configStorage'
-import { calcVideoRelativity, convertTimeToSec, matchBvid, orderedUniq, showEle, waitForEle } from '@/utils/tool'
+import { calcVideoRelativity, convertTimeToSec, matchBvid, orderedUniq, waitForEle } from '@/utils/tool'
 import {
     VideoBvidFilter,
     VideoDurationFilter,
@@ -18,6 +21,9 @@ import {
     VideoUploaderKeywordFilter,
 } from '../subFilters/black'
 import { VideoTitleWhiteFilter, VideoUploaderWhiteFilter } from '../subFilters/white'
+
+const checkSearchUser = createFilterCheck()
+const coreCheck = createFilterCheck()
 
 const GM_KEYS = {
     black: {
@@ -89,14 +95,12 @@ const relativityMap = new Map<string, RelativityItem>()
 let relativityHookEnabled = false
 
 // 拦截搜索API响应, 每次翻页更新map
-let relativityHookRegistered = false
+let unregisterRelativityHook: (() => void) | undefined
 const registerRelativityFetchHook = () => {
-    if (relativityHookRegistered) {
+    if (unregisterRelativityHook) {
         return
     }
-    relativityHookRegistered = true
-
-    fetchHook.addPostFn(async (input, init, resp) => {
+    const unregister = fetchHook.addPostFn(async (input, init, resp) => {
         if (!relativityHookEnabled) {
             return
         }
@@ -112,7 +116,7 @@ const registerRelativityFetchHook = () => {
             }
             const json = await resp?.clone().json()
             const result = json?.data?.result
-            if (!Array.isArray(result)) {
+            if (unregisterRelativityHook !== unregister || !relativityHookEnabled || !Array.isArray(result)) {
                 return
             }
             result.forEach((item: any) => {
@@ -126,6 +130,7 @@ const registerRelativityFetchHook = () => {
             logger.error('VideoFilterSearch relativity fetch hook error', err)
         }
     })
+    unregisterRelativityHook = unregister
 }
 
 // 首屏数据不经过翻页API, 从pinia中取result_type为video的部分
@@ -229,11 +234,15 @@ class VideoFilterSearch implements IMainFilter {
     init() {
         // 黑名单
         this.videoBvidFilter.setParam(GM_getValue(GM_KEYS.black.bvid.valueKey, []))
-        this.videoDurationFilter.setParam(GM_getValue(GM_KEYS.black.duration.valueKey, 0))
+        this.videoDurationFilter.setParam(
+            readSettingValue(GM_KEYS.black.duration.valueKey, FILTER_THRESHOLD_DEFAULTS.duration),
+        )
         this.videoTitleFilter.setParam(GM_getValue(GM_KEYS.black.title.valueKey, []))
         this.videoUploaderFilter.setParam(GM_getValue(GM_KEYS.black.uploader.valueKey, []))
         this.videoUploaderKeywordFilter.setParam(GM_getValue(GM_KEYS.black.uploaderKeyword.valueKey, []))
-        this.videoRelativityFilter.setParam(GM_getValue(GM_KEYS.black.relativity.valueKey, 15))
+        this.videoRelativityFilter.setParam(
+            readSettingValue(GM_KEYS.black.relativity.valueKey, FILTER_THRESHOLD_DEFAULTS.relativity),
+        )
         // 白名单
         this.videoUploaderWhiteFilter.setParam(GM_getValue(GM_KEYS.white.uploader.valueKey, []))
         this.videoTitleWhiteFilter.setParam(GM_getValue(GM_KEYS.white.title.valueKey, []))
@@ -269,7 +278,7 @@ class VideoFilterSearch implements IMainFilter {
             return
         }
         if (revertAll) {
-            videos.forEach((v) => showEle(v, 'sign'))
+            videos.forEach((v) => restoreFiltered(v, 'sign'))
             return
         }
 
@@ -313,7 +322,7 @@ class VideoFilterSearch implements IMainFilter {
             whitePairs,
             forceBlackPairs,
             false,
-            statGateExtra(videos, selectorFns.bvid),
+            videoStatOptions(selectorFns.bvid),
         )
         const time = (performance.now() - timer).toFixed(1)
         logger.debug(
@@ -342,7 +351,7 @@ class VideoFilterSearch implements IMainFilter {
             !this.videoUploaderKeywordFilter.isEnable &&
             !this.videoUploaderWhiteFilter.isEnable
         ) {
-            showEle(userList, 'sign')
+            restoreFiltered(userList, 'sign')
             return
         }
 
@@ -359,7 +368,9 @@ class VideoFilterSearch implements IMainFilter {
         this.videoUploaderWhiteFilter.isEnable &&
             whitePairs.push([this.videoUploaderWhiteFilter, selectorFns.uploaderCard])
 
-        const blackIdxSet = await coreCheck([userList], true, 'sign', blackPairs, whitePairs)
+        const blackIdxSet = await checkSearchUser([userList], true, 'sign', blackPairs, whitePairs, [], false, {
+            identify: selectorFns.uploaderCard,
+        })
         const time = (performance.now() - timer).toFixed(1)
         logger.debug(`VideoFilterSearchUserCard hide ${blackIdxSet.size} in user-list, mode=${mode}, time=${time}`)
     }
@@ -434,6 +445,8 @@ export const videoFilterSearchGroups: Group[] = [
                 },
                 disableFn: () => {
                     relativityHookEnabled = false
+                    unregisterRelativityHook?.()
+                    unregisterRelativityHook = undefined
                     relativityMap.clear()
                     mainFilter.videoRelativityFilter.disable()
                     mainFilter.checkFull()
@@ -448,8 +461,9 @@ export const videoFilterSearchGroups: Group[] = [
                 minValue: 0,
                 maxValue: 100,
                 step: 1,
-                defaultValue: 15,
+                defaultValue: FILTER_THRESHOLD_DEFAULTS.relativity,
                 disableValue: -1,
+                applyDisabledValue: true,
                 addonText: '%',
                 fn: (value: number) => {
                     mainFilter.videoRelativityFilter.setParam(value)
@@ -483,8 +497,9 @@ export const videoFilterSearchGroups: Group[] = [
                 minValue: 0,
                 maxValue: 300,
                 step: 1,
-                defaultValue: 60,
+                defaultValue: FILTER_THRESHOLD_DEFAULTS.duration,
                 disableValue: 0,
+                applyDisabledValue: true,
                 addonText: '秒',
                 fn: (value: number) => {
                     mainFilter.videoDurationFilter.setParam(value)
@@ -735,7 +750,7 @@ export const videoFilterSearchHandler: ContextMenuTargetHandler = (target: HTMLE
             }
         }
         if (spaceUrl && (mainFilter.videoUploaderFilter.isEnable || mainFilter.videoUploaderWhiteFilter.isEnable)) {
-            menus.push({
+            if (__PACK_LINKS__) menus.push({
                 name: `复制主页链接`,
                 fn: () => navigator.clipboard.writeText(`https://${spaceUrl}`),
             })
@@ -785,7 +800,7 @@ export const videoFilterSearchHandler: ContextMenuTargetHandler = (target: HTMLE
             }
         }
         if (spaceUrl && (mainFilter.videoUploaderFilter.isEnable || mainFilter.videoUploaderWhiteFilter.isEnable)) {
-            menus.push({
+            if (__PACK_LINKS__) menus.push({
                 name: `复制主页链接`,
                 fn: () => navigator.clipboard.writeText(`https://${spaceUrl}`),
             })
@@ -812,7 +827,7 @@ export const videoFilterSearchHandler: ContextMenuTargetHandler = (target: HTMLE
                         }
                     },
                 })
-                menus.push({
+                if (__PACK_LINKS__) menus.push({
                     name: '复制视频链接',
                     fn: () => navigator.clipboard.writeText(`https://www.bilibili.com/video/${bvid}`).catch(() => {}),
                 })

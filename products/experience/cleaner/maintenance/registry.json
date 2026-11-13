@@ -77,6 +77,7 @@
       "label": "过滤引擎",
       "paths": [
         "src/modules/filters/core/",
+        "src/modules/filters/decision/",
         "src/modules/filters/index.ts"
       ],
       "recommended_checks": [
@@ -671,6 +672,18 @@
       }
     },
     {
+      "file": "src/modules/configuration/effective.ts",
+      "modules": [
+        "settings-ui",
+        "runtime"
+      ],
+      "provenance": "own-confirmed",
+      "upstream": null,
+      "local_notes": [
+        "启动和面板共用生效值。已保存值优先，缺键采用已确认产品默认或当前声明；备份和同步仍读取原始存储。"
+      ]
+    },
+    {
       "file": "src/modules/configuration/runtime.ts",
       "modules": [
         "settings-ui"
@@ -687,12 +700,29 @@
       "modules": [
         "filter-core"
       ],
+      "local_notes": [
+        "本地拆分字段提取、策略与绘制；各页独立节流。保留统计失败重试和强制名单优先级。"
+      ],
       "provenance": "matching-path-in-fixed-baseline",
       "upstream": {
         "source": "cleaner",
         "path": "src/modules/filters/core/core.ts",
         "normalized_sha256": "2eb9f54abaee253658d37f168d0378d6143a618f006043d1201b2452545192e5"
       }
+    },
+    {
+      "file": "src/modules/filters/core/paint.ts",
+      "modules": ["filter-core"],
+      "provenance": "own-confirmed",
+      "upstream": null,
+      "local_notes": ["保护过期扫描与复用节点，恢复脚本接管前的行内 display。"]
+    },
+    {
+      "file": "src/modules/filters/decision/compatibility.ts",
+      "modules": ["filter-core"],
+      "provenance": "own-confirmed",
+      "upstream": null,
+      "local_notes": ["值级判断沿用固定上游匹配语义，本地独立实现优先级、统计比较和二选一结果。"]
     },
     {
       "file": "src/modules/filters/core/subFilters/booleanFilter.ts",
@@ -967,6 +997,9 @@
       "modules": [
         "video-filter"
       ],
+      "local_notes": [
+        "热门旧质量指标在点赞数为0时视为未知；不得以无效投币/点赞比判定隐藏。"
+      ],
       "provenance": "matching-path-in-fixed-baseline",
       "upstream": {
         "source": "cleaner",
@@ -1002,6 +1035,9 @@
       "file": "src/modules/filters/variety/video/pages/video.ts",
       "modules": [
         "video-filter"
+      ],
+      "local_notes": [
+        "相关视频缓存使用本轮命中下标，不能读取异步绘制前的DOM隐藏属性；复用标题/封面BV提取。延迟推荐容器按 classList 判断。"
       ],
       "provenance": "matching-path-in-fixed-baseline",
       "upstream": {

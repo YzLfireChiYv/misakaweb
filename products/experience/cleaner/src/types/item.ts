@@ -74,6 +74,9 @@ export interface INumberItem extends IBaseItem<'number'> {
     // 禁用值
     disableValue: number
 
+    // 设置面板切到禁用值时也执行 fn，例如清除旧过滤阈值。
+    applyDisabledValue?: boolean
+
     // 附加文字，显示在输入框后（如数值单位）
     addonText?: string
 

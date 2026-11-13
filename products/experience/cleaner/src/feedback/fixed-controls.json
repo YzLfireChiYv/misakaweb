@@ -53,14 +53,6 @@
             "panel": "script-manager"
         },
         {
-            "key": "menu-dark-mode",
-            "name": "夜间模式开关",
-            "pages": [
-                "*"
-            ],
-            "panel": "script-manager"
-        },
-        {
             "key": "menu-side-btn",
             "name": "快捷开关设置",
             "pages": [
@@ -162,14 +154,6 @@
                 "festival"
             ],
             "panel": "filter-sync"
-        },
-        {
-            "key": "side-dark-mode",
-            "name": "快捷按钮 夜间/日间模式",
-            "pages": [
-                "*"
-            ],
-            "panel": "side-btn"
         },
         {
             "key": "side-dynamic-filter",

@@ -1,9 +1,9 @@
-import { GM_getValue } from '@/storage/configStorage'
-import { type CoreCheckExtra } from '@/modules/filters/core/core'
+import { readSettingValue } from '@/modules/configuration/effective'
+import { statisticsDecision, type VideoLimits } from '@/modules/filters/decision/compatibility'
 import { Group } from '@/types/collection'
 import { SelectorResult } from '@/types/filter'
 import pLimit from 'p-limit'
-import { ratePercent, round1 } from './statRate'
+import { round1 } from './statRate'
 import { fetchVideoStat } from './viewStat'
 
 export const STAT_KEYS = {
@@ -34,23 +34,27 @@ type GateConfig = {
     favRateMin: number
 }
 
-const readNumber = (key: string) => {
-    const value = GM_getValue(key, 0)
-    return typeof value === 'number' && Number.isFinite(value) ? value : 0
-}
+const readLimit = (statusKey: string, value: number) => value > 0 && readSettingValue(statusKey, false)
 
-export const readStatGate = (): GateConfig => ({
-    viewOn: Boolean(GM_getValue(STAT_KEYS.viewStatus, false)),
-    likeOn: Boolean(GM_getValue(STAT_KEYS.likeStatus, false)),
-    favOn: Boolean(GM_getValue(STAT_KEYS.favStatus, false)),
-    likeRateOn: Boolean(GM_getValue(STAT_KEYS.likeRateStatus, false)),
-    favRateOn: Boolean(GM_getValue(STAT_KEYS.favRateStatus, false)),
-    viewMin: readNumber(STAT_KEYS.viewValue),
-    likeMin: readNumber(STAT_KEYS.likeValue),
-    favMin: readNumber(STAT_KEYS.favValue),
-    likeRateMin: round1(readNumber(STAT_KEYS.likeRateValue)),
-    favRateMin: round1(readNumber(STAT_KEYS.favRateValue)),
-})
+export const readStatGate = (): GateConfig => {
+    const viewMin = readSettingValue(STAT_KEYS.viewValue, 0)
+    const likeMin = readSettingValue(STAT_KEYS.likeValue, 0)
+    const favMin = readSettingValue(STAT_KEYS.favValue, 0)
+    const likeRateMin = round1(readSettingValue(STAT_KEYS.likeRateValue, 0))
+    const favRateMin = round1(readSettingValue(STAT_KEYS.favRateValue, 0))
+    return {
+        viewOn: readLimit(STAT_KEYS.viewStatus, viewMin),
+        likeOn: readLimit(STAT_KEYS.likeStatus, likeMin),
+        favOn: readLimit(STAT_KEYS.favStatus, favMin),
+        likeRateOn: readLimit(STAT_KEYS.likeRateStatus, likeRateMin),
+        favRateOn: readLimit(STAT_KEYS.favRateStatus, favRateMin),
+        viewMin,
+        likeMin,
+        favMin,
+        likeRateMin,
+        favRateMin,
+    }
+}
 
 const gateActive = (gate: GateConfig) =>
     gate.viewOn || gate.likeOn || gate.favOn || gate.likeRateOn || gate.favRateOn
@@ -63,60 +67,27 @@ const bvidOf = (value: SelectorResult) => (typeof value === 'string' && /^BV[0-9
  * 现有黑白名单画到页面之前，对仍会显示、且不是白名单救回的视频按需取数。
  * 取数失败的卡片不藏，并跳过已访问标记，下次增量扫描再试。
  */
-export const applyStatGate = async (
-    videos: HTMLElement[],
-    hideIdx: Set<number>,
-    exemptIdx: Set<number>,
-    readBvid: (el: HTMLElement) => SelectorResult,
-    skipVisitIdx: Set<number>,
-) => {
+export const videoStatOptions = (identify: (el: HTMLElement) => SelectorResult) => {
     const gate = readStatGate()
-    if (!gateActive(gate)) {
-        return
+    if (!gateActive(gate)) return { identify }
+    const limits: VideoLimits = {
+        views: gate.viewOn ? gate.viewMin : undefined,
+        likes: gate.likeOn ? gate.likeMin : undefined,
+        favorites: gate.favOn ? gate.favMin : undefined,
+        likeRate: gate.likeRateOn ? gate.likeRateMin : undefined,
+        favoriteRate: gate.favRateOn ? gate.favRateMin : undefined,
     }
-    const jobs: { index: number; bvid: string }[] = []
-    for (let index = 0; index < videos.length; index++) {
-        if (hideIdx.has(index) || exemptIdx.has(index)) {
-            continue
-        }
-        const bvid = bvidOf(readBvid(videos[index]))
-        if (!bvid) {
-            continue
-        }
-        jobs.push({ index, bvid })
-    }
-    await Promise.all(
-        jobs.map((job) =>
-            limit(async () => {
-                const stat = await fetchVideoStat(job.bvid)
-                if (!stat) {
-                    skipVisitIdx.add(job.index)
-                    return
-                }
-                const likeRate = ratePercent(stat.like, stat.view)
-                const favRate = ratePercent(stat.favorite, stat.view)
-                const below =
-                    (gate.viewOn && stat.view < gate.viewMin) ||
-                    (gate.likeOn && stat.like < gate.likeMin) ||
-                    (gate.favOn && stat.favorite < gate.favMin) ||
-                    (gate.likeRateOn && likeRate != null && likeRate < gate.likeRateMin) ||
-                    (gate.favRateOn && favRate != null && favRate < gate.favRateMin)
-                if (below) {
-                    hideIdx.add(job.index)
-                }
-            }),
-        ),
-    )
-}
-
-export const statGateExtra = (
-    videos: HTMLElement[],
-    readBvid: (el: HTMLElement) => SelectorResult,
-): CoreCheckExtra => {
-    const skipVisitIdx = new Set<number>()
     return {
-        skipVisitIdx,
-        beforePaint: (hideIdx, exemptIdx) => applyStatGate(videos, hideIdx, exemptIdx, readBvid, skipVisitIdx),
+        identify,
+        complete: (element: HTMLElement, isCurrent: () => boolean) => {
+            const bvid = bvidOf(identify(element))
+            if (!bvid) return
+            return limit(async () => {
+                if (!isCurrent()) return
+                const stat = await fetchVideoStat(bvid)
+                return stat ? statisticsDecision(stat, limits) : undefined
+            })
+        },
     }
 }
 
@@ -137,6 +108,7 @@ const numberItem = (
     decimals: options?.decimals,
     defaultValue: 0,
     disableValue: -1,
+    applyDisabledValue: true,
     addonText: options?.addon ?? '次',
     fn: (value: number) => {
         if (!Number.isFinite(value)) {

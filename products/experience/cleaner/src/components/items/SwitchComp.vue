@@ -25,7 +25,8 @@
 <script setup lang="ts">
 import { ISwitchItem } from '@/types/item'
 import { logger } from '@/utils/logger'
-import { GM_getValue, GM_setValue } from '@/storage/configStorage'
+import { GM_setValue } from '@/storage/configStorage'
+import { readItemValue } from '@/modules/configuration/effective'
 import { Switch, SwitchGroup, SwitchLabel } from '@headlessui/vue'
 import { ref, watch } from 'vue'
 import FeedbackBadge from '@/feedback/Badge.vue'
@@ -35,10 +36,11 @@ import DescriptionComp from './DescriptionComp.vue'
 const item = defineProps<ISwitchItem>()
 const feedbackCode = settingLabel(item.id)
 
-const enabled = ref(GM_getValue(item.id, item.defaultEnable))
+const enabled = ref(readItemValue(item))
 
 watch(enabled, () => {
     try {
+        GM_setValue(item.id, enabled.value)
         if (enabled.value) {
             if (!item.noStyle) {
                 document.documentElement.setAttribute(item.attrName ?? item.id, '')
@@ -46,7 +48,6 @@ watch(enabled, () => {
             if (item.enableFn) {
                 item.enableFn()?.catch(() => {})
             }
-            GM_setValue(item.id, true)
         } else {
             if (!item.noStyle) {
                 document.documentElement.removeAttribute(item.attrName ?? item.id)
@@ -56,7 +57,6 @@ watch(enabled, () => {
                     throw err
                 })
             }
-            GM_setValue(item.id, false)
         }
     } catch (err) {
         logger.error(`SwitchComp ${item.id} error`, err)

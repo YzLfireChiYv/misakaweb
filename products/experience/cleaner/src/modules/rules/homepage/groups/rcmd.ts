@@ -1,6 +1,9 @@
 import { Item } from '@/types/item'
 import fetchHook from '@/utils/fetch'
 
+let stopIncreaseLoad: (() => void) | undefined
+let stopPreload: (() => void) | undefined
+
 export const homepageRcmdItems: Item[] = [
     {
         type: 'switch',
@@ -91,7 +94,7 @@ export const homepageRcmdItems: Item[] = [
         id: 'homepage-increase-rcmd-load-size',
         name: '增大 视频载入 视频数量',
         enableFn: () => {
-            fetchHook.addPreFn((input: RequestInfo | URL, init: RequestInit | undefined): RequestInfo | URL => {
+            stopIncreaseLoad ??= fetchHook.addPreFn((input: RequestInfo | URL, init: RequestInit | undefined): RequestInfo | URL => {
                 if (
                     typeof input === 'string' &&
                     input.includes('api.bilibili.com') &&
@@ -103,6 +106,10 @@ export const homepageRcmdItems: Item[] = [
                 return input
             })
         },
+        disableFn: () => {
+            stopIncreaseLoad?.()
+            stopIncreaseLoad = undefined
+        },
     },
     {
         type: 'switch',
@@ -110,6 +117,8 @@ export const homepageRcmdItems: Item[] = [
         name: '启用 视频列表预加载 (不稳定功能)',
         description: ['会默认隐藏分区视频', '建议开启 "增大视频载入数量"', '若影响视频载入或造成卡顿，请关闭本功能'],
         enableFn: async () => {
+            if (stopPreload) return
+            let removeScroll: (() => void) | undefined
             let cnt = 0
             const id = setInterval(() => {
                 const anchor = document.querySelector('.load-more-anchor') as HTMLElement
@@ -119,7 +128,7 @@ export const homepageRcmdItems: Item[] = [
                     // 向下滚动时，调整anchor位置
                     let lastScrollTop = 0
                     let isPreload = false
-                    window.addEventListener('scroll', function () {
+                    const onScroll = () => {
                         const scrollTop = window.scrollY || document.documentElement.scrollTop
                         if (scrollTop > lastScrollTop) {
                             const gap = innerHeight - anchor.getBoundingClientRect().top
@@ -135,12 +144,26 @@ export const homepageRcmdItems: Item[] = [
                             isPreload = false
                         }
                         lastScrollTop = scrollTop
-                    })
+                    }
+                    window.addEventListener('scroll', onScroll)
+                    removeScroll = () => {
+                        window.removeEventListener('scroll', onScroll)
+                        anchor.classList.remove('preload')
+                    }
                 }
                 if (++cnt > 80) {
                     clearInterval(id)
+                    if (!removeScroll) stopPreload = undefined
                 }
             }, 250)
+            stopPreload = () => {
+                clearInterval(id)
+                removeScroll?.()
+            }
+        },
+        disableFn: () => {
+            stopPreload?.()
+            stopPreload = undefined
         },
         enableFnRunAt: 'document-end',
     },

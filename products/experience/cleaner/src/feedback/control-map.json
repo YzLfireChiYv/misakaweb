@@ -1546,7 +1546,8 @@
             ],
             "groups": [
                 "全站通用 - 夜间模式"
-            ]
+            ],
+            "retired": true
         },
         {
             "id": "S084",
@@ -9820,7 +9821,8 @@
             "pages": [
                 "*"
             ],
-            "panel": "script-manager"
+            "panel": "script-manager",
+            "retired": true
         },
         {
             "id": "M04",
@@ -10084,7 +10086,8 @@
             "pages": [
                 "*"
             ],
-            "panel": "side-btn"
+            "panel": "side-btn",
+            "retired": true
         },
         {
             "id": "B18",

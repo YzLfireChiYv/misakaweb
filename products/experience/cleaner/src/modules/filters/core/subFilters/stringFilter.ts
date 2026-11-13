@@ -1,4 +1,4 @@
-import { ISubFilter, SelectorFn } from '@/types/filter'
+import type { ISubFilter, SelectorResult } from '@/types/filter'
 
 export class StringFilter implements ISubFilter {
     isEnable = false
@@ -21,16 +21,7 @@ export class StringFilter implements ISubFilter {
         this.strSet = new Set(value.map((v) => v.trim()).filter((v) => v))
     }
 
-    check(el: HTMLElement, selectorFn: SelectorFn): Promise<void> {
-        return new Promise<void>((resolve, reject) => {
-            if (this.isEnable) {
-                const value = selectorFn(el)
-                if (typeof value === 'string' && this.strSet.has(value.trim())) {
-                    reject()
-                    return
-                }
-            }
-            resolve()
-        })
+    matches(value: SelectorResult): boolean {
+        return this.isEnable && typeof value === 'string' && this.strSet.has(value.trim())
     }
 }

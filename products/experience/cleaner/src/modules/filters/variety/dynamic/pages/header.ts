@@ -1,10 +1,12 @@
-import { coreCheck } from '@/modules/filters/core/core'
+import { createFilterCheck } from '@/modules/filters/core/core'
 import config from '@/config'
 import { IMainFilter, SelectorResult, SubFilterPair } from '@/types/filter'
 import { logger } from '@/utils/logger'
 import { GM_getValue } from '@/storage/configStorage'
 import { DynContentFilter, DynUploaderFilter, DynVideoTitleFilter } from '../subFilters/black'
 import { DynContentWhiteFilter, DynVideoTitleWhiteFilter } from '../subFilters/white'
+
+const coreCheck = createFilterCheck()
 
 const GM_KEYS = {
     black: {
@@ -107,7 +109,9 @@ class DynamicFilterHeader implements IMainFilter {
         this.dynContentWhiteFilter.isEnable && whitePairs.push([this.dynContentWhiteFilter, selectorFns.content])
 
         // 检测
-        const blackIdxSet = await coreCheck(dyns, true, 'style', blackPairs, whitePairs)
+        const blackIdxSet = await coreCheck(dyns, true, 'style', blackPairs, whitePairs, [], false, {
+            identify: (element) => element.getAttribute('href'),
+        })
         const time = (performance.now() - timer).toFixed(1)
         logger.debug(`DynamicFilterHeader hide ${blackIdxSet.size} in ${dyns.length} dyns, mode=${mode}, time=${time}`)
     }

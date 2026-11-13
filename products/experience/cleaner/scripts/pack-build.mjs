@@ -50,18 +50,11 @@ export function pruneSource(source, file, profile) {
             throw new Error(`unclassified page capability: ${file}/${id}; update catalog and pack registry first`)
         }
         if(id && excluded.has(id)) return true
-        if(excluded.has(literal(property(node,'key')))) return true
-        const name=literal(property(node,'name'))
-        return !profile.packs.includes('link-tools') && ['复制主页链接','复制视频链接'].includes(name)
+        return excluded.has(literal(property(node,'key')))
     }
     const result=ts.transform(sf,[ctx=>root=>{
         const visit=node=>{
             if(ts.isArrayLiteralExpression(node)) return ctx.factory.updateArrayLiteralExpression(node,node.elements.filter(n=>!shouldRemove(n)).map(n=>ts.visitNode(n,visit)))
-            if(ts.isExpressionStatement(node)&&ts.isCallExpression(node.expression)&&node.expression.arguments.some(shouldRemove)) {
-                const call=node.expression
-                if(ts.isPropertyAccessExpression(call.expression)&&call.expression.name.text==='push'&&call.arguments.length===1) return ctx.factory.createEmptyStatement()
-                throw new Error(`unsupported optional action placement: ${file}`)
-            }
             return ts.visitEachChild(node,visit,ctx)
         };return ts.visitNode(root,visit)
     }])
@@ -82,8 +75,7 @@ export function selectorBranches(selector) {
     }
     result.push(selector.slice(start).trim());return result
 }
-// Attribute aliases are page-specific attrName values (e.g. border-radius-video),
-// or secondary flags from that rule (common-theme-dark-page).
+// Attribute aliases include page-specific attrName values (e.g. border-radius-video).
 const attributeExcluded = (attr, excluded) => [...excluded].some(key=>attr===key||attr.startsWith(key+'-'))
 export function pruneSelector(selector, excluded) {
     return selectorBranches(selector).map(branch=>{
@@ -109,15 +101,12 @@ export const cssPruningPlugin = profile => {
     }}
 }
 
-const themePath=path.join(productRoot,'src/modules/rules/common/groups/theme.ts').replaceAll('\\','/')
 export const packSourcePlugin = profile => ({
     name:'misakaweb-pack-source',enforce:'pre',
     transform(code,id) {
         const file=id.split('?')[0].replaceAll('\\','/')
         if(!file.startsWith(productRoot.replaceAll('\\','/')+'/src/')) return
-        if(file===themePath&&!profile.packs.includes('appearance'))return {code:"import { ref } from 'vue'; export const isDarkMode=ref(false); export const commonThemeItems=[]; export const toggleDarkMode=()=>{};",map:null}
-        if(file.endsWith('/modules/touch/index.ts')&&!profile.packs.includes('touch-controls'))return {code:'export const touchItems=[];',map:null}
-        if(file.endsWith('.ts')&&(file.includes('/modules/rules/')||file.includes('/modules/filters/')||file.endsWith('/feedback/context-actions.ts')))return {code:pruneSource(code,file,profile),map:null}
+        if(file.endsWith('.ts')&&file.includes('/modules/rules/'))return {code:pruneSource(code,file,profile),map:null}
     }
 })
 
@@ -140,7 +129,7 @@ export function auditBundle(source,full,profile) {
         else if(actual.get(key)!==count)throw new Error(`retained item lost: ${profile.id}/${key}`)
     }
     if(!profile.packs.includes('link-tools')&&/复制主页链接|复制视频链接/.test(source))throw new Error('excluded context action shipped')
-    if(!profile.packs.includes('appearance')&&source.includes('labStyleLock'))throw new Error('excluded theme runtime shipped')
+    if(/theme_style|common-theme-dark-page|全站通用 - 夜间模式/.test(source))throw new Error('retired theme runtime shipped')
     if(!profile.packs.includes('playback')&&source.includes('DOMMouseScroll'))throw new Error('excluded player wheel hook shipped')
     if(!profile.packs.includes('text-style')&&source.includes('@font-face'))throw new Error('excluded font resource shipped')
     if(source.includes('product-retention-feedback')||source.includes('原逐项分类'))throw new Error('development review shipped in normal profile')

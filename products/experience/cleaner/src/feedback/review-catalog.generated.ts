@@ -918,25 +918,6 @@ export const reviewCatalog: ReviewEntry[] = [
         "packLabel": "页面布局"
     },
     {
-        "key": "common-theme-dark",
-        "id": "S083",
-        "names": [
-            "夜间模式"
-        ],
-        "pages": [
-            "*"
-        ],
-        "groups": [
-            "全站通用 - 夜间模式"
-        ],
-        "category": "optimization",
-        "rationale": "原逐项分类：外观调整；按用途归类，待用户校正",
-        "pack": "appearance",
-        "packLabel": "主题与外观",
-        "retention": "optional-retain",
-        "defaultOff": true
-    },
-    {
         "key": "common-unify-font",
         "id": "S084",
         "names": [

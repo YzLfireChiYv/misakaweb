@@ -114,7 +114,14 @@ const main = async () => {
         assert(linkBox && hostBox.x + hostBox.width <= linkBox.x + 1, 'host must reserve room instead of overlaying nav')
 
         const trigger = host.locator('#trigger')
+        await page.evaluate(() => {
+            document.documentElement.style.setProperty('--bg1', '#242628')
+            document.documentElement.style.setProperty('--text1', '#f1f2f3')
+        })
+        assert(await trigger.evaluate(el => getComputedStyle(el).backgroundColor) === 'rgb(36, 38, 40)', 'header follows the page palette')
+        assert(await trigger.evaluate(el => getComputedStyle(el).color) === 'rgb(241, 242, 243)', 'header text follows the page palette')
         await trigger.click()
+        assert(await host.locator('[data-action-key="side-dark-mode"]').count() === 0, 'retired theme action is absent')
         const pageClean = host.locator('[data-action-key="side-rule-panel"]')
         const openSettings = host.locator('[data-action-key="side-shortcut-settings"]')
         await pageClean.waitFor()

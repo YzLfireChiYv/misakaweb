@@ -4,11 +4,11 @@
 //// <reference types="vite-plugin-monkey/global" />
 
 declare const __SCRIPT_VERSION__: string
-declare const __PACK_APPEARANCE__: boolean
 declare const __PACK_PLAYBACK__: boolean
 declare const __PACK_LINKS__: boolean
 declare const __BUILD_PROFILE__: string
 declare const __BUILD_LABEL__: string
+declare const __PRODUCT_DEFAULTS__: Readonly<Record<string, unknown>>
 declare const __SETTING_SECTIONS__: Record<string, {
     category: 'cleaning' | 'optimization' | 'support'
     pack?: string

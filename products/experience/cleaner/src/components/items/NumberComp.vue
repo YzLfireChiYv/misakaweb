@@ -19,7 +19,8 @@
 <script setup lang="ts">
 import { INumberItem } from '@/types/item'
 import { logger } from '@/utils/logger'
-import { GM_getValue, GM_setValue } from '@/storage/configStorage'
+import { GM_setValue } from '@/storage/configStorage'
+import { readItemValue } from '@/modules/configuration/effective'
 import { watchThrottled } from '@vueuse/core'
 import { ref } from 'vue'
 import FeedbackBadge from '@/feedback/Badge.vue'
@@ -29,44 +30,29 @@ import DescriptionComp from './DescriptionComp.vue'
 const item = defineProps<INumberItem>()
 const feedbackCode = settingLabel(item.id)
 
-const currValue = ref(GM_getValue(item.id, item.defaultValue))
+const currValue = ref(readItemValue(item))
+let appliedValue = currValue.value
 
 watchThrottled(
     currValue,
-    (newValue, oldValue) => {
+    (newValue) => {
         try {
-            if (newValue > item.maxValue) {
-                currValue.value = item.maxValue
+            if (typeof newValue !== 'number' || !Number.isFinite(newValue)) return
+            let value = newValue
+            if (value !== item.disableValue) {
+                value = Math.max(item.minValue, Math.min(item.maxValue, value))
+                if (item.decimals != null) value = Number(value.toFixed(item.decimals))
             }
-            if (newValue < item.minValue) {
-                currValue.value = item.minValue
-            }
-            if (item.decimals != null) {
-                const numeric = typeof currValue.value === 'number' ? currValue.value : Number(currValue.value)
-                if (Number.isFinite(numeric)) {
-                    const rounded = Number(numeric.toFixed(item.decimals))
-                    if (rounded !== currValue.value) {
-                        currValue.value = rounded
-                    }
-                }
-            }
+            if (value !== newValue) currValue.value = value
+            if (value === appliedValue) return
 
-            // 样式生效、失效
-            if (oldValue === item.disableValue) {
-                if (!item.noStyle) {
-                    document.documentElement.setAttribute(item.attrName ?? item.id, '')
-                }
+            GM_setValue(item.id, value)
+            appliedValue = value
+            const disabled = value === item.disableValue
+            if (!item.noStyle) document.documentElement.toggleAttribute(item.attrName ?? item.id, !disabled)
+            if (!disabled || item.applyDisabledValue) {
+                item.fn(value)?.catch((err) => logger.error(`NumberComp ${item.id} error`, err))
             }
-            if (newValue === item.disableValue) {
-                if (!item.noStyle) {
-                    document.documentElement.removeAttribute(item.attrName ?? item.id)
-                }
-            } else if (currValue.value !== oldValue) {
-                item.fn(currValue.value)?.catch((err) => {
-                    throw err
-                })
-            }
-            GM_setValue(item.id, currValue.value)
         } catch (err) {
             logger.error(`NumberComp ${item.id} error`, err)
         }

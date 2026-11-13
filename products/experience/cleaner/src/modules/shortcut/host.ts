@@ -26,10 +26,10 @@ const HOST_CSS = `
   height: ${HOST_SLOT_PX}px;
   margin: 0;
   padding: 0;
-  border: 1px solid #e5e7eb;
+  border: 1px solid var(--line_regular, #e5e7eb);
   border-radius: 8px;
-  background: #fff;
-  color: #111;
+  background: var(--bg1, #fff);
+  color: var(--text1, #18191c);
   cursor: pointer;
   display: flex;
   flex-direction: column;
@@ -47,8 +47,8 @@ const HOST_CSS = `
   z-index: 2147483646;
   margin: 0;
   padding: 4px 0;
-  background: #fff;
-  color: #111;
+  background: var(--bg1, #fff);
+  color: var(--text1, #18191c);
   border-radius: 6px;
   box-shadow: 0 8px 24px rgb(0 0 0 / 20%);
   overflow: auto;

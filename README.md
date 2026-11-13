@@ -6,11 +6,11 @@
 
 当前收拢为三个方向，只安装其中一个；沿用原 MisakaWeb 的名称、命名空间与设置键，更新后刷新网页。
 
-- [全量体验版 0.1.5.1](https://raw.githubusercontent.com/YzLfireChiYv/misakaweb/main/products/experience/misakaweb-feedback-test.user.js)：推荐用于当前试用，保留反馈编号。包含完整净化、过滤、全部优化及触摸原型。
+- [全量体验版 0.1.5.2](https://raw.githubusercontent.com/YzLfireChiYv/misakaweb/main/products/experience/misakaweb-feedback-test.user.js)：推荐用于当前试用，保留反馈编号。包含完整净化、过滤、全部优化及触摸原型。
 - [净化轻量版](https://raw.githubusercontent.com/YzLfireChiYv/misakaweb/main/products/experience/variants/misakaweb-pure.user.js)：保留完整净化、过滤与配置管理，排除可选优化。
-- [桌面实用版](https://raw.githubusercontent.com/YzLfireChiYv/misakaweb/main/products/experience/variants/misakaweb-desktop-toolkit.user.js)：在净化、过滤、配置管理基础上加入布局、播放控制、阅读导航和链接工具；字体、主题与触摸不在本版。
+- [桌面实用版](https://raw.githubusercontent.com/YzLfireChiYv/misakaweb/main/products/experience/variants/misakaweb-desktop-toolkit.user.js)：在净化、过滤、配置管理基础上加入布局、播放控制、阅读导航和链接工具；字体与触摸留在全量体验版。
 
-三份均已更新为0.1.5.1，后续按需构建，日常自动发布默认只更新全量体验版。最终组合继续根据实际使用调整。此前实验文件保留在仓库，不再作为安装目录。
+三份均已更新为 0.1.5.2。快捷入口沿用网页提供的官方主题配色。后续按需构建，日常自动发布默认只更新全量体验版。此前实验文件保留在仓库供追溯。
 
 ## 使用
 

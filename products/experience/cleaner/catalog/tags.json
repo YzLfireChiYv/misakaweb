@@ -1,0 +1,40 @@
+{
+  "schemaVersion": 1,
+  "featureFiles": {
+    "F-MISAKA-TOUCH": {
+      "paths": ["src/modules/touch/gesture-math.ts"],
+      "evidence": "community/evolved-player-gestures.json：复用方向锁定与灵敏度计算。"
+    }
+  },
+  "dimensions": {
+    "purpose": {"label":"用途","values":{"cleaning":"净化","filtering":"过滤","optimization":"优化","data":"数据管理","support":"基础支撑","unknown":"待分类"}},
+    "page": {"label":"页面","values":{"all":"全站声明","homepage":"首页","video":"视频页","playlist":"播放列表","bangumi":"番剧页","dynamic":"动态页","space":"个人空间","search":"搜索页","popular":"热门页","channel":"分区页","live":"直播页","festival":"活动页","watchlater":"稍后再看","message":"消息页","comment":"评论区","unknown":"待定位"}},
+    "object": {"label":"对象","values":{"page-element":"页面元素（未细分）","video-card":"视频列表或卡片","comment":"评论","dynamic":"动态内容","article":"专栏","header":"顶栏","search":"搜索框","player":"播放器","danmaku":"弹幕","subtitle":"字幕","share":"分享与链接","carousel":"活动轮播","theme":"页面主题","layout":"页面布局","configuration":"配置或规则数据","shortcut":"快捷入口","unknown":"待分类"}},
+    "role": {"label":"工作职责","values":{"identify":"识别与取数","decide":"规则判断","apply":"页面处理与恢复","finish":"布局收尾","extra":"独立增强","support":"基础支撑","unknown":"待核对"}},
+    "origin": {"label":"维护来源","values":{"upstream-match":"与上游文件基线一致","upstream-modified":"有上游对应且存在本地差异","derived":"已登记为上游派生","own":"已确认自有","mixed":"多种来源","unknown":"来源待核实"}},
+    "product": {"label":"产品决定","values":{"retain":"已决定保留","not-offered":"已决定不提供","pending":"待决定"}},
+    "implementation": {"label":"实现状态","values":{"located":"已定位当前源码","prototype":"原型","historical":"仅历史参考","unknown":"尚未定位实现"}}
+  },
+  "overrides": {
+    "homepage-hide-recommend-swipe": {
+      "object": ["carousel"], "role": ["apply", "finish"],
+      "evidence": "src/modules/rules/homepage/groups/basic.scss：隐藏轮播后另有卡片占位调整。"
+    },
+    "homepage-hide-subarea": {
+      "object": ["header"], "role": ["apply", "finish"],
+      "evidence": "src/modules/rules/homepage/groups/basic.scss：隐藏分区栏并补偿顶栏下边距。"
+    },
+    "homepage-increase-rcmd-load-size": {
+      "object": ["video-card"], "role": ["identify"],
+      "evidence": "src/modules/rules/homepage/groups/rcmd.ts：调整推荐数据请求的加载量。"
+    },
+    "homepage-rcmd-video-preload": {
+      "object": ["video-card"], "role": ["support"],
+      "evidence": "src/modules/rules/homepage/groups/rcmd.ts：调整滚动加载触发位置。"
+    },
+    "video-page-simple-share": {
+      "object": ["share"], "role": ["apply"],
+      "evidence": "普通视频和番剧均在各自 basic.ts 中绑定分享按钮；共用保存键。"
+    }
+  }
+}

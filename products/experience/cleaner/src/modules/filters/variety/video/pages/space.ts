@@ -1,14 +1,19 @@
-import { coreCheck } from '@/modules/filters/core/core'
-import { statGateEnabled, statGateExtra, statGateGroup } from '../statGate'
+import { restoreFiltered } from '@/modules/filters/core/paint'
+import { readSettingValue } from '@/modules/configuration/effective'
+import { FILTER_THRESHOLD_DEFAULTS } from '@/modules/filters/thresholds'
+import { createFilterCheck } from '@/modules/filters/core/core'
+import { statGateEnabled, videoStatOptions, statGateGroup } from '../statGate'
 import config from '@/config'
 import { Group } from '@/types/collection'
 import { ContextMenuTargetHandler, FilterContextMenu, IMainFilter, SelectorResult, SubFilterPair } from '@/types/filter'
 import { logger } from '@/utils/logger'
 import { isPageSpace } from '@/utils/pageType'
 import { GM_getValue, GM_setValue } from '@/storage/configStorage'
-import { convertTimeToSec, matchBvid, orderedUniq, showEle, waitForEle } from '@/utils/tool'
+import { convertTimeToSec, matchBvid, orderedUniq, waitForEle } from '@/utils/tool'
 import { VideoBvidFilter, VideoDurationFilter, VideoTitleFilter } from '../subFilters/black'
 import { VideoTitleWhiteFilter } from '../subFilters/white'
+
+const coreCheck = createFilterCheck()
 
 const GM_KEYS = {
     black: {
@@ -69,7 +74,9 @@ class VideoFilterSpace implements IMainFilter {
     init() {
         // 黑名单
         this.videoBvidFilter.setParam(GM_getValue(GM_KEYS.black.bvid.valueKey, []))
-        this.videoDurationFilter.setParam(GM_getValue(GM_KEYS.black.duration.valueKey, 0))
+        this.videoDurationFilter.setParam(
+            readSettingValue(GM_KEYS.black.duration.valueKey, FILTER_THRESHOLD_DEFAULTS.duration),
+        )
         this.videoTitleFilter.setParam(GM_getValue(GM_KEYS.black.title.valueKey, []))
         // 白名单
         this.videoTitleWhiteFilter.setParam(GM_getValue(GM_KEYS.white.title.valueKey, []))
@@ -118,7 +125,7 @@ class VideoFilterSpace implements IMainFilter {
             return
         }
         if (revertAll) {
-            videos.forEach((v) => showEle(v, 'sign'))
+            videos.forEach((v) => restoreFiltered(v, 'sign'))
             return
         }
 
@@ -155,7 +162,7 @@ class VideoFilterSpace implements IMainFilter {
             whitePairs,
             forceBlackPairs,
             false,
-            statGateExtra(videos, selectorFns.bvid),
+            videoStatOptions(selectorFns.bvid),
         )
         const time = (performance.now() - timer).toFixed(1)
         logger.debug(`VideoFilterSpace hide ${blackIdxSet.size} in ${videos.length} videos, mode=${mode}, time=${time}`)
@@ -228,8 +235,9 @@ export const videoFilterSpaceGroups: Group[] = [
                 minValue: 0,
                 maxValue: 300,
                 step: 1,
-                defaultValue: 60,
+                defaultValue: FILTER_THRESHOLD_DEFAULTS.duration,
                 disableValue: 0,
+                applyDisabledValue: true,
                 addonText: '秒',
                 fn: (value: number) => {
                     mainFilter.videoDurationFilter.setParam(value)
@@ -367,7 +375,7 @@ export const videoFilterSpaceHandler: ContextMenuTargetHandler = (target: HTMLEl
                         }
                     },
                 })
-                menus.push({
+                if (__PACK_LINKS__) menus.push({
                     name: '复制视频链接',
                     fn: () => navigator.clipboard.writeText(`https://www.bilibili.com/video/${bvid}`).catch(() => {}),
                 })

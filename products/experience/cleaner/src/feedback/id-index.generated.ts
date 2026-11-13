@@ -82,7 +82,6 @@ export const settingsByKey: Record<string, string> = {
     "common-hide-nav-vipshop": "S080",
     "common-nav-favorite-select-watchlater": "S081",
     "common-nav-search-middle-justify": "S082",
-    "common-theme-dark": "S083",
     "common-unify-font": "S084",
     "debug-mode": "S085",
     "default-webscreen": "S086",
@@ -533,7 +532,6 @@ export const settingsByKey: Record<string, string> = {
 export const menusByKey: Record<string, string> = {
     "menu-article-filter": "M01",
     "menu-comment-filter": "M02",
-    "menu-dark-mode": "M03",
     "menu-dynamic-filter": "M04",
     "menu-feedback": "M05",
     "menu-rule-panel": "M06",
@@ -558,7 +556,6 @@ export const actionsByKey: Record<string, string> = {
     "panel-close-rule": "B14",
     "panel-close-video-filter": "B15",
     "side-comment-filter": "B16",
-    "side-dark-mode": "B17",
     "side-dynamic-filter": "B18",
     "side-rule-panel": "B19",
     "side-video-filter": "B20",

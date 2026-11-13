@@ -1,13 +1,16 @@
+import { restoreFiltered } from '@/modules/filters/core/paint'
 import { unsafeWindow } from '$'
-import { coreCheck } from '@/modules/filters/core/core'
-import { statGateEnabled, statGateExtra, statGateGroup } from '../statGate'
+import { readSettingValue } from '@/modules/configuration/effective'
+import { FILTER_THRESHOLD_DEFAULTS } from '@/modules/filters/thresholds'
+import { createFilterCheck } from '@/modules/filters/core/core'
+import { statGateEnabled, videoStatOptions, statGateGroup } from '../statGate'
 import config from '@/config'
 import { Group } from '@/types/collection'
 import { ContextMenuTargetHandler, FilterContextMenu, IMainFilter, SelectorResult, SubFilterPair } from '@/types/filter'
 import { logger } from '@/utils/logger'
 import { isPageBangumi, isPagePlaylist, isPageVideo } from '@/utils/pageType'
 import { GM_getValue, GM_setValue } from '@/storage/configStorage'
-import { convertTimeToSec, isEleHide, matchBvid, orderedUniq, showEle, waitForEle } from '@/utils/tool'
+import { convertTimeToSec, matchBvid, orderedUniq, waitForEle } from '@/utils/tool'
 import {
     VideoBvidFilter,
     VideoDurationFilter,
@@ -16,6 +19,8 @@ import {
     VideoUploaderKeywordFilter,
 } from '../subFilters/black'
 import { VideoTitleWhiteFilter, VideoUploaderWhiteFilter } from '../subFilters/white'
+
+const coreCheck = createFilterCheck()
 
 const GM_KEYS = {
     black: {
@@ -95,7 +100,9 @@ class VideoFilterVideo implements IMainFilter {
     init() {
         // 黑名单
         this.videoBvidFilter.setParam(GM_getValue(GM_KEYS.black.bvid.valueKey, []))
-        this.videoDurationFilter.setParam(GM_getValue(GM_KEYS.black.duration.valueKey, 0))
+        this.videoDurationFilter.setParam(
+            readSettingValue(GM_KEYS.black.duration.valueKey, FILTER_THRESHOLD_DEFAULTS.duration),
+        )
         this.videoTitleFilter.setParam(GM_getValue(GM_KEYS.black.title.valueKey, []))
         this.videoUploaderFilter.setParam(GM_getValue(GM_KEYS.black.uploader.valueKey, []))
         this.videoUploaderKeywordFilter.setParam(GM_getValue(GM_KEYS.black.uploaderKeyword.valueKey, []))
@@ -129,7 +136,7 @@ class VideoFilterVideo implements IMainFilter {
             return
         }
         if (revertAll) {
-            videos.forEach((v) => showEle(v, 'sign'))
+            videos.forEach((v) => restoreFiltered(v, 'sign'))
             return
         }
 
@@ -171,21 +178,17 @@ class VideoFilterVideo implements IMainFilter {
             whitePairs,
             forceBlackPairs,
             false,
-            statGateExtra(videos, selectorFns.bvid),
+            videoStatOptions(selectorFns.bvid),
         )
 
         // 缓存数据检测，更新__INITIAL_STATE__.related
         // __INITIAL_STATE__.related 与右侧视频列表绑定
         if (enableRelatedCheck && blackIdxSet.size) {
             const blackBvids = new Set<string>()
-            for (const video of videos) {
-                if (isEleHide(video, 'sign')) {
-                    const url = video.querySelector('.info > a')?.getAttribute('href')
-                    if (url) {
-                        const bvid = matchBvid(url)
-                        bvid && blackBvids.add(bvid)
-                    }
-                }
+            // DOM marks are applied in requestAnimationFrame; use this scan's result.
+            for (const index of blackIdxSet) {
+                const bvid = selectorFns.bvid(videos[index])
+                if (typeof bvid === 'string' && bvid) blackBvids.add(bvid)
             }
             const rel = unsafeWindow.__INITIAL_STATE__?.related
             if (rel?.length && blackBvids.size) {
@@ -216,7 +219,7 @@ class VideoFilterVideo implements IMainFilter {
             (node: HTMLElement): boolean => {
                 return (
                     node.id === 'reco_list' ||
-                    ['recommend-list-v1', 'recommend-list-container'].includes(node.className)
+                    node.classList.contains('recommend-list-v1') || node.classList.contains('recommend-list-container')
                 )
             },
         ).then((ele) => {
@@ -270,8 +273,9 @@ export const videoFilterVideoGroups: Group[] = [
                 minValue: 0,
                 maxValue: 300,
                 step: 1,
-                defaultValue: 60,
+                defaultValue: FILTER_THRESHOLD_DEFAULTS.duration,
                 disableValue: 0,
+                applyDisabledValue: true,
                 addonText: '秒',
                 fn: (value: number) => {
                     mainFilter.videoDurationFilter.setParam(value)
@@ -552,7 +556,7 @@ export const videoFilterVideoHandler: ContextMenuTargetHandler = (target: HTMLEl
             }
         }
         if (spaceUrl && (mainFilter.videoUploaderFilter.isEnable || mainFilter.videoUploaderWhiteFilter.isEnable)) {
-            menus.push({
+            if (__PACK_LINKS__) menus.push({
                 name: `复制主页链接`,
                 fn: () => navigator.clipboard.writeText(`https://${spaceUrl}`),
             })
@@ -578,7 +582,7 @@ export const videoFilterVideoHandler: ContextMenuTargetHandler = (target: HTMLEl
                         }
                     },
                 })
-                menus.push({
+                if (__PACK_LINKS__) menus.push({
                     name: '复制视频链接',
                     fn: () => navigator.clipboard.writeText(`https://www.bilibili.com/video/${bvid}`).catch(() => {}),
                 })

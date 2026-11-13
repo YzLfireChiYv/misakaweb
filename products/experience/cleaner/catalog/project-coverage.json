@@ -1,0 +1,72 @@
+{
+  "retiredUpstreamFiles": ["src/modules/rules/common/groups/theme.ts", "src/modules/rules/common/groups/theme.scss", "src/composables/gmValue.ts"],
+  "schemaVersion": 1,
+  "localFeatureGroups": [
+    {"id":"F-MISAKA-BACKUP","label":"配置备份、导入与恢复","description":"按作用域导出；预览导入、校验、保存导入前快照并支持恢复。","actionKeys":["menu-configuration","side-configuration","config-apply-import","config-choose-import","config-export","config-refresh-page","config-restore-backup","panel-close-configuration"],"paths":["src/modules/configuration/","src/views/ConfigurationPanelView.vue","src/storage/"],"missing":"关键写入仍无脚本管理器持久化确认。"},
+    {"id":"F-MISAKA-MAINTENANCE","label":"只读页面结构诊断","description":"主动点击后采集页面结构并生成维护材料；不自动读取用户规则。","actionKeys":["maintenance-export-diagnostic"],"paths":["src/modules/maintenance/"],"missing":"结构样本不证明网页实际行为。"}
+  ],
+  "historicalActionKeys": ["review-category-cleaning","review-category-optimization","review-category-support","review-change-category","review-export","review-scope-all","review-scope-page","review-toggle-remove","review-pack-filter","config-save-setting"],
+  "declarationNotes": {
+    "common-hide-nav-bdu": {"mechanism":"inactive-style","detail":"仍有设置声明，但相应 CSS 整段已注释，未找到有效执行。不是用户排除。","refs":[["src/modules/rules/common/groups/headerLeft.scss","// html[common-hide-nav-bdu]"]]},
+    "common-hide-nav-bml": {"mechanism":"inactive-style","detail":"仍有设置声明，但相应 CSS 整段已注释，未找到有效执行。不是用户排除。","refs":[["src/modules/rules/common/groups/headerLeft.scss","// html[common-hide-nav-bml]"]]},
+    "debug-mode": {"mechanism":"read-by-runtime","detail":"模块启动时读取保存值，决定日志/诊断分支；不是按 CSS 隐藏。","refs":[["src/config.ts","isDebugMode: GM_getValue('debug-mode')"]]},
+    "video-page-simple-share-domain": {"mechanism":"read-by-runtime","detail":"分享事件读取该选项拼接链接域名；关闭链接工具包时不使用。","refs":[["src/modules/rules/video/groups/basic.ts","let domain = __PACK_LINKS__"]]},
+    "misakaweb-gesture-vertical": {"mechanism":"read-by-runtime","detail":"控制器的配置读取该值；仅有设置开关不足以单独启动手势。","refs":[["src/modules/touch/index.ts","vertical: GM_getValue"]]}
+  },
+  "actionMappings": {
+    "A-MENU-01":"menu-rule-panel", "A-MENU-02":"menu-video-filter", "A-MENU-03":"menu-comment-filter", "A-MENU-04":"menu-dynamic-filter", "A-MENU-05":"menu-article-filter", "A-MENU-06":"menu-dark-mode", "A-MENU-07":"menu-side-btn", "A-MENU-08":"menu-feedback",
+    "A-SIDE-01":"side-rule-panel", "A-SIDE-02":["side-video-filter","side-comment-filter","side-dynamic-filter"], "A-SIDE-03":"side-dark-mode"
+  },
+  "entries": [
+    {"id":"items","label":"设置项装载与面板生效","kind":"shared","detail":"页面规则注册决定适用范围；加载与面板依次读取已保存值、已确认的产品默认及声明默认。开关加/移除根属性，数值/文本和单选写参数或调用回调。名单变动后保存并调用 saveFn。数值项可明确启用禁用值回调，供过滤阈值解除限制。","refs":[["src/modules/rules/index.ts","export const rules:"],["src/modules/rules/index.ts","export const loadRuleStyle ="],["src/modules/configuration/effective.ts","export const readSettingValue"],["src/modules/index.ts","const loadSwitchItem ="],["src/modules/index.ts","const loadNumberItem ="],["src/modules/index.ts","const loadStringItem ="],["src/modules/index.ts","const loadListItem ="],["src/components/items/SwitchComp.vue","watch(enabled"],["src/components/items/NumberComp.vue","if (!disabled || item.applyDisabledValue)"],["src/components/items/ListComp.vue","watch(selectedOption"],["src/components/EditorDialog.vue","const closeEditor"]]},
+    {"id":"panel-and-menu","label":"面板、菜单与快捷入口","kind":"interaction","featureIds":["F-UI-PANELS","F-UI-SIDEBTN","F-EDITOR","F-MISAKA-SHORTCUT"],"legacyActions":["A-SIDE-04","A-PANEL-01","A-PANEL-02","I-15","I-17"],"detail":"脚本菜单按页面开启面板；面板在独立 Shadow DOM，支持拖动关闭和名单编辑。旧右下按钮由本地顶栏/悬浮入口替代，仍保留位置和动作。","refs":[["src/main.ts","const main ="],["src/main.ts","const menu ="],["src/components/PanelComp.vue","const closeCode ="],["src/modules/shortcut/actions.ts","export const useQuickActions"],["src/modules/shortcut/anchor.ts","export const findSearchAnchor"],["src/modules/shortcut/preference.ts","export const SHORTCUT_PREFERENCE_DEFAULT"]]},
+    {"id":"context-menu","label":"右键动作与名单写入","kind":"interaction","featureIds":["F-CTX-MENU"],"legacyActions":["A-CTX-00"],"detail":"汇总页面处理器生成菜单；只有匹配时替换原生菜单。名单动作修改内存和持久化规则并触发复查，复制动作只写剪贴板。各页模板与配置按行为记录关联。","refs":[["src/views/ContextMenuView.vue","contextActionKey(menu.name)"],["src/modules/filters/index.ts","export const filterContextMenuHandlers ="],["src/feedback/context-actions.ts","export const contextActionKey"]]},
+    {"id":"startup-route","label":"首页修正与路由补装载","kind":"shared","featureIds":["F-REDIRECT-INDEX"],"legacyActions":["I-02","I-03","I-16"],"detail":"/index.html 重定向；各规则按实时页面判断补启动，已启动集合防止重复装载，不等于卸载旧监听。默认生效从设置定义读取。","refs":[["src/main.ts","const redirect ="],["src/modules/index.ts","const watchRoute ="],["src/modules/filters/variety/video/pages/homepage.ts","export const videoFilterHomepageEntry ="],["src/utils/pageType.ts","const currPage ="]]},
+    {"id":"url-and-fetch","label":"URL 与请求包装","kind":"shared","featureIds":["F-COM-URLCLEAN","F-VID-BV2AV","F-HOME-FEED-LOAD"],"legacyActions":["I-04","I-05"],"detail":"URL工具包装历史跳转并依序执行已注册转换。fetch 按需订阅，先处理输入再调用原请求并分发响应。首页载入量和搜索响应独立退订，最后一个订阅撤销后按所有权恢复。","refs":[["src/utils/urlHandler.ts","private hijack()"],["src/utils/fetch.ts","private hook()"],["src/modules/rules/homepage/groups/rcmd.ts","id: 'homepage-increase-rcmd-load-size'"]]},
+    {"id":"player-mode-support","label":"播放模式、滚轮与宽屏状态","kind":"shared","featureIds":["F-PLY-LAYOUT","F-PLY-SCROLL","F-MINI"],"legacyActions":["I-07","I-08"],"detail":"宽屏状态用于CSS及模式控制，播放器和番剧的滚轮逻辑分别装配，具体恢复与本机位置键见对应声明；被净化共用的宽屏追踪需保留。","refs":[["src/utils/widePlayer.ts","class WideScreenManager"],["src/modules/rules/video/groups/playerLayout.ts","window.addEventListener('keydown', handleKeyFPress"],["src/modules/rules/bangumi/groups/playerLayout.ts","window.addEventListener('keydown', handleKeyFPress"]]},
+    {"id":"style-hotkey","label":"Alt+B 暂停或恢复脚本样式","kind":"interaction","featureIds":["F-HOTKEY-ALTB"],"legacyActions":["A-HOTKEY-01"],"detail":"切换已注入 style 的 disabled。不会卸载非样式回调或取消行内样式。","refs":[["src/modules/index.ts","const loadRulesHotKey ="]]},
+    {"id":"storage","label":"配置存储、迁移与备份","kind":"data","featureIds":["F-MIGRATE","F-MISAKA-BACKUP"],"legacyActions":["I-01"],"detail":"旧键迁移与集中读写共用；备份保留保存值和缺省状态，导入先预览并保存恢复快照。默认不含连接凭据；配置定义和运行态缓存不混用。","refs":[["src/utils/storage.ts","export const migrate"],["src/main.ts","await migrate()"],["src/modules/configuration/runtime.ts","export const configurationAccess"],["src/modules/configuration/runtime.ts","export const commitConfigurationPlan"],["src/modules/configuration/backup.ts","export const createConfigurationBackup"]]},
+    {"id":"legacy-sync","label":"现行 WebDAV 规则同步","kind":"data","featureIds":["F-MISAKA-SYNC"],"detail":"现有 stamp 与 pack 使用规则白名单，走时间戳比较；新设备引导协议和并发合并未实现。连接与备份覆盖不等于云同步范围。","refs":[["src/modules/filters/ruleSync.ts","const STAMP_NAME ="],["src/modules/filters/ruleSync.ts","export const installRuleWatch"],["src/modules/filters/rulePack.ts","export const RULE_FIELDS"]]},
+    {"id":"build","label":"安装范围、打包与检查入口","kind":"build","legacyActions":["I-18"],"detail":"Vite用户脚本元数据和匹配边界、源码依赖、安装产物构建；产品另有成品配置与发布工作流，不能把上游 CI 当成已复用的产品流程。","refs":[["vite.config.ts","defineConfig("],["config/build-profiles.json","\"editions\""],["scripts/pack-build.mjs","packSourcePlugin"],["package.json","\"scripts\""]]},
+    {"id":"ui-support","label":"面板渲染与响应状态","kind":"shared","detail":"App 挂载页面规则、四种过滤、右键及快捷入口。组件处理折叠、描述、编辑和输入，Pinia 管理可见状态，快捷入口沿用官方页面配色。","refs":[["src/App.vue","<RulePanelView>"],["src/stores/view.ts","export const useRulePanelStore"],["src/components/items/StringComp.vue","watchThrottled("],["src/style.css",".misaka-shortcut-colors"]]},
+    {"id":"dom-support","label":"DOM初始化、日志与诊断","kind":"shared","featureIds":["F-MISAKA-MAINTENANCE"],"detail":"等待head/body后装配页面；日志帮助定位异常。结构诊断只在用户触发时采集，不代替网页运行验收。","refs":[["src/utils/init.ts","export const waitForHead"],["src/utils/init.ts","export const waitForBody"],["src/utils/logger.ts","export const logger"],["src/views/RulePanelView.vue","actionLabel('maintenance-export-diagnostic')"]]}
+  ],
+  "repositoryNotes": {
+    ".github/workflows/dev-ci.yml":"上游开发构建：锁定依赖、编译并上传构建产物；本项目不运行其工作流。",
+    ".github/workflows/main-ci.yml":"上游主分支构建：编译并上传产物；本项目另有自己的工作流。",
+    ".github/workflows/main-release.yml":"上游发布工作流：构建与发布原版成品；仅作来源记录。",
+    "vite.config.ts":"原版用户脚本元数据、匹配和排除范围、注入时机、Vue/样式构建。产品有同类入口，不视为逐行未改。",
+    "package.json":"脚本命令、运行与开发依赖、lint-staged声明。",
+    "pnpm-lock.yaml":"依赖锁定快照，不是独立运行功能。",
+    "pnpm-workspace.yaml":"依赖安装与工作区约束。",
+    "postcss.config.js":"原版样式转换配置。",
+    "tsconfig.json":"源码解析、类型与构建检查。",
+    "eslint.config.js":"ESLint、TypeScript及Vue检查配置。",
+    ".husky/pre-commit":"调用 lint-staged 的上游提交钩子。",
+    ".stylelintrc.json":"原版样式检查配置。",
+    ".prettierrc":"原版格式化配置。",
+    ".prettierignore":"原版格式化忽略范围。",
+    ".gitignore":"上游工作树排除范围。",
+    ".vscode/extensions.json":"开发编辑器推荐扩展。"
+  },
+  "sourceFamilies": [
+    {"prefix":"src/modules/rules/","kind":"page-rules","detail":"按页面/分组定位净化、布局和增强；结合声明回调及属性样式。"},
+    {"prefix":"src/modules/filters/variety/","kind":"object-filter","detail":"按四步实现链和各页现行策略读取。"},
+    {"prefix":"src/modules/filters/core/","kind":"filter-core","detail":"规则匹配与共享绘制。"},
+    {"prefix":"src/modules/filters/","kind":"filter-support","detail":"过滤分派、样式与规则数据接线。"},
+    {"prefix":"src/modules/shortcut/","kind":"shortcut","detail":"本地快捷入口、页面锚点、生命周期和偏好。"},
+    {"prefix":"src/modules/touch/","kind":"touch","detail":"播放器触摸原型、识别/提示/清理。"},
+    {"prefix":"src/modules/configuration/","kind":"configuration","detail":"配置定义、备份校验和恢复。"},
+    {"prefix":"src/modules/maintenance/","kind":"maintenance","detail":"用户主动触发的结构诊断。"},
+    {"prefix":"src/components/","kind":"ui-component","detail":"面板、交互控件及配置应用。"},
+    {"prefix":"src/views/","kind":"ui-view","detail":"页面设置、过滤面板和入口。"},
+    {"prefix":"src/utils/","kind":"helper","detail":"页面、DOM、数据、请求或存储共用工具。"},
+    {"prefix":"src/types/","kind":"contract","detail":"编译期类型定义，非独立运行功能。"},
+    {"prefix":"src/composables/","kind":"state","detail":"响应式状态及监听复用。"},
+    {"prefix":"src/stores/","kind":"state","detail":"面板、偏好及共享 UI 状态。"},
+    {"prefix":"src/feedback/","kind":"feedback","detail":"编号、查找与历史测试动作。"},
+    {"prefix":"src/storage/","kind":"storage","detail":"本地统一存储边界。"},
+    {"prefix":"src/assets/","kind":"asset","detail":"静态视觉资源，不作为独立功能。"},
+    {"prefix":"src/","kind":"entry-or-support","detail":"入口、通用样式、配置或类型支撑。"}
+  ]
+}

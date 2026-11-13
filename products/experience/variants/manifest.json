@@ -1,6 +1,6 @@
 {
   "schemaVersion": 1,
-  "version": "0.1.5.1",
+  "version": "0.1.5.2",
   "identity": {
     "name": "MisakaWeb",
     "namespace": "https://github.com/YzLfireChiYv/misakaweb"
@@ -11,12 +11,12 @@
       "id": "pure",
       "label": "净化轻量版",
       "packs": [],
-      "version": "0.1.5.1",
+      "version": "0.1.5.2",
       "artifact": "products/experience/variants/misakaweb-pure.user.js",
       "updateURL": "https://raw.githubusercontent.com/YzLfireChiYv/misakaweb/main/products/experience/variants/misakaweb-pure.user.js",
       "downloadURL": "https://raw.githubusercontent.com/YzLfireChiYv/misakaweb/main/products/experience/variants/misakaweb-pure.user.js",
-      "sha256": "ab9695a1b0df62ad325e7f68644411c62e68197d18643b539722ab858b7372a5",
-      "bytes": 711944,
+      "sha256": "4e049d9778710bb03c533748211c9242ec370d68fb38d9e7c1b0fab7ba0dc3ca",
+      "bytes": 721539,
       "audit": {
         "cleaningKeys": 325,
         "supportKeys": 1,
@@ -36,7 +36,6 @@
           "common-header-bar-search-width",
           "common-nav-favorite-select-watchlater",
           "common-nav-search-middle-justify",
-          "common-theme-dark",
           "common-unify-font",
           "ctx-copy-space-url",
           "ctx-copy-video-url",
@@ -112,12 +111,12 @@
         "reading-navigation",
         "link-tools"
       ],
-      "version": "0.1.5.1",
+      "version": "0.1.5.2",
       "artifact": "products/experience/variants/misakaweb-desktop-toolkit.user.js",
       "updateURL": "https://raw.githubusercontent.com/YzLfireChiYv/misakaweb/main/products/experience/variants/misakaweb-desktop-toolkit.user.js",
       "downloadURL": "https://raw.githubusercontent.com/YzLfireChiYv/misakaweb/main/products/experience/variants/misakaweb-desktop-toolkit.user.js",
-      "sha256": "109e23bcfa274694e83ff0189946cce13870731b0d0f386157b20468fe178440",
-      "bytes": 829421,
+      "sha256": "4cf4980652f05877403a1de7fe210826d5edf8d09a5bd4925fbfeaf5ae17b187",
+      "bytes": 838904,
       "audit": {
         "cleaningKeys": 325,
         "supportKeys": 1,
@@ -127,7 +126,6 @@
           "beauty-scrollbar",
           "border-radius",
           "channel-increase-rcmd-list-font-size",
-          "common-theme-dark",
           "common-unify-font",
           "homepage-increase-rcmd-list-font-size",
           "increase-space-page-video-card-font-size",

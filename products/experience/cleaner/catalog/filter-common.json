@@ -1,0 +1,46 @@
+{
+  "decisionContract": {
+    "id": "keep-discard",
+    "outcomes": ["keep", "discard"],
+    "status": "implemented",
+    "detail": "页面提供字段和启用的条件。判断只接收值，输出 keep 或 discard；统计豁免是内部取数标记。绘制和取数在外层协调，正式评分尚未实现。"
+  },
+  "strategyCore": {
+    "id": "current-core",
+    "label": "现行规则组合与匹配核心",
+    "detail": "可替换的兼容策略。强制命中优先，普通命中可被白名单豁免。精确、关键词、布尔和数值比较接收独立字段值，缺数和运行错误分别处理。",
+    "refs": [["src/modules/filters/decision/compatibility.ts", "export const compatibilityDecision"], ["src/modules/filters/core/core.ts", "const rawCheck ="], ["src/modules/filters/core/subFilters/stringFilter.ts", "export class StringFilter"], ["src/modules/filters/core/subFilters/keywordFilter.ts", "export class KeywordFilter"], ["src/modules/filters/core/subFilters/numberMinFilter.ts", "export class NumberMinFilter"], ["src/modules/filters/core/subFilters/numberMaxFilter.ts", "export class NumberMaxFilter"], ["src/modules/filters/core/subFilters/booleanFilter.ts", "export class BooleanFilter"]]
+  },
+  "shared": [
+    {
+      "id": "page-dispatch", "stage": "locate", "label": "页面注册与装载", "status": "implemented",
+      "detail": "注册表按页面分派入口，先调用入口再加载配置项。路由变化补启动尚未启动的模块；目标定位与观察方式见各适配。",
+      "refs": [["src/modules/filters/index.ts", "export const videoFilters:"], ["src/modules/index.ts", "const loadFilters ="], ["src/utils/tool.ts", "export const waitForEle ="]]
+    },
+    {
+      "id": "paint-decisions", "stage": "layout", "label": "绘制取舍与检查标记", "status": "implemented",
+      "detail": "下一帧按判断结果绘制。核对节点仍在页面、路由和扫描版本，视频卡片另核对身份；取数失败允许增量重试。",
+      "refs": [["src/modules/filters/core/paint.ts", "requestAnimationFrame(() =>"], ["src/config.ts", "filterVisitSign:"]]
+    },
+    {
+      "id": "hide-sign", "stage": "layout", "label": "隐藏与恢复：属性模式", "status": "implemented",
+      "detail": "添加隐藏属性，由统一 CSS 设置 display:none；恢复时移除属性。DOM不删除。",
+      "refs": [["src/utils/tool.ts", "ele.setAttribute(config.filterHideSign"], ["src/utils/tool.ts", "ele.removeAttribute(config.filterHideSign"], ["src/modules/filters/index.ts", "export const loadFilterStyle ="], ["src/config.ts", "filterHideSign:"]]
+    },
+    {
+      "id": "hide-style", "stage": "layout", "label": "隐藏与恢复：行内样式模式", "status": "implemented",
+      "detail": "写入行内 display:none!important，恢复时只处理本脚本隐藏记录，并保留原 display 与优先级。DOM 保留。",
+      "refs": [["src/utils/tool.ts", "ele.style.setProperty('display', 'none'"], ["src/modules/filters/core/paint.ts", "const previous = inlineDisplay.get"]]
+    },
+    {
+      "id": "natural-layout", "stage": "layout", "label": "站点自然排布", "status": "natural",
+      "detail": "隐藏项退出布局，剩余内容依赖站点布局和浏览器排布。父容器或固定占位是否留洞仍须实测；没有通用补洞或重排。",
+      "refs": []
+    },
+    {
+      "id": "visible-item-refill", "stage": "layout", "label": "按可见数量补载", "status": "missing",
+      "detail": "没有按过滤后剩余对象数量触发补载的实现；站点滚动、翻页或展开继续由站点控制。",
+      "refs": []
+    }
+  ]
+}

@@ -1,0 +1,1519 @@
+{
+  "schemaVersion": 1,
+  "upstreamInventory": {
+    "repository": "https://github.com/festoney8/bilibili-cleaner",
+    "commit": "15d9bced793487a8c4b0f9e1f7f67c7ccf6f3da9",
+    "evidence": "OneDrive:notes/inventory/cleaner-2026-10-09/data/features.csv",
+    "groupingStatus": "reference-unreviewed"
+  },
+  "features": [
+    {
+      "id": "F-COM-HIDE",
+      "label": "全站通用 - 基本功能（隐藏类）",
+      "settingKeys": [
+        "hide-footer",
+        "hide-watchlater-button"
+      ],
+      "groupingStatus": "reference-unreviewed",
+      "evidence": "OneDrive:notes/inventory/cleaner-2026-10-09/data/features.csv#F-COM-HIDE",
+      "baselineDescription": "全站隐藏视频卡片上的“稍后再看”按钮、页底 footer。"
+    },
+    {
+      "id": "F-COM-STYLE",
+      "label": "全站通用 - 基本功能（外观类）",
+      "settingKeys": [
+        "beauty-scrollbar",
+        "border-radius",
+        "common-unify-font"
+      ],
+      "groupingStatus": "reference-unreviewed",
+      "evidence": "OneDrive:notes/inventory/cleaner-2026-10-09/data/features.csv#F-COM-STYLE",
+      "baselineDescription": "页面直角化（按页面选用不同 CSS 属性名）、美化滚动条、统一全站字体（HarmonyOS 字体 @font-face）。"
+    },
+    {
+      "id": "F-COM-URLCLEAN",
+      "label": "URL参数净化",
+      "settingKeys": [
+        "url-cleaner"
+      ],
+      "groupingStatus": "reference-unreviewed",
+      "evidence": "OneDrive:notes/inventory/cleaner-2026-10-09/data/features.csv#F-COM-URLCLEAN",
+      "baselineDescription": "移除地址栏中的跟踪/无用参数（spm_id_from、vd_source 等三十余个，按页面追加），并劫持 history.pushState/replaceState 对后续 SPA 跳转同样净化；p=1 也被移除。默认开启。"
+    },
+    {
+      "id": "F-COM-DARK",
+      "label": "全站通用 - 夜间模式",
+      "settingKeys": [
+        "common-theme-dark"
+      ],
+      "groupingStatus": "reference-unreviewed",
+      "evidence": "OneDrive:notes/inventory/cleaner-2026-10-09/data/features.csv#F-COM-DARK",
+      "baselineDescription": "接管夜间模式：日间/夜间/跟随系统/官方默认 四选一；写 B 站 theme_style Cookie（10 年有效期），直播页拦截 lab-style 属性修改。另有菜单“夜间模式开关”和快捷按钮切换。"
+    },
+    {
+      "id": "F-COM-HDR-LEFT",
+      "label": "全站通用 - 顶栏 左侧",
+      "settingKeys": [
+        "common-hide-nav-anime",
+        "common-hide-nav-anime-popover",
+        "common-hide-nav-bdu",
+        "common-hide-nav-blackboard",
+        "common-hide-nav-bml",
+        "common-hide-nav-channel-panel-popover",
+        "common-hide-nav-download-app",
+        "common-hide-nav-game",
+        "common-hide-nav-game-popover",
+        "common-hide-nav-homepage",
+        "common-hide-nav-homepage-logo",
+        "common-hide-nav-live",
+        "common-hide-nav-live-popover",
+        "common-hide-nav-manga",
+        "common-hide-nav-manga-popover",
+        "common-hide-nav-match",
+        "common-hide-nav-vipshop"
+      ],
+      "groupingStatus": "reference-unreviewed",
+      "evidence": "OneDrive:notes/inventory/cleaner-2026-10-09/data/features.csv#F-COM-HDR-LEFT",
+      "baselineDescription": "隐藏主站顶栏左侧各入口（Logo、首页、番剧、直播、游戏中心、会员购、漫画、赛事、活动等）及其弹出框。"
+    },
+    {
+      "id": "F-COM-HDR-SEARCH",
+      "label": "全站通用 - 顶栏 搜索框",
+      "settingKeys": [
+        "common-hide-nav-search-btn",
+        "common-hide-nav-search-history",
+        "common-hide-nav-search-rcmd",
+        "common-hide-nav-search-trending",
+        "common-nav-search-middle-justify"
+      ],
+      "groupingStatus": "reference-unreviewed",
+      "evidence": "OneDrive:notes/inventory/cleaner-2026-10-09/data/features.csv#F-COM-HDR-SEARCH",
+      "baselineDescription": "隐藏搜索按钮、推荐搜索、搜索历史、热搜，修复搜索框居中。“隐藏推荐搜索”额外清空 placeholder/title，并拦截空输入回车、空输入点搜索按钮改为新开纯净搜索页。"
+    },
+    {
+      "id": "F-COM-HDR-RIGHT",
+      "label": "全站通用 - 顶栏 右侧",
+      "settingKeys": [
+        "common-hide-nav-avatar",
+        "common-hide-nav-dynamic",
+        "common-hide-nav-dynamic-red-num",
+        "common-hide-nav-favorite",
+        "common-hide-nav-history",
+        "common-hide-nav-member",
+        "common-hide-nav-message",
+        "common-hide-nav-message-red-num",
+        "common-hide-nav-upload",
+        "common-hide-nav-vip"
+      ],
+      "groupingStatus": "reference-unreviewed",
+      "evidence": "OneDrive:notes/inventory/cleaner-2026-10-09/data/features.csv#F-COM-HDR-RIGHT",
+      "baselineDescription": "隐藏顶栏右侧头像、大会员、消息/小红点、动态/小红点、收藏、历史、创作中心、投稿。"
+    },
+    {
+      "id": "F-COM-FAV-WL",
+      "label": "收藏弹出框 自动选中稍后再看",
+      "settingKeys": [
+        "common-nav-favorite-select-watchlater"
+      ],
+      "groupingStatus": "reference-unreviewed",
+      "evidence": "OneDrive:notes/inventory/cleaner-2026-10-09/data/features.csv#F-COM-FAV-WL",
+      "baselineDescription": "鼠标移入顶栏收藏入口时，自动切换到“稍后再看”标签。"
+    },
+    {
+      "id": "F-COM-HDR-SIZE",
+      "label": "全站通用 - 顶栏 数值设定",
+      "settingKeys": [
+        "common-header-bar-padding-left",
+        "common-header-bar-padding-right",
+        "common-header-bar-search-margin-left",
+        "common-header-bar-search-width"
+      ],
+      "groupingStatus": "reference-unreviewed",
+      "evidence": "OneDrive:notes/inventory/cleaner-2026-10-09/data/features.csv#F-COM-HDR-SIZE",
+      "baselineDescription": "数值调节顶栏左右边界距离、搜索框宽度及与左侧距离（-1 为禁用）。"
+    },
+    {
+      "id": "F-STICKY-HDR",
+      "label": "多页 “顶栏/分区栏 不再吸附”",
+      "settingKeys": [
+        "channel-hide-sticky-header",
+        "hide-dynamic-page-fixed-header",
+        "hide-search-page-search-sticky-header",
+        "homepage-hide-sticky-header",
+        "homepage-hide-sticky-subarea",
+        "video-page-hide-fixed-header"
+      ],
+      "groupingStatus": "reference-unreviewed",
+      "evidence": "OneDrive:notes/inventory/cleaner-2026-10-09/data/features.csv#F-STICKY-HDR",
+      "baselineDescription": "各页面滚动后取消顶栏（及首页分区栏）吸附顶部：首页、播放页/番剧页、动态页、热门、分区、搜索。"
+    },
+    {
+      "id": "F-GRID",
+      "label": "多页 “修改视频列表列数/两侧边距”",
+      "settingKeys": [
+        "channel-layout",
+        "channel-layout-padding",
+        "homepage-layout",
+        "homepage-layout-padding",
+        "popular-layout",
+        "watchlater-layout"
+      ],
+      "groupingStatus": "reference-unreviewed",
+      "evidence": "OneDrive:notes/inventory/cleaner-2026-10-09/data/features.csv#F-GRID",
+      "baselineDescription": "强制首页、新版分区页、热门页、稍后再看的视频列表列数，首页/分区页可调两侧边距。热门页“未启用”选项值为 2，默认即挂载 2 列 CSS（同时隐藏简介/标签）。"
+    },
+    {
+      "id": "F-HOME-BASIC",
+      "label": "首页 - 基本功能",
+      "settingKeys": [
+        "homepage-hide-adblock-tips",
+        "homepage-hide-banner",
+        "homepage-hide-recommend-swipe",
+        "homepage-hide-subarea",
+        "homepage-revert-channel-dynamic-icon"
+      ],
+      "groupingStatus": "reference-unreviewed",
+      "evidence": "OneDrive:notes/inventory/cleaner-2026-10-09/data/features.csv#F-HOME-BASIC",
+      "baselineDescription": "首页隐藏横幅、大图轮播、分区栏、adblock 提示，恢复原始动态按钮。"
+    },
+    {
+      "id": "F-HOME-FEED-UI",
+      "label": "首页 - 视频列表（卡片元素）",
+      "settingKeys": [
+        "homepage-hide-ad-card",
+        "homepage-hide-bili-watch-later-tip",
+        "homepage-hide-danmaku-count",
+        "homepage-hide-inline-player-danmaku",
+        "homepage-hide-live-card-recommend",
+        "homepage-hide-no-interest",
+        "homepage-hide-skeleton",
+        "homepage-hide-skeleton-animation",
+        "homepage-hide-skeleton-before-anchor",
+        "homepage-hide-sub-area-card-recommend",
+        "homepage-hide-up-info-icon",
+        "homepage-hide-video-info-date",
+        "homepage-increase-rcmd-list-font-size",
+        "homepage-move-no-interest",
+        "homepage-simple-sub-area-card-recommend"
+      ],
+      "groupingStatus": "reference-unreviewed",
+      "evidence": "OneDrive:notes/inventory/cleaner-2026-10-09/data/features.csv#F-HOME-FEED-UI",
+      "baselineDescription": "首页推荐卡片的字号、负反馈按钮、tag、发布时间、弹幕数、广告、直播推荐、分区推荐、加载骨架等的显示调整。"
+    },
+    {
+      "id": "F-HOME-FEED-LOAD",
+      "label": "首页 - 视频列表（加载行为）",
+      "settingKeys": [
+        "homepage-increase-rcmd-load-size",
+        "homepage-rcmd-video-preload"
+      ],
+      "groupingStatus": "reference-unreviewed",
+      "evidence": "OneDrive:notes/inventory/cleaner-2026-10-09/data/features.csv#F-HOME-FEED-LOAD",
+      "baselineDescription": "“增大视频载入数量”通过 fetch 预处理把 feed/rcmd 请求 ps=12 改为 24；“视频列表预加载”滚动时提前触发加载锚点（会默认隐藏分区视频）。"
+    },
+    {
+      "id": "F-HOME-SIDEBAR",
+      "label": "首页 - 页面侧栏 小组件",
+      "settingKeys": [
+        "homepage-hide-adcard-button",
+        "homepage-hide-desktop-download-tip",
+        "homepage-hide-feed-roll-btn",
+        "homepage-hide-feedback",
+        "homepage-hide-flexible-roll-btn",
+        "homepage-hide-flexible-roll-btn-text",
+        "homepage-hide-top-btn",
+        "homepage-hide-trial-feed-wrap",
+        "homepage-hide-watchlater-pip-button"
+      ],
+      "groupingStatus": "reference-unreviewed",
+      "evidence": "OneDrive:notes/inventory/cleaner-2026-10-09/data/features.csv#F-HOME-SIDEBAR",
+      "baselineDescription": "首页右侧/右下小组件：下载桌面端弹窗、下滑提示、换一换、稍后再看、广告、刷新按钮、客服、回顶部。"
+    },
+    {
+      "id": "F-VID-BV2AV",
+      "label": "BV号转AV号",
+      "settingKeys": [
+        "video-page-bv2av"
+      ],
+      "groupingStatus": "reference-unreviewed",
+      "evidence": "OneDrive:notes/inventory/cleaner-2026-10-09/data/features.csv#F-VID-BV2AV",
+      "baselineDescription": "播放页把地址栏中的 BV 号就地改写为 av 号（保留分 P 与锚点）。"
+    },
+    {
+      "id": "F-VID-SHARE",
+      "label": "净化分享功能 / 使用短域名分享",
+      "settingKeys": [
+        "video-page-simple-share",
+        "video-page-simple-share-domain"
+      ],
+      "groupingStatus": "reference-unreviewed",
+      "evidence": "OneDrive:notes/inventory/cleaner-2026-10-09/data/features.csv#F-VID-SHARE",
+      "baselineDescription": "点击分享按钮时向剪贴板写入“【标题】+纯净链接”，可选短域名（b23.tv、bili22.cn 等 6 个）。播放页与番剧页共用同一开关键，但声明默认值不同（番剧页 true、播放页未声明）。"
+    },
+    {
+      "id": "F-PLY-LAYOUT",
+      "label": "布局设定（播放模式/位置/宽度）",
+      "settingKeys": [
+        "default-webscreen",
+        "default-widescreen",
+        "normalscreen-width",
+        "video-page-exchange-player-position"
+      ],
+      "groupingStatus": "reference-unreviewed",
+      "evidence": "OneDrive:notes/inventory/cleaner-2026-10-09/data/features.csv#F-PLY-LAYOUT",
+      "baselineDescription": "自动宽屏、自动网页全屏（与自动宽屏冲突提示）、播放器与视频信息交换位置、普通播放宽度调节。"
+    },
+    {
+      "id": "F-PLY-SCROLL",
+      "label": "布局设定（全屏可滚动）",
+      "settingKeys": [
+        "fullscreen-key-f-scrollable",
+        "fullscreen-scrollable",
+        "screen-scrollable-enable-mini-player",
+        "screen-scrollable-move-header-bottom",
+        "webscreen-scrollable"
+      ],
+      "groupingStatus": "reference-unreviewed",
+      "evidence": "OneDrive:notes/inventory/cleaner-2026-10-09/data/features.csv#F-PLY-SCROLL",
+      "baselineDescription": "网页全屏/真全屏时页面可滚动、按 F 键全屏可滚动、全屏滚动时启用小窗、全屏滚动时顶栏移到视频底部；启用后滚轮不再调音量。"
+    },
+    {
+      "id": "F-VID-INFO",
+      "label": "播放页 - 视频信息",
+      "settingKeys": [
+        "video-page-hide-video-info-argue",
+        "video-page-hide-video-info-copyright",
+        "video-page-hide-video-info-danmaku-count",
+        "video-page-hide-video-info-honor",
+        "video-page-hide-video-info-pubdate",
+        "video-page-unfold-video-info-title"
+      ],
+      "groupingStatus": "reference-unreviewed",
+      "evidence": "OneDrive:notes/inventory/cleaner-2026-10-09/data/features.csv#F-VID-INFO",
+      "baselineDescription": "展开多行标题，隐藏弹幕数、发布日期、版权声明、视频荣誉、温馨提示。"
+    },
+    {
+      "id": "F-PLY-OVERLAY",
+      "label": "播放器（浮层与弹窗）",
+      "settingKeys": [
+        "bangumi-page-hide-bpx-player-record-item-wrap",
+        "bangumi-page-hide-bpx-player-top-follow",
+        "video-page-bpx-player-bili-high-icon",
+        "video-page-hide-bpx-player-bili-clock",
+        "video-page-hide-bpx-player-bili-cmd-shrink",
+        "video-page-hide-bpx-player-bili-cmtime",
+        "video-page-hide-bpx-player-bili-guide-all",
+        "video-page-hide-bpx-player-bili-link",
+        "video-page-hide-bpx-player-bili-qoe-feedback",
+        "video-page-hide-bpx-player-bili-reserve",
+        "video-page-hide-bpx-player-bili-score",
+        "video-page-hide-bpx-player-bili-score-sum",
+        "video-page-hide-bpx-player-bili-vote",
+        "video-page-hide-bpx-player-cmd-dm-wrap",
+        "video-page-hide-bpx-player-dialog-wrap",
+        "video-page-hide-bpx-player-ending-related",
+        "video-page-hide-bpx-player-state-wrap",
+        "video-page-hide-bpx-player-top-issue",
+        "video-page-hide-bpx-player-top-left-follow",
+        "video-page-hide-bpx-player-top-left-music",
+        "video-page-hide-bpx-player-top-left-title"
+      ],
+      "groupingStatus": "reference-unreviewed",
+      "evidence": "OneDrive:notes/inventory/cleaner-2026-10-09/data/features.csv#F-PLY-OVERLAY",
+      "baselineDescription": "隐藏播放器内一键三连、投票、效果调查、评分、打卡、心动、迷你弹窗、预告、链接、标题、音乐链接、关注、反馈、暂停 Logo、结束推荐、弹幕悬停菜单、高赞点赞按钮等。播放页/番剧页/活动页共用键。"
+    },
+    {
+      "id": "F-PLY-CTRL",
+      "label": "播放控制栏",
+      "settingKeys": [
+        "video-page-hide-bpx-player-ctrl-eplist",
+        "video-page-hide-bpx-player-ctrl-flac",
+        "video-page-hide-bpx-player-ctrl-full",
+        "video-page-hide-bpx-player-ctrl-next",
+        "video-page-hide-bpx-player-ctrl-pip",
+        "video-page-hide-bpx-player-ctrl-play",
+        "video-page-hide-bpx-player-ctrl-playbackrate",
+        "video-page-hide-bpx-player-ctrl-prev",
+        "video-page-hide-bpx-player-ctrl-quality",
+        "video-page-hide-bpx-player-ctrl-setting",
+        "video-page-hide-bpx-player-ctrl-subtitle",
+        "video-page-hide-bpx-player-ctrl-viewpoint",
+        "video-page-hide-bpx-player-ctrl-volume",
+        "video-page-hide-bpx-player-ctrl-web",
+        "video-page-hide-bpx-player-ctrl-wide",
+        "video-page-hide-bpx-player-pbp-pin",
+        "video-page-hide-bpx-player-shadow-progress-area",
+        "video-page-show-bpx-player-pbp",
+        "video-page-show-bpx-player-shadow-progress-area-fullscreen"
+      ],
+      "groupingStatus": "reference-unreviewed",
+      "evidence": "OneDrive:notes/inventory/cleaner-2026-10-09/data/features.csv#F-PLY-CTRL",
+      "baselineDescription": "逐个隐藏控制栏按钮（上/下一个、播放、章节、Hi-Res、清晰度、选集、倍速、字幕、音量、设置、画中画、宽屏、网页全屏、全屏）及进度条相关显示。播放页/番剧页/活动页共用键。"
+    },
+    {
+      "id": "F-DM-CTRL",
+      "label": "弹幕控制栏",
+      "settingKeys": [
+        "video-page-hide-bpx-player-dm-btn-send",
+        "video-page-hide-bpx-player-dm-hint",
+        "video-page-hide-bpx-player-dm-input",
+        "video-page-hide-bpx-player-dm-setting",
+        "video-page-hide-bpx-player-dm-switch",
+        "video-page-hide-bpx-player-postpanel",
+        "video-page-hide-bpx-player-sending-area",
+        "video-page-hide-bpx-player-video-btn-dm",
+        "video-page-hide-bpx-player-video-info-online",
+        "video-page-hide-bpx-player-video-inputbar",
+        "video-page-show-fullscreen-bpx-player-video-info-online"
+      ],
+      "groupingStatus": "reference-unreviewed",
+      "evidence": "OneDrive:notes/inventory/cleaner-2026-10-09/data/features.csv#F-DM-CTRL",
+      "baselineDescription": "隐藏同时在看人数、弹幕开关/设置/样式、占位文字、弹幕礼仪、发送按钮、智能/广告弹幕，及全屏/非全屏时弹幕栏行为。播放页/番剧页/活动页共用键。"
+    },
+    {
+      "id": "F-DM-STYLE",
+      "label": "弹幕样式",
+      "settingKeys": [
+        "video-page-bpx-player-bili-dm-normal-white",
+        "video-page-bpx-player-bili-dm-vip-white",
+        "video-page-danmaku-font-family",
+        "video-page-danmaku-font-weight"
+      ],
+      "groupingStatus": "reference-unreviewed",
+      "evidence": "OneDrive:notes/inventory/cleaner-2026-10-09/data/features.csv#F-DM-STYLE",
+      "baselineDescription": "设置弹幕字体与字重；彩色渐变/普通彩色弹幕变白。播放页、番剧页、活动页、直播页共用字体/字重键。"
+    },
+    {
+      "id": "F-SUB-STYLE",
+      "label": "字幕样式",
+      "settingKeys": [
+        "video-page-subtitle-font-color",
+        "video-page-subtitle-font-family",
+        "video-page-subtitle-font-weight",
+        "video-page-subtitle-text-stroke-color",
+        "video-page-subtitle-text-stroke-width"
+      ],
+      "groupingStatus": "reference-unreviewed",
+      "evidence": "OneDrive:notes/inventory/cleaner-2026-10-09/data/features.csv#F-SUB-STYLE",
+      "baselineDescription": "设置字幕颜色、字体、字重、描边颜色与描边宽度。播放页、活动页共用键。"
+    },
+    {
+      "id": "F-VID-TOOLBAR",
+      "label": "工具栏 / 简介区",
+      "settingKeys": [
+        "bangumi-page-hide-media-info",
+        "bangumi-page-hide-sponsor-module",
+        "bangumi-page-hide-toolbar",
+        "bangumi-page-hide-watch-together",
+        "bangumi-page-simple-media-info",
+        "video-page-hide-below-activity-vote",
+        "video-page-hide-below-bannerAd",
+        "video-page-hide-below-info-desc",
+        "video-page-hide-below-info-tag",
+        "video-page-hide-below-info-video-ai-assistant",
+        "video-page-hide-below-info-video-complaint",
+        "video-page-hide-below-info-video-note",
+        "video-page-hide-below-info-video-report-menu",
+        "video-page-hide-triple-oldfan-entry",
+        "video-page-hide-video-share-popover",
+        "video-page-simple-video-share-popover",
+        "video-page-unfold-below-info-desc"
+      ],
+      "groupingStatus": "reference-unreviewed",
+      "evidence": "OneDrive:notes/inventory/cleaner-2026-10-09/data/features.csv#F-VID-TOOLBAR",
+      "baselineDescription": "精简或隐藏分享弹出菜单，隐藏成为老粉、AI 总结、举报、记笔记、折叠菜单、简介、标签、活动宣传、广告 banner，展开简介。番剧页另有工具栏/作品信息项。"
+    },
+    {
+      "id": "F-VID-COIN",
+      "label": "投币时不自动点赞",
+      "settingKeys": [
+        "video-page-coin-disable-auto-like"
+      ],
+      "groupingStatus": "reference-unreviewed",
+      "evidence": "OneDrive:notes/inventory/cleaner-2026-10-09/data/features.csv#F-VID-COIN",
+      "baselineDescription": "点击投币后在弹窗中自动取消勾选“同时点赞”。播放页与番剧页共用键。"
+    },
+    {
+      "id": "F-VID-UPINFO",
+      "label": "播放页 - 右侧 UP主信息",
+      "settingKeys": [
+        "video-page-hide-up-bili-avatar-icon",
+        "video-page-hide-up-bili-avatar-pendent-dom",
+        "video-page-hide-up-charge",
+        "video-page-hide-up-description",
+        "video-page-hide-up-membersinfo-normal-header",
+        "video-page-hide-up-sendmsg",
+        "video-page-hide-up-usercard"
+      ],
+      "groupingStatus": "reference-unreviewed",
+      "evidence": "OneDrive:notes/inventory/cleaner-2026-10-09/data/features.csv#F-VID-UPINFO",
+      "baselineDescription": "隐藏发消息、简介、充电、头像饰品/icon、创作团队、用户卡片。"
+    },
+    {
+      "id": "F-VID-RIGHT",
+      "label": "右侧视频栏 / 番剧右栏",
+      "settingKeys": [
+        "bangumi-page-hide-eplist-badge",
+        "bangumi-page-hide-recommend",
+        "bangumi-page-hide-right-container-section-height",
+        "video-page-hide-right-container",
+        "video-page-hide-right-container-ad",
+        "video-page-hide-right-container-danmaku",
+        "video-page-hide-right-container-duration",
+        "video-page-hide-right-container-live",
+        "video-page-hide-right-container-multi-page-add-counter",
+        "video-page-hide-right-container-reco-list-next-play",
+        "video-page-hide-right-container-reco-list-next-play-next-button",
+        "video-page-hide-right-container-reco-list-rec-footer",
+        "video-page-hide-right-container-reco-list-rec-list",
+        "video-page-hide-right-container-reco-list-rec-list-info-plays",
+        "video-page-hide-right-container-reco-list-rec-list-info-up",
+        "video-page-hide-right-container-right-bottom-banner",
+        "video-page-hide-right-container-section-abstract",
+        "video-page-hide-right-container-section-height",
+        "video-page-hide-right-container-section-play-num",
+        "video-page-hide-right-container-section-subscribe",
+        "video-page-hide-right-container-video-page-game-card-small",
+        "video-page-right-container-section-unfold-title",
+        "video-page-right-container-set-info-bottom",
+        "video-page-right-container-sticky-disable",
+        "video-page-right-container-sticky-optimize"
+      ],
+      "groupingStatus": "reference-unreviewed",
+      "evidence": "OneDrive:notes/inventory/cleaner-2026-10-09/data/features.csv#F-VID-RIGHT",
+      "baselineDescription": "右栏吸附优化/禁用，隐藏广告、游戏推荐、弹幕列表、连播开关、接下来播放、合集信息、相关视频元素、活动 banner、直播推荐、整个右栏等。"
+    },
+    {
+      "id": "F-VID-UNFOLD",
+      "label": "自动展开 弹幕列表 / 相关视频",
+      "settingKeys": [
+        "video-page-unfold-right-container-danmaku",
+        "video-page-unfold-right-container-reco-list"
+      ],
+      "groupingStatus": "reference-unreviewed",
+      "evidence": "OneDrive:notes/inventory/cleaner-2026-10-09/data/features.csv#F-VID-UNFOLD",
+      "baselineDescription": "页面加载后自动点开右栏弹幕列表、自动展开相关视频（监听 URL 变化重复执行）。"
+    },
+    {
+      "id": "F-MINI",
+      "label": "小窗播放器",
+      "settingKeys": [
+        "video-page-bpx-player-mini-mode-position-record",
+        "video-page-bpx-player-mini-mode-wheel-adjust",
+        "video-page-hide-bpx-player-mini-mode-danmaku",
+        "video-page-hide-bpx-player-mini-mode-process",
+        "video-page-hide-bpx-player-mini-when-ending"
+      ],
+      "groupingStatus": "reference-unreviewed",
+      "evidence": "OneDrive:notes/inventory/cleaner-2026-10-09/data/features.csv#F-MINI",
+      "baselineDescription": "小窗隐藏进度/弹幕、播放结束隐藏小窗、滚轮调节小窗大小（localStorage 记缩放）、记录小窗位置（localStorage 记位移）。播放页与番剧页共用键与 localStorage 键。"
+    },
+    {
+      "id": "F-FLOATBTN",
+      "label": "多页 “页面右下角 小按钮 / 页面侧栏”",
+      "settingKeys": [
+        "bangumi-page-hide-sidenav-issue",
+        "hide-dynamic-page-sidebar-back-to-top",
+        "hide-dynamic-page-sidebar-old-version",
+        "hide-search-page-btn-to-top",
+        "hide-search-page-customer-service",
+        "hide-space-page-sidebar-feedback",
+        "hide-space-page-sidebar-revert",
+        "video-page-hide-sidenav-back-to-top",
+        "video-page-hide-sidenav-customer-service",
+        "video-page-hide-sidenav-mini",
+        "video-page-hide-sidenav-right-container-live"
+      ],
+      "groupingStatus": "reference-unreviewed",
+      "evidence": "OneDrive:notes/inventory/cleaner-2026-10-09/data/features.csv#F-FLOATBTN",
+      "baselineDescription": "隐藏播放页、番剧页、动态页、搜索页、空间页的右下角/侧栏小按钮（小窗开关、客服、回顶部、回旧版、新版反馈等）。"
+    },
+    {
+      "id": "F-DYN-LAYOUT",
+      "label": "动态页 - 布局",
+      "settingKeys": [
+        "dynamic-detail-width",
+        "dynamic-list-width",
+        "exchange-dynamic-page-left-right-aside"
+      ],
+      "groupingStatus": "reference-unreviewed",
+      "evidence": "OneDrive:notes/inventory/cleaner-2026-10-09/data/features.csv#F-DYN-LAYOUT",
+      "baselineDescription": "交换左右栏，调节动态列表/动态详情中栏宽度（0 禁用）。"
+    },
+    {
+      "id": "F-DYN-SIDE",
+      "label": "动态页 - 左栏/右栏",
+      "settingKeys": [
+        "hide-dynamic-page-aside-left",
+        "hide-dynamic-page-aside-right",
+        "hide-dynamic-page-bili-dyn-ads",
+        "hide-dynamic-page-bili-dyn-banner",
+        "hide-dynamic-page-bili-dyn-live-users__item__living",
+        "hide-dynamic-page-bili-dyn-my-info",
+        "hide-dynamic-page-bili-dyn-topic-box"
+      ],
+      "groupingStatus": "reference-unreviewed",
+      "evidence": "OneDrive:notes/inventory/cleaner-2026-10-09/data/features.csv#F-DYN-SIDE",
+      "baselineDescription": "隐藏个人信息框、直播中 Logo、整个左栏；隐藏社区中心、广告、热搜、整个右栏。"
+    },
+    {
+      "id": "F-DYN-TOP",
+      "label": "动态页 - 中栏 顶部功能",
+      "settingKeys": [
+        "dynamic-page-up-list-checked-item-hide",
+        "dynamic-page-up-list-checked-item-opacity",
+        "dynamic-page-up-list-dual-line-mode",
+        "hide-dynamic-page-bili-dyn-list-tabs",
+        "hide-dynamic-page-bili-dyn-publishing",
+        "hide-dynamic-page-up-list"
+      ],
+      "groupingStatus": "reference-unreviewed",
+      "evidence": "OneDrive:notes/inventory/cleaner-2026-10-09/data/features.csv#F-DYN-TOP",
+      "baselineDescription": "隐藏发布框、UP 主列表、分类 Tabbar；UP 主列表双行、已查看项淡化/隐藏。"
+    },
+    {
+      "id": "F-DYN-CARD-UI",
+      "label": "动态列表（卡片装饰）",
+      "settingKeys": [
+        "hide-dynamic-page-bili-dyn-avatar-icon",
+        "hide-dynamic-page-bili-dyn-avatar-pendent",
+        "hide-dynamic-page-bili-dyn-dispute",
+        "hide-dynamic-page-bili-dyn-item-interaction",
+        "hide-dynamic-page-bili-dyn-official-topic",
+        "hide-dynamic-page-bili-dyn-ornament",
+        "hide-dynamic-page-bili-dyn-text-topic"
+      ],
+      "groupingStatus": "reference-unreviewed",
+      "evidence": "OneDrive:notes/inventory/cleaner-2026-10-09/data/features.csv#F-DYN-CARD-UI",
+      "baselineDescription": "隐藏头像框、头像徽章、右侧饰品、警告 notice、官方话题 Tag、精选互动，禁用话题高亮。动态页与空间页共用键。"
+    },
+    {
+      "id": "F-DYN-TYPE-HIDE",
+      "label": "动态列表（按类型隐藏）",
+      "settingKeys": [
+        "hide-dynamic-page-bili-dyn-blocked",
+        "hide-dynamic-page-bili-dyn-card-goods",
+        "hide-dynamic-page-bili-dyn-card-reserve",
+        "hide-dynamic-page-bili-dyn-charge-video",
+        "hide-dynamic-page-bili-dyn-forward",
+        "hide-dynamic-page-bili-dyn-live",
+        "hide-dynamic-page-bili-dyn-lottery",
+        "hide-dynamic-page-bili-dyn-vote"
+      ],
+      "groupingStatus": "reference-unreviewed",
+      "evidence": "OneDrive:notes/inventory/cleaner-2026-10-09/data/features.csv#F-DYN-TYPE-HIDE",
+      "baselineDescription": "用 CSS 隐藏预约、带货、抽奖（含转发）、转发、投票、直播通知、充电/问答、全部充电视频等类型动态。动态页与空间页共用键。与“动态过滤”面板中的按类型过滤是两套机制。"
+    },
+    {
+      "id": "F-DYN-UNFOLD",
+      "label": "动态列表（自动展开）",
+      "settingKeys": [
+        "dynamic-page-unfold-dynamic",
+        "dynamic-page-unfold-dynamic-content"
+      ],
+      "groupingStatus": "reference-unreviewed",
+      "evidence": "OneDrive:notes/inventory/cleaner-2026-10-09/data/features.csv#F-DYN-UNFOLD",
+      "baselineDescription": "自动展开相同 UP 主被折叠的动态（动态页，定时点击）、自动展开动态文字内容（动态页与空间页共用键，CSS）。"
+    },
+    {
+      "id": "F-LIVE-UI",
+      "label": "直播页 - 基本功能（隐藏类）",
+      "settingKeys": [
+        "live-page-sidebar-vm"
+      ],
+      "groupingStatus": "reference-unreviewed",
+      "evidence": "OneDrive:notes/inventory/cleaner-2026-10-09/data/features.csv#F-LIVE-UI",
+      "baselineDescription": "隐藏直播页右侧实验室/关注按钮。"
+    },
+    {
+      "id": "F-LIVE-SKIN",
+      "label": "直播页 - 禁用播放器皮肤 / 直播背景",
+      "settingKeys": [
+        "live-page-default-skin",
+        "live-page-remove-wallpaper"
+      ],
+      "groupingStatus": "reference-unreviewed",
+      "evidence": "OneDrive:notes/inventory/cleaner-2026-10-09/data/features.csv#F-LIVE-SKIN",
+      "baselineDescription": "禁用 head#skin-css 皮肤样式（持续监听新增）与直播间背景。"
+    },
+    {
+      "id": "F-LIVE-JUMP",
+      "label": "活动直播自动跳转普通直播",
+      "settingKeys": [
+        "activity-live-auto-jump"
+      ],
+      "groupingStatus": "reference-unreviewed",
+      "evidence": "OneDrive:notes/inventory/cleaner-2026-10-09/data/features.csv#F-LIVE-JUMP",
+      "baselineDescription": "检测到活动页外壳时跳转到 live.bilibili.com/blanc/<房间号>。"
+    },
+    {
+      "id": "F-LIVE-QUALITY",
+      "label": "自动切换最高画质（实验）",
+      "settingKeys": [
+        "auto-best-quality"
+      ],
+      "groupingStatus": "reference-unreviewed",
+      "evidence": "OneDrive:notes/inventory/cleaner-2026-10-09/data/features.csv#F-LIVE-QUALITY",
+      "baselineDescription": "加载 2 秒后读取播放器画质候选并切到最高 qn。"
+    },
+    {
+      "id": "F-LIVE-WIDTH",
+      "label": "修改 页面宽度占比",
+      "settingKeys": [
+        "live-page-width"
+      ],
+      "groupingStatus": "reference-unreviewed",
+      "evidence": "OneDrive:notes/inventory/cleaner-2026-10-09/data/features.csv#F-LIVE-WIDTH",
+      "baselineDescription": "直播页内容宽度占比（0 禁用）。"
+    },
+    {
+      "id": "F-LIVE-INFO",
+      "label": "直播页 - 直播信息栏",
+      "settingKeys": [
+        "live-page-head-info-avatar-pendant",
+        "live-page-head-info-vm",
+        "live-page-head-info-vm-upper-row-activity",
+        "live-page-head-info-vm-upper-row-follow-ctnr",
+        "live-page-head-info-vm-upper-row-hotrank"
+      ],
+      "groupingStatus": "reference-unreviewed",
+      "evidence": "OneDrive:notes/inventory/cleaner-2026-10-09/data/features.csv#F-LIVE-INFO",
+      "baselineDescription": "隐藏头像饰品、关注/粉丝团、榜单、活动、整个信息栏。"
+    },
+    {
+      "id": "F-LIVE-HOTKEY",
+      "label": "禁用 快捷键 G 关注主播",
+      "settingKeys": [
+        "live-page-disable-hotkey-g-follow"
+      ],
+      "groupingStatus": "reference-unreviewed",
+      "evidence": "OneDrive:notes/inventory/cleaner-2026-10-09/data/features.csv#F-LIVE-HOTKEY",
+      "baselineDescription": "在捕获阶段拦截 G 键（keydown/keypress/keyup），非可编辑区域时阻止关注快捷键。"
+    },
+    {
+      "id": "F-LIVE-PLAYER",
+      "label": "直播页 - 播放器",
+      "settingKeys": [
+        "live-page-clean-all-danmaku-big-emoji",
+        "live-page-clean-all-danmaku-small-emoji",
+        "live-page-combo-danmaku",
+        "live-page-fullscreen-danmaku-vm",
+        "live-page-gift-control-vm",
+        "live-page-gift-control-vm-show-lottery",
+        "live-page-head-web-player-announcement-wrapper",
+        "live-page-head-web-player-awesome-pk-vm",
+        "live-page-head-web-player-game-id",
+        "live-page-head-web-player-icon-feedback",
+        "live-page-head-web-player-live-lottery",
+        "live-page-head-web-player-research-container",
+        "live-page-head-web-player-shop-popover-vm",
+        "live-page-hide-web-player-background",
+        "live-page-web-player-interactive-sticker",
+        "live-page-web-player-watermark"
+      ],
+      "groupingStatus": "reference-unreviewed",
+      "evidence": "OneDrive:notes/inventory/cleaner-2026-10-09/data/features.csv#F-LIVE-PLAYER",
+      "baselineDescription": "隐藏反馈、购物提示、sticker、PK 特效、水印、背景图、礼物通告、互动游戏、打分、天选、计数弹幕、弹幕表情、礼物栏等。"
+    },
+    {
+      "id": "F-LIVE-DMLIST",
+      "label": "直播页 - 右栏 弹幕列表",
+      "settingKeys": [
+        "live-page-brush-prompt",
+        "live-page-bulge-danmaku",
+        "live-page-chat-control-panel",
+        "live-page-chat-input-ctnr",
+        "live-page-chat-input-ctnr-medal-section",
+        "live-page-chat-input-ctnr-send-btn",
+        "live-page-chat-item-background-color",
+        "live-page-chat-item-top3-notice",
+        "live-page-combo-card",
+        "live-page-control-panel-icon-row",
+        "live-page-convention-msg",
+        "live-page-danmaku-font-size",
+        "live-page-fans-medal-item-ctnr",
+        "live-page-gift-item",
+        "live-page-group-medal-ctnr",
+        "live-page-rank-icon",
+        "live-page-rank-list-vm",
+        "live-page-rank-list-vm-fold",
+        "live-page-title-label",
+        "live-page-wealth-medal-ctnr",
+        "live-page-welcome-msg"
+      ],
+      "groupingStatus": "reference-unreviewed",
+      "evidence": "OneDrive:notes/inventory/cleaner-2026-10-09/data/features.csv#F-LIVE-DMLIST",
+      "baselineDescription": "调节弹幕列表字号；隐藏排行榜、系统提示、进场提示、排名/头衔/等级/勋章/粉丝牌、高亮底色、礼物/大表情弹幕、发送框各部件等。"
+    },
+    {
+      "id": "F-LIVE-BELOW",
+      "label": "直播页 - 下方页面",
+      "settingKeys": [
+        "live-page-announcement-cntr",
+        "live-page-flip-view",
+        "live-page-room-feed",
+        "live-page-room-info-ctnr",
+        "live-page-sections-vm"
+      ],
+      "groupingStatus": "reference-unreviewed",
+      "evidence": "OneDrive:notes/inventory/cleaner-2026-10-09/data/features.csv#F-LIVE-BELOW",
+      "baselineDescription": "隐藏活动海报、直播间推荐/介绍、主播动态、公告、下方全部内容。"
+    },
+    {
+      "id": "F-LIVE-HDR",
+      "label": "直播页 - 顶栏（左侧/搜索框/右侧）",
+      "settingKeys": [
+        "live-page-header-avatar",
+        "live-page-header-bili-download-panel",
+        "live-page-header-entry-logo",
+        "live-page-header-entry-title",
+        "live-page-header-follow-panel",
+        "live-page-header-go-live",
+        "live-page-header-live",
+        "live-page-header-mobile-game",
+        "live-page-header-net-game",
+        "live-page-header-recharge",
+        "live-page-header-search-block",
+        "live-page-header-search-btn",
+        "live-page-header-showmore-link",
+        "live-page-header-standalone-chatroom",
+        "live-page-header-standalone-entertainment",
+        "live-page-header-standalone-game",
+        "live-page-header-standalone-helpmeplay",
+        "live-page-header-standalone-interact",
+        "live-page-header-standalone-knowledge",
+        "live-page-header-standalone-living",
+        "live-page-header-standalone-match",
+        "live-page-header-standalone-radio",
+        "live-page-header-standalone-shopping",
+        "live-page-header-standalone-vtuber",
+        "live-page-nav-search-history",
+        "live-page-nav-search-rcmd",
+        "live-page-nav-search-trending"
+      ],
+      "groupingStatus": "reference-unreviewed",
+      "evidence": "OneDrive:notes/inventory/cleaner-2026-10-09/data/features.csv#F-LIVE-HDR",
+      "baselineDescription": "直播站专用顶栏：隐藏分区入口、搜索相关、头像/关注/电池/客户端/开播入口。“隐藏推荐搜索”同样拦截空输入搜索（跳直播搜索页）。"
+    },
+    {
+      "id": "F-POP-UI",
+      "label": "热门页 - 基本功能/其他功能",
+      "settingKeys": [
+        "homepage-hide-banner",
+        "popular-hide-danmaku-count",
+        "popular-hide-tips",
+        "popular-history-hide-hint",
+        "popular-hot-hide-tag",
+        "popular-weekly-hide-hint"
+      ],
+      "groupingStatus": "reference-unreviewed",
+      "evidence": "OneDrive:notes/inventory/cleaner-2026-10-09/data/features.csv#F-POP-UI",
+      "baselineDescription": "隐藏横幅、tips、弹幕数、综合热门 tag、每周必看/入站必刷一句话简介。"
+    },
+    {
+      "id": "F-CH-UI",
+      "label": "新版分区页 - 基础功能/视频列表",
+      "settingKeys": [
+        "channel-hide-carousel",
+        "channel-hide-danmaku-count",
+        "channel-hide-subarea",
+        "channel-increase-rcmd-list-font-size",
+        "homepage-hide-banner",
+        "homepage-revert-channel-dynamic-icon"
+      ],
+      "groupingStatus": "reference-unreviewed",
+      "evidence": "OneDrive:notes/inventory/cleaner-2026-10-09/data/features.csv#F-CH-UI",
+      "baselineDescription": "隐藏横幅、分区栏、大图轮播、弹幕数，恢复原始动态按钮，增大视频信息字号。"
+    },
+    {
+      "id": "F-SPACE-REDIRECT",
+      "label": "打开用户主页 自动跳转到投稿",
+      "settingKeys": [
+        "space-page-redirect-to-video"
+      ],
+      "groupingStatus": "reference-unreviewed",
+      "evidence": "OneDrive:notes/inventory/cleaner-2026-10-09/data/features.csv#F-SPACE-REDIRECT",
+      "baselineDescription": "访问 space.bilibili.com/<uid> 根路径时跳转到 /upload/video。"
+    },
+    {
+      "id": "F-SPACE-UI",
+      "label": "空间页 - 基本功能",
+      "settingKeys": [
+        "hide-space-page-video-card-charge",
+        "hide-space-page-video-card-danmaku-count",
+        "increase-space-page-video-card-font-size"
+      ],
+      "groupingStatus": "reference-unreviewed",
+      "evidence": "OneDrive:notes/inventory/cleaner-2026-10-09/data/features.csv#F-SPACE-UI",
+      "baselineDescription": "隐藏视频弹幕数、充电视频，增大视频信息字号。"
+    },
+    {
+      "id": "F-SEARCH-UI",
+      "label": "搜索页 - 基本功能",
+      "settingKeys": [
+        "hide-search-page-activity-game-list",
+        "hide-search-page-ad",
+        "hide-search-page-bangumi-pgc-list",
+        "hide-search-page-cheese-result",
+        "hide-search-page-danmaku-count",
+        "hide-search-page-date",
+        "hide-search-page-live-room-result"
+      ],
+      "groupingStatus": "reference-unreviewed",
+      "evidence": "OneDrive:notes/inventory/cleaner-2026-10-09/data/features.csv#F-SEARCH-UI",
+      "baselineDescription": "隐藏顶部版权作品、游戏/热搜、广告、直播、课堂、弹幕数、视频日期。"
+    },
+    {
+      "id": "F-WL-UI",
+      "label": "稍后再看 - 基本功能（列数除外）",
+      "settingKeys": [
+        "watchlater-hide-feedback",
+        "watchlater-increase-font-size"
+      ],
+      "groupingStatus": "reference-unreviewed",
+      "evidence": "OneDrive:notes/inventory/cleaner-2026-10-09/data/features.csv#F-WL-UI",
+      "baselineDescription": "稍后再看页增大视频信息字号、隐藏新版反馈。"
+    },
+    {
+      "id": "F-CMT-UI",
+      "label": "全站通用 - 评论区（隐藏类）",
+      "settingKeys": [
+        "video-page-hide-bili-avatar-nft-icon",
+        "video-page-hide-bili-avatar-pendent-dom",
+        "video-page-hide-comment-user-card",
+        "video-page-hide-contractor-box",
+        "video-page-hide-emoji-large",
+        "video-page-hide-emoji-popover",
+        "video-page-hide-emoji-small",
+        "video-page-hide-fan-badge",
+        "video-page-hide-fixed-reply-box",
+        "video-page-hide-main-reply-box",
+        "video-page-hide-note-prefix",
+        "video-page-hide-reply-box-textarea-placeholder",
+        "video-page-hide-reply-decorate",
+        "video-page-hide-reply-dislike-reply-btn",
+        "video-page-hide-reply-notice",
+        "video-page-hide-reply-tag-list",
+        "video-page-hide-top-vote-card",
+        "video-page-hide-user-level",
+        "video-page-hide-vote-info"
+      ],
+      "groupingStatus": "reference-unreviewed",
+      "evidence": "OneDrive:notes/inventory/cleaner-2026-10-09/data/features.csv#F-CMT-UI",
+      "baselineDescription": "评论区隐藏活动通知、编辑器/占位文字、底部吸附评论框、投票栏、用户卡片、装饰、粉丝牌、老粉 Tag、等级、头像饰品/徽章、用户投票、内容下 Tag、笔记 Logo、踩/回复（悬停显示）、表情弹框/小表情/大表情。通过 shadowRoot 样式注入实现。"
+    },
+    {
+      "id": "F-CMT-STYLE",
+      "label": "全站通用 - 评论区（样式类）",
+      "settingKeys": [
+        "video-page-fix-note-thumbnail-scale",
+        "video-page-hide-emoji-large-zoom",
+        "video-page-hide-jump-link-search-word",
+        "video-page-hide-reply-content-user-highlight",
+        "video-page-reply-user-name-color-default",
+        "video-page-reply-user-name-color-pink"
+      ],
+      "groupingStatus": "reference-unreviewed",
+      "evidence": "OneDrive:notes/inventory/cleaner-2026-10-09/data/features.csv#F-CMT-STYLE",
+      "baselineDescription": "笔记缩略图比例优化、禁用搜索词高亮与 @ 高亮、大表情变小表情、用户名全部大会员色/恢复默认色。"
+    },
+    {
+      "id": "F-CMT-AREA-HIDE",
+      "label": "隐藏 视频/动态 评论区",
+      "settingKeys": [
+        "dynamic-page-hide-all-comment",
+        "video-page-hide-comment"
+      ],
+      "groupingStatus": "reference-unreviewed",
+      "evidence": "OneDrive:notes/inventory/cleaner-2026-10-09/data/features.csv#F-CMT-AREA-HIDE",
+      "baselineDescription": "整体隐藏播放页/番剧页视频评论区，或动态页/空间页动态评论区。"
+    },
+    {
+      "id": "F-DEBUG",
+      "label": "日志输出 - Debug 模式",
+      "settingKeys": [
+        "debug-mode"
+      ],
+      "groupingStatus": "reference-unreviewed",
+      "evidence": "OneDrive:notes/inventory/cleaner-2026-10-09/data/features.csv#F-DEBUG",
+      "baselineDescription": "开启后 logger.debug 输出过滤明细（config.isDebugMode），说明“严重影响过滤性能”。仅在空间页的净化面板出现。"
+    },
+    {
+      "id": "F-VF-DURATION",
+      "label": "视频过滤 - 时长过滤",
+      "settingKeys": [
+        "channel-duration-filter-status",
+        "global-duration-filter-value",
+        "homepage-duration-filter-status",
+        "popular-duration-filter-status",
+        "search-duration-filter-status",
+        "space-duration-filter-status",
+        "video-duration-filter-status"
+      ],
+      "groupingStatus": "reference-unreviewed",
+      "evidence": "OneDrive:notes/inventory/cleaner-2026-10-09/data/features.csv#F-VF-DURATION",
+      "baselineDescription": "隐藏时长低于阈值（0~300 秒，默认 60）的视频卡片。首页/播放页/热门/分区/搜索/空间各自独立启用，阈值键全局共享（动态过滤也共享该阈值）。"
+    },
+    {
+      "id": "F-VF-UPLOADER",
+      "label": "视频过滤 - UP主黑名单",
+      "settingKeys": [
+        "channel-uploader-filter-status",
+        "global-uploader-filter-value",
+        "homepage-uploader-filter-status",
+        "popular-uploader-filter-status",
+        "search-uploader-filter-status",
+        "video-uploader-filter-status"
+      ],
+      "groupingStatus": "reference-unreviewed",
+      "evidence": "OneDrive:notes/inventory/cleaner-2026-10-09/data/features.csv#F-VF-UPLOADER",
+      "baselineDescription": "按 UP 主昵称精确匹配隐藏视频；右键 UP 主可加入。黑名单键全局共享（不含空间页、动态）。"
+    },
+    {
+      "id": "F-VF-UPLOADER-KW",
+      "label": "视频过滤 - UP主昵称关键词",
+      "settingKeys": [
+        "channel-uploader-keyword-filter-status",
+        "global-uploader-keyword-filter-value",
+        "homepage-uploader-keyword-filter-status",
+        "popular-uploader-keyword-filter-status",
+        "search-uploader-keyword-filter-status",
+        "video-uploader-keyword-filter-status"
+      ],
+      "groupingStatus": "reference-unreviewed",
+      "evidence": "OneDrive:notes/inventory/cleaner-2026-10-09/data/features.csv#F-VF-UPLOADER-KW",
+      "baselineDescription": "按昵称关键词/正则隐藏视频（不区分大小写、全半角，ius 正则）。"
+    },
+    {
+      "id": "F-VF-TITLE",
+      "label": "视频过滤 - 标题关键词",
+      "settingKeys": [
+        "channel-title-keyword-filter-status",
+        "global-title-keyword-filter-value",
+        "homepage-title-keyword-filter-status",
+        "popular-title-keyword-filter-status",
+        "search-title-keyword-filter-status",
+        "space-title-keyword-filter-status",
+        "video-title-keyword-filter-status"
+      ],
+      "groupingStatus": "reference-unreviewed",
+      "evidence": "OneDrive:notes/inventory/cleaner-2026-10-09/data/features.csv#F-VF-TITLE",
+      "baselineDescription": "按标题关键词/正则隐藏视频；标题关键词黑名单键在视频过滤各页与动态过滤（动态内视频标题）之间共享。"
+    },
+    {
+      "id": "F-VF-BVID",
+      "label": "视频过滤 - BV号黑名单",
+      "settingKeys": [
+        "channel-bvid-filter-status",
+        "global-bvid-filter-value",
+        "homepage-bvid-filter-status",
+        "popular-bvid-filter-status",
+        "search-bvid-filter-status",
+        "space-bvid-filter-status",
+        "video-bvid-filter-status"
+      ],
+      "groupingStatus": "reference-unreviewed",
+      "evidence": "OneDrive:notes/inventory/cleaner-2026-10-09/data/features.csv#F-VF-BVID",
+      "baselineDescription": "按 BV 号隐藏视频；属“高权限黑名单”，命中后不受白名单豁免。右键标题可加入。"
+    },
+    {
+      "id": "F-VF-PUBDATE",
+      "label": "视频过滤 - 发布日期",
+      "settingKeys": [
+        "channel-pubdate-filter-status",
+        "global-pubdate-filter-value",
+        "homepage-pubdate-filter-status"
+      ],
+      "groupingStatus": "reference-unreviewed",
+      "evidence": "OneDrive:notes/inventory/cleaner-2026-10-09/data/features.csv#F-VF-PUBDATE",
+      "baselineDescription": "隐藏发布日距今超过 N 天（0~500，默认 60）的视频，仅首页与新版分区页。"
+    },
+    {
+      "id": "F-VF-VIEWS",
+      "label": "视频过滤 - 播放量",
+      "settingKeys": [
+        "global-views-filter-value",
+        "homepage-views-filter-status"
+      ],
+      "groupingStatus": "reference-unreviewed",
+      "evidence": "OneDrive:notes/inventory/cleaner-2026-10-09/data/features.csv#F-VF-VIEWS",
+      "baselineDescription": "隐藏播放量低于阈值的视频（仅首页，默认 0 即不生效）。"
+    },
+    {
+      "id": "F-VF-VERTICAL",
+      "label": "视频过滤 - 竖屏视频（热门页）",
+      "settingKeys": [
+        "popular-dimension-filter-status"
+      ],
+      "groupingStatus": "reference-unreviewed",
+      "evidence": "OneDrive:notes/inventory/cleaner-2026-10-09/data/features.csv#F-VF-VERTICAL",
+      "baselineDescription": "热门页隐藏竖屏视频，默认开启。"
+    },
+    {
+      "id": "F-VF-QUALITY",
+      "label": "视频过滤 - 劣质视频（热门页）",
+      "settingKeys": [
+        "global-quality-filter-value",
+        "popular-quality-filter-status"
+      ],
+      "groupingStatus": "reference-unreviewed",
+      "evidence": "OneDrive:notes/inventory/cleaner-2026-10-09/data/features.csv#F-VF-QUALITY",
+      "baselineDescription": "热门页按投币/点赞比经 4PL 拟合公式（utils/tool.ts calcQuality）估算质量百分比，低于阈值（默认 25%）隐藏。"
+    },
+    {
+      "id": "F-VF-RELATIVITY",
+      "label": "视频过滤 - 搜索相关性（实验）",
+      "settingKeys": [
+        "search-relativity-filter-status",
+        "search-relativity-threshold-value"
+      ],
+      "groupingStatus": "reference-unreviewed",
+      "evidence": "OneDrive:notes/inventory/cleaner-2026-10-09/data/features.csv#F-VF-RELATIVITY",
+      "baselineDescription": "搜索页对未命中关键词的结果按分词/二元组覆盖率计算相关度，低于阈值（默认 15%）隐藏；通过 fetch 后处理读取搜索 API 响应。"
+    },
+    {
+      "id": "F-VF-RELATED",
+      "label": "视频过滤 - 相关视频缓存数据（实验）",
+      "settingKeys": [
+        "video-related-filter-status"
+      ],
+      "groupingStatus": "reference-unreviewed",
+      "evidence": "OneDrive:notes/inventory/cleaner-2026-10-09/data/features.csv#F-VF-RELATED",
+      "baselineDescription": "播放页同步修改 window.__INITIAL_STATE__.related，过滤被隐藏的相关视频，影响“接下来播放”和结束推荐。"
+    },
+    {
+      "id": "F-VF-WL-UPLOADER",
+      "label": "视频过滤 - UP主白名单",
+      "settingKeys": [
+        "channel-uploader-whitelist-filter-status",
+        "global-uploader-whitelist-filter-value",
+        "homepage-uploader-whitelist-filter-status",
+        "popular-uploader-whitelist-filter-status",
+        "search-uploader-whitelist-filter-status",
+        "video-uploader-whitelist-filter-status"
+      ],
+      "groupingStatus": "reference-unreviewed",
+      "evidence": "OneDrive:notes/inventory/cleaner-2026-10-09/data/features.csv#F-VF-WL-UPLOADER",
+      "baselineDescription": "命中黑名单的视频若 UP 主在白名单则免隐藏（BV 号黑名单除外）；右键可加入。"
+    },
+    {
+      "id": "F-VF-WL-TITLE",
+      "label": "视频过滤 - 标题关键词白名单",
+      "settingKeys": [
+        "channel-title-keyword-whitelist-filter-status",
+        "global-title-keyword-whitelist-filter-value",
+        "homepage-title-keyword-whitelist-filter-status",
+        "popular-title-keyword-whitelist-filter-status",
+        "search-title-keyword-whitelist-filter-status",
+        "space-title-keyword-whitelist-filter-status",
+        "video-title-keyword-whitelist-filter-status"
+      ],
+      "groupingStatus": "reference-unreviewed",
+      "evidence": "OneDrive:notes/inventory/cleaner-2026-10-09/data/features.csv#F-VF-WL-TITLE",
+      "baselineDescription": "命中黑名单的视频若标题命中白名单关键词则免隐藏；白名单键在视频与动态过滤间共享。"
+    },
+    {
+      "id": "F-VF-WL-FOLLOW",
+      "label": "视频过滤 - 已关注免过滤（首页）",
+      "settingKeys": [
+        "homepage-following-whitelist-filter-status"
+      ],
+      "groupingStatus": "reference-unreviewed",
+      "evidence": "OneDrive:notes/inventory/cleaner-2026-10-09/data/features.csv#F-VF-WL-FOLLOW",
+      "baselineDescription": "首页卡片标有“已关注”时免过滤，默认开启。"
+    },
+    {
+      "id": "F-CF-USER",
+      "label": "评论过滤 - 用户名黑名单",
+      "settingKeys": [
+        "global-comment-username-filter-value",
+        "video-comment-username-filter-status"
+      ],
+      "groupingStatus": "reference-unreviewed",
+      "evidence": "OneDrive:notes/inventory/cleaner-2026-10-09/data/features.csv#F-CF-USER",
+      "baselineDescription": "按用户名精确匹配隐藏一/二级评论；右键用户名可加入。"
+    },
+    {
+      "id": "F-CF-USER-KW",
+      "label": "评论过滤 - 昵称关键词",
+      "settingKeys": [
+        "global-comment-username-keyword-filter-value",
+        "video-comment-username-keyword-filter-status"
+      ],
+      "groupingStatus": "reference-unreviewed",
+      "evidence": "OneDrive:notes/inventory/cleaner-2026-10-09/data/features.csv#F-CF-USER-KW",
+      "baselineDescription": "按用户昵称关键词/正则隐藏评论。"
+    },
+    {
+      "id": "F-CF-CONTENT",
+      "label": "评论过滤 - 评论内容关键词",
+      "settingKeys": [
+        "global-comment-content-filter-value",
+        "video-comment-content-filter-status"
+      ],
+      "groupingStatus": "reference-unreviewed",
+      "evidence": "OneDrive:notes/inventory/cleaner-2026-10-09/data/features.csv#F-CF-CONTENT",
+      "baselineDescription": "按评论正文关键词/正则隐藏（去除 @ 与“回复 @xx:”前缀后匹配）。"
+    },
+    {
+      "id": "F-CF-AI",
+      "label": "评论过滤 - AI 相关评论",
+      "settingKeys": [
+        "video-comment-bot-filter-status",
+        "video-comment-call-bot-filter-status"
+      ],
+      "groupingStatus": "reference-unreviewed",
+      "evidence": "OneDrive:notes/inventory/cleaner-2026-10-09/data/features.csv#F-CF-AI",
+      "baselineDescription": "过滤召唤 AI 的评论（@内置 AI 账号名单）与 AI 账号发布的评论（内置 29 条名单，一级评论为强制黑名单，二级评论为普通黑名单）。"
+    },
+    {
+      "id": "F-CF-AD",
+      "label": "评论过滤 - 带货评论",
+      "settingKeys": [
+        "video-comment-ad-filter-status"
+      ],
+      "groupingStatus": "reference-unreviewed",
+      "evidence": "OneDrive:notes/inventory/cleaner-2026-10-09/data/features.csv#F-CF-AD",
+      "baselineDescription": "按内置正则（b23.tv/bili2233.cn 的 mall-/cm- 链接、“领券”、gaoneng.bilibili.com）识别，属强制黑名单，不受白名单豁免。"
+    },
+    {
+      "id": "F-CF-EMOJI",
+      "label": "评论过滤 - 只有表情的评论",
+      "settingKeys": [
+        "video-comment-emoji-only-filter-status"
+      ],
+      "groupingStatus": "reference-unreviewed",
+      "evidence": "OneDrive:notes/inventory/cleaner-2026-10-09/data/features.csv#F-CF-EMOJI",
+      "baselineDescription": "去除 @、[表情] 与 emoji 后为空则隐藏。"
+    },
+    {
+      "id": "F-CF-NOFACE",
+      "label": "评论过滤 - 默认头像非会员",
+      "settingKeys": [
+        "video-comment-noface-filter-status"
+      ],
+      "groupingStatus": "reference-unreviewed",
+      "evidence": "OneDrive:notes/inventory/cleaner-2026-10-09/data/features.csv#F-CF-NOFACE",
+      "baselineDescription": "默认头像（noface.jpg）且非大会员的用户评论隐藏。"
+    },
+    {
+      "id": "F-CF-AT",
+      "label": "评论过滤 - @其他用户的评论",
+      "settingKeys": [
+        "video-comment-call-user-filter-status",
+        "video-comment-call-user-noreply-filter-status",
+        "video-comment-call-user-only-filter-status",
+        "video-comment-call-user-only-noreply-filter-status"
+      ],
+      "groupingStatus": "reference-unreviewed",
+      "evidence": "OneDrive:notes/inventory/cleaner-2026-10-09/data/features.csv#F-CF-AT",
+      "baselineDescription": "四个变体：只含 @ 的全部/无回复评论、包含 @ 的全部/无回复评论。"
+    },
+    {
+      "id": "F-CF-LEVEL",
+      "label": "评论过滤 - 用户等级",
+      "settingKeys": [
+        "global-comment-level-filter-value",
+        "video-comment-level-filter-status"
+      ],
+      "groupingStatus": "reference-unreviewed",
+      "evidence": "OneDrive:notes/inventory/cleaner-2026-10-09/data/features.csv#F-CF-LEVEL",
+      "baselineDescription": "隐藏低于最低等级（0~6）的用户评论。"
+    },
+    {
+      "id": "F-CF-CHAIN",
+      "label": "评论过滤 - 链式过滤（实验）",
+      "settingKeys": [
+        "video-comment-chain-filter-status",
+        "video-comment-chain-level-value"
+      ],
+      "groupingStatus": "reference-unreviewed",
+      "evidence": "OneDrive:notes/inventory/cleaner-2026-10-09/data/features.csv#F-CF-CHAIN",
+      "baselineDescription": "二级评论中回复已被过滤评论的回复按“连坐层级”（0~10，默认 1）逐轮隐藏。"
+    },
+    {
+      "id": "F-CF-WL-SCOPE",
+      "label": "评论过滤 - 一级/二级评论免过滤",
+      "settingKeys": [
+        "video-comment-root-whitelist-status",
+        "video-comment-sub-whitelist-status"
+      ],
+      "groupingStatus": "reference-unreviewed",
+      "evidence": "OneDrive:notes/inventory/cleaner-2026-10-09/data/features.csv#F-CF-WL-SCOPE",
+      "baselineDescription": "整层跳过：一级评论免过滤或二级评论免过滤。"
+    },
+    {
+      "id": "F-CF-WL-TYPE",
+      "label": "评论过滤 - 按类型免过滤",
+      "settingKeys": [
+        "video-comment-link-whitelist-status",
+        "video-comment-note-whitelist-status",
+        "video-comment-pinned-whitelist-status",
+        "video-comment-uploader-whitelist-status"
+      ],
+      "groupingStatus": "reference-unreviewed",
+      "evidence": "OneDrive:notes/inventory/cleaner-2026-10-09/data/features.csv#F-CF-WL-TYPE",
+      "baselineDescription": "UP 主评论、置顶评论、笔记/图片评论、含超链接评论免过滤（一级评论全部生效；二级评论只用 UP 主与超链接）。"
+    },
+    {
+      "id": "F-DF-UPLOADER",
+      "label": "动态过滤 - 发布人黑名单",
+      "settingKeys": [
+        "dyn-uploader-filter-status",
+        "dyn-uploader-filter-value"
+      ],
+      "groupingStatus": "reference-unreviewed",
+      "evidence": "OneDrive:notes/inventory/cleaner-2026-10-09/data/features.csv#F-DF-UPLOADER",
+      "baselineDescription": "按发布人用户名隐藏动态；右键用户名可加入。名单键 dyn-uploader-filter-value 独立于视频 UP 主黑名单。仅动态页面板可配置，顶栏动态弹窗隐式复用。"
+    },
+    {
+      "id": "F-DF-DURATION",
+      "label": "动态过滤 - 动态内视频时长",
+      "settingKeys": [
+        "dyn-duration-filter-status",
+        "global-duration-filter-value",
+        "space-dyn-duration-filter-status"
+      ],
+      "groupingStatus": "reference-unreviewed",
+      "evidence": "OneDrive:notes/inventory/cleaner-2026-10-09/data/features.csv#F-DF-DURATION",
+      "baselineDescription": "隐藏动态中时长低于阈值的视频动态；阈值与视频过滤共享 global-duration-filter-value。"
+    },
+    {
+      "id": "F-DF-TITLE",
+      "label": "动态过滤 - 动态内视频标题",
+      "settingKeys": [
+        "dyn-title-keyword-filter-status",
+        "global-title-keyword-filter-value",
+        "space-dyn-title-keyword-filter-status"
+      ],
+      "groupingStatus": "reference-unreviewed",
+      "evidence": "OneDrive:notes/inventory/cleaner-2026-10-09/data/features.csv#F-DF-TITLE",
+      "baselineDescription": "按视频标题关键词隐藏动态；名单与视频标题黑名单共享。"
+    },
+    {
+      "id": "F-DF-CONTENT",
+      "label": "动态过滤 - 动态内容关键词",
+      "settingKeys": [
+        "dyn-content-keyword-filter-status",
+        "global-content-keyword-filter-value",
+        "space-dyn-content-keyword-filter-status"
+      ],
+      "groupingStatus": "reference-unreviewed",
+      "evidence": "OneDrive:notes/inventory/cleaner-2026-10-09/data/features.csv#F-DF-CONTENT",
+      "baselineDescription": "按动态正文关键词隐藏。"
+    },
+    {
+      "id": "F-DF-TYPE",
+      "label": "动态过滤 - 按类型",
+      "settingKeys": [
+        "dyn-dyn-video-filter-status",
+        "dyn-playback-filter-status",
+        "space-dyn-video-filter-status",
+        "space-playback-filter-status"
+      ],
+      "groupingStatus": "reference-unreviewed",
+      "evidence": "OneDrive:notes/inventory/cleaner-2026-10-09/data/features.csv#F-DF-TYPE",
+      "baselineDescription": "过滤动态视频、直播回放。"
+    },
+    {
+      "id": "F-DF-WL-TITLE",
+      "label": "动态过滤 - 标题关键词白名单",
+      "settingKeys": [
+        "dyn-video-title-white-filter-status",
+        "global-title-keyword-whitelist-filter-value",
+        "space-dyn-video-title-white-filter-status"
+      ],
+      "groupingStatus": "reference-unreviewed",
+      "evidence": "OneDrive:notes/inventory/cleaner-2026-10-09/data/features.csv#F-DF-WL-TITLE",
+      "baselineDescription": "命中黑名单但视频标题命中白名单的动态免隐藏；与视频标题白名单共享名单。"
+    },
+    {
+      "id": "F-DF-WL-CONTENT",
+      "label": "动态过滤 - 动态内容白名单",
+      "settingKeys": [
+        "dyn-content-white-filter-status",
+        "global-content-keyword-whitelist-filter-value",
+        "space-dyn-content-white-filter-status"
+      ],
+      "groupingStatus": "reference-unreviewed",
+      "evidence": "OneDrive:notes/inventory/cleaner-2026-10-09/data/features.csv#F-DF-WL-CONTENT",
+      "baselineDescription": "命中黑名单但正文命中白名单的动态免隐藏。"
+    },
+    {
+      "id": "F-AF-AUTHOR",
+      "label": "专栏过滤 - 作者黑名单",
+      "settingKeys": [
+        "global-article-author-filter-value",
+        "search-article-author-filter-status"
+      ],
+      "groupingStatus": "reference-unreviewed",
+      "evidence": "OneDrive:notes/inventory/cleaner-2026-10-09/data/features.csv#F-AF-AUTHOR",
+      "baselineDescription": "搜索页专栏结果按作者精确匹配隐藏；右键作者可加入。"
+    },
+    {
+      "id": "F-AF-AUTHOR-KW",
+      "label": "专栏过滤 - 作者昵称关键词",
+      "settingKeys": [
+        "global-article-author-keyword-filter-value",
+        "search-article-author-keyword-filter-status"
+      ],
+      "groupingStatus": "reference-unreviewed",
+      "evidence": "OneDrive:notes/inventory/cleaner-2026-10-09/data/features.csv#F-AF-AUTHOR-KW",
+      "baselineDescription": "按作者昵称关键词/正则隐藏专栏。"
+    },
+    {
+      "id": "F-AF-TITLE",
+      "label": "专栏过滤 - 标题关键词",
+      "settingKeys": [
+        "global-article-title-keyword-filter-value",
+        "search-article-title-keyword-filter-status"
+      ],
+      "groupingStatus": "reference-unreviewed",
+      "evidence": "OneDrive:notes/inventory/cleaner-2026-10-09/data/features.csv#F-AF-TITLE",
+      "baselineDescription": "按专栏标题关键词/正则隐藏。"
+    },
+    {
+      "id": "F-AF-WL-AUTHOR",
+      "label": "专栏过滤 - 作者白名单",
+      "settingKeys": [
+        "global-article-author-whitelist-filter-value",
+        "search-article-author-whitelist-filter-status"
+      ],
+      "groupingStatus": "reference-unreviewed",
+      "evidence": "OneDrive:notes/inventory/cleaner-2026-10-09/data/features.csv#F-AF-WL-AUTHOR",
+      "baselineDescription": "命中黑名单的专栏若作者在白名单则免隐藏；右键可加入。"
+    },
+    {
+      "id": "F-AF-WL-TITLE",
+      "label": "专栏过滤 - 标题关键词白名单",
+      "settingKeys": [
+        "global-article-title-keyword-whitelist-filter-value",
+        "search-article-title-keyword-whitelist-filter-status"
+      ],
+      "groupingStatus": "reference-unreviewed",
+      "evidence": "OneDrive:notes/inventory/cleaner-2026-10-09/data/features.csv#F-AF-WL-TITLE",
+      "baselineDescription": "命中黑名单的专栏若标题命中白名单则免隐藏。"
+    },
+    {
+      "id": "F-UI-PANELS",
+      "label": "设置面板与脚本菜单",
+      "settingKeys": [],
+      "groupingStatus": "reference-unreviewed",
+      "evidence": "OneDrive:notes/inventory/cleaner-2026-10-09/data/features.csv#F-UI-PANELS",
+      "baselineDescription": "脚本管理器菜单打开“页面净化优化”与视频/评论/动态/专栏过滤面板（当前页不支持时弹 alert）、问题反馈；面板可拖动，分组可折叠。"
+    },
+    {
+      "id": "F-UI-SIDEBTN",
+      "label": "快捷按钮（页面右下角）",
+      "settingKeys": [],
+      "groupingStatus": "reference-unreviewed",
+      "evidence": "OneDrive:notes/inventory/cleaner-2026-10-09/data/features.csv#F-UI-SIDEBTN",
+      "baselineDescription": "菜单“快捷按钮开关”切换显示；按钮含 页面净化/视频过滤/评论过滤/动态过滤/夜间模式，可拖动并在 localStorage 记位置与显示状态。无专栏过滤按钮。"
+    },
+    {
+      "id": "F-HOTKEY-ALTB",
+      "label": "Alt+B 临时禁用全部样式",
+      "settingKeys": [],
+      "groupingStatus": "reference-unreviewed",
+      "evidence": "OneDrive:notes/inventory/cleaner-2026-10-09/data/features.csv#F-HOTKEY-ALTB",
+      "baselineDescription": "按 Alt+B 切换所有 style.bili-cleaner-css 节点的 disabled（含过滤隐藏样式），不持久化。"
+    },
+    {
+      "id": "F-CTX-MENU",
+      "label": "右键快速加入名单 / 复制链接",
+      "settingKeys": [],
+      "groupingStatus": "reference-unreviewed",
+      "evidence": "OneDrive:notes/inventory/cleaner-2026-10-09/data/features.csv#F-CTX-MENU",
+      "baselineDescription": "在视频卡片 UP 主、标题，评论用户名，动态用户名，专栏作者上右键，弹出“屏蔽/加入白名单/复制主页链接/复制视频链接”自定义菜单，写入对应名单键（去重、新项置顶）。仅在对应过滤开关开启时出现。"
+    },
+    {
+      "id": "F-EDITOR",
+      "label": "名单编辑器",
+      "settingKeys": [],
+      "groupingStatus": "reference-unreviewed",
+      "evidence": "OneDrive:notes/inventory/cleaner-2026-10-09/data/features.csv#F-EDITOR",
+      "baselineDescription": "编辑器弹窗按行编辑名单，输入 1 秒防抖自动保存、关闭时保存，空行剔除并有序去重，保存后立即重载对应过滤器。"
+    },
+    {
+      "id": "F-HDR-DYN-FILTER",
+      "label": "顶栏动态弹窗过滤（隐式）",
+      "settingKeys": [],
+      "groupingStatus": "reference-unreviewed",
+      "evidence": "OneDrive:notes/inventory/cleaner-2026-10-09/data/features.csv#F-HDR-DYN-FILTER",
+      "baselineDescription": "除直播站外所有页面，对顶栏“动态”弹窗列表按动态页的发布人/标题/内容黑白名单开关与名单进行过滤（style 隐藏）。无独立配置项，只能在动态页面板设置。"
+    },
+    {
+      "id": "F-MIGRATE",
+      "label": "存储迁移（4.4.0）",
+      "settingKeys": [],
+      "groupingStatus": "reference-unreviewed",
+      "evidence": "OneDrive:notes/inventory/cleaner-2026-10-09/data/features.csv#F-MIGRATE",
+      "baselineDescription": "首次运行将 BILICLEANER_ 前缀键迁移为无前缀键并删除旧键，转换 4 个列数与夜间模式的旧值，写入 __MIGRATED__=4.4.0。"
+    },
+    {
+      "id": "F-REDIRECT-INDEX",
+      "label": "首页 index.html 重定向",
+      "settingKeys": [],
+      "groupingStatus": "reference-unreviewed",
+      "evidence": "OneDrive:notes/inventory/cleaner-2026-10-09/data/features.csv#F-REDIRECT-INDEX",
+      "baselineDescription": "www.bilibili.com/index.html 自动 replace 到 https://www.bilibili.com/（避免视频过滤失效）；首页过滤另有 index.html 提示 alert。"
+    },
+    {
+      "id": "F-MISAKA-STAT",
+      "label": "接口统计过滤",
+      "description": "根据点赞数、收藏数、播放量及相应比例进行阈值过滤；当前代码分组，不代表最终产品分组已批准。",
+      "settingKeys": [
+        "biliweb-stat-fav-min",
+        "biliweb-stat-fav-rate-min",
+        "biliweb-stat-fav-rate-status",
+        "biliweb-stat-fav-status",
+        "biliweb-stat-like-min",
+        "biliweb-stat-like-rate-min",
+        "biliweb-stat-like-rate-status",
+        "biliweb-stat-like-status",
+        "biliweb-stat-view-min",
+        "biliweb-stat-view-status"
+      ],
+      "groupingStatus": "current-product-group",
+      "evidence": "src/modules/filters/variety/video/statGate.ts"
+    },
+    {
+      "id": "F-MISAKA-SYNC",
+      "label": "现有WebDAV规则同步",
+      "description": "现有规则仓库同步开关和连接表单；不代表设备名与引导文件协议已经实现。",
+      "settingKeys": [
+        "biliweb-sync-enabled",
+        "biliweb-sync-form",
+        "biliweb-sync-password",
+        "biliweb-sync-url",
+        "biliweb-sync-user"
+      ],
+      "groupingStatus": "current-product-group",
+      "evidence": "src/modules/filters/ruleSync.ts"
+    },
+    {
+      "id": "F-MISAKA-SHORTCUT",
+      "label": "页面快捷入口设置",
+      "description": "页面快捷入口的启用和位置模式；两个控件共用复合设备设置。",
+      "settingKeys": [
+        "biliweb-shortcut-enabled",
+        "biliweb-shortcut-location"
+      ],
+      "groupingStatus": "current-product-group",
+      "evidence": "src/modules/shortcut/preference.ts"
+    },
+    {
+      "id": "F-MISAKA-TOUCH",
+      "label": "播放器触摸手势",
+      "description": "播放器触摸手势原型及最小距离、进度倍率、上下滑动设置；当前代码分组，不代表最终产品分组已批准。",
+      "settingKeys": [
+        "misakaweb-gesture-min-distance",
+        "misakaweb-gesture-seek-scale",
+        "misakaweb-gesture-vertical",
+        "misakaweb-player-gestures"
+      ],
+      "groupingStatus": "current-product-group",
+      "evidence": "src/modules/touch/index.ts"
+    }
+  ]
+}

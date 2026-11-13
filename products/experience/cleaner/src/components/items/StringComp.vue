@@ -17,7 +17,8 @@
 <script setup lang="ts">
 import { IStringItem } from '@/types/item'
 import { logger } from '@/utils/logger'
-import { GM_getValue, GM_setValue } from '@/storage/configStorage'
+import { GM_setValue } from '@/storage/configStorage'
+import { readItemValue } from '@/modules/configuration/effective'
 import { watchThrottled } from '@vueuse/core'
 import { ref } from 'vue'
 import FeedbackBadge from '@/feedback/Badge.vue'
@@ -27,7 +28,7 @@ import DescriptionComp from './DescriptionComp.vue'
 const item = defineProps<IStringItem>()
 const feedbackCode = settingLabel(item.id)
 
-const currValue = ref(GM_getValue(item.id, item.defaultValue))
+const currValue = ref(readItemValue(item))
 
 watchThrottled(
     currValue,

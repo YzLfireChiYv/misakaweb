@@ -1,12 +1,15 @@
-import { coreCheck } from '@/modules/filters/core/core'
-import { statGateEnabled, statGateExtra, statGateGroup } from '../statGate'
+import { restoreFiltered } from '@/modules/filters/core/paint'
+import { readSettingValue } from '@/modules/configuration/effective'
+import { FILTER_THRESHOLD_DEFAULTS } from '@/modules/filters/thresholds'
+import { createFilterCheck } from '@/modules/filters/core/core'
+import { statGateEnabled, videoStatOptions, statGateGroup } from '../statGate'
 import config from '@/config'
 import { Group } from '@/types/collection'
 import { ContextMenuTargetHandler, FilterContextMenu, IMainFilter, SelectorResult, SubFilterPair } from '@/types/filter'
 import { logger } from '@/utils/logger'
 import { isPageChannel } from '@/utils/pageType'
 import { GM_getValue, GM_setValue } from '@/storage/configStorage'
-import { convertDateToDays, convertTimeToSec, matchBvid, orderedUniq, showEle, waitForEle } from '@/utils/tool'
+import { convertDateToDays, convertTimeToSec, matchBvid, orderedUniq, waitForEle } from '@/utils/tool'
 import {
     VideoBvidFilter,
     VideoDurationFilter,
@@ -16,6 +19,8 @@ import {
     VideoUploaderKeywordFilter,
 } from '../subFilters/black'
 import { VideoTitleWhiteFilter, VideoUploaderWhiteFilter } from '../subFilters/white'
+
+const coreCheck = createFilterCheck()
 
 const GM_KEYS = {
     black: {
@@ -114,9 +119,13 @@ class VideoFilterChannel implements IMainFilter {
     init() {
         // 黑名单
         this.videoBvidFilter.setParam(GM_getValue(GM_KEYS.black.bvid.valueKey, []))
-        this.videoDurationFilter.setParam(GM_getValue(GM_KEYS.black.duration.valueKey, 0))
+        this.videoDurationFilter.setParam(
+            readSettingValue(GM_KEYS.black.duration.valueKey, FILTER_THRESHOLD_DEFAULTS.duration),
+        )
         this.videoTitleFilter.setParam(GM_getValue(GM_KEYS.black.title.valueKey, []))
-        this.videoPubdateFilter.setParam(GM_getValue(GM_KEYS.black.pubdate.valueKey, 0))
+        this.videoPubdateFilter.setParam(
+            readSettingValue(GM_KEYS.black.pubdate.valueKey, FILTER_THRESHOLD_DEFAULTS.pubdate),
+        )
         this.videoUploaderFilter.setParam(GM_getValue(GM_KEYS.black.uploader.valueKey, []))
         this.videoUploaderKeywordFilter.setParam(GM_getValue(GM_KEYS.black.uploaderKeyword.valueKey, []))
         // 白名单
@@ -152,7 +161,7 @@ class VideoFilterChannel implements IMainFilter {
             return
         }
         if (revertAll) {
-            videos.forEach((v) => showEle(v, 'sign'))
+            videos.forEach((v) => restoreFiltered(v, 'sign'))
             return
         }
 
@@ -196,7 +205,7 @@ class VideoFilterChannel implements IMainFilter {
             whitePairs,
             forceBlackPairs,
             false,
-            statGateExtra(videos, selectorFns.bvid),
+            videoStatOptions(selectorFns.bvid),
         )
         const time = (performance.now() - timer).toFixed(1)
         logger.debug(
@@ -270,8 +279,9 @@ export const videoFilterChannelGroups: Group[] = [
                 minValue: 0,
                 step: 1,
                 maxValue: 300,
-                defaultValue: 60,
+                defaultValue: FILTER_THRESHOLD_DEFAULTS.duration,
                 disableValue: 0,
+                applyDisabledValue: true,
                 addonText: '秒',
                 fn: (value: number) => {
                     mainFilter.videoDurationFilter.setParam(value)
@@ -434,8 +444,9 @@ export const videoFilterChannelGroups: Group[] = [
                 minValue: 0,
                 maxValue: 500,
                 step: 1,
-                defaultValue: 60,
+                defaultValue: FILTER_THRESHOLD_DEFAULTS.pubdate,
                 disableValue: 0,
+                applyDisabledValue: true,
                 addonText: '天',
                 fn: (value: number) => {
                     mainFilter.videoPubdateFilter.setParam(value)
@@ -559,7 +570,7 @@ export const videoFilterChannelHandler: ContextMenuTargetHandler = (target: HTML
             }
         }
         if (spaceUrl && (mainFilter.videoUploaderFilter.isEnable || mainFilter.videoUploaderWhiteFilter.isEnable)) {
-            menus.push({
+            if (__PACK_LINKS__) menus.push({
                 name: `复制主页链接`,
                 fn: async () => {
                     navigator.clipboard.writeText(`https://${spaceUrl}`).catch(() => {})
@@ -587,7 +598,7 @@ export const videoFilterChannelHandler: ContextMenuTargetHandler = (target: HTML
                         }
                     },
                 })
-                menus.push({
+                if (__PACK_LINKS__) menus.push({
                     name: '复制视频链接',
                     fn: async () => {
                         navigator.clipboard.writeText(`https://www.bilibili.com/video/${bvid}`).catch(() => {})

@@ -1,0 +1,95 @@
+{
+  "schemaVersion": 1,
+  "policy": {
+    "unreviewed": "Code defaults are observations, not product approval.",
+    "userOverrides": "Keep explicitly saved values; absence/default inheritance stays distinct.",
+    "candidatePreset": {
+      "status": "candidate",
+      "evidence": "OneDrive:notes/user-feedback/2026-10-10/REVIEW.md",
+      "note": "397-item historical snapshot includes saved/inherited states; not copied into public catalog or applied to new keys."
+    },
+    "defaultUpgradePolicy": {
+      "status": "undecided",
+      "note": "When an absent value should inherit a new default is not decided; this catalog applies nothing."
+    },
+    "scopePolicy": {
+      "status": "observed-current-code",
+      "note": "Scopes describe the current backup registry, not an approved future WebDAV routing policy."
+    }
+  },
+  "decisions": [
+    {
+      "key": "url-cleaner",
+      "status": "confirmed",
+      "value": false,
+      "reason": "用户确定优先做好分享链接净化，地址栏自动净化暂不默认开启。",
+      "evidence": "OneDrive:notes/user-feedback/2026-10-10/REVIEW.md#已确认的两项调整"
+    },
+    {
+      "key": "common-unify-font",
+      "status": "confirmed",
+      "value": false,
+      "reason": "保留在可选优化包中，默认不启用；不覆盖已有显式保存值。",
+      "evidence": "OneDrive:notes/product/2026-10-10/decisions.json#/user_confirmed/optional_optimization_retention_2026_10_11/common-unify-font"
+    },
+    {
+      "key": "border-radius",
+      "status": "confirmed",
+      "value": false,
+      "reason": "页面直角化保留在可选优化包中，默认不启用；不覆盖已有显式保存值。",
+      "evidence": "OneDrive:notes/product/2026-10-10/decisions.json#/user_confirmed/optional_optimization_retention_2026_10_11/border-radius"
+    },
+    {
+      "key": "video-page-hide-video-info-argue",
+      "status": "confirmed",
+      "value": false,
+      "reason": "饮酒、危险行为和AI生成等提示默认显示，保留用户主动隐藏的选择。",
+      "evidence": "OneDrive:notes/user-feedback/2026-10-10/REVIEW.md#已确认的两项调整"
+    },
+    {
+      "key": "biliweb-shortcut-entry",
+      "field": "location",
+      "status": "confirmed",
+      "value": "header",
+      "reason": "页面快捷入口默认绑定顶栏搜索图标右侧；悬浮模式保留为用户选择。这里只确认位置，不擅自确认其它字段。",
+      "evidence": "OneDrive:notes/docs/PROJECT-GUIDE.md#快捷入口约定"
+    },
+    {
+      "key": "hide-dynamic-page-bili-dyn-dispute",
+      "status": "confirmed",
+      "value": true,
+      "reason": "动态页和个人空间的警告提示统一默认隐藏；当前源码差异另保留。",
+      "evidence": "OneDrive:notes/product/refactor-2026-11-07/PLAN.md#已确认的最新产品决定"
+    },
+    {
+      "key": "video-page-simple-share",
+      "status": "confirmed",
+      "value": true,
+      "reason": "普通视频及番剧的分享净化统一默认开启；短域名继续独立设置。",
+      "evidence": "OneDrive:notes/product/refactor-2026-11-07/PLAN.md#已确认的最新产品决定"
+    }
+  ],
+  "capabilities": [
+    {
+      "featureId": "F-COM-DARK",
+      "keys": ["common-theme-dark", "menu-dark-mode", "side-dark-mode"],
+      "status": "not-offered",
+      "reason": "已移除自带夜间模式及其入口。快捷入口读取官方页面配色，历史配置键和编号保留供追溯。",
+      "evidence": "OneDrive:notes/product/refactor-2026-11-07/PLAN.md#已确认的最新产品决定"
+    },
+    {
+      "keys": ["common-unify-font", "border-radius"],
+      "status": "retain",
+      "reason": "保留为默认关闭的可选优化。",
+      "evidence": "OneDrive:notes/product/2026-10-10/decisions.json#/user_confirmed/optional_optimization_retention_2026_10_11"
+    }
+  ],
+  "supersededDecisions": [
+    {
+      "key": "common-theme-dark",
+      "value": "default",
+      "reason": "此前保留可选夜间模式且默认不接管；已由不提供自带夜间模式的决定替代。",
+      "evidence": "OneDrive:notes/product/2026-10-10/decisions.json#/user_confirmed/optional_optimization_retention_2026_10_11/common-theme-dark"
+    }
+  ]
+}

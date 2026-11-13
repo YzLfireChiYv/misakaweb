@@ -1,4 +1,4 @@
-import { ISubFilter, SelectorFn } from '@/types/filter'
+import type { ISubFilter, SelectorResult } from '@/types/filter'
 
 export class NumberMinFilter implements ISubFilter {
     isEnable = false
@@ -16,16 +16,7 @@ export class NumberMinFilter implements ISubFilter {
         this.threshold = value
     }
 
-    check(el: HTMLElement, selectorFn: SelectorFn): Promise<void> {
-        return new Promise<void>((resolve, reject) => {
-            if (this.isEnable) {
-                const value = selectorFn(el)
-                if (typeof value === 'number' && value < this.threshold) {
-                    reject()
-                    return
-                }
-            }
-            resolve()
-        })
+    matches(value: SelectorResult): boolean {
+        return this.isEnable && typeof value === 'number' && value < this.threshold
     }
 }

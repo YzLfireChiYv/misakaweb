@@ -1,0 +1,474 @@
+{
+  "schemaVersion": 2,
+  "id": "video-filter",
+  "label": "视频过滤",
+  "verification": "逐页核对源码；站点实时选择器与布局未做浏览器实测。",
+  "referenceSources": [
+    {
+      "id": "video-tags-reference",
+      "repository": "https://github.com/tjxwork/bilibili_blocked_videos_by_tags",
+      "commit": "33a7d07bb43f3f6f1abfe6c0a69db527ade051b6",
+      "path": "bilibili_blocked_videos_by_tags.user.js",
+      "line": 2163,
+      "status": "reference-only",
+      "detail": "独立社区脚本按 BV 主动请求 /x/web-interface/view/detail/tag，读取 data[].tag_name。仅记录实现线索，没有接入本产品任何页面，也没有实测接口。原脚本声明 CC-BY-NC-SA。"
+    }
+  ],
+  "strategies": [
+    {
+      "id": "current-rules",
+      "label": "现行黑白名单与条件阈值",
+      "status": "implemented",
+      "detail": "这是当前可替换策略。普通黑名单命中可被白名单救回，BV强制黑名单覆盖白名单；另有时长、发布日期、旧质量、相关度和可选统计阈值。当前实现先做页面字段判断，再按需补统计后完成取舍。",
+      "refs": [
+        [
+          "src/modules/filters/variety/video/subFilters/black.ts",
+          "export class VideoBvidFilter"
+        ],
+        [
+          "src/modules/filters/variety/video/subFilters/white.ts",
+          "export class VideoTitleWhiteFilter"
+        ],
+        [
+          "src/modules/filters/decision/compatibility.ts",
+          "const below ="
+        ],
+        [
+          "src/utils/tool.ts",
+          "export const calcQuality ="
+        ],
+        [
+          "src/utils/tool.ts",
+          "export const calcVideoRelativity ="
+        ]
+      ]
+    },
+    {
+      "id": "scoring",
+      "label": "独立评分策略",
+      "status": "missing",
+      "detail": "未实现。今后可使用相同卡片信息替换或组合判断策略，仍只向页面交付留下或不留下；旧搜索相关度和热门质量指标只是现行策略内部指标。",
+      "refs": []
+    }
+  ],
+  "shared": [
+    {
+      "id": "field-conversion",
+      "stage": "fields",
+      "label": "卡片字段转换",
+      "status": "implemented",
+      "detail": "共用工具提供 BV 解析、时长和日期转换。每页调用哪些转换以字段旁的 helpers 为准。",
+      "refs": [
+        [
+          "src/utils/tool.ts",
+          "export const matchBvid ="
+        ],
+        [
+          "src/utils/tool.ts",
+          "export const convertTimeToSec ="
+        ],
+        [
+          "src/utils/tool.ts",
+          "export const convertDateToDays ="
+        ]
+      ]
+    },
+    {
+      "id": "search-response-data",
+      "stage": "fields",
+      "label": "搜索结果的标签与相关度输入",
+      "status": "experimental",
+      "detail": "仅启用旧相关度时使用；脚本不为此另发搜索请求。按 BV 依次查站点响应缓存、Pinia 首屏数据、卡片 Vue 信息。响应或首屏的 tag 拆为标签用于相关度；卡片回退没有标签，不能据此认定视频无标签。关闭会停止解析响应并清空缓存。",
+      "inputs": [
+        {
+          "method": "site-response",
+          "path": "站点 /search/type（search_type=video）→ data.result[]",
+          "fields": [
+            "bvid",
+            "title",
+            "description",
+            "author",
+            "tag",
+            "hit_columns"
+          ]
+        },
+        {
+          "method": "site-state",
+          "path": "Pinia 首屏 result 中 result_type=video 的 data[]",
+          "fields": [
+            "bvid",
+            "title",
+            "description",
+            "author",
+            "tag",
+            "hit_columns"
+          ]
+        },
+        {
+          "method": "site-state",
+          "path": "卡片 Vue props.info",
+          "fields": [
+            "title",
+            "description",
+            "author.name"
+          ],
+          "unavailable": [
+            "tag",
+            "hit_columns 原始值"
+          ]
+        }
+      ],
+      "keys": [
+        "search-relativity-filter-status",
+        "search-relativity-threshold-value"
+      ],
+      "refs": [
+        [
+          "src/modules/filters/variety/video/pages/search.ts",
+          "const toRelativityItem ="
+        ],
+        [
+          "src/modules/filters/variety/video/pages/search.ts",
+          "const registerRelativityFetchHook ="
+        ],
+        [
+          "src/modules/filters/variety/video/pages/search.ts",
+          "const getFirstPageVideoItem ="
+        ],
+        [
+          "src/modules/filters/variety/video/pages/search.ts",
+          "const getCardVideoItem ="
+        ],
+        [
+          "src/utils/fetch.ts",
+          "    addPostFn("
+        ]
+      ]
+    },
+    {
+      "id": "video-statistics",
+      "stage": "fields",
+      "label": "按需补取视频统计",
+      "status": "implemented",
+      "detail": "六个视频模块均有该可选取数入口。当前策略在普通规则初筛后，只给仍需判断且有 BV 的卡片取数。按 BV 缓存与合并在途请求，本地计算点赞率、收藏率。取数失败不以此隐藏，可在后续扫描重试。",
+      "inputs": [
+        {
+          "method": "active-api",
+          "path": "B站 /x/web-interface/view → data.stat",
+          "fields": [
+            "view",
+            "like",
+            "favorite"
+          ],
+          "unavailable": [
+            "本地封装未返回标签、简介或评论数"
+          ]
+        }
+      ],
+      "featureId": "F-MISAKA-STAT",
+      "refs": [
+        [
+          "src/modules/filters/variety/video/statGate.ts",
+          "export const videoStatOptions ="
+        ],
+        [
+          "src/modules/filters/variety/video/viewStat.ts",
+          "const VIEW_URL ="
+        ],
+        [
+          "src/modules/filters/variety/video/viewStat.ts",
+          "const readStat ="
+        ],
+        [
+          "src/modules/filters/variety/video/viewStat.ts",
+          "export const fetchVideoStat ="
+        ],
+        [
+          "src/modules/filters/variety/video/statRate.ts",
+          "export const ratePercent ="
+        ]
+      ]
+    },
+    {
+      "id": "general-tag-data",
+      "stage": "fields",
+      "label": "跨页面主动获取标签",
+      "status": "missing",
+      "detail": "当前未实现通用标签取数或标签过滤。搜索页的已有 tag 仅供现行相关度，不能替代其它页面的标签来源。独立标签脚本仅为研究参考。",
+      "referenceIds": [
+        "video-tags-reference"
+      ],
+      "refs": []
+    },
+    {
+      "id": "homepage-layout-options",
+      "stage": "layout",
+      "label": "首页专用占位修正",
+      "status": "optional",
+      "detail": "隐藏活动轮播时有独立的卡片占位样式；扩大加载量会隐藏额外骨架，预加载也有骨架与锚点样式。这些受各自选项控制，不是视频过滤后对所有卡片执行的收尾。",
+      "keys": [
+        "homepage-hide-recommend-swipe",
+        "homepage-increase-rcmd-load-size",
+        "homepage-rcmd-video-preload"
+      ],
+      "refs": [
+        [
+          "src/modules/rules/homepage/groups/basic.scss",
+          "html[homepage-hide-recommend-swipe]"
+        ],
+        [
+          "src/modules/rules/homepage/groups/rcmd.scss",
+          "html[homepage-increase-rcmd-load-size]"
+        ],
+        [
+          "src/modules/rules/homepage/groups/rcmd.scss",
+          "html[homepage-rcmd-video-preload]"
+        ]
+      ]
+    },
+    {
+      "id": "homepage-load-options",
+      "stage": "layout",
+      "label": "首页独立加载选项",
+      "status": "optional",
+      "detail": "增加载入数量改写推荐请求的批量参数；预加载按滚动位置调整加载锚点。两者均不统计过滤后可见卡片，也没有按隐藏数量主动补载。",
+      "keys": [
+        "homepage-increase-rcmd-load-size",
+        "homepage-rcmd-video-preload"
+      ],
+      "refs": [
+        [
+          "src/modules/rules/homepage/groups/rcmd.ts",
+          "id: 'homepage-increase-rcmd-load-size'"
+        ],
+        [
+          "src/modules/rules/homepage/groups/rcmd.ts",
+          "id: 'homepage-rcmd-video-preload'"
+        ]
+      ]
+    },
+    {
+      "id": "player-related-cache",
+      "stage": "layout",
+      "label": "播放页相关视频数据过滤",
+      "status": "experimental",
+      "detail": "独立开关启用后，使用本轮命中卡片的BV号过滤站点 __INITIAL_STATE__.related。它只删缓存项，不补载；已删缓存项没有本地回填，切换规则需要刷新恢复。",
+      "keys": [
+        "video-related-filter-status"
+      ],
+      "refs": [
+        [
+          "src/modules/filters/variety/video/pages/video.ts",
+          "if (enableRelatedCheck && blackIdxSet.size)"
+        ],
+        [
+          "src/modules/filters/variety/video/pages/video.ts",
+          "name: '启用 相关视频数据过滤"
+        ]
+      ]
+    }
+  ],
+  "pages": [
+    {
+      "id": "homepage",
+      "label": "首页",
+      "routes": [
+        "homepage"
+      ],
+      "locator": "等待 .container，检查其直接子卡片；子节点变化后扫描未标记卡片。当前依赖站点首个匹配容器，是否仍命中推荐列表须实测。",
+      "locatorAnchors": [
+        "waitForEle(document, '.container'",
+        "let selector = `:scope > :is(.feed-card",
+        "if (mode === 'incr')"
+      ],
+      "fieldNotes": "标题、作者、时间和播放量读自DOM文本；BV号取标题链接或封面链接；已关注取卡片图标文字。",
+      "layoutNotes": "过滤后的卡片由浏览器按站点布局收拢，未发现通用重排。另有可选轮播/骨架修正。",
+      "refillNotes": "新增卡片依赖站点加载；可选加载调节并非按过滤后的可见数补位。",
+      "extras": [
+        "homepage-layout-options",
+        "homepage-load-options"
+      ]
+    },
+    {
+      "id": "channel",
+      "label": "新版分区页",
+      "routes": [
+        "channel"
+      ],
+      "locator": "等待 #app，扫描后代 .feed-card；监听子树，增量时排除已有检查标记的卡片。",
+      "locatorAnchors": [
+        "waitForEle(document, '#app'",
+        "let selector = `.feed-card`",
+        "if (mode === 'incr')"
+      ],
+      "fieldNotes": "标题和BV链接取卡片标题/封面，时长取封面统计，作者和发布时间从卡片同一文本按分隔符拆开。",
+      "layoutNotes": "当前过滤调用链只隐藏卡片，依赖站点自然排布；没有过滤专用补洞。",
+      "refillNotes": "监听站点后续加载的卡片，未实现按可见数补载。",
+      "extras": []
+    },
+    {
+      "id": "popular",
+      "label": "热门、每周必看及排行榜",
+      "routes": [
+        "popular"
+      ],
+      "locator": "等待 #app，匹配热门/必看列表的 .video-card 和非番剧排行榜的 .rank-item；子树变化后始终全量检查。",
+      "locatorAnchors": [
+        "waitForEle(document, '#app'",
+        "const selector = `.card-list .video-card"
+      ],
+      "fieldNotes": "普通卡片读取 __vue__.videoData；排行榜按 data-rank 读取列表 Vue 数据。可得到标题、BV号、作者、时长、尺寸及投币和点赞统计。画面方向由尺寸推导，旧质量分数归到判断策略。",
+      "fieldProvider": "site-vue-state",
+      "fieldAnchors": [
+        "const getVideoData ="
+      ],
+      "additionalFields": [
+        {
+          "field": "coin",
+          "provider": "site-vue-state",
+          "anchor": "const stat = getVideoData(video)?.stat",
+          "detail": "站点 videoData.stat.coin；供当前旧质量策略。"
+        },
+        {
+          "field": "like",
+          "provider": "site-vue-state",
+          "anchor": "const stat = getVideoData(video)?.stat",
+          "detail": "站点 videoData.stat.like；供当前旧质量策略，与主动API来源分开。"
+        },
+        {
+          "field": "dimension.height / dimension.width",
+          "provider": "site-vue-state",
+          "anchor": "const dimension = getVideoData(video)?.dimension",
+          "detail": "尺寸用来推导横屏或竖屏。"
+        }
+      ],
+      "strategyMetrics": {
+        "quality": {
+          "inputs": [
+            "站点 Vue 数据 stat.coin",
+            "站点 Vue 数据 stat.like"
+          ],
+          "detail": "旧投币/点赞拟合指标。点赞数为0时未知。"
+        }
+      },
+      "layoutNotes": "当前过滤调用链不改排行榜名次或网格结构；隐藏卡片后的排布由站点决定。",
+      "refillNotes": "没有从排名或推荐数据补齐被隐藏项的逻辑。",
+      "extras": []
+    },
+    {
+      "id": "search",
+      "label": "搜索页",
+      "routes": [
+        "search"
+      ],
+      "locator": "等待 .search-layout，扫描视频结果列表和用户卡片内的视频；用户卡片外层还有独立UP主筛选，子树变化后重新全量检查。",
+      "locatorAnchors": [
+        "waitForEle(document, '.search-layout'",
+        "const selector = `:where(.video.search-all-list",
+        "const cardSelector = `.user-list .video-list-item`",
+        "const userList = this.target.querySelector<HTMLDivElement>('.user-list')"
+      ],
+      "fieldNotes": "普通字段来自卡片DOM，UP名可回落用户卡。标签、简介及命中字段来自站点已有响应或页面状态，数据来源与缺失情况见共用的搜索数据环节。",
+      "fieldProviders": {
+        "relativity": "site-response-or-state"
+      },
+      "additionalFields": [
+        {
+          "field": "keyword",
+          "provider": "page-url",
+          "anchor": "const keyword = new URLSearchParams(location.search)",
+          "detail": "页面 URL 的 keyword 参数；供当前相关度策略。"
+        }
+      ],
+      "strategyMetrics": {
+        "relativity": {
+          "inputs": [
+            "当前搜索关键词",
+            "站点已有标题、简介、作者、标签和 hit_columns"
+          ],
+          "detail": "旧搜索相关度；标签的取数与回退见搜索结果数据环节。"
+        }
+      },
+      "fieldAnchors": [
+        "const registerRelativityFetchHook =",
+        "const getFirstPageVideoItem =",
+        "const getCardVideoItem ="
+      ],
+      "layoutNotes": "卡片或用户卡片外层隐藏后靠站点布局收拢，不改结果总量或分页。",
+      "refillNotes": "继续使用站点翻页，不按过滤结果主动跨页找内容。",
+      "extras": [
+        "search-response-data"
+      ]
+    },
+    {
+      "id": "space",
+      "label": "个人空间",
+      "routes": [
+        "space"
+      ],
+      "locator": "等待 #app，按空间主页、投稿、旧合集/系列和新版列表子路由选卡片；不匹配则跳过。子树变化后全量检查。",
+      "locatorAnchors": [
+        "waitForEle(document, '#app'",
+        "// 主页视频",
+        "// 投稿视频",
+        "// 旧版空间页 视频合集、视频系列",
+        "// 新版空间页 视频合集内视频"
+      ],
+      "fieldNotes": "使用旧/新两套卡片DOM提取时长和标题，标题链接解析BV。当前该视频过滤器不读取UP主字段。",
+      "layoutNotes": "未发现按空间子路由执行的过滤后补洞；退出布局后依赖站点自然排布。",
+      "refillNotes": "未实现按可见数补载；继续使用空间页现有列表与分页。",
+      "extras": []
+    },
+    {
+      "id": "video",
+      "label": "播放页与播放列表",
+      "routes": [
+        "video",
+        "playlist"
+      ],
+      "locator": "等待右侧推荐容器 #reco_list、.recommend-list-v1 或 .recommend-list-container；扫描接下来播放与推荐卡片。子树变化后全量检查。",
+      "locatorAnchors": [
+        "'#reco_list, .recommend-list-v1, .recommend-list-container'",
+        "const selector = `.next-play"
+      ],
+      "fieldNotes": "时长来自封面，标题和作者来自信息区；BV取标题或封面链接。番剧右键入口的存在不等于番剧注册了此过滤链。",
+      "layoutNotes": "过滤本身只隐藏推荐卡片，依赖右侧列表自然收拢。可选相关数据过滤改变站点缓存，不能当作自动重排或补位。",
+      "refillNotes": "不按可见数补充推荐；相关视频实验功能只从缓存去除命中项。",
+      "extras": [
+        "player-related-cache"
+      ]
+    }
+  ],
+  "auditNotes": [
+    {
+      "status": "fixed",
+      "label": "播放页缓存命中与容器发现",
+      "detail": "用本轮返回的命中下标代替尚未刷新或上轮留下的隐藏属性；标题无链接时复用封面链接。延迟挂载的推荐容器按单个类名识别，允许同时具有其它类。"
+    },
+    {
+      "status": "fixed",
+      "label": "补数失败后重试",
+      "detail": "当补数失败时清除已有检查标记，使卡片可以进入之后的增量扫描；不主动发起额外扫描或补载。"
+    },
+    {
+      "status": "fixed",
+      "label": "热门旧质量指标零分母",
+      "detail": "点赞数为0时返回未知值，不让无效除法产生可参与过滤的分数。"
+    },
+    {
+      "status": "pending",
+      "label": "共享数字控件与旧规则包",
+      "detail": "此前确认的显式0停用和旧规则包省略问题仍待处理，涉及通用控件及同步语义，本次未改。"
+    },
+    {
+      "status": "pending",
+      "label": "现场结构与排布",
+      "detail": "首页首个 .container、热门页私有 Vue 数据及各页面自然收拢仅有源码证据；当前站点能否命中、是否留洞需要用户实测。"
+    },
+    {
+      "status": "pending",
+      "label": "跨扫描时序",
+      "detail": "此前的本地候选修复同一轮命中结果与绘制帧的错位；未建立跨路由或异步扫描的新旧结果仲裁。"
+    }
+  ]
+}

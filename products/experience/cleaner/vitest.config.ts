@@ -3,6 +3,7 @@ import { fileURLToPath, URL } from 'node:url'
 import { defineConfig } from 'vitest/config'
 import { readFileSync } from 'node:fs'
 import { classificationFor } from './scripts/pack-build.mjs'
+import { productDefaults } from './scripts/product-defaults.mjs'
 
 const release = JSON.parse(readFileSync(new URL('./config/release.json', import.meta.url), 'utf8'))
 
@@ -11,12 +12,12 @@ export default defineConfig({
     define: {
         'import.meta.env.VITE_FEEDBACK_LABELS': JSON.stringify('true'),
         __SCRIPT_VERSION__: JSON.stringify(release.development.version),
-        __PACK_APPEARANCE__: true,
         __PACK_PLAYBACK__: true,
         __PACK_LINKS__: true,
         __BUILD_PROFILE__: JSON.stringify('development'),
         __BUILD_LABEL__: JSON.stringify('开发测试版（完整能力）'),
         __SETTING_SECTIONS__: JSON.stringify(classificationFor(null)),
+        __PRODUCT_DEFAULTS__: JSON.stringify(productDefaults),
     },
     resolve: {
         alias: {

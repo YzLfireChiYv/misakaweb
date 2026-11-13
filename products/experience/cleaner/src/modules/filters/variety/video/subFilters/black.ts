@@ -14,7 +14,12 @@ export class VideoQualityFilter extends NumberMinFilter {}
 
 export class VideoTitleFilter extends KeywordFilter {}
 
-export class VideoPubdateFilter extends NumberMaxFilter {}
+export class VideoPubdateFilter extends NumberMaxFilter {
+    override setParam(value: number) {
+        if (value === 0) this.clearParam()
+        else super.setParam(value)
+    }
+}
 
 export class VideoUploaderFilter extends StringFilter {}
 

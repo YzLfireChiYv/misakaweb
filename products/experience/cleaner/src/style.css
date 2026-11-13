@@ -29,3 +29,11 @@
         -moz-appearance: textfield;
     }
 }
+
+@layer components {
+    .misaka-shortcut-colors {
+        background-color: var(--bg1, #fff);
+        color: var(--text2, #61666d);
+        border-color: var(--line_regular, #e5e7eb);
+    }
+}

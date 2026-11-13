@@ -37,7 +37,8 @@
 import { IEditorItem } from '@/types/item'
 import { logger } from '@/utils/logger'
 import { orderedUniq } from '@/utils/tool'
-import { GM_getValue, GM_setValue } from '@/storage/configStorage'
+import { GM_setValue } from '@/storage/configStorage'
+import { readSettingValue } from '@/modules/configuration/effective'
 import { computed, onUnmounted, ref, type WatchStopHandle } from 'vue'
 import { watchDebounced } from '@vueuse/core'
 import PanelComp from './PanelComp.vue'
@@ -51,26 +52,22 @@ const currentItem = ref<IEditorItem | null>(null)
 const editorCode = computed(() => (currentItem.value ? settingLabel(currentItem.value.id) : ''))
 
 let stopWatch: WatchStopHandle | null = null
+let savedText = ''
+let editorSession = 0
 
 const openEditor = (item: IEditorItem) => {
+    stopWatch?.()
+    const session = ++editorSession
     currentItem.value = item
 
-    const val = GM_getValue(item.id, []).join('\n')
-    editorData.value = val ? val + '\n' : val
+    const val = readSettingValue<string[]>(item.id, []).join('\n')
+    savedText = val ? val + '\n' : val
+    editorData.value = savedText
 
     stopWatch = watchDebounced(
         editorData,
         (value) => {
-            if (!currentItem.value) {
-                return
-            }
-            try {
-                const data = orderedUniq(value.split('\n').filter((v) => v.trim() !== ''))
-                GM_setValue(currentItem.value.id, data)
-                currentItem.value.saveFn()
-            } catch (err) {
-                logger.error(`EditorDialog ${currentItem.value.id} saveData error`, err)
-            }
+            if (session === editorSession) saveEditor(item, value)
         },
         { debounce: 1000 },
     )
@@ -78,23 +75,29 @@ const openEditor = (item: IEditorItem) => {
     isEditorShow.value = true
 }
 
-const closeEditor = () => {
-    if (currentItem.value) {
-        try {
-            const data = orderedUniq(editorData.value.split('\n').filter((v) => v.trim() !== ''))
-            GM_setValue(currentItem.value.id, data)
-            currentItem.value.saveFn()
-        } catch (err) {
-            logger.error(`EditorDialog ${currentItem.value.id} closeEditor error`, err)
-        }
+const saveEditor = (item: IEditorItem, value: string) => {
+    if (value === savedText) return
+    try {
+        const data = orderedUniq(value.split('\n').filter((v) => v.trim() !== ''))
+        GM_setValue(item.id, data)
+        savedText = value
+        item.saveFn()
+    } catch (err) {
+        logger.error(`EditorDialog ${item.id} saveData error`, err)
     }
+}
+
+const closeEditor = () => {
+    ++editorSession
+    stopWatch?.()
+    stopWatch = null
+    if (currentItem.value) saveEditor(currentItem.value, editorData.value)
     isEditorShow.value = false
 }
 
 onUnmounted(() => {
-    if (stopWatch) {
-        stopWatch()
-    }
+    ++editorSession
+    stopWatch?.()
 })
 
 defineExpose({ openEditor })

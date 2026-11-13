@@ -1,4 +1,4 @@
-import { ISubFilter, SelectorFn } from '@/types/filter'
+import type { ISubFilter, SelectorResult } from '@/types/filter'
 import { logger } from '@/utils/logger'
 import { toHalfWidth } from '@/utils/tool'
 
@@ -66,21 +66,9 @@ export class KeywordFilter implements ISubFilter {
         this.buildRegExp()
     }
 
-    check(el: HTMLElement, selectorFn: SelectorFn): Promise<void> {
-        return new Promise<void>((resolve, reject) => {
-            if (this.isEnable) {
-                let value = selectorFn(el)
-                if (typeof value === 'string') {
-                    value = toHalfWidth(value).trim()
-                    for (const regex of this.mergedRegExp) {
-                        if (regex.test(value)) {
-                            reject()
-                            return
-                        }
-                    }
-                }
-            }
-            resolve()
-        })
+    matches(value: SelectorResult): boolean {
+        if (!this.isEnable || typeof value !== 'string') return false
+        const normalized = toHalfWidth(value).trim()
+        return this.mergedRegExp.some((regex) => regex.test(normalized))
     }
 }

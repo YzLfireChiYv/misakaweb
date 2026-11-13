@@ -1,0 +1,480 @@
+# 全量实现登记审阅
+
+范围：净化大师固定基线 15d9bce（4.5.13）和当前本地产品。4.5.15 是参考更新候选。
+
+- 上游仓库 268 个文件，其中 src 下 229 个均已对应。仓库配套按工作流、构建、文档及资源另列。
+- 原盘点 698 处声明、68 项动作/隐式行为、515 条存储记录均有去向。
+- 当前 111 个分组、529 个设置控件、713 处声明、51 项菜单/动作。声明：711 有实现指向，2 未生效，0 明确排除。
+- 登记关系缺口：0。这里是源码覆盖，并非实机验收，也不代表每个实现、每行代码都经过行为验证。
+
+## 审阅方法
+
+- `pnpm catalog --find S076`：按编号看配置声明、当前回调、样式指向及固定上游对应。
+- `pnpm catalog --find F-VID-SHARE`：按功能看普通视频和番剧的两处实现。
+- `pnpm catalog --coverage src/modules/rules/live/groups/basic.ts`：按源文件看对应关系与使用者。
+- `pnpm catalog --coverage`：查看登记关系缺口。对象过滤继续按四步审阅，其它实现按实际执行方式登记。
+
+## 需要单列的现状
+
+- S053 `common-hide-nav-bdu`：声明保留、实现不生效。仍有设置声明，但相应 CSS 整段已注释，未找到有效执行。不是用户排除。 `src/modules/rules/common/groups/headerLeft.ts:44`
+- S055 `common-hide-nav-bml`：声明保留、实现不生效。仍有设置声明，但相应 CSS 整段已注释，未找到有效执行。不是用户排除。 `src/modules/rules/common/groups/headerLeft.ts:49`
+
+## 共用执行与非开关行为
+
+- **设置项装载与面板生效**：页面规则注册决定适用范围；加载与面板依次读取已保存值、已确认的产品默认及声明默认。开关加/移除根属性，数值/文本和单选写参数或调用回调。名单变动后保存并调用 saveFn。数值项可明确启用禁用值回调，供过滤阈值解除限制。
+  - `src/modules/rules/index.ts:49`、`src/modules/rules/index.ts:145`、`src/modules/configuration/effective.ts:19`、`src/modules/index.ts:12`、`src/modules/index.ts:30`、`src/modules/index.ts:41`、`src/modules/index.ts:51`、`src/components/items/SwitchComp.vue:41`、`src/components/items/NumberComp.vue:53`、`src/components/items/ListComp.vue:76`、`src/components/EditorDialog.vue:90`
+- **面板、菜单与快捷入口**：脚本菜单按页面开启面板；面板在独立 Shadow DOM，支持拖动关闭和名单编辑。旧右下按钮由本地顶栏/悬浮入口替代，仍保留位置和动作。
+  - `src/main.ts:29`、`src/main.ts:57`、`src/components/PanelComp.vue:58`、`src/modules/shortcut/actions.ts:20`、`src/modules/shortcut/anchor.ts:28`、`src/modules/shortcut/preference.ts:29`
+- **右键动作与名单写入**：汇总页面处理器生成菜单；只有匹配时替换原生菜单。名单动作修改内存和持久化规则并触发复查，复制动作只写剪贴板。各页模板与配置按行为记录关联。
+  - `src/views/ContextMenuView.vue:10`、`src/modules/filters/index.ts:153`、`src/feedback/context-actions.ts:12`
+- **首页修正与路由补装载**：/index.html 重定向；各规则按实时页面判断补启动，已启动集合防止重复装载，不等于卸载旧监听。默认生效从设置定义读取。
+  - `src/main.ts:23`、`src/modules/index.ts:152`、`src/modules/filters/variety/video/pages/homepage.ts:266`、`src/utils/pageType.ts:1`
+- **URL 与请求包装**：URL工具包装历史跳转并依序执行已注册转换。fetch 按需订阅，先处理输入再调用原请求并分发响应。首页载入量和搜索响应独立退订，最后一个订阅撤销后按所有权恢复。
+  - `src/utils/urlHandler.ts:28`、`src/utils/fetch.ts:58`、`src/modules/rules/homepage/groups/rcmd.ts:94`
+- **播放模式、滚轮与宽屏状态**：宽屏状态用于CSS及模式控制，播放器和番剧的滚轮逻辑分别装配，具体恢复与本机位置键见对应声明；被净化共用的宽屏追踪需保留。
+  - `src/utils/widePlayer.ts:4`、`src/modules/rules/video/groups/playerLayout.ts:226`、`src/modules/rules/bangumi/groups/playerLayout.ts:173`
+- **Alt+B 暂停或恢复脚本样式**：切换已注入 style 的 disabled。不会卸载非样式回调或取消行内样式。
+  - `src/modules/index.ts:135`
+- **配置存储、迁移与备份**：旧键迁移与集中读写共用；备份保留保存值和缺省状态，导入先预览并保存恢复快照。默认不含连接凭据；配置定义和运行态缓存不混用。
+  - `src/utils/storage.ts:8`、`src/main.ts:124`、`src/modules/configuration/runtime.ts:15`、`src/modules/configuration/runtime.ts:50`、`src/modules/configuration/backup.ts:119`
+- **现行 WebDAV 规则同步**：现有 stamp 与 pack 使用规则白名单，走时间戳比较；新设备引导协议和并发合并未实现。连接与备份覆盖不等于云同步范围。
+  - `src/modules/filters/ruleSync.ts:16`、`src/modules/filters/ruleSync.ts:288`、`src/modules/filters/rulePack.ts:12`
+- **安装范围、打包与检查入口**：Vite用户脚本元数据和匹配边界、源码依赖、安装产物构建；产品另有成品配置与发布工作流，不能把上游 CI 当成已复用的产品流程。
+  - `vite.config.ts:27`、`config/build-profiles.json:7`、`scripts/pack-build.mjs:104`、`package.json:6`
+- **面板渲染与响应状态**：App 挂载页面规则、四种过滤、右键及快捷入口。组件处理折叠、描述、编辑和输入，Pinia 管理可见状态，快捷入口沿用官方页面配色。
+  - `src/App.vue:3`、`src/stores/view.ts:20`、`src/components/items/StringComp.vue:33`、`src/style.css:34`
+- **DOM初始化、日志与诊断**：等待head/body后装配页面；日志帮助定位异常。结构诊断只在用户触发时采集，不代替网页运行验收。
+  - `src/utils/init.ts:2`、`src/utils/init.ts:19`、`src/utils/logger.ts:25`、`src/views/RulePanelView.vue:35`
+
+## 功能登记
+
+- F-COM-HIDE 全站通用 - 基本功能（隐藏类）：有实现指向；声明 2，动作 0。
+- F-COM-STYLE 全站通用 - 基本功能（外观类）：有实现指向；声明 3，动作 0。
+- F-COM-URLCLEAN URL参数净化：有实现指向；声明 1，动作 0；共用 url-and-fetch。
+- F-COM-DARK 全站通用 - 夜间模式：用户明确排除；声明 0，动作 2。
+- F-COM-HDR-LEFT 全站通用 - 顶栏 左侧：有实现指向；声明 17，动作 0。
+- F-COM-HDR-SEARCH 全站通用 - 顶栏 搜索框：有实现指向；声明 5，动作 0。
+- F-COM-HDR-RIGHT 全站通用 - 顶栏 右侧：有实现指向；声明 10，动作 0。
+- F-COM-FAV-WL 收藏弹出框 自动选中稍后再看：有实现指向；声明 1，动作 0。
+- F-COM-HDR-SIZE 全站通用 - 顶栏 数值设定：有实现指向；声明 4，动作 0。
+- F-STICKY-HDR 多页 “顶栏/分区栏 不再吸附”：有实现指向；声明 8，动作 0。
+- F-GRID 多页 “修改视频列表列数/两侧边距”：有实现指向；声明 6，动作 0。
+- F-HOME-BASIC 首页 - 基本功能：有实现指向；声明 8，动作 0；过滤链 video-filter。
+- F-HOME-FEED-UI 首页 - 视频列表（卡片元素）：有实现指向；声明 15，动作 0。
+- F-HOME-FEED-LOAD 首页 - 视频列表（加载行为）：有实现指向；声明 2，动作 0；过滤链 video-filter；共用 url-and-fetch。
+- F-HOME-SIDEBAR 首页 - 页面侧栏 小组件：有实现指向；声明 9，动作 0。
+- F-VID-BV2AV BV号转AV号：有实现指向；声明 1，动作 0；共用 url-and-fetch。
+- F-VID-SHARE 净化分享功能 / 使用短域名分享：有实现指向；声明 3，动作 0。
+- F-PLY-LAYOUT 布局设定（播放模式/位置/宽度）：有实现指向；声明 6，动作 0；共用 player-mode-support。
+- F-PLY-SCROLL 布局设定（全屏可滚动）：有实现指向；声明 10，动作 0；共用 player-mode-support。
+- F-VID-INFO 播放页 - 视频信息：有实现指向；声明 6，动作 0。
+- F-PLY-OVERLAY 播放器（浮层与弹窗）：有实现指向；声明 56，动作 0。
+- F-PLY-CTRL 播放控制栏：有实现指向；声明 56，动作 0。
+- F-DM-CTRL 弹幕控制栏：有实现指向；声明 32，动作 0。
+- F-DM-STYLE 弹幕样式：有实现指向；声明 14，动作 0。
+- F-SUB-STYLE 字幕样式：有实现指向；声明 10，动作 0。
+- F-VID-TOOLBAR 工具栏 / 简介区：有实现指向；声明 19，动作 0。
+- F-VID-COIN 投币时不自动点赞：有实现指向；声明 2，动作 0。
+- F-VID-UPINFO 播放页 - 右侧 UP主信息：有实现指向；声明 7，动作 0。
+- F-VID-RIGHT 右侧视频栏 / 番剧右栏：有实现指向；声明 26，动作 0。
+- F-VID-UNFOLD 自动展开 弹幕列表 / 相关视频：有实现指向；声明 3，动作 0。
+- F-MINI 小窗播放器：有实现指向；声明 10，动作 0；共用 player-mode-support。
+- F-FLOATBTN 多页 “页面右下角 小按钮 / 页面侧栏”：有实现指向；声明 13，动作 0。
+- F-DYN-LAYOUT 动态页 - 布局：有实现指向；声明 3，动作 0。
+- F-DYN-SIDE 动态页 - 左栏/右栏：有实现指向；声明 7，动作 0。
+- F-DYN-TOP 动态页 - 中栏 顶部功能：有实现指向；声明 6，动作 0。
+- F-DYN-CARD-UI 动态列表（卡片装饰）：有实现指向；声明 14，动作 0。
+- F-DYN-TYPE-HIDE 动态列表（按类型隐藏）：有实现指向；声明 16，动作 0。
+- F-DYN-UNFOLD 动态列表（自动展开）：有实现指向；声明 3，动作 0。
+- F-LIVE-UI 直播页 - 基本功能（隐藏类）：有实现指向；声明 1，动作 0。
+- F-LIVE-SKIN 直播页 - 禁用播放器皮肤 / 直播背景：有实现指向；声明 2，动作 0。
+- F-LIVE-JUMP 活动直播自动跳转普通直播：有实现指向；声明 1，动作 0。
+- F-LIVE-QUALITY 自动切换最高画质（实验）：有实现指向；声明 1，动作 0。
+- F-LIVE-WIDTH 修改 页面宽度占比：有实现指向；声明 1，动作 0。
+- F-LIVE-INFO 直播页 - 直播信息栏：有实现指向；声明 5，动作 0。
+- F-LIVE-HOTKEY 禁用 快捷键 G 关注主播：有实现指向；声明 1，动作 0。
+- F-LIVE-PLAYER 直播页 - 播放器：有实现指向；声明 16，动作 0。
+- F-LIVE-DMLIST 直播页 - 右栏 弹幕列表：有实现指向；声明 21，动作 0。
+- F-LIVE-BELOW 直播页 - 下方页面：有实现指向；声明 5，动作 0。
+- F-LIVE-HDR 直播页 - 顶栏（左侧/搜索框/右侧）：有实现指向；声明 27，动作 0。
+- F-POP-UI 热门页 - 基本功能/其他功能：有实现指向；声明 8，动作 0。
+- F-CH-UI 新版分区页 - 基础功能/视频列表：有实现指向；声明 9，动作 0。
+- F-SPACE-REDIRECT 打开用户主页 自动跳转到投稿：有实现指向；声明 1，动作 0。
+- F-SPACE-UI 空间页 - 基本功能：有实现指向；声明 3，动作 0。
+- F-SEARCH-UI 搜索页 - 基本功能：有实现指向；声明 7，动作 0。
+- F-WL-UI 稍后再看 - 基本功能（列数除外）：有实现指向；声明 2，动作 0。
+- F-CMT-UI 全站通用 - 评论区（隐藏类）：有实现指向；声明 19，动作 0。
+- F-CMT-STYLE 全站通用 - 评论区（样式类）：有实现指向；声明 6，动作 0。
+- F-CMT-AREA-HIDE 隐藏 视频/动态 评论区：有实现指向；声明 2，动作 0。
+- F-DEBUG 日志输出 - Debug 模式：有实现指向；声明 1，动作 0。
+- F-VF-DURATION 视频过滤 - 时长过滤：有实现指向；声明 14，动作 0；过滤链 video-filter、dynamic-filter。
+- F-VF-UPLOADER 视频过滤 - UP主黑名单：有实现指向；声明 10，动作 0；过滤链 video-filter。
+- F-VF-UPLOADER-KW 视频过滤 - UP主昵称关键词：有实现指向；声明 10，动作 0；过滤链 video-filter。
+- F-VF-TITLE 视频过滤 - 标题关键词：有实现指向；声明 14，动作 0；过滤链 video-filter、dynamic-filter。
+- F-VF-BVID 视频过滤 - BV号黑名单：有实现指向；声明 12，动作 0；过滤链 video-filter。
+- F-VF-PUBDATE 视频过滤 - 发布日期：有实现指向；声明 4，动作 0；过滤链 video-filter。
+- F-VF-VIEWS 视频过滤 - 播放量：有实现指向；声明 2，动作 0；过滤链 video-filter。
+- F-VF-VERTICAL 视频过滤 - 竖屏视频（热门页）：有实现指向；声明 1，动作 0；过滤链 video-filter。
+- F-VF-QUALITY 视频过滤 - 劣质视频（热门页）：有实现指向；声明 2，动作 0；过滤链 video-filter。
+- F-VF-RELATIVITY 视频过滤 - 搜索相关性（实验）：有实现指向；声明 2，动作 0；过滤链 video-filter。
+- F-VF-RELATED 视频过滤 - 相关视频缓存数据（实验）：有实现指向；声明 1，动作 0；过滤链 video-filter。
+- F-VF-WL-UPLOADER 视频过滤 - UP主白名单：有实现指向；声明 10，动作 0；过滤链 video-filter。
+- F-VF-WL-TITLE 视频过滤 - 标题关键词白名单：有实现指向；声明 14，动作 0；过滤链 video-filter、dynamic-filter。
+- F-VF-WL-FOLLOW 视频过滤 - 已关注免过滤（首页）：有实现指向；声明 1，动作 0；过滤链 video-filter。
+- F-CF-USER 评论过滤 - 用户名黑名单：有实现指向；声明 2，动作 0；过滤链 comment-filter。
+- F-CF-USER-KW 评论过滤 - 昵称关键词：有实现指向；声明 2，动作 0；过滤链 comment-filter。
+- F-CF-CONTENT 评论过滤 - 评论内容关键词：有实现指向；声明 2，动作 0；过滤链 comment-filter。
+- F-CF-AI 评论过滤 - AI 相关评论：有实现指向；声明 2，动作 0；过滤链 comment-filter。
+- F-CF-AD 评论过滤 - 带货评论：有实现指向；声明 1，动作 0；过滤链 comment-filter。
+- F-CF-EMOJI 评论过滤 - 只有表情的评论：有实现指向；声明 1，动作 0；过滤链 comment-filter。
+- F-CF-NOFACE 评论过滤 - 默认头像非会员：有实现指向；声明 1，动作 0；过滤链 comment-filter。
+- F-CF-AT 评论过滤 - @其他用户的评论：有实现指向；声明 4，动作 0；过滤链 comment-filter。
+- F-CF-LEVEL 评论过滤 - 用户等级：有实现指向；声明 2，动作 0；过滤链 comment-filter。
+- F-CF-CHAIN 评论过滤 - 链式过滤（实验）：有实现指向；声明 2，动作 0；过滤链 comment-filter。
+- F-CF-WL-SCOPE 评论过滤 - 一级/二级评论免过滤：有实现指向；声明 2，动作 0；过滤链 comment-filter。
+- F-CF-WL-TYPE 评论过滤 - 按类型免过滤：有实现指向；声明 4，动作 0；过滤链 comment-filter。
+- F-DF-UPLOADER 动态过滤 - 发布人黑名单：有实现指向；声明 2，动作 0；过滤链 dynamic-filter。
+- F-DF-DURATION 动态过滤 - 动态内视频时长：有实现指向；声明 10，动作 0；过滤链 video-filter、dynamic-filter。
+- F-DF-TITLE 动态过滤 - 动态内视频标题：有实现指向；声明 10，动作 0；过滤链 video-filter、dynamic-filter。
+- F-DF-CONTENT 动态过滤 - 动态内容关键词：有实现指向；声明 4，动作 0；过滤链 dynamic-filter。
+- F-DF-TYPE 动态过滤 - 按类型：有实现指向；声明 4，动作 0；过滤链 dynamic-filter。
+- F-DF-WL-TITLE 动态过滤 - 标题关键词白名单：有实现指向；声明 10，动作 0；过滤链 video-filter、dynamic-filter。
+- F-DF-WL-CONTENT 动态过滤 - 动态内容白名单：有实现指向；声明 4，动作 0；过滤链 dynamic-filter。
+- F-AF-AUTHOR 专栏过滤 - 作者黑名单：有实现指向；声明 2，动作 0；过滤链 article-filter。
+- F-AF-AUTHOR-KW 专栏过滤 - 作者昵称关键词：有实现指向；声明 2，动作 0；过滤链 article-filter。
+- F-AF-TITLE 专栏过滤 - 标题关键词：有实现指向；声明 2，动作 0；过滤链 article-filter。
+- F-AF-WL-AUTHOR 专栏过滤 - 作者白名单：有实现指向；声明 2，动作 0；过滤链 article-filter。
+- F-AF-WL-TITLE 专栏过滤 - 标题关键词白名单：有实现指向；声明 2，动作 0；过滤链 article-filter。
+- F-UI-PANELS 设置面板与脚本菜单：有实现指向；声明 0，动作 0；共用 panel-and-menu。
+- F-UI-SIDEBTN 快捷按钮（页面右下角）：有实现指向；声明 0，动作 0；共用 panel-and-menu。
+- F-HOTKEY-ALTB Alt+B 临时禁用全部样式：有实现指向；声明 0，动作 0；共用 style-hotkey。
+- F-CTX-MENU 右键快速加入名单 / 复制链接：有实现指向；声明 0，动作 0；共用 context-menu。
+- F-EDITOR 名单编辑器：有实现指向；声明 0，动作 0；共用 panel-and-menu。
+- F-HDR-DYN-FILTER 顶栏动态弹窗过滤（隐式）：有实现指向；声明 0，动作 0；过滤链 dynamic-filter。
+- F-MIGRATE 存储迁移（4.4.0）：有实现指向；声明 0，动作 0；共用 storage。
+- F-REDIRECT-INDEX 首页 index.html 重定向：有实现指向；声明 0，动作 0；共用 startup-route。
+- F-MISAKA-STAT 接口统计过滤：有实现指向；声明 10，动作 0；过滤链 video-filter。
+- F-MISAKA-SYNC 现有WebDAV规则同步：有实现指向；声明 2，动作 0；共用 legacy-sync。
+- F-MISAKA-SHORTCUT 页面快捷入口设置：有实现指向；声明 0，动作 0；共用 panel-and-menu。
+- F-MISAKA-TOUCH 播放器触摸手势：有实现指向；声明 4，动作 0。
+- F-MISAKA-BACKUP 配置备份、导入与恢复：有实现指向；声明 0，动作 8；共用 storage。
+- F-MISAKA-MAINTENANCE 只读页面结构诊断：有实现指向；声明 0，动作 1；共用 dom-support。
+
+## 上游文件去向
+
+- [.github/ISSUE_TEMPLATE/bug.yaml](https://github.com/festoney8/bilibili-cleaner/blob/15d9bced793487a8c4b0f9e1f7f67c7ccf6f3da9/.github/ISSUE_TEMPLATE/bug.yaml)：仓库配套。上游仓库配套文件，按构建、工作流、资料或资源登记。
+- [.github/ISSUE_TEMPLATE/feature.yaml](https://github.com/festoney8/bilibili-cleaner/blob/15d9bced793487a8c4b0f9e1f7f67c7ccf6f3da9/.github/ISSUE_TEMPLATE/feature.yaml)：仓库配套。上游仓库配套文件，按构建、工作流、资料或资源登记。
+- [.github/ISSUE_TEMPLATE/other.yaml](https://github.com/festoney8/bilibili-cleaner/blob/15d9bced793487a8c4b0f9e1f7f67c7ccf6f3da9/.github/ISSUE_TEMPLATE/other.yaml)：仓库配套。上游仓库配套文件，按构建、工作流、资料或资源登记。
+- [.github/workflows/dev-ci.yml](https://github.com/festoney8/bilibili-cleaner/blob/15d9bced793487a8c4b0f9e1f7f67c7ccf6f3da9/.github/workflows/dev-ci.yml)：仓库配套。上游开发构建：锁定依赖、编译并上传构建产物；本项目不运行其工作流。
+- [.github/workflows/main-ci.yml](https://github.com/festoney8/bilibili-cleaner/blob/15d9bced793487a8c4b0f9e1f7f67c7ccf6f3da9/.github/workflows/main-ci.yml)：仓库配套。上游主分支构建：编译并上传产物；本项目另有自己的工作流。
+- [.github/workflows/main-release.yml](https://github.com/festoney8/bilibili-cleaner/blob/15d9bced793487a8c4b0f9e1f7f67c7ccf6f3da9/.github/workflows/main-release.yml)：仓库配套。上游发布工作流：构建与发布原版成品；仅作来源记录。
+- [.gitignore](https://github.com/festoney8/bilibili-cleaner/blob/15d9bced793487a8c4b0f9e1f7f67c7ccf6f3da9/.gitignore)：仓库配套。上游工作树排除范围。
+- [.husky/pre-commit](https://github.com/festoney8/bilibili-cleaner/blob/15d9bced793487a8c4b0f9e1f7f67c7ccf6f3da9/.husky/pre-commit)：仓库配套。调用 lint-staged 的上游提交钩子。
+- [.prettierignore](https://github.com/festoney8/bilibili-cleaner/blob/15d9bced793487a8c4b0f9e1f7f67c7ccf6f3da9/.prettierignore)：仓库配套。原版格式化忽略范围。
+- [.prettierrc](https://github.com/festoney8/bilibili-cleaner/blob/15d9bced793487a8c4b0f9e1f7f67c7ccf6f3da9/.prettierrc)：仓库配套。原版格式化配置。
+- [.stylelintrc.json](https://github.com/festoney8/bilibili-cleaner/blob/15d9bced793487a8c4b0f9e1f7f67c7ccf6f3da9/.stylelintrc.json)：仓库配套。原版样式检查配置。
+- [.vscode/extensions.json](https://github.com/festoney8/bilibili-cleaner/blob/15d9bced793487a8c4b0f9e1f7f67c7ccf6f3da9/.vscode/extensions.json)：仓库配套。开发编辑器推荐扩展。
+- [CHANGELOG.md](https://github.com/festoney8/bilibili-cleaner/blob/15d9bced793487a8c4b0f9e1f7f67c7ccf6f3da9/CHANGELOG.md)：仓库配套。上游仓库配套文件，按构建、工作流、资料或资源登记。
+- [LICENSE](https://github.com/festoney8/bilibili-cleaner/blob/15d9bced793487a8c4b0f9e1f7f67c7ccf6f3da9/LICENSE)：仓库配套。上游仓库配套文件，按构建、工作流、资料或资源登记。
+- [NOTE.md](https://github.com/festoney8/bilibili-cleaner/blob/15d9bced793487a8c4b0f9e1f7f67c7ccf6f3da9/NOTE.md)：仓库配套。上游仓库配套文件，按构建、工作流、资料或资源登记。
+- [README.md](https://github.com/festoney8/bilibili-cleaner/blob/15d9bced793487a8c4b0f9e1f7f67c7ccf6f3da9/README.md)：仓库配套。上游仓库配套文件，按构建、工作流、资料或资源登记。
+- [eslint.config.js](https://github.com/festoney8/bilibili-cleaner/blob/15d9bced793487a8c4b0f9e1f7f67c7ccf6f3da9/eslint.config.js)：仓库配套。ESLint、TypeScript及Vue检查配置。
+- [images/how-to-backup-to-cloud-drive.png](https://github.com/festoney8/bilibili-cleaner/blob/15d9bced793487a8c4b0f9e1f7f67c7ccf6f3da9/images/how-to-backup-to-cloud-drive.png)：仓库配套。上游仓库配套文件，按构建、工作流、资料或资源登记。
+- [images/how-to-edit-1.png](https://github.com/festoney8/bilibili-cleaner/blob/15d9bced793487a8c4b0f9e1f7f67c7ccf6f3da9/images/how-to-edit-1.png)：仓库配套。上游仓库配套文件，按构建、工作流、资料或资源登记。
+- [images/how-to-edit-2.png](https://github.com/festoney8/bilibili-cleaner/blob/15d9bced793487a8c4b0f9e1f7f67c7ccf6f3da9/images/how-to-edit-2.png)：仓库配套。上游仓库配套文件，按构建、工作流、资料或资源登记。
+- [images/how-to-edit-3.png](https://github.com/festoney8/bilibili-cleaner/blob/15d9bced793487a8c4b0f9e1f7f67c7ccf6f3da9/images/how-to-edit-3.png)：仓库配套。上游仓库配套文件，按构建、工作流、资料或资源登记。
+- [images/how-to-export.png](https://github.com/festoney8/bilibili-cleaner/blob/15d9bced793487a8c4b0f9e1f7f67c7ccf6f3da9/images/how-to-export.png)：仓库配套。上游仓库配套文件，按构建、工作流、资料或资源登记。
+- [images/how-to-import.png](https://github.com/festoney8/bilibili-cleaner/blob/15d9bced793487a8c4b0f9e1f7f67c7ccf6f3da9/images/how-to-import.png)：仓库配套。上游仓库配套文件，按构建、工作流、资料或资源登记。
+- [images/how-to-install-on-chrome.png](https://github.com/festoney8/bilibili-cleaner/blob/15d9bced793487a8c4b0f9e1f7f67c7ccf6f3da9/images/how-to-install-on-chrome.png)：仓库配套。上游仓库配套文件，按构建、工作流、资料或资源登记。
+- [images/how-to-install-on-edge.png](https://github.com/festoney8/bilibili-cleaner/blob/15d9bced793487a8c4b0f9e1f7f67c7ccf6f3da9/images/how-to-install-on-edge.png)：仓库配套。上游仓库配套文件，按构建、工作流、资料或资源登记。
+- [images/logo.png](https://github.com/festoney8/bilibili-cleaner/blob/15d9bced793487a8c4b0f9e1f7f67c7ccf6f3da9/images/logo.png)：仓库配套。上游仓库配套文件，按构建、工作流、资料或资源登记。
+- [images/preview.png](https://github.com/festoney8/bilibili-cleaner/blob/15d9bced793487a8c4b0f9e1f7f67c7ccf6f3da9/images/preview.png)：仓库配套。上游仓库配套文件，按构建、工作流、资料或资源登记。
+- [images/screenshot-dynamic.webp](https://github.com/festoney8/bilibili-cleaner/blob/15d9bced793487a8c4b0f9e1f7f67c7ccf6f3da9/images/screenshot-dynamic.webp)：仓库配套。上游仓库配套文件，按构建、工作流、资料或资源登记。
+- [images/screenshot-filter.webp](https://github.com/festoney8/bilibili-cleaner/blob/15d9bced793487a8c4b0f9e1f7f67c7ccf6f3da9/images/screenshot-filter.webp)：仓库配套。上游仓库配套文件，按构建、工作流、资料或资源登记。
+- [images/screenshot-homepage.webp](https://github.com/festoney8/bilibili-cleaner/blob/15d9bced793487a8c4b0f9e1f7f67c7ccf6f3da9/images/screenshot-homepage.webp)：仓库配套。上游仓库配套文件，按构建、工作流、资料或资源登记。
+- [images/screenshot-popular.webp](https://github.com/festoney8/bilibili-cleaner/blob/15d9bced793487a8c4b0f9e1f7f67c7ccf6f3da9/images/screenshot-popular.webp)：仓库配套。上游仓库配套文件，按构建、工作流、资料或资源登记。
+- [images/screenshot-video.webp](https://github.com/festoney8/bilibili-cleaner/blob/15d9bced793487a8c4b0f9e1f7f67c7ccf6f3da9/images/screenshot-video.webp)：仓库配套。上游仓库配套文件，按构建、工作流、资料或资源登记。
+- [images/usage.png](https://github.com/festoney8/bilibili-cleaner/blob/15d9bced793487a8c4b0f9e1f7f67c7ccf6f3da9/images/usage.png)：仓库配套。上游仓库配套文件，按构建、工作流、资料或资源登记。
+- [package.json](https://github.com/festoney8/bilibili-cleaner/blob/15d9bced793487a8c4b0f9e1f7f67c7ccf6f3da9/package.json)：仓库配套。脚本命令、运行与开发依赖、lint-staged声明。
+- [pnpm-lock.yaml](https://github.com/festoney8/bilibili-cleaner/blob/15d9bced793487a8c4b0f9e1f7f67c7ccf6f3da9/pnpm-lock.yaml)：仓库配套。依赖锁定快照，不是独立运行功能。
+- [pnpm-workspace.yaml](https://github.com/festoney8/bilibili-cleaner/blob/15d9bced793487a8c4b0f9e1f7f67c7ccf6f3da9/pnpm-workspace.yaml)：仓库配套。依赖安装与工作区约束。
+- [postcss.config.js](https://github.com/festoney8/bilibili-cleaner/blob/15d9bced793487a8c4b0f9e1f7f67c7ccf6f3da9/postcss.config.js)：仓库配套。原版样式转换配置。
+- [src/App.vue](https://github.com/festoney8/bilibili-cleaner/blob/15d9bced793487a8c4b0f9e1f7f67c7ccf6f3da9/src/App.vue)：有实现指向 → `src/App.vue`。
+- [src/components/DisclosureComp.vue](https://github.com/festoney8/bilibili-cleaner/blob/15d9bced793487a8c4b0f9e1f7f67c7ccf6f3da9/src/components/DisclosureComp.vue)：共用支撑／装配索引 → `src/components/DisclosureComp.vue`。面板、交互控件及配置应用。
+- [src/components/EditorDialog.vue](https://github.com/festoney8/bilibili-cleaner/blob/15d9bced793487a8c4b0f9e1f7f67c7ccf6f3da9/src/components/EditorDialog.vue)：有实现指向 → `src/components/EditorDialog.vue`。
+- [src/components/PanelComp.vue](https://github.com/festoney8/bilibili-cleaner/blob/15d9bced793487a8c4b0f9e1f7f67c7ccf6f3da9/src/components/PanelComp.vue)：有实现指向 → `src/components/PanelComp.vue`。
+- [src/components/items/DescriptionComp.vue](https://github.com/festoney8/bilibili-cleaner/blob/15d9bced793487a8c4b0f9e1f7f67c7ccf6f3da9/src/components/items/DescriptionComp.vue)：共用支撑／装配索引 → `src/components/items/DescriptionComp.vue`。面板、交互控件及配置应用。
+- [src/components/items/EditorComp.vue](https://github.com/festoney8/bilibili-cleaner/blob/15d9bced793487a8c4b0f9e1f7f67c7ccf6f3da9/src/components/items/EditorComp.vue)：共用支撑／装配索引 → `src/components/items/EditorComp.vue`。面板、交互控件及配置应用。
+- [src/components/items/ListComp.vue](https://github.com/festoney8/bilibili-cleaner/blob/15d9bced793487a8c4b0f9e1f7f67c7ccf6f3da9/src/components/items/ListComp.vue)：有实现指向 → `src/components/items/ListComp.vue`。
+- [src/components/items/NumberComp.vue](https://github.com/festoney8/bilibili-cleaner/blob/15d9bced793487a8c4b0f9e1f7f67c7ccf6f3da9/src/components/items/NumberComp.vue)：有实现指向 → `src/components/items/NumberComp.vue`。
+- [src/components/items/StringComp.vue](https://github.com/festoney8/bilibili-cleaner/blob/15d9bced793487a8c4b0f9e1f7f67c7ccf6f3da9/src/components/items/StringComp.vue)：有实现指向 → `src/components/items/StringComp.vue`。
+- [src/components/items/SwitchComp.vue](https://github.com/festoney8/bilibili-cleaner/blob/15d9bced793487a8c4b0f9e1f7f67c7ccf6f3da9/src/components/items/SwitchComp.vue)：有实现指向 → `src/components/items/SwitchComp.vue`。
+- [src/composables/gmValue.ts](https://github.com/festoney8/bilibili-cleaner/blob/15d9bced793487a8c4b0f9e1f7f67c7ccf6f3da9/src/composables/gmValue.ts)：用户明确排除。自带夜间模式及其专用依赖已撤出产品。
+- [src/config.ts](https://github.com/festoney8/bilibili-cleaner/blob/15d9bced793487a8c4b0f9e1f7f67c7ccf6f3da9/src/config.ts)：有实现指向 → `src/config.ts`。
+- [src/main.ts](https://github.com/festoney8/bilibili-cleaner/blob/15d9bced793487a8c4b0f9e1f7f67c7ccf6f3da9/src/main.ts)：有实现指向 → `src/main.ts`。
+- [src/modules/filters/core/core.ts](https://github.com/festoney8/bilibili-cleaner/blob/15d9bced793487a8c4b0f9e1f7f67c7ccf6f3da9/src/modules/filters/core/core.ts)：有实现指向 → `src/modules/filters/core/core.ts`。
+- [src/modules/filters/core/subFilters/booleanFilter.ts](https://github.com/festoney8/bilibili-cleaner/blob/15d9bced793487a8c4b0f9e1f7f67c7ccf6f3da9/src/modules/filters/core/subFilters/booleanFilter.ts)：有实现指向 → `src/modules/filters/core/subFilters/booleanFilter.ts`。
+- [src/modules/filters/core/subFilters/keywordFilter.ts](https://github.com/festoney8/bilibili-cleaner/blob/15d9bced793487a8c4b0f9e1f7f67c7ccf6f3da9/src/modules/filters/core/subFilters/keywordFilter.ts)：有实现指向 → `src/modules/filters/core/subFilters/keywordFilter.ts`。
+- [src/modules/filters/core/subFilters/numberMaxFilter.ts](https://github.com/festoney8/bilibili-cleaner/blob/15d9bced793487a8c4b0f9e1f7f67c7ccf6f3da9/src/modules/filters/core/subFilters/numberMaxFilter.ts)：有实现指向 → `src/modules/filters/core/subFilters/numberMaxFilter.ts`。
+- [src/modules/filters/core/subFilters/numberMinFilter.ts](https://github.com/festoney8/bilibili-cleaner/blob/15d9bced793487a8c4b0f9e1f7f67c7ccf6f3da9/src/modules/filters/core/subFilters/numberMinFilter.ts)：有实现指向 → `src/modules/filters/core/subFilters/numberMinFilter.ts`。
+- [src/modules/filters/core/subFilters/stringFilter.ts](https://github.com/festoney8/bilibili-cleaner/blob/15d9bced793487a8c4b0f9e1f7f67c7ccf6f3da9/src/modules/filters/core/subFilters/stringFilter.ts)：有实现指向 → `src/modules/filters/core/subFilters/stringFilter.ts`。
+- [src/modules/filters/index.ts](https://github.com/festoney8/bilibili-cleaner/blob/15d9bced793487a8c4b0f9e1f7f67c7ccf6f3da9/src/modules/filters/index.ts)：有实现指向 → `src/modules/filters/index.ts`。
+- [src/modules/filters/variety/article/index.ts](https://github.com/festoney8/bilibili-cleaner/blob/15d9bced793487a8c4b0f9e1f7f67c7ccf6f3da9/src/modules/filters/variety/article/index.ts)：共用支撑／装配索引 → `src/modules/filters/variety/article/index.ts`。按四步实现链和各页现行策略读取。
+- [src/modules/filters/variety/article/pages/searchArticle.ts](https://github.com/festoney8/bilibili-cleaner/blob/15d9bced793487a8c4b0f9e1f7f67c7ccf6f3da9/src/modules/filters/variety/article/pages/searchArticle.ts)：有实现指向 → `src/modules/filters/variety/article/pages/searchArticle.ts`。
+- [src/modules/filters/variety/article/subFilters/black.ts](https://github.com/festoney8/bilibili-cleaner/blob/15d9bced793487a8c4b0f9e1f7f67c7ccf6f3da9/src/modules/filters/variety/article/subFilters/black.ts)：有实现指向 → `src/modules/filters/variety/article/subFilters/black.ts`。
+- [src/modules/filters/variety/article/subFilters/white.ts](https://github.com/festoney8/bilibili-cleaner/blob/15d9bced793487a8c4b0f9e1f7f67c7ccf6f3da9/src/modules/filters/variety/article/subFilters/white.ts)：有实现指向 → `src/modules/filters/variety/article/subFilters/white.ts`。
+- [src/modules/filters/variety/comment/extra/bots.ts](https://github.com/festoney8/bilibili-cleaner/blob/15d9bced793487a8c4b0f9e1f7f67c7ccf6f3da9/src/modules/filters/variety/comment/extra/bots.ts)：有实现指向 → `src/modules/filters/variety/comment/extra/bots.ts`。
+- [src/modules/filters/variety/comment/pages/common.ts](https://github.com/festoney8/bilibili-cleaner/blob/15d9bced793487a8c4b0f9e1f7f67c7ccf6f3da9/src/modules/filters/variety/comment/pages/common.ts)：有实现指向 → `src/modules/filters/variety/comment/pages/common.ts`。
+- [src/modules/filters/variety/comment/subFilters/black.ts](https://github.com/festoney8/bilibili-cleaner/blob/15d9bced793487a8c4b0f9e1f7f67c7ccf6f3da9/src/modules/filters/variety/comment/subFilters/black.ts)：有实现指向 → `src/modules/filters/variety/comment/subFilters/black.ts`。
+- [src/modules/filters/variety/comment/subFilters/white.ts](https://github.com/festoney8/bilibili-cleaner/blob/15d9bced793487a8c4b0f9e1f7f67c7ccf6f3da9/src/modules/filters/variety/comment/subFilters/white.ts)：有实现指向 → `src/modules/filters/variety/comment/subFilters/white.ts`。
+- [src/modules/filters/variety/dynamic/pages/dynamic.ts](https://github.com/festoney8/bilibili-cleaner/blob/15d9bced793487a8c4b0f9e1f7f67c7ccf6f3da9/src/modules/filters/variety/dynamic/pages/dynamic.ts)：有实现指向 → `src/modules/filters/variety/dynamic/pages/dynamic.ts`。
+- [src/modules/filters/variety/dynamic/pages/header.ts](https://github.com/festoney8/bilibili-cleaner/blob/15d9bced793487a8c4b0f9e1f7f67c7ccf6f3da9/src/modules/filters/variety/dynamic/pages/header.ts)：有实现指向 → `src/modules/filters/variety/dynamic/pages/header.ts`。
+- [src/modules/filters/variety/dynamic/pages/space.ts](https://github.com/festoney8/bilibili-cleaner/blob/15d9bced793487a8c4b0f9e1f7f67c7ccf6f3da9/src/modules/filters/variety/dynamic/pages/space.ts)：有实现指向 → `src/modules/filters/variety/dynamic/pages/space.ts`。
+- [src/modules/filters/variety/dynamic/subFilters/black.ts](https://github.com/festoney8/bilibili-cleaner/blob/15d9bced793487a8c4b0f9e1f7f67c7ccf6f3da9/src/modules/filters/variety/dynamic/subFilters/black.ts)：有实现指向 → `src/modules/filters/variety/dynamic/subFilters/black.ts`。
+- [src/modules/filters/variety/dynamic/subFilters/white.ts](https://github.com/festoney8/bilibili-cleaner/blob/15d9bced793487a8c4b0f9e1f7f67c7ccf6f3da9/src/modules/filters/variety/dynamic/subFilters/white.ts)：有实现指向 → `src/modules/filters/variety/dynamic/subFilters/white.ts`。
+- [src/modules/filters/variety/video/pages/channel.ts](https://github.com/festoney8/bilibili-cleaner/blob/15d9bced793487a8c4b0f9e1f7f67c7ccf6f3da9/src/modules/filters/variety/video/pages/channel.ts)：有实现指向 → `src/modules/filters/variety/video/pages/channel.ts`。
+- [src/modules/filters/variety/video/pages/homepage.ts](https://github.com/festoney8/bilibili-cleaner/blob/15d9bced793487a8c4b0f9e1f7f67c7ccf6f3da9/src/modules/filters/variety/video/pages/homepage.ts)：有实现指向 → `src/modules/filters/variety/video/pages/homepage.ts`。
+- [src/modules/filters/variety/video/pages/popular.ts](https://github.com/festoney8/bilibili-cleaner/blob/15d9bced793487a8c4b0f9e1f7f67c7ccf6f3da9/src/modules/filters/variety/video/pages/popular.ts)：有实现指向 → `src/modules/filters/variety/video/pages/popular.ts`。
+- [src/modules/filters/variety/video/pages/search.ts](https://github.com/festoney8/bilibili-cleaner/blob/15d9bced793487a8c4b0f9e1f7f67c7ccf6f3da9/src/modules/filters/variety/video/pages/search.ts)：有实现指向 → `src/modules/filters/variety/video/pages/search.ts`。
+- [src/modules/filters/variety/video/pages/space.ts](https://github.com/festoney8/bilibili-cleaner/blob/15d9bced793487a8c4b0f9e1f7f67c7ccf6f3da9/src/modules/filters/variety/video/pages/space.ts)：有实现指向 → `src/modules/filters/variety/video/pages/space.ts`。
+- [src/modules/filters/variety/video/pages/video.ts](https://github.com/festoney8/bilibili-cleaner/blob/15d9bced793487a8c4b0f9e1f7f67c7ccf6f3da9/src/modules/filters/variety/video/pages/video.ts)：有实现指向 → `src/modules/filters/variety/video/pages/video.ts`。
+- [src/modules/filters/variety/video/subFilters/black.ts](https://github.com/festoney8/bilibili-cleaner/blob/15d9bced793487a8c4b0f9e1f7f67c7ccf6f3da9/src/modules/filters/variety/video/subFilters/black.ts)：有实现指向 → `src/modules/filters/variety/video/subFilters/black.ts`。
+- [src/modules/filters/variety/video/subFilters/white.ts](https://github.com/festoney8/bilibili-cleaner/blob/15d9bced793487a8c4b0f9e1f7f67c7ccf6f3da9/src/modules/filters/variety/video/subFilters/white.ts)：有实现指向 → `src/modules/filters/variety/video/subFilters/white.ts`。
+- [src/modules/index.ts](https://github.com/festoney8/bilibili-cleaner/blob/15d9bced793487a8c4b0f9e1f7f67c7ccf6f3da9/src/modules/index.ts)：有实现指向 → `src/modules/index.ts`。
+- [src/modules/rules/bangumi/groups/basic.scss](https://github.com/festoney8/bilibili-cleaner/blob/15d9bced793487a8c4b0f9e1f7f67c7ccf6f3da9/src/modules/rules/bangumi/groups/basic.scss)：有实现指向 → `src/modules/rules/bangumi/groups/basic.scss`。
+- [src/modules/rules/bangumi/groups/basic.ts](https://github.com/festoney8/bilibili-cleaner/blob/15d9bced793487a8c4b0f9e1f7f67c7ccf6f3da9/src/modules/rules/bangumi/groups/basic.ts)：有实现指向 → `src/modules/rules/bangumi/groups/basic.ts`。
+- [src/modules/rules/bangumi/groups/danmaku.scss](https://github.com/festoney8/bilibili-cleaner/blob/15d9bced793487a8c4b0f9e1f7f67c7ccf6f3da9/src/modules/rules/bangumi/groups/danmaku.scss)：有实现指向 → `src/modules/rules/bangumi/groups/danmaku.scss`。
+- [src/modules/rules/bangumi/groups/danmaku.ts](https://github.com/festoney8/bilibili-cleaner/blob/15d9bced793487a8c4b0f9e1f7f67c7ccf6f3da9/src/modules/rules/bangumi/groups/danmaku.ts)：有实现指向 → `src/modules/rules/bangumi/groups/danmaku.ts`。
+- [src/modules/rules/bangumi/groups/danmakuControl.scss](https://github.com/festoney8/bilibili-cleaner/blob/15d9bced793487a8c4b0f9e1f7f67c7ccf6f3da9/src/modules/rules/bangumi/groups/danmakuControl.scss)：有实现指向 → `src/modules/rules/bangumi/groups/danmakuControl.scss`。
+- [src/modules/rules/bangumi/groups/danmakuControl.ts](https://github.com/festoney8/bilibili-cleaner/blob/15d9bced793487a8c4b0f9e1f7f67c7ccf6f3da9/src/modules/rules/bangumi/groups/danmakuControl.ts)：有实现指向 → `src/modules/rules/bangumi/groups/danmakuControl.ts`。
+- [src/modules/rules/bangumi/groups/miniPlayer.scss](https://github.com/festoney8/bilibili-cleaner/blob/15d9bced793487a8c4b0f9e1f7f67c7ccf6f3da9/src/modules/rules/bangumi/groups/miniPlayer.scss)：有实现指向 → `src/modules/rules/bangumi/groups/miniPlayer.scss`。
+- [src/modules/rules/bangumi/groups/miniPlayer.ts](https://github.com/festoney8/bilibili-cleaner/blob/15d9bced793487a8c4b0f9e1f7f67c7ccf6f3da9/src/modules/rules/bangumi/groups/miniPlayer.ts)：有实现指向 → `src/modules/rules/bangumi/groups/miniPlayer.ts`。
+- [src/modules/rules/bangumi/groups/player.scss](https://github.com/festoney8/bilibili-cleaner/blob/15d9bced793487a8c4b0f9e1f7f67c7ccf6f3da9/src/modules/rules/bangumi/groups/player.scss)：有实现指向 → `src/modules/rules/bangumi/groups/player.scss`。
+- [src/modules/rules/bangumi/groups/player.ts](https://github.com/festoney8/bilibili-cleaner/blob/15d9bced793487a8c4b0f9e1f7f67c7ccf6f3da9/src/modules/rules/bangumi/groups/player.ts)：有实现指向 → `src/modules/rules/bangumi/groups/player.ts`。
+- [src/modules/rules/bangumi/groups/playerControl.scss](https://github.com/festoney8/bilibili-cleaner/blob/15d9bced793487a8c4b0f9e1f7f67c7ccf6f3da9/src/modules/rules/bangumi/groups/playerControl.scss)：有实现指向 → `src/modules/rules/bangumi/groups/playerControl.scss`。
+- [src/modules/rules/bangumi/groups/playerControl.ts](https://github.com/festoney8/bilibili-cleaner/blob/15d9bced793487a8c4b0f9e1f7f67c7ccf6f3da9/src/modules/rules/bangumi/groups/playerControl.ts)：有实现指向 → `src/modules/rules/bangumi/groups/playerControl.ts`。
+- [src/modules/rules/bangumi/groups/playerLayout.scss](https://github.com/festoney8/bilibili-cleaner/blob/15d9bced793487a8c4b0f9e1f7f67c7ccf6f3da9/src/modules/rules/bangumi/groups/playerLayout.scss)：有实现指向 → `src/modules/rules/bangumi/groups/playerLayout.scss`。
+- [src/modules/rules/bangumi/groups/playerLayout.ts](https://github.com/festoney8/bilibili-cleaner/blob/15d9bced793487a8c4b0f9e1f7f67c7ccf6f3da9/src/modules/rules/bangumi/groups/playerLayout.ts)：有实现指向 → `src/modules/rules/bangumi/groups/playerLayout.ts`。
+- [src/modules/rules/bangumi/groups/right.scss](https://github.com/festoney8/bilibili-cleaner/blob/15d9bced793487a8c4b0f9e1f7f67c7ccf6f3da9/src/modules/rules/bangumi/groups/right.scss)：有实现指向 → `src/modules/rules/bangumi/groups/right.scss`。
+- [src/modules/rules/bangumi/groups/right.ts](https://github.com/festoney8/bilibili-cleaner/blob/15d9bced793487a8c4b0f9e1f7f67c7ccf6f3da9/src/modules/rules/bangumi/groups/right.ts)：有实现指向 → `src/modules/rules/bangumi/groups/right.ts`。
+- [src/modules/rules/bangumi/groups/sidebar.scss](https://github.com/festoney8/bilibili-cleaner/blob/15d9bced793487a8c4b0f9e1f7f67c7ccf6f3da9/src/modules/rules/bangumi/groups/sidebar.scss)：有实现指向 → `src/modules/rules/bangumi/groups/sidebar.scss`。
+- [src/modules/rules/bangumi/groups/sidebar.ts](https://github.com/festoney8/bilibili-cleaner/blob/15d9bced793487a8c4b0f9e1f7f67c7ccf6f3da9/src/modules/rules/bangumi/groups/sidebar.ts)：有实现指向 → `src/modules/rules/bangumi/groups/sidebar.ts`。
+- [src/modules/rules/bangumi/groups/toolbar.scss](https://github.com/festoney8/bilibili-cleaner/blob/15d9bced793487a8c4b0f9e1f7f67c7ccf6f3da9/src/modules/rules/bangumi/groups/toolbar.scss)：有实现指向 → `src/modules/rules/bangumi/groups/toolbar.scss`。
+- [src/modules/rules/bangumi/groups/toolbar.ts](https://github.com/festoney8/bilibili-cleaner/blob/15d9bced793487a8c4b0f9e1f7f67c7ccf6f3da9/src/modules/rules/bangumi/groups/toolbar.ts)：有实现指向 → `src/modules/rules/bangumi/groups/toolbar.ts`。
+- [src/modules/rules/bangumi/index.scss](https://github.com/festoney8/bilibili-cleaner/blob/15d9bced793487a8c4b0f9e1f7f67c7ccf6f3da9/src/modules/rules/bangumi/index.scss)：共用支撑／装配索引 → `src/modules/rules/bangumi/index.scss`。按页面/分组定位净化、布局和增强；结合声明回调及属性样式。
+- [src/modules/rules/bangumi/index.ts](https://github.com/festoney8/bilibili-cleaner/blob/15d9bced793487a8c4b0f9e1f7f67c7ccf6f3da9/src/modules/rules/bangumi/index.ts)：共用支撑／装配索引 → `src/modules/rules/bangumi/index.ts`。按页面/分组定位净化、布局和增强；结合声明回调及属性样式。
+- [src/modules/rules/channel/groups/basic.scss](https://github.com/festoney8/bilibili-cleaner/blob/15d9bced793487a8c4b0f9e1f7f67c7ccf6f3da9/src/modules/rules/channel/groups/basic.scss)：有实现指向 → `src/modules/rules/channel/groups/basic.scss`。
+- [src/modules/rules/channel/groups/basic.ts](https://github.com/festoney8/bilibili-cleaner/blob/15d9bced793487a8c4b0f9e1f7f67c7ccf6f3da9/src/modules/rules/channel/groups/basic.ts)：有实现指向 → `src/modules/rules/channel/groups/basic.ts`。
+- [src/modules/rules/channel/groups/layout.scss](https://github.com/festoney8/bilibili-cleaner/blob/15d9bced793487a8c4b0f9e1f7f67c7ccf6f3da9/src/modules/rules/channel/groups/layout.scss)：有实现指向 → `src/modules/rules/channel/groups/layout.scss`。
+- [src/modules/rules/channel/groups/layout.ts](https://github.com/festoney8/bilibili-cleaner/blob/15d9bced793487a8c4b0f9e1f7f67c7ccf6f3da9/src/modules/rules/channel/groups/layout.ts)：有实现指向 → `src/modules/rules/channel/groups/layout.ts`。
+- [src/modules/rules/channel/groups/rcmd.scss](https://github.com/festoney8/bilibili-cleaner/blob/15d9bced793487a8c4b0f9e1f7f67c7ccf6f3da9/src/modules/rules/channel/groups/rcmd.scss)：有实现指向 → `src/modules/rules/channel/groups/rcmd.scss`。
+- [src/modules/rules/channel/groups/rcmd.ts](https://github.com/festoney8/bilibili-cleaner/blob/15d9bced793487a8c4b0f9e1f7f67c7ccf6f3da9/src/modules/rules/channel/groups/rcmd.ts)：有实现指向 → `src/modules/rules/channel/groups/rcmd.ts`。
+- [src/modules/rules/channel/index.scss](https://github.com/festoney8/bilibili-cleaner/blob/15d9bced793487a8c4b0f9e1f7f67c7ccf6f3da9/src/modules/rules/channel/index.scss)：共用支撑／装配索引 → `src/modules/rules/channel/index.scss`。按页面/分组定位净化、布局和增强；结合声明回调及属性样式。
+- [src/modules/rules/channel/index.ts](https://github.com/festoney8/bilibili-cleaner/blob/15d9bced793487a8c4b0f9e1f7f67c7ccf6f3da9/src/modules/rules/channel/index.ts)：共用支撑／装配索引 → `src/modules/rules/channel/index.ts`。按页面/分组定位净化、布局和增强；结合声明回调及属性样式。
+- [src/modules/rules/comment/groups/basic.scss](https://github.com/festoney8/bilibili-cleaner/blob/15d9bced793487a8c4b0f9e1f7f67c7ccf6f3da9/src/modules/rules/comment/groups/basic.scss)：有实现指向 → `src/modules/rules/comment/groups/basic.scss`。
+- [src/modules/rules/comment/groups/basic.ts](https://github.com/festoney8/bilibili-cleaner/blob/15d9bced793487a8c4b0f9e1f7f67c7ccf6f3da9/src/modules/rules/comment/groups/basic.ts)：有实现指向 → `src/modules/rules/comment/groups/basic.ts`。
+- [src/modules/rules/comment/index.scss](https://github.com/festoney8/bilibili-cleaner/blob/15d9bced793487a8c4b0f9e1f7f67c7ccf6f3da9/src/modules/rules/comment/index.scss)：共用支撑／装配索引 → `src/modules/rules/comment/index.scss`。按页面/分组定位净化、布局和增强；结合声明回调及属性样式。
+- [src/modules/rules/comment/index.ts](https://github.com/festoney8/bilibili-cleaner/blob/15d9bced793487a8c4b0f9e1f7f67c7ccf6f3da9/src/modules/rules/comment/index.ts)：共用支撑／装配索引 → `src/modules/rules/comment/index.ts`。按页面/分组定位净化、布局和增强；结合声明回调及属性样式。
+- [src/modules/rules/common/groups/basic.scss](https://github.com/festoney8/bilibili-cleaner/blob/15d9bced793487a8c4b0f9e1f7f67c7ccf6f3da9/src/modules/rules/common/groups/basic.scss)：有实现指向 → `src/modules/rules/common/groups/basic.scss`。
+- [src/modules/rules/common/groups/basic.ts](https://github.com/festoney8/bilibili-cleaner/blob/15d9bced793487a8c4b0f9e1f7f67c7ccf6f3da9/src/modules/rules/common/groups/basic.ts)：有实现指向 → `src/modules/rules/common/groups/basic.ts`。
+- [src/modules/rules/common/groups/font.scss](https://github.com/festoney8/bilibili-cleaner/blob/15d9bced793487a8c4b0f9e1f7f67c7ccf6f3da9/src/modules/rules/common/groups/font.scss)：共用支撑／装配索引 → `src/modules/rules/common/groups/font.scss`。按页面/分组定位净化、布局和增强；结合声明回调及属性样式。
+- [src/modules/rules/common/groups/headerCenter.scss](https://github.com/festoney8/bilibili-cleaner/blob/15d9bced793487a8c4b0f9e1f7f67c7ccf6f3da9/src/modules/rules/common/groups/headerCenter.scss)：有实现指向 → `src/modules/rules/common/groups/headerCenter.scss`。
+- [src/modules/rules/common/groups/headerCenter.ts](https://github.com/festoney8/bilibili-cleaner/blob/15d9bced793487a8c4b0f9e1f7f67c7ccf6f3da9/src/modules/rules/common/groups/headerCenter.ts)：有实现指向 → `src/modules/rules/common/groups/headerCenter.ts`。
+- [src/modules/rules/common/groups/headerLeft.scss](https://github.com/festoney8/bilibili-cleaner/blob/15d9bced793487a8c4b0f9e1f7f67c7ccf6f3da9/src/modules/rules/common/groups/headerLeft.scss)：有实现指向 → `src/modules/rules/common/groups/headerLeft.scss`。
+- [src/modules/rules/common/groups/headerLeft.ts](https://github.com/festoney8/bilibili-cleaner/blob/15d9bced793487a8c4b0f9e1f7f67c7ccf6f3da9/src/modules/rules/common/groups/headerLeft.ts)：有实现指向 → `src/modules/rules/common/groups/headerLeft.ts`。
+- [src/modules/rules/common/groups/headerRight.scss](https://github.com/festoney8/bilibili-cleaner/blob/15d9bced793487a8c4b0f9e1f7f67c7ccf6f3da9/src/modules/rules/common/groups/headerRight.scss)：有实现指向 → `src/modules/rules/common/groups/headerRight.scss`。
+- [src/modules/rules/common/groups/headerRight.ts](https://github.com/festoney8/bilibili-cleaner/blob/15d9bced793487a8c4b0f9e1f7f67c7ccf6f3da9/src/modules/rules/common/groups/headerRight.ts)：有实现指向 → `src/modules/rules/common/groups/headerRight.ts`。
+- [src/modules/rules/common/groups/headerWidth.scss](https://github.com/festoney8/bilibili-cleaner/blob/15d9bced793487a8c4b0f9e1f7f67c7ccf6f3da9/src/modules/rules/common/groups/headerWidth.scss)：有实现指向 → `src/modules/rules/common/groups/headerWidth.scss`。
+- [src/modules/rules/common/groups/headerWidth.ts](https://github.com/festoney8/bilibili-cleaner/blob/15d9bced793487a8c4b0f9e1f7f67c7ccf6f3da9/src/modules/rules/common/groups/headerWidth.ts)：有实现指向 → `src/modules/rules/common/groups/headerWidth.ts`。
+- [src/modules/rules/common/groups/theme.scss](https://github.com/festoney8/bilibili-cleaner/blob/15d9bced793487a8c4b0f9e1f7f67c7ccf6f3da9/src/modules/rules/common/groups/theme.scss)：用户明确排除。自带夜间模式及其专用依赖已撤出产品。
+- [src/modules/rules/common/groups/theme.ts](https://github.com/festoney8/bilibili-cleaner/blob/15d9bced793487a8c4b0f9e1f7f67c7ccf6f3da9/src/modules/rules/common/groups/theme.ts)：用户明确排除。自带夜间模式及其专用依赖已撤出产品。
+- [src/modules/rules/common/index.scss](https://github.com/festoney8/bilibili-cleaner/blob/15d9bced793487a8c4b0f9e1f7f67c7ccf6f3da9/src/modules/rules/common/index.scss)：共用支撑／装配索引 → `src/modules/rules/common/index.scss`。按页面/分组定位净化、布局和增强；结合声明回调及属性样式。
+- [src/modules/rules/common/index.ts](https://github.com/festoney8/bilibili-cleaner/blob/15d9bced793487a8c4b0f9e1f7f67c7ccf6f3da9/src/modules/rules/common/index.ts)：共用支撑／装配索引 → `src/modules/rules/common/index.ts`。按页面/分组定位净化、布局和增强；结合声明回调及属性样式。
+- [src/modules/rules/debug/groups/basic.ts](https://github.com/festoney8/bilibili-cleaner/blob/15d9bced793487a8c4b0f9e1f7f67c7ccf6f3da9/src/modules/rules/debug/groups/basic.ts)：有实现指向 → `src/modules/rules/debug/groups/basic.ts`。
+- [src/modules/rules/debug/index.ts](https://github.com/festoney8/bilibili-cleaner/blob/15d9bced793487a8c4b0f9e1f7f67c7ccf6f3da9/src/modules/rules/debug/index.ts)：共用支撑／装配索引 → `src/modules/rules/debug/index.ts`。按页面/分组定位净化、布局和增强；结合声明回调及属性样式。
+- [src/modules/rules/dynamic/groups/basic.scss](https://github.com/festoney8/bilibili-cleaner/blob/15d9bced793487a8c4b0f9e1f7f67c7ccf6f3da9/src/modules/rules/dynamic/groups/basic.scss)：有实现指向 → `src/modules/rules/dynamic/groups/basic.scss`。
+- [src/modules/rules/dynamic/groups/basic.ts](https://github.com/festoney8/bilibili-cleaner/blob/15d9bced793487a8c4b0f9e1f7f67c7ccf6f3da9/src/modules/rules/dynamic/groups/basic.ts)：有实现指向 → `src/modules/rules/dynamic/groups/basic.ts`。
+- [src/modules/rules/dynamic/groups/centerDyn.scss](https://github.com/festoney8/bilibili-cleaner/blob/15d9bced793487a8c4b0f9e1f7f67c7ccf6f3da9/src/modules/rules/dynamic/groups/centerDyn.scss)：有实现指向 → `src/modules/rules/dynamic/groups/centerDyn.scss`。
+- [src/modules/rules/dynamic/groups/centerDyn.ts](https://github.com/festoney8/bilibili-cleaner/blob/15d9bced793487a8c4b0f9e1f7f67c7ccf6f3da9/src/modules/rules/dynamic/groups/centerDyn.ts)：有实现指向 → `src/modules/rules/dynamic/groups/centerDyn.ts`。
+- [src/modules/rules/dynamic/groups/centerTop.scss](https://github.com/festoney8/bilibili-cleaner/blob/15d9bced793487a8c4b0f9e1f7f67c7ccf6f3da9/src/modules/rules/dynamic/groups/centerTop.scss)：有实现指向 → `src/modules/rules/dynamic/groups/centerTop.scss`。
+- [src/modules/rules/dynamic/groups/centerTop.ts](https://github.com/festoney8/bilibili-cleaner/blob/15d9bced793487a8c4b0f9e1f7f67c7ccf6f3da9/src/modules/rules/dynamic/groups/centerTop.ts)：有实现指向 → `src/modules/rules/dynamic/groups/centerTop.ts`。
+- [src/modules/rules/dynamic/groups/layout.scss](https://github.com/festoney8/bilibili-cleaner/blob/15d9bced793487a8c4b0f9e1f7f67c7ccf6f3da9/src/modules/rules/dynamic/groups/layout.scss)：有实现指向 → `src/modules/rules/dynamic/groups/layout.scss`。
+- [src/modules/rules/dynamic/groups/layout.ts](https://github.com/festoney8/bilibili-cleaner/blob/15d9bced793487a8c4b0f9e1f7f67c7ccf6f3da9/src/modules/rules/dynamic/groups/layout.ts)：有实现指向 → `src/modules/rules/dynamic/groups/layout.ts`。
+- [src/modules/rules/dynamic/groups/left.scss](https://github.com/festoney8/bilibili-cleaner/blob/15d9bced793487a8c4b0f9e1f7f67c7ccf6f3da9/src/modules/rules/dynamic/groups/left.scss)：有实现指向 → `src/modules/rules/dynamic/groups/left.scss`。
+- [src/modules/rules/dynamic/groups/left.ts](https://github.com/festoney8/bilibili-cleaner/blob/15d9bced793487a8c4b0f9e1f7f67c7ccf6f3da9/src/modules/rules/dynamic/groups/left.ts)：有实现指向 → `src/modules/rules/dynamic/groups/left.ts`。
+- [src/modules/rules/dynamic/groups/right.scss](https://github.com/festoney8/bilibili-cleaner/blob/15d9bced793487a8c4b0f9e1f7f67c7ccf6f3da9/src/modules/rules/dynamic/groups/right.scss)：有实现指向 → `src/modules/rules/dynamic/groups/right.scss`。
+- [src/modules/rules/dynamic/groups/right.ts](https://github.com/festoney8/bilibili-cleaner/blob/15d9bced793487a8c4b0f9e1f7f67c7ccf6f3da9/src/modules/rules/dynamic/groups/right.ts)：有实现指向 → `src/modules/rules/dynamic/groups/right.ts`。
+- [src/modules/rules/dynamic/groups/sidebar.scss](https://github.com/festoney8/bilibili-cleaner/blob/15d9bced793487a8c4b0f9e1f7f67c7ccf6f3da9/src/modules/rules/dynamic/groups/sidebar.scss)：有实现指向 → `src/modules/rules/dynamic/groups/sidebar.scss`。
+- [src/modules/rules/dynamic/groups/sidebar.ts](https://github.com/festoney8/bilibili-cleaner/blob/15d9bced793487a8c4b0f9e1f7f67c7ccf6f3da9/src/modules/rules/dynamic/groups/sidebar.ts)：有实现指向 → `src/modules/rules/dynamic/groups/sidebar.ts`。
+- [src/modules/rules/dynamic/index.scss](https://github.com/festoney8/bilibili-cleaner/blob/15d9bced793487a8c4b0f9e1f7f67c7ccf6f3da9/src/modules/rules/dynamic/index.scss)：共用支撑／装配索引 → `src/modules/rules/dynamic/index.scss`。按页面/分组定位净化、布局和增强；结合声明回调及属性样式。
+- [src/modules/rules/dynamic/index.ts](https://github.com/festoney8/bilibili-cleaner/blob/15d9bced793487a8c4b0f9e1f7f67c7ccf6f3da9/src/modules/rules/dynamic/index.ts)：共用支撑／装配索引 → `src/modules/rules/dynamic/index.ts`。按页面/分组定位净化、布局和增强；结合声明回调及属性样式。
+- [src/modules/rules/festival/groups/danmaku.scss](https://github.com/festoney8/bilibili-cleaner/blob/15d9bced793487a8c4b0f9e1f7f67c7ccf6f3da9/src/modules/rules/festival/groups/danmaku.scss)：有实现指向 → `src/modules/rules/festival/groups/danmaku.scss`。
+- [src/modules/rules/festival/groups/danmaku.ts](https://github.com/festoney8/bilibili-cleaner/blob/15d9bced793487a8c4b0f9e1f7f67c7ccf6f3da9/src/modules/rules/festival/groups/danmaku.ts)：有实现指向 → `src/modules/rules/festival/groups/danmaku.ts`。
+- [src/modules/rules/festival/groups/danmakuControl.scss](https://github.com/festoney8/bilibili-cleaner/blob/15d9bced793487a8c4b0f9e1f7f67c7ccf6f3da9/src/modules/rules/festival/groups/danmakuControl.scss)：有实现指向 → `src/modules/rules/festival/groups/danmakuControl.scss`。
+- [src/modules/rules/festival/groups/danmakuControl.ts](https://github.com/festoney8/bilibili-cleaner/blob/15d9bced793487a8c4b0f9e1f7f67c7ccf6f3da9/src/modules/rules/festival/groups/danmakuControl.ts)：有实现指向 → `src/modules/rules/festival/groups/danmakuControl.ts`。
+- [src/modules/rules/festival/groups/player.scss](https://github.com/festoney8/bilibili-cleaner/blob/15d9bced793487a8c4b0f9e1f7f67c7ccf6f3da9/src/modules/rules/festival/groups/player.scss)：有实现指向 → `src/modules/rules/festival/groups/player.scss`。
+- [src/modules/rules/festival/groups/player.ts](https://github.com/festoney8/bilibili-cleaner/blob/15d9bced793487a8c4b0f9e1f7f67c7ccf6f3da9/src/modules/rules/festival/groups/player.ts)：有实现指向 → `src/modules/rules/festival/groups/player.ts`。
+- [src/modules/rules/festival/groups/playerControl.scss](https://github.com/festoney8/bilibili-cleaner/blob/15d9bced793487a8c4b0f9e1f7f67c7ccf6f3da9/src/modules/rules/festival/groups/playerControl.scss)：有实现指向 → `src/modules/rules/festival/groups/playerControl.scss`。
+- [src/modules/rules/festival/groups/playerControl.ts](https://github.com/festoney8/bilibili-cleaner/blob/15d9bced793487a8c4b0f9e1f7f67c7ccf6f3da9/src/modules/rules/festival/groups/playerControl.ts)：有实现指向 → `src/modules/rules/festival/groups/playerControl.ts`。
+- [src/modules/rules/festival/groups/subtitle.scss](https://github.com/festoney8/bilibili-cleaner/blob/15d9bced793487a8c4b0f9e1f7f67c7ccf6f3da9/src/modules/rules/festival/groups/subtitle.scss)：有实现指向 → `src/modules/rules/festival/groups/subtitle.scss`。
+- [src/modules/rules/festival/groups/subtitle.ts](https://github.com/festoney8/bilibili-cleaner/blob/15d9bced793487a8c4b0f9e1f7f67c7ccf6f3da9/src/modules/rules/festival/groups/subtitle.ts)：有实现指向 → `src/modules/rules/festival/groups/subtitle.ts`。
+- [src/modules/rules/festival/index.scss](https://github.com/festoney8/bilibili-cleaner/blob/15d9bced793487a8c4b0f9e1f7f67c7ccf6f3da9/src/modules/rules/festival/index.scss)：共用支撑／装配索引 → `src/modules/rules/festival/index.scss`。按页面/分组定位净化、布局和增强；结合声明回调及属性样式。
+- [src/modules/rules/festival/index.ts](https://github.com/festoney8/bilibili-cleaner/blob/15d9bced793487a8c4b0f9e1f7f67c7ccf6f3da9/src/modules/rules/festival/index.ts)：共用支撑／装配索引 → `src/modules/rules/festival/index.ts`。按页面/分组定位净化、布局和增强；结合声明回调及属性样式。
+- [src/modules/rules/homepage/groups/basic.scss](https://github.com/festoney8/bilibili-cleaner/blob/15d9bced793487a8c4b0f9e1f7f67c7ccf6f3da9/src/modules/rules/homepage/groups/basic.scss)：有实现指向 → `src/modules/rules/homepage/groups/basic.scss`。
+- [src/modules/rules/homepage/groups/basic.ts](https://github.com/festoney8/bilibili-cleaner/blob/15d9bced793487a8c4b0f9e1f7f67c7ccf6f3da9/src/modules/rules/homepage/groups/basic.ts)：有实现指向 → `src/modules/rules/homepage/groups/basic.ts`。
+- [src/modules/rules/homepage/groups/layout.scss](https://github.com/festoney8/bilibili-cleaner/blob/15d9bced793487a8c4b0f9e1f7f67c7ccf6f3da9/src/modules/rules/homepage/groups/layout.scss)：有实现指向 → `src/modules/rules/homepage/groups/layout.scss`。
+- [src/modules/rules/homepage/groups/layout.ts](https://github.com/festoney8/bilibili-cleaner/blob/15d9bced793487a8c4b0f9e1f7f67c7ccf6f3da9/src/modules/rules/homepage/groups/layout.ts)：有实现指向 → `src/modules/rules/homepage/groups/layout.ts`。
+- [src/modules/rules/homepage/groups/rcmd.scss](https://github.com/festoney8/bilibili-cleaner/blob/15d9bced793487a8c4b0f9e1f7f67c7ccf6f3da9/src/modules/rules/homepage/groups/rcmd.scss)：有实现指向 → `src/modules/rules/homepage/groups/rcmd.scss`。
+- [src/modules/rules/homepage/groups/rcmd.ts](https://github.com/festoney8/bilibili-cleaner/blob/15d9bced793487a8c4b0f9e1f7f67c7ccf6f3da9/src/modules/rules/homepage/groups/rcmd.ts)：有实现指向 → `src/modules/rules/homepage/groups/rcmd.ts`。
+- [src/modules/rules/homepage/groups/sidebar.scss](https://github.com/festoney8/bilibili-cleaner/blob/15d9bced793487a8c4b0f9e1f7f67c7ccf6f3da9/src/modules/rules/homepage/groups/sidebar.scss)：有实现指向 → `src/modules/rules/homepage/groups/sidebar.scss`。
+- [src/modules/rules/homepage/groups/sidebar.ts](https://github.com/festoney8/bilibili-cleaner/blob/15d9bced793487a8c4b0f9e1f7f67c7ccf6f3da9/src/modules/rules/homepage/groups/sidebar.ts)：有实现指向 → `src/modules/rules/homepage/groups/sidebar.ts`。
+- [src/modules/rules/homepage/index.scss](https://github.com/festoney8/bilibili-cleaner/blob/15d9bced793487a8c4b0f9e1f7f67c7ccf6f3da9/src/modules/rules/homepage/index.scss)：共用支撑／装配索引 → `src/modules/rules/homepage/index.scss`。按页面/分组定位净化、布局和增强；结合声明回调及属性样式。
+- [src/modules/rules/homepage/index.ts](https://github.com/festoney8/bilibili-cleaner/blob/15d9bced793487a8c4b0f9e1f7f67c7ccf6f3da9/src/modules/rules/homepage/index.ts)：共用支撑／装配索引 → `src/modules/rules/homepage/index.ts`。按页面/分组定位净化、布局和增强；结合声明回调及属性样式。
+- [src/modules/rules/index.ts](https://github.com/festoney8/bilibili-cleaner/blob/15d9bced793487a8c4b0f9e1f7f67c7ccf6f3da9/src/modules/rules/index.ts)：有实现指向 → `src/modules/rules/index.ts`。
+- [src/modules/rules/live/groups/basic.scss](https://github.com/festoney8/bilibili-cleaner/blob/15d9bced793487a8c4b0f9e1f7f67c7ccf6f3da9/src/modules/rules/live/groups/basic.scss)：有实现指向 → `src/modules/rules/live/groups/basic.scss`。
+- [src/modules/rules/live/groups/basic.ts](https://github.com/festoney8/bilibili-cleaner/blob/15d9bced793487a8c4b0f9e1f7f67c7ccf6f3da9/src/modules/rules/live/groups/basic.ts)：有实现指向 → `src/modules/rules/live/groups/basic.ts`。
+- [src/modules/rules/live/groups/below.scss](https://github.com/festoney8/bilibili-cleaner/blob/15d9bced793487a8c4b0f9e1f7f67c7ccf6f3da9/src/modules/rules/live/groups/below.scss)：有实现指向 → `src/modules/rules/live/groups/below.scss`。
+- [src/modules/rules/live/groups/below.ts](https://github.com/festoney8/bilibili-cleaner/blob/15d9bced793487a8c4b0f9e1f7f67c7ccf6f3da9/src/modules/rules/live/groups/below.ts)：有实现指向 → `src/modules/rules/live/groups/below.ts`。
+- [src/modules/rules/live/groups/danmaku.scss](https://github.com/festoney8/bilibili-cleaner/blob/15d9bced793487a8c4b0f9e1f7f67c7ccf6f3da9/src/modules/rules/live/groups/danmaku.scss)：有实现指向 → `src/modules/rules/live/groups/danmaku.scss`。
+- [src/modules/rules/live/groups/danmaku.ts](https://github.com/festoney8/bilibili-cleaner/blob/15d9bced793487a8c4b0f9e1f7f67c7ccf6f3da9/src/modules/rules/live/groups/danmaku.ts)：有实现指向 → `src/modules/rules/live/groups/danmaku.ts`。
+- [src/modules/rules/live/groups/headerCenter.scss](https://github.com/festoney8/bilibili-cleaner/blob/15d9bced793487a8c4b0f9e1f7f67c7ccf6f3da9/src/modules/rules/live/groups/headerCenter.scss)：有实现指向 → `src/modules/rules/live/groups/headerCenter.scss`。
+- [src/modules/rules/live/groups/headerCenter.ts](https://github.com/festoney8/bilibili-cleaner/blob/15d9bced793487a8c4b0f9e1f7f67c7ccf6f3da9/src/modules/rules/live/groups/headerCenter.ts)：有实现指向 → `src/modules/rules/live/groups/headerCenter.ts`。
+- [src/modules/rules/live/groups/headerLeft.scss](https://github.com/festoney8/bilibili-cleaner/blob/15d9bced793487a8c4b0f9e1f7f67c7ccf6f3da9/src/modules/rules/live/groups/headerLeft.scss)：有实现指向 → `src/modules/rules/live/groups/headerLeft.scss`。
+- [src/modules/rules/live/groups/headerLeft.ts](https://github.com/festoney8/bilibili-cleaner/blob/15d9bced793487a8c4b0f9e1f7f67c7ccf6f3da9/src/modules/rules/live/groups/headerLeft.ts)：有实现指向 → `src/modules/rules/live/groups/headerLeft.ts`。
+- [src/modules/rules/live/groups/headerRight.scss](https://github.com/festoney8/bilibili-cleaner/blob/15d9bced793487a8c4b0f9e1f7f67c7ccf6f3da9/src/modules/rules/live/groups/headerRight.scss)：有实现指向 → `src/modules/rules/live/groups/headerRight.scss`。
+- [src/modules/rules/live/groups/headerRight.ts](https://github.com/festoney8/bilibili-cleaner/blob/15d9bced793487a8c4b0f9e1f7f67c7ccf6f3da9/src/modules/rules/live/groups/headerRight.ts)：有实现指向 → `src/modules/rules/live/groups/headerRight.ts`。
+- [src/modules/rules/live/groups/info.scss](https://github.com/festoney8/bilibili-cleaner/blob/15d9bced793487a8c4b0f9e1f7f67c7ccf6f3da9/src/modules/rules/live/groups/info.scss)：有实现指向 → `src/modules/rules/live/groups/info.scss`。
+- [src/modules/rules/live/groups/info.ts](https://github.com/festoney8/bilibili-cleaner/blob/15d9bced793487a8c4b0f9e1f7f67c7ccf6f3da9/src/modules/rules/live/groups/info.ts)：有实现指向 → `src/modules/rules/live/groups/info.ts`。
+- [src/modules/rules/live/groups/player.scss](https://github.com/festoney8/bilibili-cleaner/blob/15d9bced793487a8c4b0f9e1f7f67c7ccf6f3da9/src/modules/rules/live/groups/player.scss)：有实现指向 → `src/modules/rules/live/groups/player.scss`。
+- [src/modules/rules/live/groups/player.ts](https://github.com/festoney8/bilibili-cleaner/blob/15d9bced793487a8c4b0f9e1f7f67c7ccf6f3da9/src/modules/rules/live/groups/player.ts)：有实现指向 → `src/modules/rules/live/groups/player.ts`。
+- [src/modules/rules/live/groups/right.scss](https://github.com/festoney8/bilibili-cleaner/blob/15d9bced793487a8c4b0f9e1f7f67c7ccf6f3da9/src/modules/rules/live/groups/right.scss)：有实现指向 → `src/modules/rules/live/groups/right.scss`。
+- [src/modules/rules/live/groups/right.ts](https://github.com/festoney8/bilibili-cleaner/blob/15d9bced793487a8c4b0f9e1f7f67c7ccf6f3da9/src/modules/rules/live/groups/right.ts)：有实现指向 → `src/modules/rules/live/groups/right.ts`。
+- [src/modules/rules/live/index.scss](https://github.com/festoney8/bilibili-cleaner/blob/15d9bced793487a8c4b0f9e1f7f67c7ccf6f3da9/src/modules/rules/live/index.scss)：共用支撑／装配索引 → `src/modules/rules/live/index.scss`。按页面/分组定位净化、布局和增强；结合声明回调及属性样式。
+- [src/modules/rules/live/index.ts](https://github.com/festoney8/bilibili-cleaner/blob/15d9bced793487a8c4b0f9e1f7f67c7ccf6f3da9/src/modules/rules/live/index.ts)：共用支撑／装配索引 → `src/modules/rules/live/index.ts`。按页面/分组定位净化、布局和增强；结合声明回调及属性样式。
+- [src/modules/rules/popular/groups/basic.scss](https://github.com/festoney8/bilibili-cleaner/blob/15d9bced793487a8c4b0f9e1f7f67c7ccf6f3da9/src/modules/rules/popular/groups/basic.scss)：有实现指向 → `src/modules/rules/popular/groups/basic.scss`。
+- [src/modules/rules/popular/groups/basic.ts](https://github.com/festoney8/bilibili-cleaner/blob/15d9bced793487a8c4b0f9e1f7f67c7ccf6f3da9/src/modules/rules/popular/groups/basic.ts)：有实现指向 → `src/modules/rules/popular/groups/basic.ts`。
+- [src/modules/rules/popular/groups/layout.scss](https://github.com/festoney8/bilibili-cleaner/blob/15d9bced793487a8c4b0f9e1f7f67c7ccf6f3da9/src/modules/rules/popular/groups/layout.scss)：有实现指向 → `src/modules/rules/popular/groups/layout.scss`。
+- [src/modules/rules/popular/groups/layout.ts](https://github.com/festoney8/bilibili-cleaner/blob/15d9bced793487a8c4b0f9e1f7f67c7ccf6f3da9/src/modules/rules/popular/groups/layout.ts)：有实现指向 → `src/modules/rules/popular/groups/layout.ts`。
+- [src/modules/rules/popular/groups/other.scss](https://github.com/festoney8/bilibili-cleaner/blob/15d9bced793487a8c4b0f9e1f7f67c7ccf6f3da9/src/modules/rules/popular/groups/other.scss)：有实现指向 → `src/modules/rules/popular/groups/other.scss`。
+- [src/modules/rules/popular/groups/other.ts](https://github.com/festoney8/bilibili-cleaner/blob/15d9bced793487a8c4b0f9e1f7f67c7ccf6f3da9/src/modules/rules/popular/groups/other.ts)：有实现指向 → `src/modules/rules/popular/groups/other.ts`。
+- [src/modules/rules/popular/index.scss](https://github.com/festoney8/bilibili-cleaner/blob/15d9bced793487a8c4b0f9e1f7f67c7ccf6f3da9/src/modules/rules/popular/index.scss)：共用支撑／装配索引 → `src/modules/rules/popular/index.scss`。按页面/分组定位净化、布局和增强；结合声明回调及属性样式。
+- [src/modules/rules/popular/index.ts](https://github.com/festoney8/bilibili-cleaner/blob/15d9bced793487a8c4b0f9e1f7f67c7ccf6f3da9/src/modules/rules/popular/index.ts)：共用支撑／装配索引 → `src/modules/rules/popular/index.ts`。按页面/分组定位净化、布局和增强；结合声明回调及属性样式。
+- [src/modules/rules/search/groups/basic.scss](https://github.com/festoney8/bilibili-cleaner/blob/15d9bced793487a8c4b0f9e1f7f67c7ccf6f3da9/src/modules/rules/search/groups/basic.scss)：有实现指向 → `src/modules/rules/search/groups/basic.scss`。
+- [src/modules/rules/search/groups/basic.ts](https://github.com/festoney8/bilibili-cleaner/blob/15d9bced793487a8c4b0f9e1f7f67c7ccf6f3da9/src/modules/rules/search/groups/basic.ts)：有实现指向 → `src/modules/rules/search/groups/basic.ts`。
+- [src/modules/rules/search/groups/sidebar.scss](https://github.com/festoney8/bilibili-cleaner/blob/15d9bced793487a8c4b0f9e1f7f67c7ccf6f3da9/src/modules/rules/search/groups/sidebar.scss)：有实现指向 → `src/modules/rules/search/groups/sidebar.scss`。
+- [src/modules/rules/search/groups/sidebar.ts](https://github.com/festoney8/bilibili-cleaner/blob/15d9bced793487a8c4b0f9e1f7f67c7ccf6f3da9/src/modules/rules/search/groups/sidebar.ts)：有实现指向 → `src/modules/rules/search/groups/sidebar.ts`。
+- [src/modules/rules/search/index.scss](https://github.com/festoney8/bilibili-cleaner/blob/15d9bced793487a8c4b0f9e1f7f67c7ccf6f3da9/src/modules/rules/search/index.scss)：共用支撑／装配索引 → `src/modules/rules/search/index.scss`。按页面/分组定位净化、布局和增强；结合声明回调及属性样式。
+- [src/modules/rules/search/index.ts](https://github.com/festoney8/bilibili-cleaner/blob/15d9bced793487a8c4b0f9e1f7f67c7ccf6f3da9/src/modules/rules/search/index.ts)：共用支撑／装配索引 → `src/modules/rules/search/index.ts`。按页面/分组定位净化、布局和增强；结合声明回调及属性样式。
+- [src/modules/rules/space/groups/basic.scss](https://github.com/festoney8/bilibili-cleaner/blob/15d9bced793487a8c4b0f9e1f7f67c7ccf6f3da9/src/modules/rules/space/groups/basic.scss)：有实现指向 → `src/modules/rules/space/groups/basic.scss`。
+- [src/modules/rules/space/groups/basic.ts](https://github.com/festoney8/bilibili-cleaner/blob/15d9bced793487a8c4b0f9e1f7f67c7ccf6f3da9/src/modules/rules/space/groups/basic.ts)：有实现指向 → `src/modules/rules/space/groups/basic.ts`。
+- [src/modules/rules/space/groups/dynamic.scss](https://github.com/festoney8/bilibili-cleaner/blob/15d9bced793487a8c4b0f9e1f7f67c7ccf6f3da9/src/modules/rules/space/groups/dynamic.scss)：有实现指向 → `src/modules/rules/space/groups/dynamic.scss`。
+- [src/modules/rules/space/groups/dynamic.ts](https://github.com/festoney8/bilibili-cleaner/blob/15d9bced793487a8c4b0f9e1f7f67c7ccf6f3da9/src/modules/rules/space/groups/dynamic.ts)：有实现指向 → `src/modules/rules/space/groups/dynamic.ts`。
+- [src/modules/rules/space/groups/sidebar.scss](https://github.com/festoney8/bilibili-cleaner/blob/15d9bced793487a8c4b0f9e1f7f67c7ccf6f3da9/src/modules/rules/space/groups/sidebar.scss)：有实现指向 → `src/modules/rules/space/groups/sidebar.scss`。
+- [src/modules/rules/space/groups/sidebar.ts](https://github.com/festoney8/bilibili-cleaner/blob/15d9bced793487a8c4b0f9e1f7f67c7ccf6f3da9/src/modules/rules/space/groups/sidebar.ts)：有实现指向 → `src/modules/rules/space/groups/sidebar.ts`。
+- [src/modules/rules/space/index.scss](https://github.com/festoney8/bilibili-cleaner/blob/15d9bced793487a8c4b0f9e1f7f67c7ccf6f3da9/src/modules/rules/space/index.scss)：共用支撑／装配索引 → `src/modules/rules/space/index.scss`。按页面/分组定位净化、布局和增强；结合声明回调及属性样式。
+- [src/modules/rules/space/index.ts](https://github.com/festoney8/bilibili-cleaner/blob/15d9bced793487a8c4b0f9e1f7f67c7ccf6f3da9/src/modules/rules/space/index.ts)：共用支撑／装配索引 → `src/modules/rules/space/index.ts`。按页面/分组定位净化、布局和增强；结合声明回调及属性样式。
+- [src/modules/rules/video/groups/basic.scss](https://github.com/festoney8/bilibili-cleaner/blob/15d9bced793487a8c4b0f9e1f7f67c7ccf6f3da9/src/modules/rules/video/groups/basic.scss)：有实现指向 → `src/modules/rules/video/groups/basic.scss`。
+- [src/modules/rules/video/groups/basic.ts](https://github.com/festoney8/bilibili-cleaner/blob/15d9bced793487a8c4b0f9e1f7f67c7ccf6f3da9/src/modules/rules/video/groups/basic.ts)：有实现指向 → `src/modules/rules/video/groups/basic.ts`。
+- [src/modules/rules/video/groups/danmaku.scss](https://github.com/festoney8/bilibili-cleaner/blob/15d9bced793487a8c4b0f9e1f7f67c7ccf6f3da9/src/modules/rules/video/groups/danmaku.scss)：有实现指向 → `src/modules/rules/video/groups/danmaku.scss`。
+- [src/modules/rules/video/groups/danmaku.ts](https://github.com/festoney8/bilibili-cleaner/blob/15d9bced793487a8c4b0f9e1f7f67c7ccf6f3da9/src/modules/rules/video/groups/danmaku.ts)：有实现指向 → `src/modules/rules/video/groups/danmaku.ts`。
+- [src/modules/rules/video/groups/danmakuControl.scss](https://github.com/festoney8/bilibili-cleaner/blob/15d9bced793487a8c4b0f9e1f7f67c7ccf6f3da9/src/modules/rules/video/groups/danmakuControl.scss)：有实现指向 → `src/modules/rules/video/groups/danmakuControl.scss`。
+- [src/modules/rules/video/groups/danmakuControl.ts](https://github.com/festoney8/bilibili-cleaner/blob/15d9bced793487a8c4b0f9e1f7f67c7ccf6f3da9/src/modules/rules/video/groups/danmakuControl.ts)：有实现指向 → `src/modules/rules/video/groups/danmakuControl.ts`。
+- [src/modules/rules/video/groups/info.scss](https://github.com/festoney8/bilibili-cleaner/blob/15d9bced793487a8c4b0f9e1f7f67c7ccf6f3da9/src/modules/rules/video/groups/info.scss)：有实现指向 → `src/modules/rules/video/groups/info.scss`。
+- [src/modules/rules/video/groups/info.ts](https://github.com/festoney8/bilibili-cleaner/blob/15d9bced793487a8c4b0f9e1f7f67c7ccf6f3da9/src/modules/rules/video/groups/info.ts)：有实现指向 → `src/modules/rules/video/groups/info.ts`。
+- [src/modules/rules/video/groups/miniPlayer.scss](https://github.com/festoney8/bilibili-cleaner/blob/15d9bced793487a8c4b0f9e1f7f67c7ccf6f3da9/src/modules/rules/video/groups/miniPlayer.scss)：有实现指向 → `src/modules/rules/video/groups/miniPlayer.scss`。
+- [src/modules/rules/video/groups/miniPlayer.ts](https://github.com/festoney8/bilibili-cleaner/blob/15d9bced793487a8c4b0f9e1f7f67c7ccf6f3da9/src/modules/rules/video/groups/miniPlayer.ts)：有实现指向 → `src/modules/rules/video/groups/miniPlayer.ts`。
+- [src/modules/rules/video/groups/player.scss](https://github.com/festoney8/bilibili-cleaner/blob/15d9bced793487a8c4b0f9e1f7f67c7ccf6f3da9/src/modules/rules/video/groups/player.scss)：有实现指向 → `src/modules/rules/video/groups/player.scss`。
+- [src/modules/rules/video/groups/player.ts](https://github.com/festoney8/bilibili-cleaner/blob/15d9bced793487a8c4b0f9e1f7f67c7ccf6f3da9/src/modules/rules/video/groups/player.ts)：有实现指向 → `src/modules/rules/video/groups/player.ts`。
+- [src/modules/rules/video/groups/playerControl.scss](https://github.com/festoney8/bilibili-cleaner/blob/15d9bced793487a8c4b0f9e1f7f67c7ccf6f3da9/src/modules/rules/video/groups/playerControl.scss)：有实现指向 → `src/modules/rules/video/groups/playerControl.scss`。
+- [src/modules/rules/video/groups/playerControl.ts](https://github.com/festoney8/bilibili-cleaner/blob/15d9bced793487a8c4b0f9e1f7f67c7ccf6f3da9/src/modules/rules/video/groups/playerControl.ts)：有实现指向 → `src/modules/rules/video/groups/playerControl.ts`。
+- [src/modules/rules/video/groups/playerLayout.scss](https://github.com/festoney8/bilibili-cleaner/blob/15d9bced793487a8c4b0f9e1f7f67c7ccf6f3da9/src/modules/rules/video/groups/playerLayout.scss)：有实现指向 → `src/modules/rules/video/groups/playerLayout.scss`。
+- [src/modules/rules/video/groups/playerLayout.ts](https://github.com/festoney8/bilibili-cleaner/blob/15d9bced793487a8c4b0f9e1f7f67c7ccf6f3da9/src/modules/rules/video/groups/playerLayout.ts)：有实现指向 → `src/modules/rules/video/groups/playerLayout.ts`。
+- [src/modules/rules/video/groups/right.scss](https://github.com/festoney8/bilibili-cleaner/blob/15d9bced793487a8c4b0f9e1f7f67c7ccf6f3da9/src/modules/rules/video/groups/right.scss)：有实现指向 → `src/modules/rules/video/groups/right.scss`。
+- [src/modules/rules/video/groups/right.ts](https://github.com/festoney8/bilibili-cleaner/blob/15d9bced793487a8c4b0f9e1f7f67c7ccf6f3da9/src/modules/rules/video/groups/right.ts)：有实现指向 → `src/modules/rules/video/groups/right.ts`。
+- [src/modules/rules/video/groups/sidebar.scss](https://github.com/festoney8/bilibili-cleaner/blob/15d9bced793487a8c4b0f9e1f7f67c7ccf6f3da9/src/modules/rules/video/groups/sidebar.scss)：有实现指向 → `src/modules/rules/video/groups/sidebar.scss`。
+- [src/modules/rules/video/groups/sidebar.ts](https://github.com/festoney8/bilibili-cleaner/blob/15d9bced793487a8c4b0f9e1f7f67c7ccf6f3da9/src/modules/rules/video/groups/sidebar.ts)：有实现指向 → `src/modules/rules/video/groups/sidebar.ts`。
+- [src/modules/rules/video/groups/subtitle.scss](https://github.com/festoney8/bilibili-cleaner/blob/15d9bced793487a8c4b0f9e1f7f67c7ccf6f3da9/src/modules/rules/video/groups/subtitle.scss)：有实现指向 → `src/modules/rules/video/groups/subtitle.scss`。
+- [src/modules/rules/video/groups/subtitle.ts](https://github.com/festoney8/bilibili-cleaner/blob/15d9bced793487a8c4b0f9e1f7f67c7ccf6f3da9/src/modules/rules/video/groups/subtitle.ts)：有实现指向 → `src/modules/rules/video/groups/subtitle.ts`。
+- [src/modules/rules/video/groups/toolbar.scss](https://github.com/festoney8/bilibili-cleaner/blob/15d9bced793487a8c4b0f9e1f7f67c7ccf6f3da9/src/modules/rules/video/groups/toolbar.scss)：有实现指向 → `src/modules/rules/video/groups/toolbar.scss`。
+- [src/modules/rules/video/groups/toolbar.ts](https://github.com/festoney8/bilibili-cleaner/blob/15d9bced793487a8c4b0f9e1f7f67c7ccf6f3da9/src/modules/rules/video/groups/toolbar.ts)：有实现指向 → `src/modules/rules/video/groups/toolbar.ts`。
+- [src/modules/rules/video/groups/upInfo.scss](https://github.com/festoney8/bilibili-cleaner/blob/15d9bced793487a8c4b0f9e1f7f67c7ccf6f3da9/src/modules/rules/video/groups/upInfo.scss)：有实现指向 → `src/modules/rules/video/groups/upInfo.scss`。
+- [src/modules/rules/video/groups/upInfo.ts](https://github.com/festoney8/bilibili-cleaner/blob/15d9bced793487a8c4b0f9e1f7f67c7ccf6f3da9/src/modules/rules/video/groups/upInfo.ts)：有实现指向 → `src/modules/rules/video/groups/upInfo.ts`。
+- [src/modules/rules/video/index.scss](https://github.com/festoney8/bilibili-cleaner/blob/15d9bced793487a8c4b0f9e1f7f67c7ccf6f3da9/src/modules/rules/video/index.scss)：共用支撑／装配索引 → `src/modules/rules/video/index.scss`。按页面/分组定位净化、布局和增强；结合声明回调及属性样式。
+- [src/modules/rules/video/index.ts](https://github.com/festoney8/bilibili-cleaner/blob/15d9bced793487a8c4b0f9e1f7f67c7ccf6f3da9/src/modules/rules/video/index.ts)：共用支撑／装配索引 → `src/modules/rules/video/index.ts`。按页面/分组定位净化、布局和增强；结合声明回调及属性样式。
+- [src/modules/rules/watchlater/groups/basic.scss](https://github.com/festoney8/bilibili-cleaner/blob/15d9bced793487a8c4b0f9e1f7f67c7ccf6f3da9/src/modules/rules/watchlater/groups/basic.scss)：有实现指向 → `src/modules/rules/watchlater/groups/basic.scss`。
+- [src/modules/rules/watchlater/groups/basic.ts](https://github.com/festoney8/bilibili-cleaner/blob/15d9bced793487a8c4b0f9e1f7f67c7ccf6f3da9/src/modules/rules/watchlater/groups/basic.ts)：有实现指向 → `src/modules/rules/watchlater/groups/basic.ts`。
+- [src/modules/rules/watchlater/index.scss](https://github.com/festoney8/bilibili-cleaner/blob/15d9bced793487a8c4b0f9e1f7f67c7ccf6f3da9/src/modules/rules/watchlater/index.scss)：共用支撑／装配索引 → `src/modules/rules/watchlater/index.scss`。按页面/分组定位净化、布局和增强；结合声明回调及属性样式。
+- [src/modules/rules/watchlater/index.ts](https://github.com/festoney8/bilibili-cleaner/blob/15d9bced793487a8c4b0f9e1f7f67c7ccf6f3da9/src/modules/rules/watchlater/index.ts)：共用支撑／装配索引 → `src/modules/rules/watchlater/index.ts`。按页面/分组定位净化、布局和增强；结合声明回调及属性样式。
+- [src/stores/view.ts](https://github.com/festoney8/bilibili-cleaner/blob/15d9bced793487a8c4b0f9e1f7f67c7ccf6f3da9/src/stores/view.ts)：有实现指向 → `src/stores/view.ts`。
+- [src/style.css](https://github.com/festoney8/bilibili-cleaner/blob/15d9bced793487a8c4b0f9e1f7f67c7ccf6f3da9/src/style.css)：有实现指向 → `src/style.css`。
+- [src/types/collection.ts](https://github.com/festoney8/bilibili-cleaner/blob/15d9bced793487a8c4b0f9e1f7f67c7ccf6f3da9/src/types/collection.ts)：共用支撑／装配索引 → `src/types/collection.ts`。编译期类型定义，非独立运行功能。
+- [src/types/filter.ts](https://github.com/festoney8/bilibili-cleaner/blob/15d9bced793487a8c4b0f9e1f7f67c7ccf6f3da9/src/types/filter.ts)：共用支撑／装配索引 → `src/types/filter.ts`。编译期类型定义，非独立运行功能。
+- [src/types/global.d.ts](https://github.com/festoney8/bilibili-cleaner/blob/15d9bced793487a8c4b0f9e1f7f67c7ccf6f3da9/src/types/global.d.ts)：共用支撑／装配索引 → `src/types/global.d.ts`。编译期类型定义，非独立运行功能。
+- [src/types/item.ts](https://github.com/festoney8/bilibili-cleaner/blob/15d9bced793487a8c4b0f9e1f7f67c7ccf6f3da9/src/types/item.ts)：共用支撑／装配索引 → `src/types/item.ts`。编译期类型定义，非独立运行功能。
+- [src/utils/fetch.ts](https://github.com/festoney8/bilibili-cleaner/blob/15d9bced793487a8c4b0f9e1f7f67c7ccf6f3da9/src/utils/fetch.ts)：有实现指向 → `src/utils/fetch.ts`。
+- [src/utils/init.ts](https://github.com/festoney8/bilibili-cleaner/blob/15d9bced793487a8c4b0f9e1f7f67c7ccf6f3da9/src/utils/init.ts)：有实现指向 → `src/utils/init.ts`。
+- [src/utils/logger.ts](https://github.com/festoney8/bilibili-cleaner/blob/15d9bced793487a8c4b0f9e1f7f67c7ccf6f3da9/src/utils/logger.ts)：有实现指向 → `src/utils/logger.ts`。
+- [src/utils/pageType.ts](https://github.com/festoney8/bilibili-cleaner/blob/15d9bced793487a8c4b0f9e1f7f67c7ccf6f3da9/src/utils/pageType.ts)：有实现指向 → `src/utils/pageType.ts`。
+- [src/utils/shadow.ts](https://github.com/festoney8/bilibili-cleaner/blob/15d9bced793487a8c4b0f9e1f7f67c7ccf6f3da9/src/utils/shadow.ts)：有实现指向 → `src/utils/shadow.ts`。
+- [src/utils/storage.ts](https://github.com/festoney8/bilibili-cleaner/blob/15d9bced793487a8c4b0f9e1f7f67c7ccf6f3da9/src/utils/storage.ts)：有实现指向 → `src/utils/storage.ts`。
+- [src/utils/tool.ts](https://github.com/festoney8/bilibili-cleaner/blob/15d9bced793487a8c4b0f9e1f7f67c7ccf6f3da9/src/utils/tool.ts)：有实现指向 → `src/utils/tool.ts`。
+- [src/utils/urlHandler.ts](https://github.com/festoney8/bilibili-cleaner/blob/15d9bced793487a8c4b0f9e1f7f67c7ccf6f3da9/src/utils/urlHandler.ts)：有实现指向 → `src/utils/urlHandler.ts`。
+- [src/utils/widePlayer.ts](https://github.com/festoney8/bilibili-cleaner/blob/15d9bced793487a8c4b0f9e1f7f67c7ccf6f3da9/src/utils/widePlayer.ts)：有实现指向 → `src/utils/widePlayer.ts`。
+- [src/views/ArticleFilterPanelView.vue](https://github.com/festoney8/bilibili-cleaner/blob/15d9bced793487a8c4b0f9e1f7f67c7ccf6f3da9/src/views/ArticleFilterPanelView.vue)：有实现指向 → `src/views/ArticleFilterPanelView.vue`。
+- [src/views/CommentFilterPanelView.vue](https://github.com/festoney8/bilibili-cleaner/blob/15d9bced793487a8c4b0f9e1f7f67c7ccf6f3da9/src/views/CommentFilterPanelView.vue)：有实现指向 → `src/views/CommentFilterPanelView.vue`。
+- [src/views/ContextMenuView.vue](https://github.com/festoney8/bilibili-cleaner/blob/15d9bced793487a8c4b0f9e1f7f67c7ccf6f3da9/src/views/ContextMenuView.vue)：有实现指向 → `src/views/ContextMenuView.vue`。
+- [src/views/DynamicFilterPanelView.vue](https://github.com/festoney8/bilibili-cleaner/blob/15d9bced793487a8c4b0f9e1f7f67c7ccf6f3da9/src/views/DynamicFilterPanelView.vue)：有实现指向 → `src/views/DynamicFilterPanelView.vue`。
+- [src/views/RulePanelView.vue](https://github.com/festoney8/bilibili-cleaner/blob/15d9bced793487a8c4b0f9e1f7f67c7ccf6f3da9/src/views/RulePanelView.vue)：有实现指向 → `src/views/RulePanelView.vue`。
+- [src/views/SideBtnView.vue](https://github.com/festoney8/bilibili-cleaner/blob/15d9bced793487a8c4b0f9e1f7f67c7ccf6f3da9/src/views/SideBtnView.vue)：共用支撑／装配索引 → `src/views/SideBtnView.vue`。页面设置、过滤面板和入口。
+- [src/views/VideoFilterPanelView.vue](https://github.com/festoney8/bilibili-cleaner/blob/15d9bced793487a8c4b0f9e1f7f67c7ccf6f3da9/src/views/VideoFilterPanelView.vue)：有实现指向 → `src/views/VideoFilterPanelView.vue`。
+- [src/vite-env.d.ts](https://github.com/festoney8/bilibili-cleaner/blob/15d9bced793487a8c4b0f9e1f7f67c7ccf6f3da9/src/vite-env.d.ts)：共用支撑／装配索引 → `src/vite-env.d.ts`。入口、通用样式、配置或类型支撑。
+- [tsconfig.json](https://github.com/festoney8/bilibili-cleaner/blob/15d9bced793487a8c4b0f9e1f7f67c7ccf6f3da9/tsconfig.json)：仓库配套。源码解析、类型与构建检查。
+- [vite.config.ts](https://github.com/festoney8/bilibili-cleaner/blob/15d9bced793487a8c4b0f9e1f7f67c7ccf6f3da9/vite.config.ts)：有实现指向 → `vite.config.ts`。
+
+## 本地扩展与其他来源
+
+- `src/components/items/WebdavComp.vue`：面板、交互控件及配置应用。
+- `src/feedback/Badge.vue`：编号、查找与历史测试动作。
+- `src/feedback/context-actions.ts`：编号、查找与历史测试动作。
+- `src/feedback/control-map.json`：编号、查找与历史测试动作。
+- `src/feedback/enabled.ts`：编号、查找与历史测试动作。
+- `src/feedback/fixed-controls.json`：编号、查找与历史测试动作。
+- `src/feedback/id-index.empty.ts`：编号、查找与历史测试动作。
+- `src/feedback/id-index.generated.ts`：编号、查找与历史测试动作。
+- `src/feedback/index.ts`：编号、查找与历史测试动作。
+- `src/feedback/OptimizationReviewRow.vue`：编号、查找与历史测试动作。
+- `src/feedback/review-catalog.empty.ts`：编号、查找与历史测试动作。
+- `src/feedback/review-catalog.generated.ts`：编号、查找与历史测试动作。
+- `src/feedback/review-store.ts`：编号、查找与历史测试动作。
+- `src/feedback/review-types.ts`：编号、查找与历史测试动作。
+- `src/modules/configuration/backup.ts`：配置定义、备份校验和恢复。
+- `src/modules/configuration/effective.ts`：配置定义、备份校验和恢复。
+- `src/modules/configuration/registry.ts`：配置定义、备份校验和恢复。
+- `src/modules/configuration/runtime.ts`：配置定义、备份校验和恢复。
+- `src/modules/configuration/scriptcat.ts`：配置定义、备份校验和恢复。
+- `src/modules/filters/core/paint.ts`：规则匹配与共享绘制。
+- `src/modules/filters/decision/compatibility.ts`：过滤分派、样式与规则数据接线。
+- `src/modules/filters/rulePack.ts`：过滤分派、样式与规则数据接线。
+- `src/modules/filters/ruleSync.ts`：过滤分派、样式与规则数据接线。
+- `src/modules/filters/thresholds.ts`：过滤分派、样式与规则数据接线。
+- `src/modules/filters/variety/video/statGate.ts`：按四步实现链和各页现行策略读取。
+- `src/modules/filters/variety/video/statRate.ts`：按四步实现链和各页现行策略读取。
+- `src/modules/filters/variety/video/viewStat.ts`：按四步实现链和各页现行策略读取。
+- `src/modules/filters/webdavProbe.ts`：过滤分派、样式与规则数据接线。
+- `src/modules/maintenance/diagnostics.ts`：用户主动触发的结构诊断。
+- `src/modules/maintenance/evidence.ts`：用户主动触发的结构诊断。
+- `src/modules/settings/sections.ts`：入口、通用样式、配置或类型支撑。
+- `src/modules/shortcut/actions.ts`：本地快捷入口、页面锚点、生命周期和偏好。
+- `src/modules/shortcut/anchor.ts`：本地快捷入口、页面锚点、生命周期和偏好。
+- `src/modules/shortcut/host.ts`：本地快捷入口、页面锚点、生命周期和偏好。
+- `src/modules/shortcut/preference.ts`：本地快捷入口、页面锚点、生命周期和偏好。
+- `src/modules/touch/controller.ts`：播放器触摸原型、识别/提示/清理。
+- `src/modules/touch/empty.ts`：播放器触摸原型、识别/提示/清理。
+- `src/modules/touch/gesture-math.ts`：播放器触摸原型、识别/提示/清理。 [固定来源](https://github.com/the1812/Bilibili-Evolved/blob/fa06dcec095dbccaba82f50ae2318c8d61c26671/registry/lib/components/touch/player-gestures/swiper.ts)。
+- `src/modules/touch/index.ts`：播放器触摸原型、识别/提示/清理。
+- `src/storage/configStorage.ts`：本地统一存储边界。
+- `src/utils/md5.ts`：页面、DOM、数据、请求或存储共用工具。
+- `src/utils/panelGeometry.ts`：页面、DOM、数据、请求或存储共用工具。
+- `src/views/ConfigurationPanelView.vue`：页面设置、过滤面板和入口。
+- `src/views/HeaderShortcutView.vue`：页面设置、过滤面板和入口。
+- `src/views/ShortcutSettingsPanelView.vue`：页面设置、过滤面板和入口。

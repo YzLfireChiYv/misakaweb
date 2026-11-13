@@ -13,7 +13,7 @@ for (const name of [process.env.PLAYWRIGHT_MODULE_PATH, 'playwright', 'playwrigh
     try { playwright = require(name); break } catch { /* next optional runtime */ }
 }
 if (!playwright) throw new Error('Install Playwright or set PLAYWRIGHT_MODULE_PATH to run this optional live test.')
-const source = await fs.readFile(path.resolve(root, '../misakaweb-feedback-test.user.js'), 'utf8')
+const source = await fs.readFile(process.env.MISAKA_TEST_ARTIFACT || path.resolve(root, '../misakaweb-feedback-test.user.js'), 'utf8')
 const vue = await fs.readFile(path.join(root, 'node_modules/vue/dist/vue.global.prod.js'), 'utf8')
 const out = process.env.TEST_OUTPUT_DIR || path.join(root, 'node_modules/.tmp/live-search')
 await fs.mkdir(out, { recursive: true })

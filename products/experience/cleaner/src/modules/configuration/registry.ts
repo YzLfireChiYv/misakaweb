@@ -4,6 +4,7 @@ import { RULE_FIELDS } from '@/modules/filters/rulePack'
 import { SHORTCUT_PREFERENCE_DEFAULT, SHORTCUT_PREFERENCE_KEY } from '@/modules/shortcut/preference'
 import type { Item } from '@/types/item'
 import type { ConfigDefinition, ConfigValue } from './backup'
+import { declaredItemDefault, settingDefault } from './effective'
 
 const ruleKeys = new Set(RULE_FIELDS.map((field) => field.gm))
 const profile = __BUILD_PROFILE__
@@ -75,7 +76,7 @@ export const getConfigurationDefinitions = (): ConfigDefinition[] => {
             return
         }
         const defaultValue: ConfigValue =
-            item.type === 'switch' ? Boolean(item.defaultEnable) : item.type === 'editor' ? [] : item.defaultValue
+            item.type === 'editor' ? [] : settingDefault(item.id, declaredItemDefault(item))
         const definition: ConfigDefinition = {
             key: item.id,
             name: item.name,
@@ -132,7 +133,15 @@ export const getConfigurationDefinitions = (): ConfigDefinition[] => {
         scope: 'device',
         kind: 'shortcut',
         groups: ['当前设备 / 快捷开关'],
-        defaults: [{ context: '当前设备', value: SHORTCUT_PREFERENCE_DEFAULT }],
+        defaults: [
+            {
+                context: '当前设备',
+                value: {
+                    enabled: SHORTCUT_PREFERENCE_DEFAULT.enabled,
+                    location: settingDefault(SHORTCUT_PREFERENCE_KEY, SHORTCUT_PREFERENCE_DEFAULT.location, 'location'),
+                },
+            },
+        ],
         availableProfiles: [profile],
     })
     add({
